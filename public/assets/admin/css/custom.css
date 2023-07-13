@@ -1,0 +1,43 @@
+.folder-container
+{
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.folder-link:hover img.folder-img
+{
+    transform: translateY(-8px);
+}
+
+.folder-link:hover .folder-card
+{
+    transform: translateY(-4px);
+}
+
+.folder-card
+{
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.726);
+    border-left: 1px solid rgba(255, 255, 255, 0.726);
+    border-right: 1px solid rgba(121, 121, 121, 0.116);
+    border-bottom: 1px solid rgba(121, 121, 121, 0.116);
+    transition: all .3s;
+}
+
+.folder-card img.folder-img
+{
+    width: 120px;
+    transition: all .3s;
+}
+
+.folder-card p.card-text
+{
+    user-select: none;
+}
+
