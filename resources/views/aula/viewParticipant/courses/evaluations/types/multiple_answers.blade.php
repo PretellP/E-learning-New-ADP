@@ -34,7 +34,7 @@
             </div>
 
             <div class="box-answers">
-                @foreach($question->alternatives()->get() as $alternative)
+                @foreach($question->alternatives as $alternative)
 
                 <div class="hs_firstname field hs-form-field answers-colors">
 

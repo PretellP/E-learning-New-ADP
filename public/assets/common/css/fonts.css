@@ -1,0 +1,148 @@
+/* ---- ROBOTO STYLES --------*/
+
+    /* -------- BLACK ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Black.ttf);
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-BlackItalic.ttf);
+    font-weight: 900;
+    font-style: italic;
+}
+
+    /* -------- BOLD ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Bold.ttf);
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-BoldItalic.ttf);
+    font-weight: 700;
+    font-style: italic;
+}
+
+    /* -------- MEDIUM ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Medium.ttf);
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-MediumItalic.ttf);
+    font-weight: 500;
+    font-style: italic;
+}
+
+    /* -------- REGULAR ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Italic.ttf);
+    font-weight: 400;
+    font-style: italic;
+}
+
+    /* -------- LIGHT  ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Light.ttf);
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-LightItalic.ttf);
+    font-weight: 200;
+    font-style: italic;
+}
+
+    /* -------- THIN  ----------*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Thin.ttf);
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-ThinItalic.ttf);
+    font-weight: 100;
+    font-style: italic;
+}
+
+
+/* ---- ROBOTO-CONDENSED STYLES --------*/
+
+    /* -------- BOLD  ----------*/
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-Bold.ttf);
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-BoldItalic.ttf);
+    font-weight: 700;
+    font-style: italic;
+}
+
+    /* -------- REGULAR  ----------*/
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-Italic.ttf);
+    font-weight: 400;
+    font-style: italic;
+}
+
+    /* -------- LIGHT  ----------*/
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-Light.ttf);
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto-condensed';
+    src: url(../fonts/RobotoCondensed-LightItalic.ttf);
+    font-weight: 200;
+    font-style: italic;
+}

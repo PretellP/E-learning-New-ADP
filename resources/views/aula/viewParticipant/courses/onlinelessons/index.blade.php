@@ -57,8 +57,8 @@
             @foreach ($certifications as $certification)
 
             @php
-            $event = $certification->event()->first();
-            $instructor = $event->user()->first();
+            $event = $certification->event;
+            $instructor = $event->user;
             @endphp
                 
             @if ($event->date == getCurrentDate())

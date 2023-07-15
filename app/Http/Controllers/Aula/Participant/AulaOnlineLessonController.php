@@ -56,7 +56,7 @@ class AulaOnlineLessonController extends Controller
     public function show(Event $event)
     {
         $course = getCourseFromEvent($event);
-        $room = $event->room()->first();
+        $room = $event->room;
 
         return view('aula.viewParticipant.courses.onlinelessons.viewlesson', [
             'course' => $course,

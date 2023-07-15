@@ -34,15 +34,14 @@ function getSelectedAnswers($certification)
 
 function getExamFromCertification($certification)
 {
-    $exam = ($certification->event()->get()->first())
-                ->exam()->get()->first();
+    $exam = $certification->event->exam;
 
     return $exam;
 }
 
 function getCourseFromEvent(Event $event)
 {
-    $course = ($event->exam()->first())->course()->first();
+    $course = $event->exam->course;
 
     return $course;
 }
@@ -230,7 +229,7 @@ function getMiningUnitsFromUser()
 {
     $user = User::findOrFail(Auth::user()->id);
 
-    $mining_units = $user->miningUnits()->get();
+    $mining_units = $user->miningUnits;
 
     return $mining_units;
 }
@@ -298,8 +297,7 @@ function getNStudentsFromCourse(Course $course)
 
 function getOwnerCompanyFromCertification(Certification $certification)
 {
-    $ownerCompany = (($certification->event()->first())
-                    ->exam()->first())->ownerCompany()->first();
+    $ownerCompany = $certification->event->exam->ownerCompany;
 
     return $ownerCompany;
 }

@@ -32,7 +32,7 @@ class QuizController extends Controller
 
     public function show(Certification $certification, $num_question)
     {
-        $evaluations = $certification->evaluations()->get();
+        $evaluations = $certification->evaluations;
 
         $selected_answers = getSelectedAnswers($certification);
         $isFinished = $certification->status == 'finished' ? true : false;
@@ -42,11 +42,11 @@ class QuizController extends Controller
         }
 
         $question = DynamicQuestion::findOrFail($evaluations[$num_question-1] -> question_id);
-        $exam = $question->exam()->first();
-        $event_date = $certification->event()->first('date');
+        $exam = $question->exam;
+        $event_date = $certification->event->date;
         $its_time_out = getItsTimeOut(getTimeDifference($certification, $exam));
 
-        if (!$its_time_out && getCurrentDate() == $event_date->date)
+        if (!$its_time_out && getCurrentDate() == $event_date)
         {
             if ($question->question_type_id == 5)
             {
@@ -75,14 +75,14 @@ class QuizController extends Controller
             ]);
             
         }else{
-            $course = $exam->course()->first();
+            $course = $exam->course;
             return redirect()->route('aula.course.evaluation.index', $course);
         }
     }
 
     public function start(Certification $certification)
     {
-        if (($certification->evaluations()->get())->isEmpty())
+        if (($certification->evaluations)->isEmpty())
         {
             $questions = getQuestionsFromExam(getExamFromCertification($certification));
 
@@ -156,9 +156,9 @@ class QuizController extends Controller
         $evaluation = Evaluation::findOrFail($evaluation);
         $diff_time = getTimeDifference($evaluation, $exam);
         $its_time_out = getItsTimeOut($diff_time);
-        $event_date = $certification->event()->first('date');
+        $event_date = $certification->event->date;
 
-        if (!$its_time_out && getCurrentDate() == $event_date->date)
+        if (!$its_time_out && getCurrentDate() == $event_date)
         {
             $question = DynamicQuestion::where('id', $evaluation->question_id)->first();
             $correct_alternatives = getCorrectAltFromQuestion($question);
@@ -266,7 +266,7 @@ class QuizController extends Controller
             'score' => $score,
         ]);
 
-        $course = $exam->course()->first();
+        $course = $exam->course;
 
         return redirect()->route('aula.course.evaluation.index', $course);
         

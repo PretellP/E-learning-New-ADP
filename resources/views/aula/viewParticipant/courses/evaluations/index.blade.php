@@ -26,7 +26,7 @@
         @php
         updateIfNotFinished($certification);
         $ownerCompany = getOwnerCompanyFromCertification($certification);
-        $event = $certification->event()->first();
+        $event = $certification->event;
         @endphp
 
         <div class="card evaluation-card">

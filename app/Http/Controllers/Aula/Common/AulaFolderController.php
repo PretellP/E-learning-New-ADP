@@ -55,7 +55,7 @@ class AulaFolderController extends Controller
      */
     public function show(Course $course, Folder $folder)
     {
-        $files = $folder->documents()->get();
+        $files = $folder->documents;
         $subFolders = Folder::where('parent_folder_id', $folder->id)->get();
         $parentFoldersCollection = collect();
         $lastFolderId = $folder->parent_folder_id;

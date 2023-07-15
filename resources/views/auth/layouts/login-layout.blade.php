@@ -13,14 +13,11 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@200;300;500;600&display=swap">
 
-    <link href="{{asset('assets/css/nucleo-icons.css')}}" rel="stylesheet" />
-    <link href="{{asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />
-
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <script src="https://kit.fontawesome.com/469f55554f.js" crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
 
     <link rel="stylesheet" href="{{asset('assets/login/css/login-styles.css')}}">
 

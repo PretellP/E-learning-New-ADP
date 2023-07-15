@@ -12,7 +12,10 @@ class AulaController extends Controller
     {
         $publishings = Publishing::orderBy('publication_time', 'DESC')->get();
 
-        return view('aula.common.home.home', [
+        // return view('aula.common.home.home', [
+        //     'publishings' => $publishings
+        // ]);
+        return view('aula2.common.home.home', [
             'publishings' => $publishings
         ]);
     }

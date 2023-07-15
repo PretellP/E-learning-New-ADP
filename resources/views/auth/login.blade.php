@@ -19,7 +19,7 @@
 			<div class="right-form-container">
 
 				<div class="cont-txt-login d-flex">
-					<img src="{{asset('assets/login/img/proto-logo.png')}}" alt="">
+					<img src="{{asset('assets/common/images/logo.png')}}" alt="">
 					<div class="txt-login-title">
 						MODELO
 					</div>
