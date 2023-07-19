@@ -58,7 +58,7 @@ class DocumentController extends Controller
 
     public function download(Document $file)
     {
-        $folder = $file->folder()->get()->first();
+        $folder = $file->folder;
         $pathToFile = $folder->folder_path.$file->uuid;
 
         return Storage::download($pathToFile, $file->filename);

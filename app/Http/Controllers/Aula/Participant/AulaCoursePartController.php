@@ -50,7 +50,7 @@ class AulaCoursePartController extends Controller
      */
     public function show(Course $course)
     {
-        return view('aula.viewParticipant.courses.show', [
+        return view('aula2.viewParticipant.courses.show', [
             'course' => $course
         ]);
     }

@@ -6,11 +6,11 @@
 
     <div class="col-12">
         <div class="card card-upper-info">
-            <div class="card-upper-info-items welcome">
+            <div class="card-upper-info-items principal">
                 Bienvenido,
             </div>
 
-            <div class="card-upper-info-items names">
+            <div class="card-upper-info-items extra">
                 {{strtolower(Auth::user()->name)}},
                 {{strtolower(Auth::user()->paternal)}}
                 {{strtolower(Auth::user()->maternal)}}
@@ -24,12 +24,12 @@
 
 
     <div class="col-lg-8 publishings">
-        <div class="card">
+        <div class="card page-title-container">
             <div class="card-header">
-                <h4>INICIO</h4>
+                <div class="total-width-container">
+                    <h4>INICIO</h4>
+                </div>
             </div>
-
-
         </div>
 
         <div class="card-body publishing-boxes-container card z-index-2 g-course-flex">
@@ -90,15 +90,19 @@
     <div class="col-lg-4 recomended-courses">
         <div class="card gradient-bottom">
             <div class="card-header">
-                <h4>Cursos Recomendados</h4>
+                <div class="total-width-container">
+                    <h4>Cursos Recomendados</h4>
+                </div>
             </div>
             <div class="card-body">
                 <ul class="list-unstyled list-unstyled-border">
 
+                    @for ($i = 0; $i < 5; $i++)
+
                     <li class="media">
                         <div class="media-body">
                             <div class="img-course">
-                                
+
                             </div>
 
                             <div class="course-description-container">
@@ -115,87 +119,8 @@
                         </div>
                     </li>
 
-
-
-                    <li class="media">
-                        <div class="media-body">
-                            <div class="img-course">
-                                
-                            </div>
-
-                            <div class="course-description-container">
-                                <div class="text-content-1">
-
-                                </div>
-                                <div class="text-content-2">
-
-                                </div>
-                                <div class="text-content-3">
-
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="media">
-                        <div class="media-body">
-                            <div class="img-course">
-                                
-                            </div>
-
-                            <div class="course-description-container">
-                                <div class="text-content-1">
-
-                                </div>
-                                <div class="text-content-2">
-
-                                </div>
-                                <div class="text-content-3">
-
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="media">
-                        <div class="media-body">
-                            <div class="img-course">
-                                
-                            </div>
-
-                            <div class="course-description-container">
-                                <div class="text-content-1">
-
-                                </div>
-                                <div class="text-content-2">
-
-                                </div>
-                                <div class="text-content-3">
-
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="media">
-                        <div class="media-body">
-                            <div class="img-course">
-                                
-                            </div>
-
-                            <div class="course-description-container">
-                                <div class="text-content-1">
-
-                                </div>
-                                <div class="text-content-2">
-
-                                </div>
-                                <div class="text-content-3">
-
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @endfor
+               
 
                 </ul>
             </div>

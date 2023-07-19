@@ -14,7 +14,14 @@
 
         <ul class="sidebar-menu">
 
-            <li class="dropdown profile-dropdown {{setActive('aula.index')}}">
+            <li class="{{setActive('aula.index')}}">
+                <a href="{{route('aula.index')}}" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
+
+            <li class="dropdown profile-dropdown">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fa-solid fa-circle-user"></i>
                     <span>
@@ -36,7 +43,7 @@
                 </ul>
             </li>
 
-            <li class="">
+            <li class="{{setActive('aula.course.*')}}">
                 <a href="{{route('aula.course.index')}}" class="nav-link">
                     <i class="fa-solid fa-book"></i>
                     <span>E-Learning</span>

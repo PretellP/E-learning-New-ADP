@@ -103,9 +103,9 @@ $(function() {
     }).niceScroll();
   }
 
-  $(".main-content").css({
-    minHeight: $(window).outerHeight() - 95
-  })
+  // $(".main-content").css({
+  //   minHeight: $(window).outerHeight() - 95
+  // })
 
   $(".nav-collapse-toggle").click(function() {
     $(this).parent().find('.navbar-nav').toggleClass('show');

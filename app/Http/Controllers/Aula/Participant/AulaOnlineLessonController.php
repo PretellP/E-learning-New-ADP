@@ -20,7 +20,7 @@ class AulaOnlineLessonController extends Controller
     {
         $certifications = getCertificationsFromCourse($course);
 
-        return view('aula.viewParticipant.courses.onlinelessons.index', [
+        return view('aula2.viewParticipant.courses.onlinelessons.index', [
             'course' => $course,
             'certifications' => $certifications
         ]);
@@ -58,7 +58,7 @@ class AulaOnlineLessonController extends Controller
         $course = getCourseFromEvent($event);
         $room = $event->room;
 
-        return view('aula.viewParticipant.courses.onlinelessons.viewlesson', [
+        return view('aula2.viewParticipant.courses.onlinelessons.viewlesson', [
             'course' => $course,
             'room' => $room
         ]); 

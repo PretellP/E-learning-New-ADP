@@ -28,12 +28,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function(){
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes(['register' => false]);
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::group(['middleware' => 'auth'], function(){
@@ -60,7 +58,6 @@ Route::group(['middleware' => 'auth'], function(){
     });
 
 
-
 // -------  RUTAS DE LA INTERFAZ AULA ---------------
 
     Route::group(['middleware' => 'aula'], function(){
@@ -69,6 +66,8 @@ Route::group(['middleware' => 'auth'], function(){
 
         Route::group(['middleware' => 'participant'], function(){
             Route::get('/aula/e-learning/Alumno/{course}', [AulaCoursePartController::class, 'show'])->name('aula.course.participant.show');
+            Route::get('/aula/e-learning/Alumno/{course}/evaluaciones', [AulaEvaluationController::class, 'index'])->name('aula.course.evaluation.index');
+            Route::get('/aula/e-learning/Alumno/{certification}/pregunta/{num_question}', [QuizController::class, 'show'])->name('aula.course.quiz.show');
             Route::get('/aula/e-learning/Alumno/{course}/curso-online', [AulaOnlineLessonController::class, 'index'])->name('aula.course.onlinelesson.index');
             Route::get('/aula/e-learning/Alumno/clase-online/{event}', [AulaOnlineLessonController::class, 'show'])->name('aula.course.onlinelesson.show');
         });
@@ -77,15 +76,13 @@ Route::group(['middleware' => 'auth'], function(){
             Route::get('/aula/e-learning/Instructor/{course}', [AulaCourseInstController::class, 'show'])->name('aula.course.instructor.show');
         });
         
-        Route::get('/aula/e-learning/{course}/evaluaciones', [AulaEvaluationController::class, 'index'])->name('aula.course.evaluation.index');
-        Route::get('/aula/e-learning/{certification}/pregunta/{num_question}', [QuizController::class, 'show'])->name('aula.course.quiz.show');
-
-
 
         Route::get('/aula/e-learning/{course}/carpetas', [AulaFolderController::class, 'index'])->name('aula.course.folder.index');
         Route::get('/aula/e-learning/{course}/carpeta/{folder}', [AulaFolderController::class, 'show'])->name('aula.course.folder.show');
 
         Route::get('/aula/e-learning/Carpeta/descargar/{file}', [DocumentController::class, 'download'])->name('aula.file.download');
+
+        Route::get('/aula/e-learning/ajax-certification/{certification}', [AulaEvaluationController::class, 'getAjaxCertification'])->name('aula.course.ajax.certification');
         
         
         Route::post('/aula/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');

@@ -18,7 +18,7 @@ class AulaEvaluationController extends Controller
     {
         $certifications = getCertificationsFromCourse($course);
 
-        return view('aula.viewParticipant.courses.evaluations.index', [
+        return view('aula2.viewParticipant.courses.evaluations.index', [
             'certifications'=> $certifications,
             'course' => $course
         ]);
@@ -29,6 +29,18 @@ class AulaEvaluationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getAjaxCertification(Certification $certification)
+    {
+        $exam = getExamFromCertification($certification);
+        $n_questions = count(getQuestionsFromExam($exam));
+
+        return response()->json([
+            'total_time' => $exam->exam_time,
+            'question_time' => $exam->exam_time / $n_questions
+        ]);
+    }
+
     public function create()
     {
         //

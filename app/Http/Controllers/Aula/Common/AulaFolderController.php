@@ -20,7 +20,7 @@ class AulaFolderController extends Controller
     {
         $folders = $course->folders()->where('level', 1)->get();
 
-        return view('aula.common.courses.folders.index', [
+        return view('aula2.common.courses.folders.index', [
             'course' => $course,
             'folders' => $folders
         ]);
@@ -67,7 +67,7 @@ class AulaFolderController extends Controller
             $lastFolderId = $parentFolder->parent_folder_id;
         }
 
-        return view('aula.common.courses.folders.show', [
+        return view('aula2.common.courses.folders.show', [
             'folder' => $folder,
             'parentFoldersCollection' => $parentFoldersCollection->reverse(),
             'course' => $course,

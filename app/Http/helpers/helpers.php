@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Models\{
     DynamicQuestion,
@@ -11,7 +12,8 @@ use App\Models\{
     User,
     Company,
     MiningUnits,
-    OwnerCompany
+    OwnerCompany,
+    Document
 };
 
 date_default_timezone_set("America/Lima");
@@ -305,6 +307,119 @@ function getOwnerCompanyFromCertification(Certification $certification)
 function getCurrentDate()
 {
     return Carbon::now('America/Lima')->format('Y-m-d');
+}
+
+function getFileExtension(Document $document)
+{
+    $folder = $document->folder;
+    $pathToFile = $folder->folder_path.$document->uuid;
+
+    $fileExt = File::extension($pathToFile);
+
+    switch($fileExt)
+    {
+        case 'ai':
+            $extension = 'ai';
+            break;
+        case 'avi':
+            $extension = 'avi';
+            break;
+        case 'csv':
+            $extension = 'csv';
+            break;
+        case 'eps':
+            $extension = 'eps';
+            break;
+        case 'docx':
+        case 'doc':
+            $extension = 'docx';
+            break;
+        case 'flv':
+            $extension = 'flv';
+            break;
+        case 'gif':
+            $extension = 'gif';
+            break;
+        case 'html':
+            $extension = 'html';
+            break;
+        case 'java':
+            $extension = 'java';
+            break;  
+        case 'jpg':
+        case 'jpeg':
+        case 'jfif':
+        case 'pjeg':
+        case 'pjp':
+            $extension = 'jpg';
+            break;
+        case 'mid':
+        case 'midi':
+            $extension = 'mid';
+            break;
+        case 'mov':
+            $extension = 'mov';
+            break;
+        case 'mp4':
+        case 'm4p':
+        case 'm4v':
+            $extension = 'mp4';
+            break;
+        case 'mpeg':
+        case 'mpg':
+        case 'mp2':
+        case 'mpe':
+        case 'mpv':
+        case 'm2v':
+            $extension = 'mpeg';
+            break;
+        case 'pdf':
+            $extension = 'pdf';
+            break;
+        case 'png':
+            $extension = 'png';
+            break;
+        case 'pptx':
+        case 'pptm':
+        case 'ppt':
+            $extension = 'ppt';
+            break;
+        case 'psd':
+            $extension = 'psd';
+            break;
+        case 'rar':
+            $extension = 'rar';
+            break;
+        case 'rss':
+            $extension = 'rss';
+            break;
+        case 'svg':
+            $extension = 'svg';
+            break;
+        case 'txt':
+            $extension = 'txt';
+            break;
+        case 'wav':
+            $extension = 'wav';
+            break;
+        case 'vma':
+            $extension = 'vma';
+            break;
+        case 'xml':
+            $extension = 'xml';
+            break;
+        case 'xlsx':
+        case 'xls':
+            $extension = 'xsl';
+            break;
+        case 'zip':
+            $extension = 'zip';
+            break;
+        default:
+            $extension = 'default';
+    }
+
+    return $extension;
 }
 
 ?>
