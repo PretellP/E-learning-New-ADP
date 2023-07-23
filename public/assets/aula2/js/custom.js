@@ -48,7 +48,7 @@ $(function() {
                 var ev_time = response.total_time
                 var qst_time = response.question_time
 
-                modal.find('.ev-time').text(ev_time)
+                modal.find('.ev-time').text(ev_time)  
                 modal.find('.qst-time').text(qst_time)
             },
             error: function(response){
@@ -97,12 +97,51 @@ $(function() {
             e.preventDefault();
         }
     })
-    
+
+
+
+    /* ---- ACTIVE SECTIONS TAB -----*/
+
+
+
+    $(".collapse-sections").each(function(){
+
+        if($(this).hasClass('show'))
+        {
+           $(this).parent().find('.card-header').addClass('active');
+        }
+    })
+
+    $(".button-section-tab").click(function(){
+
+        var collapseSection = $(this).closest(".section-accordion").find(".collapse-sections");
+
+        if(collapseSection.hasClass('show'))
+        {
+            $(this).closest(".card-header").removeClass('active');
+        }
+        else{
+            $(this).closest(".card-header").addClass('active');
+        }
+
+        $(this).closest(".section-accordion").siblings().find('.card-header').removeClass('active');
+
+    })
+
+
+
+
+
 
 });
 
 
+
+
 // Drop and Drag QUIZ
+
+
+
 
 
 const draggableElements = document.querySelectorAll(".draggable");

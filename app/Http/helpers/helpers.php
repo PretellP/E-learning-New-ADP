@@ -13,7 +13,9 @@ use App\Models\{
     Company,
     MiningUnits,
     OwnerCompany,
-    Document
+    Document,
+    CourseSection,
+    SectionChapter
 };
 
 date_default_timezone_set("America/Lima");
@@ -173,6 +175,7 @@ function getCoursesBasedOnRole()
                         ->join('users', 'events.user_id', '=', 'users.id')
                         ->where('users.id', Auth::user()->id)
                         ->where('courses.active', 'S')
+                        ->where('courses.course_type', 'REGULAR')
                         ->distinct()->get('courses.*');
     }
     else if($role == 'participants'){
@@ -183,6 +186,7 @@ function getCoursesBasedOnRole()
                         ->join('users', 'users.id', '=', 'certifications.user_id')
                         ->where('users.id', Auth::user()->id)
                         ->where('courses.active', 'S')
+                        ->where('courses.course_type', 'REGULAR')
                         ->distinct()->get('courses.*');
     }
 
@@ -309,6 +313,66 @@ function getCurrentDate()
     return Carbon::now('America/Lima')->format('Y-m-d');
 }
 
+function getFreeCourseTotalTime(Course $course)
+{
+    $totalTime = SectionChapter::join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
+                                ->join('courses', 'courses.id', '=', 'course_sections.course_id')
+                                ->where('courses.id', $course->id)
+                                ->sum('section_chapters.duration');
+
+    $hours = intdiv($totalTime, 60);
+    $minuts = $totalTime % 60;
+
+    return $hours.' hrs '.$minuts.' minutos';
+}
+
+
+function getShowSection(SectionChapter $current_chapter, CourseSection $section)
+{
+    return $current_chapter->courseSection->id == $section->id ? 'show' : '';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getFileExtension(Document $document)
 {
     $folder = $document->folder;
@@ -421,5 +485,10 @@ function getFileExtension(Document $document)
 
     return $extension;
 }
+
+
+
+
+
 
 ?>

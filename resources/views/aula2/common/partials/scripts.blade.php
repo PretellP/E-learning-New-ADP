@@ -1,3 +1,8 @@
+<!-- VIDEO.JS ---->
+
+{{-- <script src="{{mix('js/app.js')}}"></script> --}}
+<script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+
 <!-- General JS Scripts -->
 <script src="{{asset('assets/aula2/modules/jquery.min.js')}}"></script>
 <script src="{{asset('assets/aula2/modules/popper.js')}}"></script>
@@ -20,3 +25,5 @@
 <!-- Template JS File -->
 <script src="{{asset('assets/aula2/js/scripts.js')}}"></script>
 <script src="{{asset('assets/aula2/js/custom.js')}}"></script>
+
+

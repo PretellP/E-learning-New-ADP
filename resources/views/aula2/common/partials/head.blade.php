@@ -23,4 +23,9 @@
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/custom.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
 
+	<!-- VIDEO.JS ---->
+	<link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+
+	{{-- <link rel="stylesheet" href="{{mix('sass/app.scss')}}"> --}}
+
 </head>

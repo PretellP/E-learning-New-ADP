@@ -4,7 +4,7 @@
   --first-color-opacity: 83, 175, 190;
   --second-color: rgb(254, 92, 54);
   --second-color-opacity: 254, 92, 54;
-  --thirth-color: rgb(254, 180, 73);
+  --third-color: rgb(254, 180, 73);
   --fourth-color: rgb(67, 67, 67);
   --light-gray: rgb(243, 243, 243);
 }
@@ -14,7 +14,6 @@
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-weight: 400;
 }
-
 
 button:focus
 {
@@ -652,7 +651,7 @@ margin-left: -16rem !important; }
 
 .navbar .nav-link:hover
 {
-    color: var(--thirth-color);
+    color: var(--third-color);
 }
 
 .main-sidebar,
@@ -679,7 +678,7 @@ margin-left: -16rem !important; }
 {
     font-size: .7em;
     width: fit-content;
-    color: var(--thirth-color);
+    color: var(--third-color);
 }
 
 .main-sidebar .sidebar-menu li a
@@ -873,7 +872,7 @@ body.sidebar-mini
     font-size: 1.5em;
     font-weight: 900;
     width: 100%;
-    border-top: 2px solid var(--thirth-color);
+    border-top: 2px solid var(--third-color);
     padding-top: 1em;
     font-style: italic;
     position: relative;
@@ -888,7 +887,7 @@ body.sidebar-mini
     font-weight: 400;
     font-style: italic;
     width: 100%;
-    border-bottom: 2px solid var(--thirth-color);
+    border-bottom: 2px solid var(--third-color);
     position: relative;
     padding: 0.5em 0 1em 0;
 }
@@ -1044,7 +1043,7 @@ body.sidebar-mini
 .publishing-box .card-body .box-content-info-user
 .box-flex-align-info .avatar-img > i
 {
-    color: var(--thirth-color);
+    color: var(--third-color);
     font-size: 3.5em;
 }
 
@@ -1234,12 +1233,15 @@ a:hover
     background-color: transparent;
     box-shadow: none;
     min-height: 60vh;
-}
-
-.card-body
-{
     padding: 1.25rem 25px !important;
 }
+
+/* .card-body
+{
+    padding: 1.25rem 25px !important;
+} */
+
+
 
 
 
@@ -1272,6 +1274,12 @@ a:hover
     flex-wrap: wrap;
     gap: 70px;
 }
+
+/* .courses-cards-container
+.card-body
+{
+    padding: 0 !important;
+} */
 
 .courses-cards-container
 .course-card
@@ -1320,7 +1328,7 @@ a:hover
 .card-body
 .start-button-container
 {
-    background-color: var(--thirth-color);
+    background-color: var(--third-color);
     position: absolute;
     top: 0; left: 50%;
     width: 50%;
@@ -1396,7 +1404,7 @@ a:hover
 
 .instructor-name-box .instructor-name > div 
 {
-    border-bottom: 1px solid var(--thirth-color);
+    border-bottom: 1px solid var(--third-color);
 }
 
 .instructor-name-box .instructor-name > div:last-child
@@ -1426,7 +1434,7 @@ a:hover
 
 .course-info-box > div i
 {
-    color: var(--thirth-color) !important;
+    color: var(--third-color) !important;
 }
 
 .course-info-box > div:last-child
@@ -2139,7 +2147,7 @@ fieldset .box-quiz-body .box-answers
 .box-quiz-body [class^='btn-'] button:hover i,
 .box-quiz-body [class^='btn-'] a:hover i
 {
-    color: var(--thirth-color);
+    color: var(--third-color);
 }
 
 .steps input, .steps textarea {
@@ -2238,7 +2246,7 @@ fieldset .box-quiz-body .box-answers
     display: block;
     font-size: 10px;
     color: white;
-    background: var(--thirth-color);
+    background: var(--third-color);
     border-radius: 50%;
     margin: 0 auto 10px auto;
 }
@@ -2254,7 +2262,7 @@ fieldset .box-quiz-body .box-answers
     content: '';
     width: 70%;
     height: 2px;
-    background: var(--thirth-color);
+    background: var(--third-color);
     position: absolute;
     opacity: 0;
     left: -35%;
@@ -2591,7 +2599,7 @@ fieldset .box-quiz-body .box-answers
 
 .folder-btn-back .btn-folder-home:hover i
 {
-    color: var(--thirth-color);
+    color: var(--third-color);
 }
 
 .folder-name-cont
@@ -2646,6 +2654,394 @@ fieldset .box-quiz-body .box-answers
     color: var(--first-color);
 }
 
+
+
+
+/* -------------  FREE COURSES STYLES ------------  */
+
+
+
+.global-container
+.page-title-container.free-courses
+{
+    margin-bottom: 1.75rem;
+}
+
+.course-category-container
+{
+    display: flex;
+    justify-content: space-around;
+    gap: 80px 15px;
+    flex-wrap: wrap;
+}
+
+.course-category-container
+.category-card
+{
+    width: auto;
+    height: 400px;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.course-category-container
+.category-card img
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.course-category-container
+.category-card
+.category-title-container
+{
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.category-title-container
+.box-title
+{
+    min-width: 320px;
+    height: 320px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+}
+
+.category-title-container
+.box-title::after
+{
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    border-radius: 3px;
+    opacity: 0.9;
+    z-index: -1;
+}
+
+.category-card:nth-child(1n)
+.box-title::after
+{
+    background-color: var(--second-color);
+}
+
+.category-card:nth-child(2n)
+.box-title::after
+{
+    background-color: var(--third-color);
+}
+
+.category-card:nth-child(3n)
+.box-title::after
+{
+    background-color: var(--first-color);
+}
+
+.category-title-container
+.box-title .upper-text
+{
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+.category-title-container
+.box-title .title
+{
+    font-size: 3.1em;
+    font-weight: 900;
+}
+
+.category-title-container
+.box-title a.category-start
+{
+    background-color: white;
+    border-radius: 20px;
+    padding: 0.3em 2.4em;
+    margin: .5em 0;
+    transition: all .2s;
+}
+
+.category-title-container
+.box-title a.category-start:hover
+{
+    color: white !important;
+}
+
+.category-card:nth-child(1n)
+.box-title a.category-start
+{
+    color: var(--second-color);
+}
+
+.category-card:nth-child(1n)
+.box-title a.category-start:hover
+{
+    background-color: var(--first-color);
+}
+
+.category-card:nth-child(2n)
+.box-title a.category-start
+{
+    color: var(--third-color);
+}
+
+.category-card:nth-child(2n)
+.box-title a.category-start:hover
+{
+    background-color: var(--second-color);
+}
+
+.category-card:nth-child(3n)
+.box-title a.category-start
+{
+    color: var(--first-color);
+}
+
+.category-card:nth-child(3n)
+.box-title a.category-start:hover
+{
+    background-color: var(--third-color);
+}
+
+.start-button-container.freecourses
+button
+{
+    background-color: transparent;
+    border: none;
+    color: white;
+    height: 45px;
+    width: 100%;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.start-button-container.freecourses
+button i
+{
+    color: white;
+    font-size: 0.8em;
+}
+
+
+
+
+
+
+
+/* ----- FREE COURSE VIEW STYLES -------*/
+
+
+.body-global-container.freecourse-view
+{
+    background-color: var(--first-color);
+    padding: 0 !important;
+    flex-direction: row;
+    min-height: 80vh;
+}
+
+.body-global-container.freecourse-view
+.video-container
+{
+    width: 100%;
+    background-color: #333333;
+}
+
+.body-global-container.freecourse-view
+.lateral-menu
+{
+    width: 450px;
+}
+
+.body-global-container.freecourse-view
+.lateral-menu .course-header .img-container
+{
+    width: 100%;
+    height: 200px;
+}
+
+.lateral-menu .course-header .img-container img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.body-global-container.freecourse-view
+.lateral-menu .course-header .title
+{
+    background-color: var(--third-color);
+    height: auto;
+    font-size: 1.6em;
+    text-align: center;
+    font-weight: 700;
+    padding: 0.5em 0;
+    color: white;
+}
+
+.lateral-menu
+.info-head-freecourse
+{
+    color: white;
+    font-size: 1.1em;
+    text-align: center;
+    padding: 0.6em 0;
+    border-bottom: 5px solid white;
+}
+
+
+
+.lateral-menu
+.section-accordion
+{
+    margin-bottom: 0;
+    background-color: var(--first-color);
+}
+
+.lateral-menu
+.section-accordion .card-header
+{
+    padding: 0;
+    border-bottom: 1px solid white;
+}
+
+
+.lateral-menu
+.section-accordion .card-header button
+{
+    min-height: 70px;
+    border-radius: 0 !important;
+    margin-top: 0 !important;
+    color: white;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 20px 25px;
+    background-color: var(--first-color);
+    transition: all .2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-accordion .card-header button
+.info-section-txt
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.section-accordion .card-header button
+.info-count
+{
+    font-size: 0.9em;
+    font-weight: 200;
+}
+
+
+.lateral-menu
+.section-accordion .card-header.active button
+{
+    filter: brightness(1.07) !important;
+}
+
+.section-accordion .card-header button i
+{
+    transition: all .2s;
+    transform: rotateZ(0deg);
+}
+
+.section-accordion .card-header button:hover,
+.section-accordion .card-header button:focus
+{
+    background-color: var(--first-color) !important;
+    filter: brightness(1.07);
+    text-decoration: none;
+}
+
+.section-accordion .card-header.active button i
+{
+    transform: rotateZ(-180deg);
+}
+
+.lateral-menu
+.section-accordion .collapse-sections
+.card-body
+{
+    background-color: var(--light-gray);
+    transition: all .2s;
+    padding: 0 !important;
+}
+
+.lateral-menu
+.section-accordion .collapse-sections
+.card-body:hover
+{
+    background-color: white;
+}
+
+.section-accordion .collapse-sections
+.card-body.active
+{
+    background-color: white;
+}
+
+.section-accordion .collapse-sections
+.card-body button
+{
+    color: var(--first-color);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+    padding: 20px;
+}
+
+.section-accordion .collapse-sections
+.card-body.active button
+{
+    color: var(--second-color);
+}
+
+.card-body button
+.chapter-title span i
+{
+    font-size: 0.4em;
+}
+
+
+
+
+
+
+
+.page-title-container.sub-content
+.card-header
+{
+    padding: 0;
+    margin:  2.75rem 0;
+}
 
 
 

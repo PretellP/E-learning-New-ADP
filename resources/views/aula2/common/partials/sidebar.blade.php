@@ -21,7 +21,7 @@
                 </a>
             </li>
 
-            <li class="dropdown profile-dropdown">
+            <li class="dropdown profile-dropdown {{setActive('aula.profile.*')}}" >
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fa-solid fa-circle-user"></i>
                     <span>
@@ -35,7 +35,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="nav-link" href="">
+                        <a href="{{route('aula.profile.index')}}" class="nav-link">
                             <i class="fa-solid fa-circle fa-2xs"></i>
                             Ver Perfil
                         </a>
@@ -57,8 +57,8 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="nav-link">
+            <li class="{{setActive('aula.freecourse.*')}}">
+                <a href="{{route('aula.freecourse.index')}}" class="nav-link">
                     <i class="fa-solid fa-laptop-file"></i>
                     <span>Cursos Libres</span>
                 </a>

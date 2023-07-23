@@ -16,4 +16,5 @@ class Company extends Model
     {
         return $this -> HasMany(User::class, 'company_id', 'id');
     }
+    
 }

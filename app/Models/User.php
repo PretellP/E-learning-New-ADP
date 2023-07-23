@@ -10,7 +10,8 @@ use App\Models\{Certification,
                 Event, 
                 Company,
                 MiningUnit,
-                Publishing
+                Publishing,
+                SectionChapter
             };
 
 class User extends Authenticatable
@@ -68,4 +69,11 @@ class User extends Authenticatable
     {
         return $this -> hasMany(Publishing::class, 'user_id', 'id');
     }
+
+    public function progressChapters()
+    {
+        return $this -> belongsToMany(SectionChapter::class, 'user_course_progress', 'user_id', 'section_chapter_id')
+                                        ->withPivot(['id', 'progress_time', 'last_seen', 'status'])->withTimestamps();
+    }
+
 }
