@@ -3,12 +3,13 @@
 
         <div class="sidebar-brand">
             <a href="{{route('aula.index')}}">
-                <img src="{{asset('assets/common/images/logo.png')}}" alt="">
+                <img src="{{asset('assets/common/images/logo-white.png')}}" alt="">
             </a>
         </div>
+        
         <div class="sidebar-brand hidden sidebar-brand-sm">
             <a href="{{route('aula.index')}}">
-                <img src="{{asset('assets/common/images/logo.png')}}" alt="">
+                <img src="{{asset('assets/common/images/logo-white.png')}}" alt="">
             </a>
         </div>
 
@@ -69,6 +70,17 @@
                     <i class="fa-solid fa-square-poll-vertical"></i>
                     <span>Encuestas</span>
                 </a>
+            </li>
+
+            <li>
+                <a href="#" class="nav-link" onclick="event.preventDefault(); 
+                document.getElementById('logout-form').submit();">
+                   <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Cerrar sesión</span>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
 
         </ul>

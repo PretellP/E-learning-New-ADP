@@ -4,20 +4,19 @@
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
         </ul>
 
+        <div class="banner-navbar">
+            <img src="{{asset('assets/common/images/banner-header2.jpg')}}" alt="">
+        </div>
+
+        <div class="company-info-welcome">
+            <div class="welcome">
+                Bienvenido a 
+            </div>
+            <div class="company-name">
+                Company.pe
+            </div>
+
+        </div>
+
     </form>
-    <ul class="navbar-nav navbar-right">
-
-        <li class="dropdown">
-
-            <a href="#" onclick="event.preventDefault(); 
-            document.getElementById('logout-form').submit();" class="nav-link nav-link-lg nav-link-user">
-                <i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i> &nbsp;
-                <div class="d-sm-none d-lg-inline-block">Cerrar Sesión</div>
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </li>
-    </ul>
 </nav>

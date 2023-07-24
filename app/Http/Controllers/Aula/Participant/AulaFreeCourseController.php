@@ -37,7 +37,7 @@ class AulaFreeCourseController extends Controller
 
     public function start(Course $course)
     {
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $progress = $user->progressChapters()->join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
                                             ->join('courses', 'courses.id', '=', 'course_sections.course_id')
                                             ->where('courses.id', $course->id)
@@ -97,9 +97,17 @@ class AulaFreeCourseController extends Controller
 
     public function updateChapter(SectionChapter $current_chapter, SectionChapter $new_chapter)
     {
-        $user = User::findOrFail(Auth::user()->id);
+        $course = $current_chapter->courseSection->course;
 
-        $user->progressChapters()->updateExistingPivot($current_chapter, [
+        $user = Auth::user();
+
+        $lastSeenSection = $user->progressChapters()->join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
+                                                    ->join('courses', 'courses.id', '=', 'course_sections.course_id')
+                                                    ->where('courses.id', $course->id)
+                                                    ->wherePivot('last_seen', 1)
+                                                    ->first();
+
+        $user->progressChapters()->updateExistingPivot($lastSeenSection, [
             'last_seen' => 0,
         ]);
 
@@ -125,6 +133,19 @@ class AulaFreeCourseController extends Controller
             'course' => $course,
             'current_chapter' => $new_chapter
         ]);
+    }
+
+
+    public function updateProgressTime(Request $request, SectionChapter $current_chapter)
+    {
+        $user = Auth::user();
+        $time = floor($request->time);
+
+        $user->progressChapters()->updateExistingPivot($current_chapter, [
+            'progress_time' => $time
+        ]);
+
+        return response()->json(['message' => 'Time saved']);
     }
 
     /**

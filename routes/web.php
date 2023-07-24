@@ -79,6 +79,7 @@ Route::group(['middleware' => 'auth'], function(){
             Route::get('/aula/cursos-libres/categoria/{category}', [AulaFreeCourseController::class, 'showCategory'])->name('aula.freecourse.showCategory');
             Route::get('/aula/cursos-libres/curso/{course}/{current_chapter}', [AulaFreeCourseController::class, 'showCourse'])->name('aula.freecourse.showChapter');
             Route::post('/aula/cursos-libres/iniciar/{course}', [AulaFreeCourseController::class, 'start'])->name('aula.freecourse.start');
+            Route::post('/aula/cursos-libres/AjaxSavetime/{current_chapter}', [AulaFreeCourseController::class, 'updateProgressTime'])->name('aula.freecourse.saveTime');
             Route::patch('/aula/cursos-libres/actualizar/{current_chapter}/{new_chapter}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
            
         });

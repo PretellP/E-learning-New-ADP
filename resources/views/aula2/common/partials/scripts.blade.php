@@ -26,4 +26,6 @@
 <script src="{{asset('assets/aula2/js/scripts.js')}}"></script>
 <script src="{{asset('assets/aula2/js/custom.js')}}"></script>
 
+@yield('extra-script')
+
 

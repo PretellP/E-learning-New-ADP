@@ -2,8 +2,11 @@
 
 @section('content')
 
+@php
+    $current_time = ($current_chapter->progressUsers()->wherePivot('user_id', Auth::user()->id)->first())->pivot->progress_time;
+@endphp
 
-<div class="content global-container">
+<div class="content global-container" id="chapter-title-head">
 
     <div class="card page-title-container free-courses">
         <div class="card-header">
@@ -13,16 +16,33 @@
         </div>
     </div>
 
+    <input type="hidden" id="url-input-video" data-time='{{$current_time}}' value='{{route('aula.freecourse.saveTime', $current_chapter)}}'>
+
 
     <div class="card-body body-global-container freecourse-view card z-index-2 g-course-flex">
 
         <div class="video-container">
-            <video controls preload='auto' class="video-js" data-setup='{
+            <video id="chapter-video" controls preload='auto' class="video-js" data-setup='{
                 "fluid": true,
                 "playbackRates": [0.5, 1, 1.5, 2]
             }'>
-                <source src="{{asset($current_chapter->url_video)}}">
+                <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+                {{-- <source src="{{asset($current_chapter->url_video)}}"> --}}
             </video>
+
+            <div class="card page-title-container free-courses">
+                <div class="card-header chapter-info-box">
+                    <div class="total-width-container chapter-title-info">
+                        <h4>{{$current_chapter->title}} </h4>
+                    </div>
+                                    
+                    <div class="chapter-desc-info">
+                        {{$current_chapter->description}}
+                    </div>
+
+                    <span id="show-time"></span>
+                </div>
+            </div>
         </div>
 
 
@@ -87,7 +107,7 @@
 
                             @if($chapter->id != $current_chapter->id)
                             <form method="POST"
-                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter])}}">
+                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter])}}#chapter-title-head">
                                 @method('PATCH')
                                 @csrf
                             @else
@@ -141,5 +161,20 @@
 
 
 </div>
+
+@endsection
+
+
+@section('extra-script')
+
+<script>
+
+// $(function() {
+
+//     videoElement.currentTime(20);
+
+// })
+
+</script>
 
 @endsection

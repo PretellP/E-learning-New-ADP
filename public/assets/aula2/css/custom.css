@@ -4,10 +4,14 @@
   --first-color-opacity: 83, 175, 190;
   --second-color: rgb(254, 92, 54);
   --second-color-opacity: 254, 92, 54;
-  --third-color: rgb(254, 180, 73);
+  --third-color: rgb(254, 178, 72);
   --fourth-color: rgb(67, 67, 67);
   --light-gray: rgb(243, 243, 243);
 }
+
+html:focus-within {
+  scroll-behavior: initial;
+} 
 
 *
 {
@@ -619,7 +623,19 @@ margin-left: -14rem !important; }
 margin-left: -16rem !important; }
 
 
+/* --------- MAIN CONTENT -------*/
 
+.main-content
+{
+    padding-top: 210px !important;
+    padding-left: 280px !important;
+    padding-right: 30px !important;
+}
+
+body.sidebar-mini .main-content, body.sidebar-mini .main-footer
+{
+    padding-left: 90px !important;
+}
 
 
 
@@ -629,7 +645,70 @@ margin-left: -16rem !important; }
 
 .navbar-bg
 {
-    background-color: var(--first-color);
+    background: rgb(254,180,73);
+    background: linear-gradient(90deg, rgba(254,180,73,1) 50%, rgba(254,92,54,1) 130%);
+    height: 172px;
+}
+
+.navbar
+{
+    padding: 0 !important;
+    height: 172px;
+    overflow: hidden;
+}
+
+.navbar form
+{
+    height: 100%;
+    width: 100%;
+}
+
+.navbar
+.banner-navbar
+{
+    height: 100%;
+    width: 50%;
+}
+
+.navbar
+.banner-navbar img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.company-info-welcome
+{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    padding-left: 40px;
+    text-transform: uppercase;
+    line-height: 4.5em;
+}
+
+.company-info-welcome
+.welcome
+{
+    font-family: 'Roboto-condensed', Arial, Helvetica, sans-serif;
+    font-size: 3.6em;
+    font-weight: 200;
+}
+
+.company-info-welcome
+.company-name
+{
+    font-size: 4.2em;
+    font-weight: 700;
+}
+
+.navbar-nav
+{
+    display: none;
 }
 
 .navbar.fixed
@@ -663,9 +742,10 @@ margin-left: -16rem !important; }
 .main-sidebar aside
 .sidebar-brand
 {
-    height: auto;
+    height: 172px;
     padding: 3em;
-    background-color: var(--light-gray);
+    background: rgb(254,180,73);
+background: linear-gradient(180deg, rgba(254,180,73,1) 15%, rgba(254,92,54,1) 150%);
 }
 
 .main-sidebar .sidebar-menu > li
@@ -747,7 +827,12 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu > li.active > a:before
 .main-sidebar aside
 .sidebar-brand img
 {
-    width: 90px;
+    height: 100%;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-brand-sm
+{
+    height: auto;
 }
 
 .main-sidebar aside
@@ -1232,7 +1317,7 @@ a:hover
 {
     background-color: transparent;
     box-shadow: none;
-    min-height: 60vh;
+    min-height: 70vh;
     padding: 1.25rem 25px !important;
 }
 
@@ -1907,12 +1992,12 @@ iframe.zoom-meeting
     margin: 15px auto;
     text-align: center;
     z-index: 999;
-    width: 96%;
+    width: 98%;
 }
 
 .info > h3
 {
-    font-size: 1.4em;
+    font-size: 1.3em;
     background-color: var(--second-color);
     color: white;
     padding: 1em 1.2em;
@@ -2219,7 +2304,7 @@ fieldset .box-quiz-body .box-answers
 }
 
 #progressbar {
-    margin: 0 auto 30px auto;
+    margin: 0 auto 15px auto;
     padding: 0;
     counter-reset: step;
     width: 100%;
@@ -2848,25 +2933,80 @@ button i
 /* ----- FREE COURSE VIEW STYLES -------*/
 
 
+/* ----- videoJS STYLES ---------*/
+
+.vjs-big-play-button
+{
+    background-color: var(--first-color) !important;
+    width: 80px !important;
+    height: 80px !important;
+    transform: translateY(-50%);
+    border-radius: 50% !important;
+    transition: all .2s !important;
+}
+
+.vjs-big-play-button:hover
+{
+    background-color: var(--second-color) !important;
+}
+
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before
+{
+    position: absolute;
+    transform: translateY(20%);
+}
+
 .body-global-container.freecourse-view
 {
-    background-color: var(--first-color);
+    background-color: white;
     padding: 0 !important;
     flex-direction: row;
-    min-height: 80vh;
+    min-height: 100vh;
 }
 
 .body-global-container.freecourse-view
 .video-container
 {
     width: 100%;
-    background-color: #333333;
+}
+
+.video-container.fixed
+{
+    padding-right: 400px;
+}
+
+.body-global-container.freecourse-view
+.chapter-info-box
+{
+    flex-direction: column;
+    margin-top: 1em;
+}
+
+.body-global-container.freecourse-view
+.chapter-desc-info
+{
+    padding-top: 1em;
 }
 
 .body-global-container.freecourse-view
 .lateral-menu
 {
-    width: 450px;
+    background-color: var(--first-color);
+    min-width: 400px;
+    overflow-y: scroll;
+}
+
+.lateral-menu::-webkit-scrollbar
+{
+    display: none;
+}
+
+.lateral-menu.fixed
+{
+    position: fixed;
+    right: 45px;
+    top: 0;
+    height: 100vh;
 }
 
 .body-global-container.freecourse-view
@@ -2904,8 +3044,6 @@ button i
     padding: 0.6em 0;
     border-bottom: 5px solid white;
 }
-
-
 
 .lateral-menu
 .section-accordion
@@ -2953,7 +3091,6 @@ button i
     font-size: 0.9em;
     font-weight: 200;
 }
-
 
 .lateral-menu
 .section-accordion .card-header.active button
@@ -3130,7 +3267,19 @@ button i
 
 
 
+@media (max-width: 1024px)
+{
+    .main-content
+    {
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+    }
 
+    .navbar-nav
+    {
+        display: block;
+    }
+}
 
 
 
@@ -3154,7 +3303,7 @@ button i
     .steps fieldset
     {
         position: absolute;
-        height: 95% !important;
+        height: 96% !important;
         margin: 0 10%;
     }
 
@@ -3206,7 +3355,7 @@ button i
 @media (min-width:768px)
 {
     .info {
-        margin: 35px 0;
+        margin: 20px 0;
     }
 
     .container-fluid.cont-view-body
@@ -3229,7 +3378,7 @@ button i
 
     .quiz-container.quiz
     {
-        height: calc(100vh - 105px) !important;
+        height: calc(100vh - 225px) !important;
         position: relative;
         overflow-y: scroll;
     }

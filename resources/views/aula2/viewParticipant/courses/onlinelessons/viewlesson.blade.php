@@ -2,23 +2,6 @@
 
 @section('content')
 
-<div class="row upper-info-container">
-
-    <div class="col-12">
-        <div class="card card-upper-info">
-            <div class="card-upper-info-items principal">
-                {{$course->description}}:
-            </div>
-
-            <div class="card-upper-info-items extra text-uppercase">
-                {{$room->description}}
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
 
 <div class="content global-container">
 

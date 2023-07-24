@@ -5,18 +5,18 @@ $(function() {
     /*---- NAVBAR SCROLL ----*/
 
     var recomendedCourses = $(".recomended-courses");
-    var navbar = $(".navbar")
-    var navbarBg = $(".navbar-bg")
+    var videContainer = $(".video-container")
+    var lateralMenu = $(".lateral-menu")
 
     $(window).scroll(function() {    
         var scroll_height = $(window).scrollTop();
 
-        if(scroll_height >= 70){
-            navbar.addClass('fixed')
-            navbarBg.addClass('fixed')
+        if(scroll_height >= 302){
+            lateralMenu.addClass('fixed')
+            videContainer.addClass('fixed')
         }else{
-            navbarBg.removeClass('fixed')
-            navbar.removeClass('fixed')
+            lateralMenu.removeClass('fixed')
+            videContainer.removeClass('fixed')
         }
     
         if (scroll_height >= 180) {
@@ -130,7 +130,46 @@ $(function() {
 
 
 
+      /*----- VIDEO GET CURRENT PLAY TIME ------*/
 
+
+    var videoElement = videojs.getPlayer('chapter-video');
+    var dataChapterInput = $('#url-input-video');
+    var url = dataChapterInput.val();
+    var setTime = dataChapterInput.data('time');
+
+    function SetTimeProgress()
+    {
+        var currentTime = videoElement.currentTime();
+        var data = {time: currentTime};
+        var headers = {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+
+        $.ajax({
+            method: 'POST',
+            url: url,
+            data: data,
+            dataType: "JSON",
+            headers: headers,
+            success: function (response)
+            { }
+
+        })
+        
+        if(videoElement.paused())
+        {
+            clearInterval(timeVideoUpdate);
+            return;
+        }
+    }
+
+    let timeVideoUpdate;
+
+    videoElement.on('playing', () => {
+
+        timeVideoUpdate = setInterval(SetTimeProgress, 5000);
+    })
+
+    videoElement.currentTime(setTime);
 
 
 });
