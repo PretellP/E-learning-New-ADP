@@ -78,7 +78,7 @@ class FolderController extends Controller
      */
     public function show(Course $course, Folder $folder)
     {
-        $files = $folder->documents()->get();
+        $files = $folder->documents;
         $subFolders = Folder::where('parent_folder_id', $folder->id)->get();
         $parentFoldersCollection = collect();
         $lastFolderId = $folder->parent_folder_id;
@@ -135,7 +135,7 @@ class FolderController extends Controller
 
     public function destroy(Folder $folder)
     {
-        $course = $folder->course()->first();
+        $course = $folder->course;
 
         Storage::deleteDirectory($folder->folder_path);
         $parentFolder = $folder->parent_folder_id;

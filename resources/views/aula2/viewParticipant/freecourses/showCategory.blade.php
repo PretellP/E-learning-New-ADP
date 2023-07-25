@@ -35,7 +35,7 @@
                         <form method="POST" action="{{route('aula.freecourse.start', $course)}}#chapter-title-head"> 
                             @csrf
                             <button type="submit">
-                                Iniciar &nbsp;
+                                Ingresar &nbsp;
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </form>
@@ -44,6 +44,18 @@
 
                     <div class="course-title-box">
                         {{$course->description}}
+                    </div>
+
+                    <div class="course-info-box">
+                        <div class="category-box">
+                            <div>
+                                (Categoría)
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-table-cells-large"></i> 
+                                {{$course->courseCategory->description}}
+                            </div>
+                        </div>
                     </div>
 
                     <div class="course-info-box">

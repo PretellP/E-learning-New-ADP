@@ -2924,7 +2924,50 @@ button i
     font-size: 0.8em;
 }
 
+.category-box
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .2em !important;
+}
 
+.category-box > div
+{
+    display: flex;
+    align-items: center;
+    gap: .5em;
+}
+
+.category-box > div i
+{
+    color: var(--first-color) !important;
+}
+
+.category-box > div:nth-child(2)
+{
+    border-top: 1px solid var(--second-color);
+    font-weight: 700;
+    padding-top: .2em;
+}
+
+.info-empty-section
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1.7em;
+    color: rgb(190, 190, 190);
+    user-select: none;
+}
+
+.info-empty-section h4
+{
+    font-weight: 400 !important;
+}
 
 
 
@@ -2935,19 +2978,199 @@ button i
 
 /* ----- videoJS STYLES ---------*/
 
+.sub-video-container
+{
+    position: relative;
+}
+
+.video-label-top
+{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.8) 100%);
+    padding: 1.8em;
+    color: white;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 2s 2s;
+}
+
+.sub-video-container:hover
+.video-label-top
+{
+    opacity: 1;
+    transition: opacity .1s .2s;
+}
+
+.video-label-top.paused
+{
+    opacity: 1 !important;
+}
+
+.btn-next-chapter-video
+{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--first-color);
+    min-height: 80px;
+    min-width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6em;
+    opacity: 0;
+    border-radius: 20px 0 0 20px;
+    cursor: pointer;
+    transition: opacity 2s 2s;
+    padding: .15em .8em;
+}
+
+.btn-navigation-chapter > a
+{
+    color: white;
+}
+
+.btn-next-chapter-video
+.inner-btn-next-chapter,
+.btn-previous-chapter-video
+.inner-btn-previous-chapter
+{
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    height: 80px;
+}
+
+.inner-btn-next-chapter
+.info-next-chapter,
+.inner-btn-previous-chapter
+.info-previous-chapter
+{
+    width: 0px;
+    word-wrap: normal;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: width 0.3s 0s, opacity 0.1s;
+    line-height: 1em;
+}
+
+.btn-navigation-chapter:hover 
+.inner-btn-next-chapter
+.info-next-chapter,
+.btn-navigation-chapter:hover 
+.inner-btn-previous-chapter
+.info-previous-chapter
+{
+    width: 300px;
+    opacity: 1;
+    transition: width 0.3s .3s, opacity 0.5s .5s;
+}
+
+
+.info-next-chapter
+.extra-txt-nc,
+.info-previous-chapter
+.extra-txt-nc
+{
+    font-size: 0.7em;
+    font-weight: 200;
+}
+
+.info-next-chapter
+.txt-title-nc,
+.info-previous-chapter
+.txt-title-nc
+{
+    font-size: 0.9em;
+}
+
+
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before
+{
+    top: 3px !important;
+}
+
+.sub-video-container:hover
+.btn-navigation-chapter
+{
+    opacity: 0.9;
+    transition: opacity .1s .2s;
+}
+
+.btn-previous-chapter-video
+{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--first-color);
+    max-height: 80px;
+    min-width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6em;
+    opacity: 0;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    transition: opacity 2s 2s;
+    padding: .8em .8em;
+}
+
+.inner-btn-previous-chapter
+.info-previous-chapter
+{
+    text-align: right;
+}
+
+.btn-navigation-chapter.paused
+{
+    opacity: 0.9 !important;
+}
+
+
+
+.video-js .vjs-control
+{
+    height: 3em !important;
+}
+
+.video-js .vjs-control-bar
+{
+    background-color: var(--first-color) !important;
+    align-items: center !important;
+    height: 4em !important;
+}
+
+.video-js .vjs-play-control .vjs-icon-placeholder
+{
+    color: var(--third-color);
+}
+
+
 .vjs-big-play-button
 {
     background-color: var(--first-color) !important;
     width: 80px !important;
     height: 80px !important;
+    margin-top: 0 !important;
     transform: translateY(-50%);
     border-radius: 50% !important;
+    border: none !important;
+    opacity: 0.8 !important;
     transition: all .2s !important;
 }
 
 .vjs-big-play-button:hover
 {
-    background-color: var(--second-color) !important;
+    opacity: 1 !important;
 }
 
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before
@@ -3179,6 +3402,9 @@ button i
     padding: 0;
     margin:  2.75rem 0;
 }
+
+
+
 
 
 

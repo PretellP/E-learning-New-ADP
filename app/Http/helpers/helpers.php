@@ -226,15 +226,15 @@ function getInstructorsBasedOnUserAndCourse(Course $course)
 
 function getCompanyFromUser()
 {
-   $company = Company::findOrFail(Auth::user()->company_id);
+    $user = Auth::user();
+    $company = $user->company;
 
-   return $company;
+    return $company;
 }
 
 function getMiningUnitsFromUser()
 {
-    $user = User::findOrFail(Auth::user()->id);
-
+    $user = Auth::user();
     $mining_units = $user->miningUnits;
 
     return $mining_units;
@@ -333,6 +333,75 @@ function getShowSection(SectionChapter $current_chapter, CourseSection $section)
 }
 
 
+function getNextChapter($next_sections, SectionChapter $current_chapter)
+{
+    $next_chapter = null;
+    $i = 0;
+    foreach($next_sections as $section)
+    {
+        if($i == 0)
+        {
+            $next_chapter = $section->sectionChapters->where('chapter_order', $current_chapter->chapter_order + 1)->first();
+        }
+        else{
+            $next_chapter = $section->sectionChapters->where('chapter_order', 1)->first();
+        }
+
+        if($next_chapter != null)
+        {
+            break;
+        }
+        $i++;
+    }
+
+    return $next_chapter;
+}
+
+function getPreviousChapter($previous_sections, SectionChapter $current_chapter)
+{
+    $previous_chapter = null;
+    $i = 0;
+
+    foreach($previous_sections as $section)
+    {
+        if($i == 0)
+        {
+            $previous_chapter = $section->sectionChapters->where('chapter_order', $current_chapter->chapter_order - 1)->first();
+        }
+        else{
+            $previous_chapter = $section->sectionChapters->where('chapter_order', count($section->sectionChapters))->first();
+        }
+
+        if($previous_chapter != null)
+        {
+            break;
+        }
+
+        $i++;
+    }
+
+    return $previous_chapter;
+}
+
+
+function getItsChapterFinished(SectionChapter $chapter)
+{
+    $user = Auth::user();
+
+    return $user->progressChapters()->wherePivot('section_chapter_id', $chapter->id)
+                                    ->wherePivot('status', 'F')->first() != null ? true : false;
+}
+
+function getNFinishedChapters($section)
+{
+    $user = Auth::user();
+
+    $Nchapters = $user->progressChapters()->join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
+                                            ->where('course_sections.id', $section->id)
+                                            ->wherePivot('status', 'F')
+                                            ->count();
+    return $Nchapters;
+}
 
 
 

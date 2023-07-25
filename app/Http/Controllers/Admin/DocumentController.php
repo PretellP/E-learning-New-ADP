@@ -106,7 +106,7 @@ class DocumentController extends Controller
      */
     public function destroy(Document $file)
     {
-        $folder=$file->folder()->get()->first();
+        $folder=$file->folder;
         $pathToFile=$folder->folder_path.$file->uuid;
 
         $file->delete();
