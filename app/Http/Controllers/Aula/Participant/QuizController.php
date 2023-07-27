@@ -46,7 +46,7 @@ class QuizController extends Controller
         $event_date = $certification->event->date;
         $its_time_out = getItsTimeOut(getTimeDifference($certification, $exam));
 
-        if (!$its_time_out && getCurrentDate() == $event_date)
+        if (!$its_time_out && getCurrentDate() == $event_date && $certification->assist_user == 'S')
         {
             if ($question->question_type_id == 5)
             {

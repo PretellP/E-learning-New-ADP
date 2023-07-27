@@ -32,8 +32,6 @@
                         alt="Card image cap">
                 </div>
 
-
-
                 <div class="card-body">
 
                     <div class="start-button-container">

@@ -3,8 +3,7 @@
 @section('content')
 
 @php
-$current_time = ($current_chapter->progressUsers()->wherePivot('user_id',
-Auth::user()->id)->first())->pivot->progress_time;
+
 @endphp
 
 <div class="content global-container" id="chapter-title-head">
@@ -28,7 +27,7 @@ Auth::user()->id)->first())->pivot->progress_time;
                     "fluid": true,
                     "playbackRates": [0.5, 1, 1.5, 2]
                 }'>
-                    <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+                    <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
                     
                     {{-- <source src="{{asset($current_chapter->url_video)}}"> --}}
 

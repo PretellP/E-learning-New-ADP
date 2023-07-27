@@ -68,7 +68,7 @@
 													 ECM 
 												</span>
 												<span class="info-profile-content">
-													 {{(getCompanyFromUser())->description}} 
+											
 												</span>
 											</div>
 											<div class="info-profile-box">
@@ -77,11 +77,11 @@
 													 UNIDAD 
 												</span>
 												<span class="info-profile-content">
-													@foreach (getMiningUnitsFromUser() as $miningUnit)
+											
 													<div>
-														{{$miningUnit->description}}
+												
 													</div>
-													@endforeach
+											
 												</span>
 												
 											</div>

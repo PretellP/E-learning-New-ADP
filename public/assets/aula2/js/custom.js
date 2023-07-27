@@ -136,59 +136,64 @@ $(function() {
 
 
     var videoElement = videojs.getPlayer('chapter-video');
-    var dataChapterInput = $('#url-input-video');
-    var url = dataChapterInput.val();
-    var setTime = dataChapterInput.data('time');
-    var chapterId = dataChapterInput.data('id');
-    var iconCheck = '<i class="fa-solid fa-circle-check"></i>';
-    var iconNoCheck = '<i class="fa-regular fa-circle"></i>';
 
-    function SetTimeProgress()
+    if(jQuery.type(videoElement) != 'undefined')
     {
-        var totalVideoDuration = videoElement.duration();
-        var currentTime = videoElement.currentTime();
-        var data = {time: currentTime, duration: totalVideoDuration};
-        var headers = {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+        var dataChapterInput = $('#url-input-video');
+        var url = dataChapterInput.val();
+        var setTime = dataChapterInput.data('time');
+        var chapterId = dataChapterInput.data('id');
+        var iconCheck = '<i class="fa-solid fa-circle-check"></i>';
+        var iconNoCheck = '<i class="fa-regular fa-circle"></i>';
 
-        $.ajax({
-            method: 'POST',
-            url: url,
-            data: data,
-            dataType: "JSON",
-            headers: headers,
-            success: function (response)
-            { 
-                if(response.check)
-                {
-                    $('#check-chapter-icon-'+chapterId).html(iconCheck);
-                }
-                else{
-                    $('#check-chapter-icon-'+chapterId).html(iconNoCheck);
-                }
-            }
-        })
-        
-        if(videoElement.paused())
+        function SetTimeProgress()
         {
-            clearInterval(timeVideoUpdate);
-            return;
+            var totalVideoDuration = videoElement.duration();
+            var currentTime = videoElement.currentTime();
+            var data = {time: currentTime, duration: totalVideoDuration};
+            var headers = {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+    
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: data,
+                dataType: "JSON",
+                headers: headers,
+                success: function (response)
+                { 
+                    if(response.check)
+                    {
+                        $('#check-chapter-icon-'+chapterId).html(iconCheck);
+                    }
+                    else{
+                        $('#check-chapter-icon-'+chapterId).html(iconNoCheck);
+                    }
+                }
+            })
         }
+    
+        let timeVideoUpdate;
+    
+        videoElement.on('playing', () => {
+            timeVideoUpdate = setInterval(SetTimeProgress, 5000);
+            $('.video-label-top').removeClass('paused')
+            $('.btn-navigation-chapter').removeClass('paused')
+            $('.btn-next-chapter-video').removeClass('ended')
+        })
+    
+        videoElement.on('pause', () =>{
+            clearInterval(timeVideoUpdate);
+            $('.video-label-top').addClass('paused')
+            $('.btn-navigation-chapter').addClass('paused')
+        }) 
+    
+        videoElement.on('ended', ()=>{
+            $('.btn-next-chapter-video').addClass('ended')
+        })
+    
+        videoElement.currentTime(setTime);
     }
 
-    let timeVideoUpdate;
-
-    videoElement.on('playing', () => {
-        timeVideoUpdate = setInterval(SetTimeProgress, 5000);
-        $('.video-label-top').removeClass('paused')
-        $('.btn-navigation-chapter').removeClass('paused')
-    })
-
-    videoElement.on('pause', () =>{
-        $('.video-label-top').addClass('paused')
-        $('.btn-navigation-chapter').addClass('paused')
-    }) 
-
-    videoElement.currentTime(setTime);
 
 });
 

@@ -24,7 +24,9 @@
 
             <li class="dropdown profile-dropdown {{setActive('aula.profile.*')}}" >
                 <a href="#" class="nav-link has-dropdown">
-                    <i class="fa-solid fa-circle-user"></i>
+                    <div class="img-avatar-box">
+                        <img src="{{asset(Auth::user()->url_img)}}" alt="">
+                    </div>
                     <span>
                         <div class="name">
                             {{strtolower(Auth::user()->name)}}
@@ -51,8 +53,8 @@
                 </a>
             </li>
 
-            <li>
-                <a class="nav-link" href="blank.html">
+            <li class="{{setActive('aula.myprogress.*')}}">
+                <a class="nav-link" href="{{route('aula.myprogress.index')}}">
                     <i class="fa-solid fa-chart-pie"></i>
                     <span>Mi Progreso</span>
                 </a>

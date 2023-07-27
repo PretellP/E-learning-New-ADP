@@ -119,16 +119,28 @@ class AulaFreeCourseController extends Controller
 
         $next_chapter = getNextChapter($next_sections, $current_chapter);
 
-        $previus_sections = $sections->whereIn('section_order', [$current_chapter->courseSection->section_order, $current_chapter->courseSection->section_order - 1])->reverse();
+        $previous_sections = $sections->whereIn('section_order', [$current_chapter->courseSection->section_order, $current_chapter->courseSection->section_order - 1])->reverse();
 
-        $previous_chapter = getPreviousChapter($previus_sections, $current_chapter);
+        $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
+
+        $current_progress = $current_chapter->progressUsers()->wherePivot('user_id', Auth::user()->id)->first();
+
+        if($current_progress != null)
+        {
+            $current_time = $current_progress->pivot->progress_time;
+        }
+        else
+        {
+            return back();
+        }
         
         return view('aula2.viewParticipant.freecourses.showChapter', [
             'course' => $course,
             'sections' => $sections,
             'current_chapter' => $current_chapter,
             'next_chapter' => $next_chapter,
-            'previous_chapter' => $previous_chapter
+            'previous_chapter' => $previous_chapter,
+            'current_time' => $current_time
         ]);
     }
 

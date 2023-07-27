@@ -623,6 +623,9 @@ margin-left: -14rem !important; }
 margin-left: -16rem !important; }
 
 
+
+
+
 /* --------- MAIN CONTENT -------*/
 
 .main-content
@@ -765,7 +768,7 @@ background: linear-gradient(180deg, rgba(254,180,73,1) 15%, rgba(254,92,54,1) 15
 {
     padding: 20px;
     height: auto;
-    transition: all .4s;
+    transition: all .2s;
 }
 
 .main-sidebar .sidebar-menu li a i
@@ -777,6 +780,7 @@ background: linear-gradient(180deg, rgba(254,180,73,1) 15%, rgba(254,92,54,1) 15
 .main-sidebar .sidebar-menu li a span
 {
     font-weight: 900;
+    line-height: 1.3em;
 }
 
 .main-sidebar .sidebar-menu
@@ -886,9 +890,23 @@ body.sidebar-mini .main-sidebar .sidebar-brand-sm
 }
 
 
+/* -------- SIDEBAR  ------- */
 
+.img-avatar-box
+{
+    max-width: 37px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1em;
+    border-radius: 50%;
+    overflow: hidden;
+}
 
-
+.img-avatar-box > img
+{
+    width: 100%;
+}
 
 
 
@@ -925,15 +943,101 @@ body.sidebar-mini
 
 
 
+/* -------- PROFILE STYLES ------------*/
+
+.profile-page-container
+{
+    margin-top: -3em !important;
+}
+
+.profile-view-container
+{
+    max-width: 1200px;
+    margin: auto;
+}
+
+.user-profile-presentation-cont
+{
+    width: 500px;
+    margin: auto;
+    padding-top: 2em;
+}
+
+.user-profile-presentation-cont
+.img-profile-page-box
+{
+    width: 25%;
+    margin: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--first-color);
+}
+
+.img-profile-page-box img
+{
+    width: 100%;
+}
+
+.user-profile-presentation-cont
+.user-info-profile-page-box
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: .7em;
+}
+
+.user-info-profile-page-box >
+.name-info-profile-page
+{
+    text-transform: capitalize;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+
+.data-profile-container
+{
+    background-color: var(--light-gray);
+}
+
+.data-profile-container
+.profile-row
+{
+    display: flex;
+    padding: 1.5em 2em;
+    text-align: left;
+    font-size: 1.1em;
+    align-items: center;
+}
+
+.data-profile-container
+.profile-row > div
+{
+    width: 100%;
+}
+
+.data-profile-container
+.profile-row:not(:last-child)
+{
+    border-bottom: 2px solid white;
+}
+
+.data-profile-container
+.profile-row
+.profile-label
+{
+    font-weight: 700;
+}
 
 
 
 
 
-/*------- HOME PAGE STYLES -----*/
 
 
-
+/*------- HOME PAGE STYLES ------*/
 
 
 
@@ -2973,10 +3077,10 @@ button i
 
 
 
-/* ----- FREE COURSE VIEW STYLES -------*/
+/* ------ FREE COURSE VIEW STYLES -------*/
 
 
-/* ----- videoJS STYLES ---------*/
+/* -------- videoJS STYLES ---------*/
 
 .sub-video-container
 {
@@ -3009,6 +3113,7 @@ button i
 .video-label-top.paused
 {
     opacity: 1 !important;
+    transition: opacity 0.2s;
 }
 
 .btn-next-chapter-video
@@ -3029,6 +3134,11 @@ button i
     cursor: pointer;
     transition: opacity 2s 2s;
     padding: .15em .8em;
+}
+
+.btn-next-chapter-video.ended 
+{
+    transition: opacity .2s 0s;
 }
 
 .btn-navigation-chapter > a
@@ -3070,7 +3180,15 @@ button i
 {
     width: 300px;
     opacity: 1;
-    transition: width 0.3s .3s, opacity 0.5s .5s;
+    transition: width 0.3s .3s, opacity .5s .5s;
+}
+
+.btn-next-chapter-video.ended 
+.info-next-chapter
+{
+    width: 300px;
+    opacity: 1;
+    transition: width 0.3s, opacity .5s .2s;
 }
 
 
@@ -3392,10 +3510,6 @@ button i
 
 
 
-
-
-
-
 .page-title-container.sub-content
 .card-header
 {
@@ -3406,6 +3520,222 @@ button i
 
 
 
+/* ------- MY PROGRESS STYLES --------*/
+
+.body-global-container.progress-container
+{
+    max-width: 1800px;
+    margin: auto;
+}
+
+
+.progress-section-title-container
+{
+    font-size: 1.2em;
+    font-family: 'Roboto-condensed', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    margin-bottom: 1em;
+}
+
+.course-progress-container
+{
+    display: flex;
+    flex-direction: column;
+    gap: 4em;
+}
+
+.course-progress-container
+.course-box
+{
+    display: flex;
+    justify-content: space-between;
+    height: 150px;
+    gap: 2.2em;
+}
+
+.course-progress-container
+.course-box > div
+{
+    background-color: var(--light-gray);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.course-progress-innerbox
+{
+    min-width: 500px;
+    height: 100%;
+    display: flex;
+}
+
+.course-progress-innerbox
+.course-progress-img
+{
+    min-width: 180px;
+    height: 100%;
+}
+
+.course-progress-innerbox
+.course-progress-img img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-progress-innerbox
+.course-progress-info
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.course-progress-info
+.title
+{
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    line-height: 1.1em;
+    font-weight: 700;
+    text-align: center;
+    padding: .7em .7em .2em .7em;
+    height: 100%;
+}
+
+.course-progress-info
+.btn-start
+{   
+    background-color: var(--third-color);
+    color: white;
+    padding: .3em 2em;
+    border-radius: 1em;
+    transition: all .2s;
+}
+
+.btn-start:hover
+{
+    background-color: var(--second-color);
+}
+
+.course-progress-info
+.extra-info
+{
+    margin-top: .5em;
+    padding: .7em;
+    width: 100%;
+    text-align: center;
+    border-top: 2px solid white;
+}
+
+.extra-info > i 
+{
+    color: var(--third-color);
+}
+
+.progress-bar-line-box
+{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5em;
+}
+
+.progress-bar-line-box
+.info-progress-txt
+{
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+.progress-bar-line-box
+.info-progress-txt span
+{
+    font-size: 1.2em;
+    color: var(--second-color);
+    font-weight: 700;
+}
+
+.progress-bar-line-box
+.progress-line
+{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
+}
+
+.progress-line
+.progress-bar
+{
+    min-height: 25%;
+    width: 100%;
+    background-color: var(--light-gray);
+}
+
+.progress-bar.assist,
+.progress-bar.finished
+{
+    background-color: var(--first-color);
+}
+
+.progress-bar.no-assist,
+.progress-bar.pending
+{
+    background-color: white;
+}
+
+.course-progress-results
+{
+    min-width: 200px;
+    padding: 2.3em .7em .7em .7em;
+    position: relative;
+}
+
+.course-progress-results
+.progress-evaluation-title
+{
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    text-align: center;
+}
+
+.course-progress-results
+.progress-evaluation-subtitle
+{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 35%;
+    height: calc(100% - 22px);
+    font-size: .8em;
+    font-weight: 600;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.canva-progress
+{
+    z-index: 999;
+}
+
+
+
 
 
 
@@ -3413,6 +3743,9 @@ button i
 
 
 /*----- MODAL STYLES --------*/
+
+
+
 
 
 .modal button.close:focus

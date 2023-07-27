@@ -29,10 +29,10 @@
 
             @php
             updateIfNotFinished($certification);
-            $ownerCompany = getOwnerCompanyFromCertification($certification);
+            $ownerCompany = $certification->event->exam->ownerCompany;
             $event = $certification->event;
             $status = $certification->status;
-            $availableStart = getCurrentDate() == $event->date && $certification->status == 'pending' ? true : false;
+            $availableStart = getCurrentDate() == $event->date && $certification->status == 'pending' && $certification->assist_user == 'S' ? true : false;
             @endphp
 
             <div class="card evaluation-card">
@@ -111,8 +111,7 @@
 
                         @elseif ($status == 'finished')
 
-                        @if ($certification->score < 10) <div class="variable-info"
-                            style="color: rgb(189, 20, 20)">
+                        @if ($certification->score < 10) <div class="variable-info" style="color: rgb(189, 20, 20)">
                             Desaprobado &nbsp;
                             <i class="fa-regular fa-circle-xmark"></i>
                     </div>
@@ -122,6 +121,13 @@
                         <i class="fa-regular fa-circle-check"></i>
                     </div>
                     @endif
+
+                    @elseif($certification->assist_user == 'N')
+
+                    <div class="variable-info" style="background-color: rgba(189, 20, 20, 0.486)">
+                        No se ha marcado asistencia &nbsp;
+                        <i class="fa-solid fa-calendar-xmark"></i>
+                    </div>
 
                     @else
 

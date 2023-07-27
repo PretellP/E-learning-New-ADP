@@ -88,14 +88,13 @@ function getItsTimeOut($diff_time)
 
 function getCertificationsFromCourse(Course $course)
 {
-    $certifications = Certification::join('events', 'certifications.event_id', '=', 'events.id')
-                            ->join('exams', 'events.exam_id', '=', 'exams.id')
-                            ->join('courses', 'exams.course_id', '=', 'courses.id')
-                            ->where('courses.id', $course->id)
-                            ->where('certifications.evaluation_type', '=', 'certification')
-                            ->where('certifications.user_id', '=', Auth::user()->id)
-                            ->orderBy('certifications.id', 'DESC')
-                            ->get('certifications.*');
+    $user = Auth::user();
+
+    $certifications = $user->certifications()->with('event.exam.ownerCompany')->get()
+                            ->filter(function($certification) use ($course){
+                            if($certification->event->exam->course_id == $course->id && $certification->evaluation_type == 'certification')
+                            return $certification;
+                    })->sortByDesc('id');
 
     return $certifications;
 }
@@ -121,11 +120,11 @@ function getDroppableOptionFromId($id)
 }
 
 
-function updateIfNotFinished(Certification $certification) : void
+function updateIfNotFinished($certification) : void
 {
     $current_date_string = Carbon::now('America/Lima')->format('Y-m-d');
     $current_date = Carbon::parse($current_date_string);
-    $event_date = Carbon::parse(($certification->event()->first('date'))->date);
+    $event_date = Carbon::parse(($certification->event->date));
 
     if($current_date->greaterThan($event_date) && $certification->status != 'finished')
     {
@@ -166,28 +165,24 @@ function updateIfNotFinished(Certification $certification) : void
 
 function getCoursesBasedOnRole()
 {
-    $role = Auth::user()->role;
+    $user = Auth::user();
 
-    if ($role == 'instructor')
+    if ($user->role == 'instructor')
     {
         $courses = Course::join('exams', 'exams.course_id', '=', 'courses.id')
                         ->join('events', 'events.exam_id', '=', 'exams.id')
                         ->join('users', 'events.user_id', '=', 'users.id')
-                        ->where('users.id', Auth::user()->id)
+                        ->where('users.id', $user->id)
                         ->where('courses.active', 'S')
                         ->where('courses.course_type', 'REGULAR')
                         ->distinct()->get('courses.*');
     }
-    else if($role == 'participants'){
+    else if($user->role == 'participants'){
 
-        $courses = Course::join('exams', 'exams.course_id', '=', 'courses.id')
-                        ->join('events', 'events.exam_id', '=', 'exams.id')
-                        ->join('certifications', 'certifications.event_id', '=', 'events.id')
-                        ->join('users', 'users.id', '=', 'certifications.user_id')
-                        ->where('users.id', Auth::user()->id)
-                        ->where('courses.active', 'S')
-                        ->where('courses.course_type', 'REGULAR')
-                        ->distinct()->get('courses.*');
+        $courses = $user->certifications()->where('evaluation_type', 'certification')
+                    ->with('event.exam.course')
+                    ->get()->pluck('event.exam.course')->unique();
+
     }
 
     return $courses;
@@ -222,22 +217,6 @@ function getInstructorsBasedOnUserAndCourse(Course $course)
     }
 
     return $instructors; 
-}
-
-function getCompanyFromUser()
-{
-    $user = Auth::user();
-    $company = $user->company;
-
-    return $company;
-}
-
-function getMiningUnitsFromUser()
-{
-    $user = Auth::user();
-    $mining_units = $user->miningUnits;
-
-    return $mining_units;
 }
 
 function getUserFromId($id)

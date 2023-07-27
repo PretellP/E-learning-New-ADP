@@ -87,7 +87,7 @@ $(function() {
       $(".main-sidebar .sidebar-menu li a.has-dropdown").off('click').on('click', function() {
         var me = $(this);
 
-        me.parent().find('> .dropdown-menu').slideToggle(500, function() {
+        me.parent().find('> .dropdown-menu').slideToggle(200, function() {
           update_sidebar_nicescroll();
           return false;
         });

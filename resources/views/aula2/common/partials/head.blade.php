@@ -7,7 +7,6 @@
 
 	<!-- General CSS Files -->
 	<link rel="stylesheet" href="{{asset('assets/aula2/modules/bootstrap/css/bootstrap.min.css')}}">
-	<link rel="stylesheet" href="{{asset('assets/aula2/modules/fontawesome/css/all.min.css')}}">
 
 	<script src="https://kit.fontawesome.com/469f55554f.js" crossorigin="anonymous"></script>
 
@@ -25,7 +24,5 @@
 
 	<!-- VIDEO.JS ---->
 	<link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
-
-	{{-- <link rel="stylesheet" href="{{mix('sass/app.scss')}}"> --}}
 
 </head>

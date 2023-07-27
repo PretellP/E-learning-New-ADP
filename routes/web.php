@@ -20,7 +20,8 @@ use App\Http\Controllers\Aula\Participant\{
     QuizController,
     AulaEvaluationController,
     AulaOnlineLessonController,
-    AulaFreeCourseController
+    AulaFreeCourseController,
+    AulaMyProgressController
 };
 use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
@@ -81,6 +82,9 @@ Route::group(['middleware' => 'auth'], function(){
             Route::post('/aula/cursos-libres/iniciar/{course}', [AulaFreeCourseController::class, 'start'])->name('aula.freecourse.start');
             Route::post('/aula/cursos-libres/AjaxSavetime/{current_chapter}', [AulaFreeCourseController::class, 'updateProgressTime'])->name('aula.freecourse.saveTime');
             Route::patch('/aula/cursos-libres/actualizar/{current_chapter}/{new_chapter}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
+
+
+            Route::get('/aula/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');
            
         });
 
@@ -97,7 +101,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/aula/e-learning/ajax-certification/{certification}', [AulaEvaluationController::class, 'getAjaxCertification'])->name('aula.course.ajax.certification');
         
         Route::post('/aula/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
-        Route::patch('/aula/e-learning/{certification}/{exam}/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
+        Route::patch('/aula/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
 
     });
 
