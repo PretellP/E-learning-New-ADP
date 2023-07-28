@@ -180,40 +180,31 @@ function getCoursesBasedOnRole()
     else if($user->role == 'participants'){
 
         $courses = $user->certifications()->where('evaluation_type', 'certification')
-                    ->with('event.exam.course')
-                    ->get()->pluck('event.exam.course')->unique();
-
+                    ->with(['event'=>fn($query)=>$query->with('user')->with('exam.course')])
+                    ->get()->groupBy('event.exam.course.id');
     }
 
     return $courses;
 }
 
 
-function getInstructorsBasedOnUserAndCourse(Course $course)
+function getInstructorsBasedOnUserAndCourse($currentRelation)
 {
-    $role = Auth::user()->role;
+    $user = Auth::user();
+    $role = $user->role;
 
     $instructors = collect();
 
     if($role == 'instructor')
     {
-        $instructors = $instructors->push((User::FindOrFail(Auth::user()->id)));
+        $instructors = $instructors->push($user);
     }
     else if($role == 'participants')
     {
-        $instructors_ids = Event::join('exams', 'events.exam_id', '=', 'exams.id')
-                            ->join('courses', 'exams.course_id', '=', 'courses.id')
-                            ->join('certifications', 'events.id', '=', 'certifications.event_id')
-                            ->join('users', 'certifications.user_id', '=', 'users.id')
-                            ->where('users.id', Auth::user()->id)
-                            ->where('courses.id', $course->id)
-                            ->distinct()->get('events.user_id');
-
-        foreach($instructors_ids as $instructor_id)
-        {
-            $instructor = User::findOrFail($instructor_id->user_id);
-            $instructors = $instructors->push($instructor);
-        }
+        $instructors = $currentRelation->groupBy('event.user.id')
+                                        ->map(function($certification){
+                                            return $certification->first()->event->user;
+                                        });
     }
 
     return $instructors; 
@@ -292,17 +283,52 @@ function getCurrentDate()
     return Carbon::now('America/Lima')->format('Y-m-d');
 }
 
-function getFreeCourseTotalTime(Course $course)
+// function getFreeCourseTotalTime(Course $course)
+// {
+//     $totalTime = SectionChapter::join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
+//                                 ->join('courses', 'courses.id', '=', 'course_sections.course_id')
+//                                 ->where('courses.id', $course->id)
+//                                 ->sum('section_chapters.duration');
+
+//     $hours = intdiv($totalTime, 60);
+//     $minuts = $totalTime % 60;
+
+//     return $hours.' hrs '.$minuts.' minutos';
+// }
+
+function getFreeCourseTime(Course $course)
 {
-    $totalTime = SectionChapter::join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
-                                ->join('courses', 'courses.id', '=', 'course_sections.course_id')
-                                ->where('courses.id', $course->id)
-                                ->sum('section_chapters.duration');
+    $totalTime = $course->courseSections
+                ->reduce(function($carry, $section){
+                    return $carry + $section->sectionChapters
+                    ->reduce(function($count, $chapter){
+                        return $count + $chapter->duration;
+                   });
+                });
 
     $hours = intdiv($totalTime, 60);
     $minuts = $totalTime % 60;
 
     return $hours.' hrs '.$minuts.' minutos';
+}
+
+function getFreeCourseTotalChapters(Course $course)
+{
+    $totalChapters = $course->courseSections
+                    ->reduce(function($carry, $section){
+                        return $carry + $section->sectionChapters->count();
+                    });
+
+    return $totalChapters;
+}
+
+function getCompletedChapters($progress)
+{
+    $completedChapters = $progress->reduce(function($carry, $chapter){
+                            return $chapter->pivot->status == 'F' ? $carry+1 : $carry+0;
+                        });
+
+    return $completedChapters;
 }
 
 

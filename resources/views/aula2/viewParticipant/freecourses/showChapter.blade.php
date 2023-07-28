@@ -2,10 +2,6 @@
 
 @section('content')
 
-@php
-
-@endphp
-
 <div class="content global-container" id="chapter-title-head">
 
     <div class="card page-title-container free-courses">

@@ -26,35 +26,30 @@ class AulaFreeCourseController extends Controller
         $categories = CourseCategory::where('status', 'S')->get();
 
         $recomendedCourses = Course::where('course_type', 'FREE')
-                                    ->where('flg_recom', 1)->get();
+                                    ->where('flg_recom', 1)->with('courseSections.sectionChapters')->get();
 
         $pendingCourses = collect();
         $finishedCourses = collect();
 
-        $followingCourses = Course::with(['courseSections' => fn($query) => $query->withCount('sectionChapters')])
-                                    ->join('course_sections', 'courses.id', '=', 'course_sections.course_id')
-                                    ->join('user_course_progress', 'user_course_progress.section_chapter_id', '=', 'course_sections.id')
-                                    ->where('user_course_progress.user_id', $user->id)->distinct()->get('courses.*');
+        $followingCourses = $user->progressChapters()
+                                ->with(['courseSection' => fn($query) => $query
+                                ->with(['course' => fn($query2) => $query2
+                                ->with('courseCategory')->with('courseSections.sectionChapters')])])
+                                ->get()->groupBy('courseSection.course.id');
+
 
         foreach($followingCourses as $followingCourse)
         {
-            $Nprogress = $user->progressChapters()->join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
-                                                ->join('courses', 'courses.id', '=', 'course_sections.course_id')
-                                                ->where('courses.id', $followingCourse->id)
-                                                ->wherePivot('status', 'F')
-                                                ->count();
-
-            $totalChapters = $followingCourse->courseSections
-                            ->reduce(function ($count, $section){
-                                return $count + $section->section_chapters_count;
-                            });
+            $freeCourse = $followingCourse->first()->courseSection->course;
+            $Nprogress = getCompletedChapters($followingCourse);
+            $totalChapters = getFreeCourseTotalChapters($freeCourse);
 
             if($totalChapters == $Nprogress)
             {
-                $finishedCourses->push($followingCourse);
+                $finishedCourses->push($freeCourse);
             }
             else{
-                $pendingCourses->push($followingCourse);
+                $pendingCourses->push($freeCourse);
             }
         }
       
@@ -115,11 +110,13 @@ class AulaFreeCourseController extends Controller
         $sections = CourseSection::with('sectionChapters')->where('course_id', $course->id)
                                 ->orderBy('section_order', 'ASC')->get();
 
-        $next_sections = $sections->whereIn('section_order', [$current_chapter->courseSection->section_order, $current_chapter->courseSection->section_order + 1]);
+        $current_section_order = $current_chapter->courseSection->section_order;
+
+        $next_sections = $sections->whereIn('section_order', [$current_section_order, $current_section_order + 1]);
 
         $next_chapter = getNextChapter($next_sections, $current_chapter);
 
-        $previous_sections = $sections->whereIn('section_order', [$current_chapter->courseSection->section_order, $current_chapter->courseSection->section_order - 1])->reverse();
+        $previous_sections = $sections->whereIn('section_order', [$current_section_order, $current_section_order - 1])->reverse();
 
         $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
 

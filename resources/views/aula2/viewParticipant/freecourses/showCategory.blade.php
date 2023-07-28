@@ -61,7 +61,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTotalTime($course)}}
+                            Duración: {{getFreeCourseTime($course)}}
                         </div>
                     </div>
 

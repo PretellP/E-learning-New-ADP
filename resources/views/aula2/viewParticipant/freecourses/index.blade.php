@@ -93,7 +93,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTotalTime($pendingCourse)}}
+                            Duración: {{getFreeCourseTime($pendingCourse)}}
                         </div>
                     </div>
 
@@ -172,7 +172,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTotalTime($finishedCourse)}}
+                            Duración: {{getFreeCourseTime($finishedCourse)}}
                         </div>
                     </div>
 
@@ -250,7 +250,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTotalTime($recomendedCourse)}}
+                            Duración: {{getFreeCourseTime($recomendedCourse)}}
                         </div>
                     </div>
 

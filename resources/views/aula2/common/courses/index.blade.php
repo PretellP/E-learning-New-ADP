@@ -16,14 +16,15 @@
     <div class="card-body body-global-container card z-index-2 g-course-flex">
 
         <div class="info-count-courses">
-            Tienes <span> {{count($courses)}} </span>  cursos en total
+            Tienes <span> {{count($coursesRelation)}} </span>  cursos en total
         </div>
 
         <div class="courses-cards-container">
 
-            @forelse($courses as $course)
+            @forelse($coursesRelation as $currentRelation)
             @php
-            $instructors = getInstructorsBasedOnUserAndCourse($course);
+            $course = $currentRelation->first()->event->exam->course;
+            $instructors = getInstructorsBasedOnUserAndCourse($currentRelation);
             @endphp
 
             <div class="card course-card">
