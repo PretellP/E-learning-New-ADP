@@ -59,12 +59,12 @@ Chart.defaults.global.defaultFontColor = 'black';
         type: 'doughnut',
         data: {
           labels: [
+            'Completado',
             'Total',
-            'Completado'
           ],
           datasets: [{
             label: 'Evaluation Progress',
-            data: [dataTotal, dataCompleted],
+            data: [dataCompleted, dataTotal],
             backgroundColor: [
               'rgb(83, 175, 190)',
               'rgb(254, 92, 54)'

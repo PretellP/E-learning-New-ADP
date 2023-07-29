@@ -38,16 +38,12 @@ function getSelectedAnswers($certification)
 
 function getExamFromCertification($certification)
 {
-    $exam = $certification->event->exam;
-
-    return $exam;
+    return $certification->event->exam;
 }
 
 function getCourseFromEvent(Event $event)
 {
-    $course = $event->exam->course;
-
-    return $course;
+    return $event->exam->course;
 }
 
 function getQuestionsFromExam($exam)
@@ -68,7 +64,7 @@ function getCorrectAltFromQuestion($question)
 
 function getScoreFromCertification($certification)
 {
-    $score = $certification->evaluations()->sum('points');
+    $score = $certification->evaluations->sum('points');
 
     return $score;
 }
@@ -90,11 +86,25 @@ function getCertificationsFromCourse(Course $course)
 {
     $user = Auth::user();
 
-    $certifications = $user->certifications()->with('event.exam.ownerCompany')->get()
+    $certifications = $user->certifications()
+                            ->select('id','user_id','event_id','evaluation_type',
+                                    'status','score','assist_user','evaluation_time')
+                            ->with('evaluations:id,certification_id,points')
+                            ->with([
+                                'event'=>fn($query)=>$query
+                                ->select('id','exam_id','date','description','user_id')
+                                ->with('user:id,name,paternal,maternal')
+                                ->with([
+                                    'exam'=>fn($query2)=>$query2
+                                    ->select('id','course_id','owner_company_id','exam_time')
+                                    ->with('ownerCompany:id,name')
+                                ])
+                            ])
+                            ->get()
                             ->filter(function($certification) use ($course){
-                            if($certification->event->exam->course_id == $course->id && $certification->evaluation_type == 'certification')
-                            return $certification;
-                    })->sortByDesc('id');
+                                    if($certification->event->exam->course_id == $course->id && $certification->evaluation_type == 'certification')
+                                    return $certification;
+                            })->sortByDesc('id');
 
     return $certifications;
 }
@@ -162,26 +172,43 @@ function updateIfNotFinished($certification) : void
 }
 
 
-
 function getCoursesBasedOnRole()
 {
     $user = Auth::user();
 
     if ($user->role == 'instructor')
     {
-        $courses = Course::join('exams', 'exams.course_id', '=', 'courses.id')
-                        ->join('events', 'events.exam_id', '=', 'exams.id')
-                        ->join('users', 'events.user_id', '=', 'users.id')
-                        ->where('users.id', $user->id)
-                        ->where('courses.active', 'S')
-                        ->where('courses.course_type', 'REGULAR')
-                        ->distinct()->get('courses.*');
+        $courses = $user->events()->select('id','user_id','exam_id')
+                        ->with('exam.course', 'exam:id,course_id')
+                        ->with([
+                            'certifications'=>fn($query)=>$query
+                            ->where('evaluation_type', 'certification')
+                            ->select('user_id','event_id')
+                        ])
+                        ->get()->groupBy('exam.course.id');
+
     }
     else if($user->role == 'participants'){
 
-        $courses = $user->certifications()->where('evaluation_type', 'certification')
-                    ->with(['event'=>fn($query)=>$query->with('user')->with('exam.course')])
-                    ->get()->groupBy('event.exam.course.id');
+        $courses = $user->certifications()
+                        ->where('evaluation_type', 'certification')
+                        ->with([
+                            'event'=>fn($query)=>$query
+                            ->select('id','user_id','exam_id')
+                            ->with('user:id,name,paternal,maternal')
+                            ->with([
+                                'certifications'=>fn($query2)=>$query2
+                                ->where('evaluation_type', 'certification')
+                                ->select('user_id','event_id')
+                            ])
+                            ->with([
+                                'exam'=>fn($query3)=>$query3
+                                ->select('id','course_id')
+                                ->with('course:id,url_img,description,hours')
+                            ])
+                        ])->select('certifications.id',
+                                    'certifications.event_id')
+                        ->get()->groupBy('event.exam.course.id');
     }
 
     return $courses;
@@ -193,10 +220,9 @@ function getInstructorsBasedOnUserAndCourse($currentRelation)
     $user = Auth::user();
     $role = $user->role;
 
-    $instructors = collect();
-
     if($role == 'instructor')
     {
+        $instructors = collect();
         $instructors = $instructors->push($user);
     }
     else if($role == 'participants')
@@ -220,62 +246,31 @@ function getDiffForHumansFromTimestamp($timestamp)
     return Carbon::parse($timestamp)->diffForHumans();
 }
 
-function getEventsFromCourse(Course $course)
+function getNStudentsFromCourse($currentRelation)
 {
     $role = Auth::user()->role;
 
-    if($role == 'instructor')
+    if($role == 'participants')
     {
-        $events = Event::join('users', 'events.user_id', '=', 'users.id')
-                        ->join('exams', 'events.exam_id', '=', 'exams.id')
-                        ->join('courses', 'exams.course_id', '=', 'courses.id')
-                        ->where('courses.id', $course->id)
-                        ->where('users.id', Auth::user()->id)
-                        ->distinct()->get('events.*');
+        $nstudents = $currentRelation->map(function($certification){{
+                                    return $certification->event->certifications
+                                    ->pluck('user_id');
+                                }})->collapse()->unique()->count();
     }
-    else if($role == 'participants')
+    elseif($role == 'instructor')
     {
-        $events = Event::join('certifications', 'certifications.event_id', '=', 'events.id')
-                        ->join('users', 'certifications.user_id', '=', 'users.id')
-                        ->join('exams', 'events.exam_id', '=', 'exams.id')
-                        ->join('courses', 'exams.course_id', '=', 'courses.id')
-                        ->where('courses.id', $course->id)
-                        ->where('users.id', Auth::user()->id)
-                        ->distinct()->get('events.*');  
+        $nstudents = $currentRelation->map(function($event){
+                                        return $event->certifications
+                                        ->pluck('user_id');
+                                    })->collapse()->unique()->count();
     }
 
-    return $events;
-}
-
-function getNStudentsFromCourse(Course $course)
-{
-    $events = getEventsFromCourse($course);
-    $students_collect = collect();
-
-    foreach($events as $event)
-    {
-        $students = User::join('certifications', 'certifications.user_id', '=', 'users.id')
-                        ->join('events', 'certifications.event_id', '=', 'events.id')
-                        ->where('events.id', $event->id)
-                        ->distinct()->get('users.*');
-
-        foreach($students as $student)
-        {
-            if(!($students_collect->contains($student)))
-            {
-                $students_collect = $students_collect->push($student);
-            }
-        }
-    }
-    
-    return $students_collect->count();
+    return $nstudents;
 }
 
 function getOwnerCompanyFromCertification(Certification $certification)
 {
-    $ownerCompany = $certification->event->exam->ownerCompany;
-
-    return $ownerCompany;
+    return $certification->event->exam->ownerCompany;
 }
 
 function getCurrentDate()
@@ -283,28 +278,14 @@ function getCurrentDate()
     return Carbon::now('America/Lima')->format('Y-m-d');
 }
 
-// function getFreeCourseTotalTime(Course $course)
-// {
-//     $totalTime = SectionChapter::join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
-//                                 ->join('courses', 'courses.id', '=', 'course_sections.course_id')
-//                                 ->where('courses.id', $course->id)
-//                                 ->sum('section_chapters.duration');
-
-//     $hours = intdiv($totalTime, 60);
-//     $minuts = $totalTime % 60;
-
-//     return $hours.' hrs '.$minuts.' minutos';
-// }
-
 function getFreeCourseTime(Course $course)
 {
     $totalTime = $course->courseSections
-                ->reduce(function($carry, $section){
-                    return $carry + $section->sectionChapters
-                    ->reduce(function($count, $chapter){
-                        return $count + $chapter->duration;
+                ->sum(function($section){
+                    return $section->sectionChapters
+                    ->sum('duration');
                    });
-                });
+   
 
     $hours = intdiv($totalTime, 60);
     $minuts = $totalTime % 60;
@@ -312,20 +293,22 @@ function getFreeCourseTime(Course $course)
     return $hours.' hrs '.$minuts.' minutos';
 }
 
+
 function getFreeCourseTotalChapters(Course $course)
 {
     $totalChapters = $course->courseSections
-                    ->reduce(function($carry, $section){
-                        return $carry + $section->sectionChapters->count();
+                        ->sum(function($section){
+                        return $section->sectionChapters->count();
                     });
 
     return $totalChapters;
 }
 
+
 function getCompletedChapters($progress)
 {
-    $completedChapters = $progress->reduce(function($carry, $chapter){
-                            return $chapter->pivot->status == 'F' ? $carry+1 : $carry+0;
+    $completedChapters = $progress->sum(function($chapter){
+                            return $chapter->pivot->status == 'F' ? 1 : 0;
                         });
 
     return $completedChapters;
@@ -344,13 +327,13 @@ function getNextChapter($next_sections, SectionChapter $current_chapter)
     $i = 0;
     foreach($next_sections as $section)
     {
-        if($i == 0)
-        {
-            $next_chapter = $section->sectionChapters->where('chapter_order', $current_chapter->chapter_order + 1)->first();
-        }
-        else{
-            $next_chapter = $section->sectionChapters->where('chapter_order', 1)->first();
-        }
+        $next_chapter = $i == 0 ? 
+                        $section->sectionChapters
+                                ->where('chapter_order', $current_chapter->chapter_order + 1)
+                                ->first() 
+                        : $section->sectionChapters
+                                ->where('chapter_order', 1)
+                                ->first();
 
         if($next_chapter != null)
         {
@@ -369,13 +352,13 @@ function getPreviousChapter($previous_sections, SectionChapter $current_chapter)
 
     foreach($previous_sections as $section)
     {
-        if($i == 0)
-        {
-            $previous_chapter = $section->sectionChapters->where('chapter_order', $current_chapter->chapter_order - 1)->first();
-        }
-        else{
-            $previous_chapter = $section->sectionChapters->where('chapter_order', count($section->sectionChapters))->first();
-        }
+        $previous_chapter = $i == 0 ?
+                            $section->sectionChapters
+                                ->where('chapter_order', $current_chapter->chapter_order - 1)
+                                ->first()
+                            : $section->sectionChapters
+                                ->where('chapter_order', count($section->sectionChapters))
+                                ->first();
 
         if($previous_chapter != null)
         {
@@ -389,22 +372,18 @@ function getPreviousChapter($previous_sections, SectionChapter $current_chapter)
 }
 
 
-function getItsChapterFinished(SectionChapter $chapter)
+function getItsChapterFinished(SectionChapter $chapter, $allProgress)
 {
-    $user = Auth::user();
-
-    return $user->progressChapters()->wherePivot('section_chapter_id', $chapter->id)
-                                    ->wherePivot('status', 'F')->first() != null ? true : false;
+    return $allProgress->where('id', $chapter->id)->first()->pivot->status == 'F' ? true : false;
 }
 
-function getNFinishedChapters($section)
+function getNFinishedChapters($section, $allProgress)
 {
-    $user = Auth::user();
+    $Nchapters = $allProgress->where('section_id', $section->id)
+                            ->sum(function($chapter){
+                                return $chapter->pivot->status == 'F' ? 1 : 0;
+                            });
 
-    $Nchapters = $user->progressChapters()->join('course_sections', 'course_sections.id', '=', 'section_chapters.section_id')
-                                            ->where('course_sections.id', $section->id)
-                                            ->wherePivot('status', 'F')
-                                            ->count();
     return $Nchapters;
 }
 

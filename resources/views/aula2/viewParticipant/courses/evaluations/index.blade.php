@@ -32,7 +32,9 @@
             $ownerCompany = $certification->event->exam->ownerCompany;
             $event = $certification->event;
             $status = $certification->status;
-            $availableStart = getCurrentDate() == $event->date && $certification->status == 'pending' && $certification->assist_user == 'S' ? true : false;
+            $availableStart = getCurrentDate() == $event->date && 
+                                $certification->status == 'pending' && 
+                                $certification->assist_user == 'S' ? true : false;
             @endphp
 
             <div class="card evaluation-card">

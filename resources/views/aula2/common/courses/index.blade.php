@@ -23,7 +23,10 @@
 
             @forelse($coursesRelation as $currentRelation)
             @php
-            $course = $currentRelation->first()->event->exam->course;
+            $course = Auth::user()->role == 'instructor' ? 
+                        $currentRelation->first()->exam->course
+                        : $currentRelation->first()->event->exam->course;
+  
             $instructors = getInstructorsBasedOnUserAndCourse($currentRelation);
             @endphp
 
@@ -71,7 +74,7 @@
                         </div>
                         <div class="students-box">
                             <i class="fa-solid fa-graduation-cap"></i>
-                            {{getNStudentsFromCourse($course)}} Estudiantes
+                            {{getNStudentsFromCourse($currentRelation)}} Estudiantes
                         </div>
                     </div>
 

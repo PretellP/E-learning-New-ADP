@@ -19,12 +19,31 @@ class AulaMyProgressController extends Controller
         $user = Auth::user();
 
         $courses = $user->certifications()->where('evaluation_type', 'certification')
-                        ->with('event.exam.course')
+                        ->with(['event'=>fn($query)=>$query
+                            ->select('id','exam_id')
+                            ->with(['exam'=>fn($query2)=>$query2
+                                ->select('id','course_id')
+                                ->with('course:id,url_img,description,hours')
+                            ])
+                        ])->select('certifications.id',
+                                'certifications.event_id',
+                                'certifications.assist_user',
+                                'certifications.status',
+                                'certifications.score')
                         ->get()->groupBy('event.exam.course.id');
 
         $freeCourses = $user->progressChapters()
                         ->with(['courseSection' => fn($query) => $query
-                        ->with('course.courseSections.sectionChapters')])
+                            ->select('id','course_id')
+                            ->with(['course'=>fn($query2)=>$query2
+                                ->select('id','url_img','description')
+                                ->with(['courseSections'=>fn($query3)=>$query3
+                                    ->select('id','course_id')
+                                    ->with('sectionChapters:id,section_id,duration')
+                                ])
+                            ])
+                        ])->select('section_chapters.id',
+                                'section_chapters.section_id')
                         ->get()->groupBy('courseSection.course.id');
                 
         return view('aula2.viewParticipant.myprogress.index', [

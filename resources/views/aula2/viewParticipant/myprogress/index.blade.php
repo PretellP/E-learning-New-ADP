@@ -141,7 +141,7 @@
 
                 <div class="freecourse-progress-results" >
                     <div id='chart-{{$currentFreeCourse->id}}' class="freecourse-progress-chart-box" 
-                        data-total='{{$totalChapters}}' data-completed='{{$totalChapters - $completedChapters}}'>
+                        data-total='{{$totalChapters - $completedChapters}}' data-completed='{{$completedChapters}}'>
                         <canvas class="freecourse-chart" id="freecourse-chart-{{$currentFreeCourse->id}}"></canvas>
                     </div>
                     <div class="freecourse-progress-percentage-box">

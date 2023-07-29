@@ -132,12 +132,12 @@
                             </div>
 
                             <div class="info-count">
-                                {{getNFinishedChapters($section)}}/{{count($section->sectionChapters)}}
+                                {{getNFinishedChapters($section, $allProgress)}}/{{count($section->sectionChapters)}}
                                 @php
-                                $section_duration = 0;
-                                foreach ($section->sectionChapters as $chapter_duration) {
-                                $section_duration += $chapter_duration->duration;
-                                }
+                                $section_duration = $section->sectionChapters
+                                                    ->sum(function($chapter){
+                                                        return $chapter->duration;
+                                                    })
                                 @endphp
                                 | {{$section_duration}} min
                             </div>
@@ -165,7 +165,7 @@
                                     <button class="btn-next-chapter" type="submit">
 
                                         <div class="check-chapter-icon" id="check-chapter-icon-{{$chapter->id}}">
-                                            @if (getItsChapterFinished($chapter))
+                                            @if (getItsChapterFinished($chapter, $allProgress))
                                             <i class="fa-solid fa-circle-check"></i>
                                             @else
                                             <i class="fa-regular fa-circle"></i>
