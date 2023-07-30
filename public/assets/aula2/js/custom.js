@@ -4,7 +4,6 @@ $(function() {
 
     /*---- NAVBAR SCROLL ----*/
 
-    var recomendedCourses = $(".recomended-courses");
     var videContainer = $(".video-container")
     var lateralMenu = $(".lateral-menu")
 
@@ -17,12 +16,6 @@ $(function() {
         }else{
             lateralMenu.removeClass('fixed')
             videContainer.removeClass('fixed')
-        }
-    
-        if (scroll_height >= 180) {
-            recomendedCourses.addClass('fixed')
-        } else {
-            recomendedCourses.removeClass("fixed")
         }
     })
 
@@ -195,7 +188,27 @@ $(function() {
     }
 
 
+
+    /* ------- OWL CAROUSEL 2 ---------*/
+
+    var publiCarousel = $('#publishings-owlcarousel');
+
+    if(publiCarousel.length)
+    {
+        publiCarousel.owlCarousel({
+            items:1,
+            loop:true,
+            autoplay:true,
+            autoplayTimeout:5000,
+            autoplayHoverPause:true,
+            nav: true,
+            navText: ['<i class="fas fa-chevron-left"></i>','<i class="fas fa-chevron-right"></i>']
+        });
+    }
+
+
 });
+
 
 
 

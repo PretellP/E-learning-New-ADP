@@ -20,7 +20,7 @@
 
 <script src="{{asset('assets/aula2/modules/chart.min.js')}}"></script>
 
-<script src="{{asset('assets/aula2/modules/owlcarousel2/dist/owl.carousel.min.js')}}"></script>
+
 <script src="{{asset('assets/aula2/modules/summernote/summernote-bs4.js')}}"></script>
 <script src="{{asset('assets/aula2/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
 

@@ -10,10 +10,19 @@ class AulaHomeController extends Controller
 {
     public function index()
     {
-        $publishings = Publishing::orderBy('publication_time', 'DESC')->get();
+        $bannerPublishings = Publishing::where('type', 'BANNER')
+                            ->orderBy('publishing_order', 'ASC')
+                            ->select('id','publishing_order','url_img','type','title')
+                            ->get();
+
+        $cardPublishings = Publishing::where('type', 'CARD')
+                            ->with('user:id,name')
+                            ->select('id','user_id','type','title','content','url_img','publication_time')
+                            ->orderBy('publication_time', 'DESC')->get();
 
         return view('aula2.common.home.home', [
-            'publishings' => $publishings
+            'cardPublishings' => $cardPublishings,
+            'bannerPublishings' => $bannerPublishings
         ]);
     }
 }

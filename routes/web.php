@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function(){
             Route::get('/aula/cursos-libres/curso/{course}/{current_chapter}', [AulaFreeCourseController::class, 'showChapter'])->name('aula.freecourse.showChapter');
             Route::post('/aula/cursos-libres/iniciar/{course}', [AulaFreeCourseController::class, 'start'])->name('aula.freecourse.start');
             Route::post('/aula/cursos-libres/AjaxSavetime/{current_chapter}', [AulaFreeCourseController::class, 'updateProgressTime'])->name('aula.freecourse.saveTime');
-            Route::patch('/aula/cursos-libres/actualizar/{current_chapter}/{new_chapter}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
+            Route::patch('/aula/cursos-libres/actualizar/{current_chapter}/{new_chapter}/{course}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
 
 
             Route::get('/aula/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');

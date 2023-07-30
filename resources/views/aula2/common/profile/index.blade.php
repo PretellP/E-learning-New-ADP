@@ -9,16 +9,16 @@
 
         <div class="user-profile-presentation-cont">
             <div class="img-profile-page-box">
-                <img src="{{asset(Auth::user()->url_img)}}" alt="">
+                <img src="{{asset($user->url_img)}}" alt="">
             </div>
             <div class="user-info-profile-page-box">
                 <div class="name-info-profile-page">
-                    {{strtolower(Auth::user()->name)}}
-                    {{strtolower(Auth::user()->paternal)}}
-                    {{strtolower(Auth::user()->maternal)}}
+                    {{strtolower($user->name)}}
+                    {{strtolower($user->paternal)}}
+                    {{strtolower($user->maternal)}}
                 </div>
                 <div class="email-info-profile-page">
-                    {{strtolower(Auth::user()->email)}}
+                    {{strtolower($user->email)}}
                 </div>
             </div>
         </div>
@@ -37,22 +37,22 @@
                 <div class="profile-row">
                     <div class="profile-label">Nombre completo</div>
                     <div class="profile-info"> 
-                        {{Auth::user()->name}}
-                        {{Auth::user()->paternal}}
-                        {{Auth::user()->maternal}} 
+                        {{$user->name}}
+                        {{$user->paternal}}
+                        {{$user->maternal}} 
                     </div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">DNI</div>
-                    <div class="profile-info">{{Auth::user()->dni}}</div>
+                    <div class="profile-info">{{$user->dni}}</div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">Email</div>
-                    <div class="profile-info"> {{Auth::user()->email}} </div>
+                    <div class="profile-info"> {{$user->email}} </div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">Teléfono</div>
-                    <div class="profile-info"> {{Auth::user()->telephone}} </div>
+                    <div class="profile-info"> {{$user->telephone}} </div>
                 </div>
             </div>
 
@@ -67,20 +67,20 @@
             <div class="data-profile-container">
                 <div class="profile-row">
                     <div class="profile-label">Cargo</div>
-                    <div class="profile-info"> {{Auth::user()->position}} </div>
+                    <div class="profile-info"> {{$user->position}} </div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">Perfil</div>
-                    <div class="profile-info"> {{Auth::user()->profile_user}} </div>
+                    <div class="profile-info"> {{$user->profile_user}} </div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">ECM</div>
-                    <div class="profile-info"> {{Auth::user()->company->description}} </div>
+                    <div class="profile-info"> {{$user->company()->select('id','description')->first()->description}} </div>
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">Unidad Minera</div>
                     <div class="profile-info"> 
-                        @foreach (Auth::user()->miningUnits as $miningUnit)
+                        @foreach ($user->miningUnits()->select('mining_units.id','mining_units.description')->get() as $miningUnit)
                         <div>   
                             {{$miningUnit->description}}
                         </div>

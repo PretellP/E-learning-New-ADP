@@ -1,12 +1,19 @@
 @extends('aula2.common.layouts.masterpage')
 
+@section('extra-head')
+
+<link rel="stylesheet" href="{{asset('assets/aula2/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/aula2/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
+
+@endsection
+
 @section('content')
 
 
 <div class="row content">
 
 
-    <div class="col-lg-8 publishings">
+    <div class="publishings">
         <div class="card page-title-container">
             <div class="card-header">
                 <div class="total-width-container">
@@ -17,8 +24,24 @@
 
         <div class="card-body publishing-boxes-container card z-index-2 g-course-flex">
 
+            <div class="carousel-container">
+                <div id="publishings-owlcarousel" class="publishings-owlcarousel owl-carousel owl-theme slider">
+                    @foreach ($bannerPublishings as $banner)
+                        <img class='banner-img' src="{{asset($banner->url_img)}}" alt="">
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="card page-title-container sub-content">
+                <div class="card-header">
+                    <div class="total-width-container">
+                        <h4>NOTICIAS</h4>
+                    </div>
+                </div>
+            </div>
+
             <div class="tight-publishing-container">
-                @forelse ($publishings as $publishing)
+                @forelse ($cardPublishings as $card)
 
                 <div class="publishing-box card">
                     <div class="card-body">
@@ -30,29 +53,26 @@
                                 </div>
                                 <div class="box-publication-info">
                                     <div class="publishing-title">
-                                        {{$publishing->title}}
+                                        {{$card->title}}
                                     </div>
                                     <div class="publishing-name-time">
                                         <span class="publishing-username">
-                                            {{strtolower((getUserFromId($publishing->user_id))->name)}}
+                                            {{strtolower(($card->user->name))}}
                                         </span>
                                         <i class="fa-solid fa-circle fa-2xs"></i>
                                         <span class="publishing-difftime">
-                                            {{getDiffForHumansFromTimestamp($publishing->publication_time)}}
+                                            {{getDiffForHumansFromTimestamp($card->publication_time)}}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="publishing-text-content">
-                                {{$publishing->content}}
+                                {!! $card->content !!}
                             </div>
                         </div>
 
                         <div class="box-publishing-img">
-                            <img src="{{asset($publishing->url_img)}}" alt="">
-                        </div>
-
-                        <div class="box-publishing-footer">
+                            <img src="{{asset($card->url_img)}}" alt="">
                         </div>
                     </div>
                 </div>
@@ -69,46 +89,13 @@
         </div>
     </div>
 
-
-    <div class="col-lg-4 recomended-courses">
-        <div class="card gradient-bottom">
-            <div class="card-header">
-                <div class="total-width-container">
-                    <h4>Cursos Recomendados</h4>
-                </div>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled list-unstyled-border">
-
-                    @for ($i = 0; $i < 5; $i++)
-
-                    <li class="media">
-                        <div class="media-body">
-                            <div class="img-course">
-
-                            </div>
-
-                            <div class="course-description-container">
-                                <div class="text-content-1">
-
-                                </div>
-                                <div class="text-content-2">
-
-                                </div>
-                                <div class="text-content-3">
-
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    @endfor
-               
-
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
+
+@endsection
+
+
+@section('extra-script')
+
+<script src="{{asset('assets/aula2/modules/owlcarousel2/dist/owl.carousel.min.js')}}"></script>
 
 @endsection

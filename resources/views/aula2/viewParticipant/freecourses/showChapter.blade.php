@@ -30,7 +30,7 @@
                 </video>
 
                 <div class="video-label-top">
-                    {{$current_chapter->courseSection->title}} -
+                    {{$current_section->title}} -
                     {{$current_chapter->title}}
                 </div>
 
@@ -48,7 +48,8 @@
                         </div> 
                         <i class="fa-solid fa-angles-right fa-flip-horizontal"></i>
                     </a>
-                    <form method="POST" action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $previous_chapter])}}#chapter-title-head"" id="previous-chapter-video-form">
+                    <form method="POST" 
+                        action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $previous_chapter, $course])}}#chapter-title-head"" id="previous-chapter-video-form">
                         @method('PATCH')
                         @csrf
                     </form>
@@ -70,7 +71,7 @@
                             </div>
                         </div> 
                     </a>
-                    <form method="POST" action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $next_chapter])}}#chapter-title-head"" id="next-chapter-video-form">
+                    <form method="POST" action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $next_chapter, $course])}}#chapter-title-head"" id="next-chapter-video-form">
                         @method('PATCH')
                         @csrf
                     </form>
@@ -146,7 +147,7 @@
                     </div>
 
                     <div id="collapse-{{$section->id}}"
-                        class="collapse collapse-sections {{getShowSection($current_chapter, $section)}}"
+                        class="collapse collapse-sections {{getShowSection($current_section, $section)}}"
                         aria-labelledby="heading-{{$section->id}}" data-parent="#lateral-menu-sections">
 
                         @foreach ($section->sectionChapters->sortBy('chapter_order') as $chapter)
@@ -155,7 +156,7 @@
 
                             @if($chapter->id != $current_chapter->id)
                             <form method="POST"
-                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter])}}#chapter-title-head">
+                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter, $course])}}#chapter-title-head">
                                 @method('PATCH')
                                 @csrf
                                 @else

@@ -13,16 +13,20 @@
 	<!-- CSS Libraries -->
 	<link rel="stylesheet" href="{{asset('assets/aula2/modules/jqvmap/dist/jqvmap.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/aula2/modules/summernote/summernote-bs4.css')}}">
-	<link rel="stylesheet" href="{{asset('assets/aula2/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
-	<link rel="stylesheet" href="{{asset('assets/aula2/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
+	
 
+	
 	<!-- Template CSS -->
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/components.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/custom.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
+	
+
 
 	<!-- VIDEO.JS ---->
 	<link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+
+	@yield('extra-head')
 
 </head>

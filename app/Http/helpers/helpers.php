@@ -179,7 +179,10 @@ function getCoursesBasedOnRole()
     if ($user->role == 'instructor')
     {
         $courses = $user->events()->select('id','user_id','exam_id')
-                        ->with('exam.course', 'exam:id,course_id')
+                        ->with(['exam'=>fn($query)=>$query 
+                                ->select('id','course_id')
+                                ->with('course:id,url_img,description,hours')
+                            ])
                         ->with([
                             'certifications'=>fn($query)=>$query
                             ->where('evaluation_type', 'certification')
@@ -236,11 +239,6 @@ function getInstructorsBasedOnUserAndCourse($currentRelation)
     return $instructors; 
 }
 
-function getUserFromId($id)
-{
-    return User::findOrFail($id);
-}
-
 function getDiffForHumansFromTimestamp($timestamp)
 {
     return Carbon::parse($timestamp)->diffForHumans();
@@ -283,7 +281,7 @@ function getFreeCourseTime(Course $course)
     $totalTime = $course->courseSections
                 ->sum(function($section){
                     return $section->sectionChapters
-                    ->sum('duration');
+                            ->sum('duration');
                    });
    
 
@@ -315,9 +313,9 @@ function getCompletedChapters($progress)
 }
 
 
-function getShowSection(SectionChapter $current_chapter, CourseSection $section)
+function getShowSection(CourseSection $current_section, CourseSection $section)
 {
-    return $current_chapter->courseSection->id == $section->id ? 'show' : '';
+    return $current_section->id == $section->id ? 'show' : '';
 }
 
 
@@ -349,7 +347,6 @@ function getPreviousChapter($previous_sections, SectionChapter $current_chapter)
 {
     $previous_chapter = null;
     $i = 0;
-
     foreach($previous_sections as $section)
     {
         $previous_chapter = $i == 0 ?
@@ -374,7 +371,12 @@ function getPreviousChapter($previous_sections, SectionChapter $current_chapter)
 
 function getItsChapterFinished(SectionChapter $chapter, $allProgress)
 {
-    return $allProgress->where('id', $chapter->id)->first()->pivot->status == 'F' ? true : false;
+    $progress = $allProgress->where('id', $chapter->id)->first();
+    if($progress)
+    {
+        return $progress->pivot->status == 'F' ? true : false;
+    }
+
 }
 
 function getNFinishedChapters($section, $allProgress)
