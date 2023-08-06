@@ -28,7 +28,7 @@ class Aula
         {
             return $next($request);
         }else{
-            return redirect()->route('admin.index');
+            abort(403, 'Acceso denegado');
         }
         
     }

@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="{{asset('assets/aula2/modules/summernote/summernote-bs4.css')}}">
 	
 
-	
+	<link rel="stylesheet" href="{{asset('assets/aula2//modules/izitoast/css/iziToast.min.css')}}">
+
 	<!-- Template CSS -->
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/aula2/css/components.css')}}">

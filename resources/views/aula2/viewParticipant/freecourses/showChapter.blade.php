@@ -1,10 +1,12 @@
 @extends('aula2.common.layouts.masterpage')
 
+@section('main-content-extra-class', 'fixed-padding')
+
 @section('content')
 
-<div class="content global-container" id="chapter-title-head">
+<div class="content global-container free-courses" id="chapter-title-head">
 
-    <div class="card page-title-container free-courses">
+    <div class="card page-title-container">
         <div class="card-header">
             <div class="total-width-container">
                 <h4> Cursos libres: {{$course->description}} </h4>

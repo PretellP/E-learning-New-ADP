@@ -24,13 +24,15 @@
 <script src="{{asset('assets/aula2/modules/summernote/summernote-bs4.js')}}"></script>
 <script src="{{asset('assets/aula2/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
 
+
+<script src="{{asset('assets/aula2/modules/izitoast/js/iziToast.min.js')}}"></script>
+
 <!-- Page Specific JS File -->
 {{-- <script src="{{asset('assets/aula2/js/page/index.js')}}"></script> --}}
 
 <!-- Template JS File -->
 <script src="{{asset('assets/aula2/js/scripts.js')}}"></script>
 <script src="{{asset('assets/aula2/js/custom.js')}}"></script>
-
 
 @yield('extra-script')
 

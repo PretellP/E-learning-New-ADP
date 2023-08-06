@@ -2,11 +2,9 @@
 
 @section('content')
 
-
-
 <div class="content global-container">
 
-    <div class="card page-title-container free-courses">
+    <div class="card page-title-container">
         <div class="card-header">
             <div class="total-width-container">
                 <h4>CURSOS LIBRES</h4>
@@ -15,7 +13,6 @@
     </div>
 
     <div class="card-body body-global-container card z-index-2 g-course-flex">
-
 
         <div class="course-category-container">
 

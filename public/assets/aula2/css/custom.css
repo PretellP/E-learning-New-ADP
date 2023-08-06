@@ -3106,8 +3106,17 @@ button i
 
 /* ------ FREE COURSE VIEW STYLES -------*/
 
+/*------------ MAIN CONTENT --------------*/
+
+.main-content.fixed-padding,
+.global-container.free-courses
+{
+    padding-right: 0 !important;
+}
 
 /* -------- videoJS STYLES ---------*/
+
+
 
 .sub-video-container
 {
@@ -3372,7 +3381,7 @@ button i
 .lateral-menu.fixed
 {
     position: fixed;
-    right: 45px;
+    right: 0;
     top: 0;
     height: 100vh;
 }
@@ -3823,6 +3832,256 @@ button i
 {
     background-color: var(--second-color);
 }
+
+/* ----- SIDEBAR SURVEY ------*/
+
+.surveys-notify
+{
+    margin: 0 !important;
+    color: var(--third-color);
+}
+
+
+/* --------- SURVEY STYLES ----------*/
+
+.body-global-container.surveys h4
+{
+    width: 100%;
+    text-align: center;
+    color: #929292;
+    user-select: none;
+}
+
+.survey-container
+{
+    display: flex;
+    border-radius: 100px 3px 3px 100px;
+    overflow: hidden;
+    background-color: var(--light-gray);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.089);
+}
+
+.survey-container
+.survey-img-container
+{
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.survey-container
+.survey-img-container img
+{
+    width: 100%;
+    object-fit: cover;
+}
+
+.survey-container
+.card-body.survey
+{
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.survey-title-box
+{
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.4em;
+}
+
+.survey-btn-start
+{
+    text-align: center;
+}
+
+.survey-btn-start > a
+{
+    display: block;
+    width: 100% !important;
+    border-radius: 20px;
+    padding: 0.7em;
+    background-color: var(--third-color);
+    color: white;
+    transition: all .2s;
+}
+
+.survey-btn-start > a:hover
+{
+    background-color: var(--second-color);
+}
+
+
+.step-survey-container
+{
+    background-color: var(--light-gray);
+    max-width: 1000px;
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3.5em 2.5em;
+    border-radius: 3px;
+}
+
+.step-survey-container
+.group-title
+{
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.step-survey-container
+.group-options-container
+{
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+    max-width: 60%;
+    justify-content: flex-end;
+    gap: 28px;
+    padding: 0 21px 0 21px;
+}
+
+.group-options-container
+.group-option
+{
+    text-align: center;
+    padding: 1em;
+    width: 70px;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.questions-container
+.question-box
+{
+    padding: 1em 21px;
+    font-size: 1.1em;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+}
+
+.question-box
+.question-options-group
+{
+    display: flex;
+    width: fit-content;
+    max-width: 60%;
+    justify-content: flex-end;
+    gap: 28px;
+}
+
+.question-options-group
+.question-option
+{
+    text-align: center;
+    padding: 0 1em;
+    width: 70px;
+    height: 25px;
+}
+
+.questions-container
+.question-box:nth-child(odd)
+{
+    background-color: white;
+}
+
+.question-option >
+label
+{
+    margin: 0 !important;
+}
+
+.question-option
+.circle-label-option
+{
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border: 1px solid var(--fourth-color);
+    border-radius: 50%;
+    transition: all .1s;
+    cursor: pointer;
+}
+
+.question-option
+input
+{
+    display: none;
+}
+
+.question-option
+input:checked ~ label .circle-label-option
+{
+    background-color: var(--third-color);
+    border: 1px solid var(--third-color);
+}
+
+.btn-survey-container
+{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+}
+
+.btn-survey-container
+button.btn-survey-submit
+{
+    border: none;
+    background-color: var(--first-color);
+    color: white;
+    padding: 0.8em 1.3em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 1.1em;
+    border-radius: 3px;
+    margin-left: auto;
+}
+
+button.btn-survey-submit:hover,
+.survey-previous-btn:hover
+{
+    filter: brightness(1.1);
+}
+
+.survey-progress-bar-container
+{
+    margin-top: 1.5em;
+    display: flex;
+}
+
+.survey-progress-bar
+{
+    width: 100%;
+    height: 15px;
+    background-color: var(--third-color);
+}
+
+.survey-progress-bar.active
+{
+    background-color: var(--first-color);
+}
+
+.btn-survey-container
+.survey-previous-btn
+{
+    background-color: var(--first-color);
+    padding: 0.8em 1.3em;
+    color: white;
+    border-radius: 3px;
+    font-size: 1.1em;
+    transition: all .2s;
+    font-weight: 700;
+}
+
 
 
 

@@ -15,7 +15,11 @@ use App\Models\{
     OwnerCompany,
     Document,
     CourseSection,
-    SectionChapter
+    SectionChapter,
+    Survey,
+    UserSurvey,
+    SurveyStatement,
+    SurveyOption
 };
 
 date_default_timezone_set("America/Lima");
@@ -390,14 +394,98 @@ function getNFinishedChapters($section, $allProgress)
 }
 
 
+function validateSurveys()
+{
+    $user = Auth::user();
+    $surveys = $user->userSurveys()->whereHas('survey', function($query){
+                                        $query->where('active', 'S');
+                                    })
+                                    ->with('survey:id,destined_to')
+                                    ->get();
+
+    $checkEmptyCourseLive = $surveys->filter(function ($survey){
+                                    return $survey->survey->destined_to == 'course_live';
+                                })->isEmpty();
+    $checkEmptyUserProfile = $surveys->filter(function($survey){
+                                    return $survey->survey->destined_to == 'user_profile';
+                                })->isEmpty();
+
+    if($checkEmptyCourseLive)
+    {   
+        $survey_cl = Survey::where('destined_to', 'course_live')->first();
+
+        if($survey_cl != null)
+        {
+            UserSurvey::create([
+                'user_id' => $user->id,
+                'survey_id' => $survey_cl->id,
+                'date' => getCurrentDate(),
+                'status' => 'pending',
+                'start_time' => null,
+                'end_time' => null,
+                'total_time' => null,
+                'course_id' => null
+            ]);
+        }
+    }
+    if($checkEmptyUserProfile)
+    {
+        $survey_up = Survey::where('destined_to', 'user_profile')->first();
+
+        if($survey_up != null)
+        {
+            UserSurvey::create([
+                'user_id' => $user->id,
+                'survey_id' => $survey_up->id,
+                'date' => getCurrentDate(),
+                'status' => 'pending',
+                'start_time' => null,
+                'end_time' => null,
+                'total_time' => null,
+                'course_id' => null
+            ]);
+        }
+    
+    }
+
+    $checkPendingSurveys = $surveys->filter(function($survey){
+                                return $survey->status == 'pending';
+                            })->isNotEmpty();
+
+    return $checkPendingSurveys;
+}
 
 
+function getStatementsFromUserSurvey(UserSurvey $userSurvey)
+{
+    $statements = $userSurvey->survey->with(['surveyGroups'=>fn($query)=>$query
+                                            ->select('id','survey_id')
+                                            ->with('statements:id,description,group_id')
+                                        ])
+                                        ->first()
+                                        ->surveyGroups->map(function($group){
+                                            return $group->statements;
+                                        })->flatten();
 
+    return $statements;
+}
 
+function getOptionsFromStatement(SurveyStatement $statement)
+{
+    $options = $statement->options->sortByDesc('description');
+    
+    return $options;
+}
 
+function getChekedInput(SurveyStatement $statement, SurveyOption $option)
+{
+    return $statement->pivot->answer == $option->description ? 'checked': '';
+}
 
-
-
+function verifyLastSurveyGroup($answersByGroup, $group_position)
+{
+    return $answersByGroup->count() == $group_position ? true : false;
+}
 
 
 

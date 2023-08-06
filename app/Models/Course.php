@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Folder, Exam, CourseCategory, CourseSection};
+use App\Models\{Folder, Exam, CourseCategory, CourseSection, UserSurvey};
 
 class Course extends Model
 {
@@ -32,6 +32,9 @@ class Course extends Model
         return $this->hasMany(CourseSection::class, 'course_id', 'id');
     }
 
-    
+    public function userSurveys()
+    {
+        return $this->hasMany(UserSurvey::class, 'course_id', 'id');
+    }
 }
 

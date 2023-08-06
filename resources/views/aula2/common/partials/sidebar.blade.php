@@ -53,13 +53,6 @@
                 </a>
             </li>
 
-            <li class="{{setActive('aula.myprogress.*')}}">
-                <a class="nav-link" href="{{route('aula.myprogress.index')}}">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <span>Mi Progreso</span>
-                </a>
-            </li>
-
             <li class="{{setActive('aula.freecourse.*')}}">
                 <a href="{{route('aula.freecourse.index')}}" class="nav-link">
                     <i class="fa-solid fa-laptop-file"></i>
@@ -67,10 +60,20 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="nav-link">
+            <li class="{{setActive('aula.myprogress.*')}}">
+                <a class="nav-link" href="{{route('aula.myprogress.index')}}">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Mi Progreso</span>
+                </a>
+            </li>
+
+            <li class="{{setActive('aula.surveys.*')}}">
+                <a href="{{route('aula.surveys.index')}}" class="nav-link">
                     <i class="fa-solid fa-square-poll-vertical"></i>
                     <span>Encuestas</span>
+                    @if (validateSurveys())
+                    <i class="fa-solid fa-circle-exclamation surveys-notify"></i> 
+                    @endif
                 </a>
             </li>
 

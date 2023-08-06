@@ -10,7 +10,7 @@ $(function() {
     $(window).scroll(function() {    
         var scroll_height = $(window).scrollTop();
 
-        if(scroll_height >= 302){
+        if(scroll_height >= 275){
             lateralMenu.addClass('fixed')
             videContainer.addClass('fixed')
         }else{
@@ -205,6 +205,32 @@ $(function() {
             navText: ['<i class="fas fa-chevron-left"></i>','<i class="fas fa-chevron-right"></i>']
         });
     }
+
+
+
+
+    /*------------ IZITOAST ------------*/
+
+    $('#survey-form').submit(function(e){
+        var flginputSelect = true;
+        $('.input-radio-survey').each(function(){
+            var name = $(this).attr('name');
+            if(!$("input[name='"+name+"']").is(':checked'))
+            {
+                flginputSelect = false;
+                return false;
+            }
+        })
+
+        if(!flginputSelect)
+        {
+            e.preventDefault();
+            iziToast.warning({
+                        title: '¡Responde todas las preguntas antes de continuar!',
+                        position: 'topRight'
+                    })
+        }
+    })
 
 
 });

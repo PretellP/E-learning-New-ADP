@@ -12,7 +12,7 @@
             @include('aula2.common.partials.navbar')
             @include('aula2.common.partials.sidebar')
 
-            <div class="main-content">
+            <div class="main-content @yield('main-content-extra-class')">
 
                 <section class="section">
 

@@ -21,7 +21,8 @@ use App\Http\Controllers\Aula\Participant\{
     AulaEvaluationController,
     AulaOnlineLessonController,
     AulaFreeCourseController,
-    AulaMyProgressController
+    AulaMyProgressController,
+    AulaSurveysController
 };
 use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
@@ -41,7 +42,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------ 
     
-    Route::group(['middleware' => 'admin'], function(){
+    Route::group(['middleware' => 'check.role:admin'], function(){
         // ---- ADMIN DASHBOARD PRINCIPAL VIEW --------
         Route::get('/admin/inicio', [AdminController::class, 'index'])->name('admin.index');
         // ----- ALL COURSES VIEW LIST  ---------------------
@@ -68,7 +69,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/aula/perfil', [AulaProfileController::class, 'index'])->name('aula.profile.index');
         Route::get('/aula/e-learning', [AulaCourseController::class, 'index'])->name('aula.course.index');
 
-        Route::group(['middleware' => 'participant'], function(){
+        Route::group(['middleware' => 'check.role:participants'], function(){
             Route::get('/aula/e-learning/Alumno/{course}', [AulaCoursePartController::class, 'show'])->name('aula.course.participant.show');
             Route::get('/aula/e-learning/Alumno/{course}/evaluaciones', [AulaEvaluationController::class, 'index'])->name('aula.course.evaluation.index');
             Route::get('/aula/e-learning/Alumno/{certification}/pregunta/{num_question}', [QuizController::class, 'show'])->name('aula.course.quiz.show');
@@ -85,10 +86,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 
             Route::get('/aula/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');
-           
+
+            Route::get('/aula/encuestas', [AulaSurveysController::class, 'index'])->name('aula.surveys.index');
+            Route::get('/aula/encuesta/{user_survey}/{num_question}', [AulaSurveysController::class, 'show'])->name('aula.surveys.show');
+            Route::post('/aula/encuestas/iniciar/{userSurvey}', [AulaSurveysController::class, 'start'])->name('aula.surveys.start');
+            Route::patch('/aula/encuestas/actualizar/{user_survey}/{group_id}', [AulaSurveysController::class, 'update'])->name('aula.surveys.update');
         });
 
-        Route::group(['middleware' => 'instructor'], function(){
+        Route::group(['middleware' => 'check.role:instructor'], function(){
             Route::get('/aula/e-learning/Instructor/{course}', [AulaCourseInstController::class, 'show'])->name('aula.course.instructor.show');
         });
     
