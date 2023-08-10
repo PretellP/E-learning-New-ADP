@@ -210,7 +210,7 @@ $(function() {
 
 
     /*------------ IZITOAST ------------*/
-
+    
     $('#survey-form').submit(function(e){
         var flginputSelect = true;
         $('.input-radio-survey').each(function(){
