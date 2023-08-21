@@ -25,9 +25,9 @@
                     "fluid": true,
                     "playbackRates": [0.5, 1, 1.5, 2]
                 }'>
-                    <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
+                    {{-- <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"> --}}
                     
-                    {{-- <source src="{{asset($current_chapter->url_video)}}"> --}}
+                    <source src="{{asset($current_chapter->url_video)}}">
 
                 </video>
 
