@@ -12,6 +12,7 @@ class Folder extends Model
     use HasFactory;
 
     protected $table = 'folders';
+    protected $guarded = [];
 
     public function course()
     {
@@ -22,6 +23,4 @@ class Folder extends Model
     {
         return $this->hasMany(Document::class, 'folder_id', 'id');
     }
-
-    protected $guarded = [];
 }

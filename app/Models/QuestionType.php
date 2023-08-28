@@ -9,6 +9,8 @@ use App\Models\DynamicQuestion;
 class QuestionType extends Model
 {
     use HasFactory;
+    protected $table = 'question_types';
+    protected $guarded = [];
 
     public function questions()
     {

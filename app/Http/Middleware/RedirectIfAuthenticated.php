@@ -29,7 +29,7 @@ class RedirectIfAuthenticated
                         $verifiedRoute = route('aula.index');
                         break;
                     default:
-                        $verifiedRoute = route('admin.index');
+                        $verifiedRoute = route('admin.home.index');
                 }
    
                 return redirect($verifiedRoute);

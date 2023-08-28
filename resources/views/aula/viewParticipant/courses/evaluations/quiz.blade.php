@@ -1,11 +1,10 @@
-@extends('aula.common.layouts.dashboard')
+@extends('aula.common.layouts.masterpage')
 
-@section('sub_content')
+@section('content')
 
-<div class="row">
+<div class="content global-container quiz">
 
-    <div class="quiz-container quiz mt-2 col-12">
-
+    <div class="quiz-container quiz col-12">
 
         <div class="card quiz z-index-2">
 
@@ -20,13 +19,16 @@
 
             @if(!is_null($exam))
 
-            <div class="timer-container">
-                <i class="fa-regular fa-clock fa-spin fa-lg"></i> &nbsp;
-                <span class="timer"> </span>
-            </div>
 
             <div class="info">
-                <h3 class="text-white"> {{$exam->title}} </h3>
+
+                <h3> {{$exam->title}} </h3>
+
+                <div class="timer-container">
+                    <i class="fa-regular fa-clock fa-spin fa-lg"></i> &nbsp;
+                    <span class="timer"> </span>
+                </div>
+
             </div>
 
             <input type="hidden" name="examId" value="{{$exam->id}}">
@@ -52,12 +54,20 @@
             @elseif ($type_id == 5)
             @include('aula.viewParticipant.courses.evaluations.types.matching')
             @endif
-
-
+            
             <script>
                 const timer = document.querySelector('.timer');
                     let diff = @json($diff_time);
-            
+
+                    function showTime()
+                    {
+                        let minutes = Math.floor((diff / 60));
+                        let seconds = Math.floor((diff % 60));
+
+                        timer.innerHTML=
+                        minutes + " minutos " + seconds + " segundos";
+                    }
+
                     function showRemaining(){
                         diff = diff - 1;
                         if(diff < 0)
@@ -67,12 +77,10 @@
                             return;
                         }
             
-                        let minutes = Math.floor((diff / 60));
-                        let seconds = Math.floor((diff % 60));
-            
-                        timer.innerHTML= 
-                        minutes + " minutos " + seconds + " segundos";
+                        showTime();
                     }
+
+                    showTime();
             
                     let clock; 
                     clock = setInterval(showRemaining, 1000); 

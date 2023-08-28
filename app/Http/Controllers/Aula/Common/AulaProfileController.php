@@ -13,7 +13,7 @@ class AulaProfileController extends Controller
     {
         $user = Auth::user();
 
-        return view('aula2.common.profile.index', [
+        return view('aula.common.profile.index', [
             'user' => $user
         ]);
     }

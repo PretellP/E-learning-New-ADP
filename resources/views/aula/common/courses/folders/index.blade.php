@@ -1,48 +1,63 @@
-@extends('aula.common.courses.layout')
+@extends('aula.common.layouts.masterpage')
 
-@section('page-info', 'Contenido')
+@section('content')
 
-@section('courseContent')
 
-<div class="link-navigation-pages mt-4">
-    <a href="{{route('aula.course.index')}}">
-        <i class="fa-solid fa-arrow-left"></i>
-        Volver a los cursos
-    </a>
-    <a href="{{route('aula.course.participant.show', $course)}}">
-        / Menú
-    </a>
+<div class="content global-container">
 
-    / Contenido
-</div>
-
-<div class="row mt-5 w-100">
-
-    <div class="folders-container">
-
-        @forelse ($folders as $folder)
-
-        <a href="{{route('aula.course.folder.show', [$course, $folder])}}" class="folder-link">
-            <div class="folder-block">
-                <img class="card-img-top folder-img" src="{{asset('assets/common/images/subfolder.png')}}"
-                    alt="Card image cap">
-                <div class="card-body">
-                    <p class="card-text">{{$folder->name}}</p>
-                </div>
+    <div class="card page-title-container">
+        <div class="card-header">
+            <div class="total-width-container">
+                <h4>
+                    <a href="{{route('aula.course.index')}}">
+                        <i class="fa-solid fa-circle-chevron-left"></i> Cursos
+                    </a>
+                    <span> / {{$course->description}} </span> /
+                    <a href="{{route('aula.course.participant.show', $course)}}">
+                        MENÚ
+                    </a> /
+                    CONTENIDO
+                </h4>
             </div>
-        </a>
+        </div>
+    </div>
 
-        @empty
 
-        <h4 class="text-center">
-            Aún no hay carpetas
-            <img src="{{asset('assets/common/images/emptyfolder.png')}}" alt=""> 
-        </h4>
-        
-        @endforelse
+    <div class="card-body body-global-container card z-index-2 principal-container">
+
+        <div class="mt-5 folders-container">
+
+            @forelse ($folders as $folder)
+    
+            <a href="{{route('aula.course.folder.show', [$course, $folder])}}" class="folder-link">
+                <div class="folder-block">
+                    <img class="card-img-top folder-img" src="{{asset('assets/common/images/subfolder.png')}}"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text">{{$folder->name}}</p>
+                    </div>
+                </div>
+            </a>
+    
+            @empty
+    
+            <h4 class="text-center">
+                Aún no hay carpetas
+                <img src="{{asset('assets/common/images/emptyfolder.png')}}" alt=""> 
+            </h4>
+            
+            @endforelse
+    
+        </div>
 
     </div>
 
 </div>
+
+
+
+
+
+
 
 @endsection

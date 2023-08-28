@@ -25,7 +25,7 @@ class AulaSurveysController extends Controller
                                             ->with('survey:id,name,destined_to,url_img,active')
                                             ->get();
 
-        return view('aula2.viewParticipant.surveys.index', [
+        return view('aula.viewParticipant.surveys.index', [
             'pendingSurveys' => $pendingSurveys
         ]);
     }
@@ -127,7 +127,7 @@ class AulaSurveysController extends Controller
                                                     ->unique()
                                                     ->sortByDesc('description');
                     
-                    return view('aula2.viewParticipant.surveys.show', [
+                    return view('aula.viewParticipant.surveys.show', [
                         'survey' => $survey,
                         'user_survey' => $userSurvey,
                         'answersByGroup' => $answersByGroup,
@@ -141,7 +141,7 @@ class AulaSurveysController extends Controller
                 else{
                     $statement = $answers[$num_question-1];
         
-                    return view('aula2.viewParticipant.surveys.show', [
+                    return view('aula.viewParticipant.surveys.show', [
                         'survey' => $survey,
                         'user_survey' => $userSurvey,
                         'statement' => $statement,

@@ -40,7 +40,7 @@ class LoginController extends Controller
             case 'super_admin':
             case 'supervisor':
             case 'technical_support':
-                $this->redirectTo = route('admin.index');
+                $this->redirectTo = route('admin.home.index');
                 return $this->redirectTo;
                 break;
             case 'participants':

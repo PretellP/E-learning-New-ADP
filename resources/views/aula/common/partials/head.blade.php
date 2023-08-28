@@ -1,18 +1,36 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+	
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	
+	<title>@yield('title', 'E-learning | Home')</title>
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<!-- General CSS Files -->
+	<link rel="stylesheet" href="{{asset('assets/common/modules/bootstrap/css/bootstrap.min.css')}}">
 
-    <title> @yield('title', 'HAMA') </title>
+	<script src="https://kit.fontawesome.com/469f55554f.js" crossorigin="anonymous"></script>
 
-    <script src="https://kit.fontawesome.com/469f55554f.js" crossorigin="anonymous"></script>
+	<!-- CSS Libraries -->
+	<link rel="stylesheet" href="{{asset('assets/common/modules/jqvmap/dist/jqvmap.min.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/common/modules/summernote/summernote-bs4.css')}}">
+	
 
-    <link id="pagestyle" href="{{ asset('assets/aula/css/material-dashboard.css?v=3.0.0') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="{{asset('assets/aula/css/styles.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/common//modules/izitoast/css/iziToast.min.css')}}">
+
+	<!-- Template CSS -->
+	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
+
+
+
+	<link rel="stylesheet" href="{{asset('assets/aula/css/custom.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
+	
+
+	<!-- VIDEO.JS ---->
+	<link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+
+	@yield('extra-head')
 
 </head>

@@ -55,7 +55,7 @@ class QuizController extends Controller
                 $alts_ids = explode(",", $alts_and_options_array[0]);
                 $options_ids = explode(",", $alts_and_options_array[1]);
 
-                return view('aula2.viewParticipant.courses.evaluations.quiz', [
+                return view('aula.viewParticipant.courses.evaluations.quiz', [
                     'exam' => $exam,
                     'num_question' => $num_question-1,
                     'question' => $question,
@@ -66,7 +66,7 @@ class QuizController extends Controller
                 ]);
             }
 
-            return view('aula2.viewParticipant.courses.evaluations.quiz', [
+            return view('aula.viewParticipant.courses.evaluations.quiz', [
                 'exam' => $exam,
                 'num_question' => $num_question-1,
                 'question' => $question,

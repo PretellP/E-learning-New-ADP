@@ -1,45 +1,47 @@
-@extends('aula.common.layouts.dashboard')
+@extends('aula.common.layouts.masterpage')
 
-@section('sub_content')
+@section('extra-head')
 
-<div class="row general-container-page-info">
-    <div class="body-container-page-info">
+<link rel="stylesheet" href="{{asset('assets/common/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/common/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
 
-        <div class="col-12 mb-0">
-            <div class="card pt-5 box-container-info">
-                <div class="welcome-page-info">
-                    <span>Bienvenido,</span>
-                </div>
-                <div class="names-page-info">
-                    <span>
-                        {{strtolower(Auth::user()->name)}},
-                        {{strtolower(Auth::user()->paternal)}}
-                        {{strtolower(Auth::user()->maternal)}}
-                    </span>
-                </div>
-                <hr class="divider-page-info">
-                <div class="extra-page-info">
-                    <span>
-                        Estás viendo los anuncios más recientes
-                    </span>
+@endsection
+
+@section('content')
+
+
+<div class="row content">
+
+
+    <div class="publishings">
+        <div class="card page-title-container">
+            <div class="card-header">
+                <div class="total-width-container">
+                    <h4>INICIO</h4>
                 </div>
             </div>
         </div>
 
-    </div>
+        <div class="card-body publishing-boxes-container card z-index-2 principal-container">
 
+            <div class="carousel-container">
+                <div id="publishings-owlcarousel" class="publishings-owlcarousel owl-carousel owl-theme slider">
+                    @foreach ($bannerPublishings as $banner)
+                        <img class='banner-img' src="{{asset($banner->url_img)}}" alt="">
+                    @endforeach
+                </div>
+            </div>
 
-</div>
-
-<div class="row">
-
-    <div class="body-page-container col-12">
-
-        <div class="publishing-boxes-container card z-index-2 g-course-flex">
+            <div class="card page-title-container sub-content">
+                <div class="card-header">
+                    <div class="total-width-container">
+                        <h4>NOTICIAS</h4>
+                    </div>
+                </div>
+            </div>
 
             <div class="tight-publishing-container">
-                
-                @forelse ($publishings as $publishing)
+                @forelse ($cardPublishings as $card)
 
                 <div class="publishing-box card">
                     <div class="card-body">
@@ -51,29 +53,26 @@
                                 </div>
                                 <div class="box-publication-info">
                                     <div class="publishing-title">
-                                        {{$publishing->title}}
+                                        {{$card->title}}
                                     </div>
                                     <div class="publishing-name-time">
                                         <span class="publishing-username">
-                                            {{strtolower((getUserFromId($publishing->user_id))->name)}}
+                                            {{strtolower(($card->user->name))}}
                                         </span>
                                         <i class="fa-solid fa-circle fa-2xs"></i>
                                         <span class="publishing-difftime">
-                                            {{getDiffForHumansFromTimestamp($publishing->publication_time)}}
+                                            {{getDiffForHumansFromTimestamp($card->publication_time)}}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="publishing-text-content">
-                                {{$publishing->content}}
+                                {!! $card->content !!}
                             </div>
                         </div>
 
                         <div class="box-publishing-img">
-                            <img src="{{asset($publishing->url_img)}}" alt="">
-                        </div>
-
-                        <div class="box-publishing-footer">
+                            <img src="{{asset($card->url_img)}}" alt="">
                         </div>
                     </div>
                 </div>
@@ -85,14 +84,18 @@
                 </h4>
 
                 @endforelse
-
             </div>
 
-
         </div>
-
     </div>
+
 </div>
 
+@endsection
+
+
+@section('extra-script')
+
+<script src="{{asset('assets/common/modules/owlcarousel2/dist/owl.carousel.min.js')}}"></script>
 
 @endsection

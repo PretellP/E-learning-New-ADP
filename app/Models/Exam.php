@@ -14,6 +14,9 @@ class Exam extends Model
 {
     use HasFactory;
 
+    protected $table = 'exams';
+    protected $guarded = [];
+
     public function questions()
     {
         return $this->hasMany(DynamicQuestion::class, 'exam_id', 'id');

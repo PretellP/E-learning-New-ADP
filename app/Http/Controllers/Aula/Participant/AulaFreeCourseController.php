@@ -68,7 +68,7 @@ class AulaFreeCourseController extends Controller
             }
         }
       
-        return view('aula2.viewParticipant.freecourses.index', [
+        return view('aula.viewParticipant.freecourses.index', [
             'recomendedCourses' => $recomendedCourses,
             'categories' => $categories,
             'pendingCourses' => $pendingCourses,
@@ -131,7 +131,7 @@ class AulaFreeCourseController extends Controller
                             ->with('courseCategory:id,description')
                             ->get();
 
-        return view('aula2.viewParticipant.freecourses.showCategory', [
+        return view('aula.viewParticipant.freecourses.showCategory', [
             'category' => $category,
             'courses' => $courses
         ]);
@@ -182,7 +182,7 @@ class AulaFreeCourseController extends Controller
                                                  $current_section->section_order - 1])->reverse();
         $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
 
-        return view('aula2.viewParticipant.freecourses.showChapter', [
+        return view('aula.viewParticipant.freecourses.showChapter', [
             'course' => $course,
             'sections' => $sections,
             'current_chapter' => $current_chapter,

@@ -11,6 +11,7 @@ class MiningUnit extends Model
     use HasFactory;
 
     protected $table = 'mining_units';
+    protected $guarded = [];
 
     public function users()
     {

@@ -20,7 +20,7 @@ class AulaHomeController extends Controller
                             ->select('id','user_id','type','title','content','url_img','publication_time')
                             ->orderBy('publication_time', 'DESC')->get();
 
-        return view('aula2.common.home.home', [
+        return view('aula.common.home.home', [
             'cardPublishings' => $cardPublishings,
             'bannerPublishings' => $bannerPublishings
         ]);

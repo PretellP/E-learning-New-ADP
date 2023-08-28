@@ -46,7 +46,7 @@ class AulaMyProgressController extends Controller
                                 'section_chapters.section_id')
                         ->get()->groupBy('courseSection.course.id');
                 
-        return view('aula2.viewParticipant.myprogress.index', [
+        return view('aula.viewParticipant.myprogress.index', [
             'courses' => $courses,
             'freeCourses' => $freeCourses,
         ]);

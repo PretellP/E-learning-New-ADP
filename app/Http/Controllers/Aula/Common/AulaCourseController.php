@@ -22,7 +22,7 @@ class AulaCourseController extends Controller
     {
         $coursesRelation = getCoursesBasedOnRole();
 
-        return view('aula2.common.courses.index', [
+        return view('aula.common.courses.index', [
             'coursesRelation' => $coursesRelation,
         ]);
     }

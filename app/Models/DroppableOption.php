@@ -11,7 +11,6 @@ class DroppableOption extends Model
     use HasFactory;
 
     protected $table = 'droppable_options';
-
     protected $guarded = [];
 
     public function alternative()

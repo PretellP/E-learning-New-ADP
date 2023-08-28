@@ -7,7 +7,14 @@ use App\Http\Controllers\Admin\{
     AdminController,
     AdminCourseController,
     FolderController,
-    DocumentController
+    DocumentController,
+    AdminAnnouncementsController,
+    AdminCompaniesController,
+    AdminEvaluationsController,
+    AdminEventsController,
+    AdminFreeCoursesController,
+    AdminRoomsController,
+    AdminUsersController
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -44,7 +51,61 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::group(['middleware' => 'check.role:admin'], function(){
         // ---- ADMIN DASHBOARD PRINCIPAL VIEW --------
-        Route::get('/admin/inicio', [AdminController::class, 'index'])->name('admin.index');
+        Route::get('/admin/inicio', [AdminController::class, 'index'])->name('admin.home.index');
+
+        // --------------- USERS -------------------------
+
+        Route::get('/admin/usuarios', [AdminUsersController::class, 'index'])->name('admin.users.index');
+        Route::get('/admin/usuarios/registrar/obtener-empresas', [AdminUsersController::class, 'registerGetCompanies'])->name('admin.users.registerGetCompanies');
+        Route::get('/admin/usuarios/editar/{user}', [AdminUsersController::class, 'edit'])->name('admin.user.edit');
+        Route::post('/admin/usuarios/registrar/validar-dni', [AdminUsersController::class, 'registerValidateDni'])->name('admin.users.validateDni');
+        Route::post('/admin/usuarios/editar/validar-dni', [AdminUsersController::class, 'editValidateDni'])->name('admin.user.editValidateDni');
+        Route::post('/admin/usuarios/registrar', [AdminUsersController::class, 'store'])->name('admin.user.store');
+        Route::post('/admin/usuarios/actualizar/{user}', [AdminUsersController::class, 'update'])->name('admin.user.update');
+        Route::delete('/admin/usuarios/eliminar/{user}', [AdminUsersController::class, 'destroy'])->name('admin.user.delete');
+
+
+        // ---------------  COMPANIES --------------------
+
+        Route::get('/admin/empresas', [AdminCompaniesController::class, 'index'])->name('admin.companies.index');
+        Route::get('/admin/empresas/editar/{company}', [AdminCompaniesController::class, 'edit'])->name('admin.companies.edit');
+        Route::post('/admin/empresas/registrar', [AdminCompaniesController::class, 'store'])->name('admin.companies.store');
+        Route::post('/admin/empresas/editar/validar-ruc', [AdminCompaniesController::class, 'EditvalidateRuc'])->name('admin.companies.validateRuc');
+        Route::post('/admin/empresas/actualizar/{company}', [AdminCompaniesController::class, 'update'])->name('admin.companies.update');
+        Route::delete('/admin/empresas/eliminar/{company}', [AdminCompaniesController::class, 'destroy'])->name('admin.companies.delete');
+
+        // --------------- ROOMS -------------------------
+
+        Route::get('/admin/salas', [AdminRoomsController::class, 'index'])->name('admin.rooms.index');
+        Route::get('/admin/salas/editar/{room}', [AdminRoomsController::class, 'edit'])->name('admin.room.edit');
+        Route::post('/admin/salas/registrar', [AdminRoomsController::class, 'store'])->name('admin.rooms.store');
+        Route::post('/admin/salas/registrar/validar-nombre', [AdminRoomsController::class, 'registerValidateName'])->name('admin.rooms.registerValidateName');
+        Route::post('/admin/salas/editar/validar-nombre', [AdminRoomsController::class, 'editValidateName'])->name('admin.rooms.editValidateName');
+        Route::post('/admin/salas/actualizar/{room}', [AdminRoomsController::class, 'update'])->name('admin.room.update');
+        Route::delete('/admin/salas/eliminar/{room}', [AdminRoomsController::class, 'destroy'])->name('admin.rooms.delete');
+
+
+        // --------------- COURSES ----------------------
+
+
+
+        // --------------- FREE COURSES -----------------
+
+        Route::get('/admin/free-courses', [AdminFreeCoursesController::class, 'index'])->name('admin.freeCourses.index');
+
+        // --------------- EVALUATIONS -------------------
+
+        Route::get('/admin/evaluaciones', [AdminEvaluationsController::class, 'index'])->name('admin.evaluations.index');
+
+        // --------------- EVENTS ------------------------
+
+        Route::get('/admin/eventos', [AdminEventsController::class, 'index'])->name('admin.events.index');
+
+         // --------------- ANNOUNCEMENTS ----------------
+
+         Route::get('/admin/anuncios', [AdminAnnouncementsController::class, 'index'])->name('admin.announcements.index');
+
+
         // ----- ALL COURSES VIEW LIST  ---------------------
         Route::get('/admin/Cursos/', [AdminCourseController::class, 'index'])->name('admin.course.index');
         // ----- COURSE FOLDERS VIEWS-----------------------

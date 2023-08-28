@@ -11,6 +11,7 @@ class Course extends Model
     use HasFactory;
 
     protected $table = 'courses';
+    protected $guarded = [];
 
     public function folders()
     {

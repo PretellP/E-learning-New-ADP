@@ -38,6 +38,7 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'c72349b1fe8d0deeedd3a52e8aa814d8' => __DIR__ . '/..' . '/mockery/mockery/library/helpers.php',
         'ce9671a430e4846b44e1c68c7611f9f5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
         '2e6607ff826221364e8841ef612824dd' => __DIR__ . '/../..' . '/app/Http/helpers/helpers.php',
     );
 
@@ -45,6 +46,10 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'v' => 
         array (
             'voku\\' => 5,
+        ),
+        'Y' => 
+        array (
+            'Yajra\\DataTables\\' => 17,
         ),
         'W' => 
         array (
@@ -184,6 +189,10 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+        ),
+        'Yajra\\DataTables\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -528,7 +537,9 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'App\\Http\\Controllers\\Aula\\Participant\\AulaCoursePartController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaCoursePartController.php',
         'App\\Http\\Controllers\\Aula\\Participant\\AulaEvaluationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaEvaluationController.php',
         'App\\Http\\Controllers\\Aula\\Participant\\AulaFreeCourseController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaFreeCourseController.php',
+        'App\\Http\\Controllers\\Aula\\Participant\\AulaMyProgressController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaMyProgressController.php',
         'App\\Http\\Controllers\\Aula\\Participant\\AulaOnlineLessonController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaOnlineLessonController.php',
+        'App\\Http\\Controllers\\Aula\\Participant\\AulaSurveysController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/AulaSurveysController.php',
         'App\\Http\\Controllers\\Aula\\Participant\\QuizController' => __DIR__ . '/../..' . '/app/Http/Controllers/Aula/Participant/QuizController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -539,12 +550,10 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
-        'App\\Http\\Middleware\\Admin' => __DIR__ . '/../..' . '/app/Http/Middleware/Admin.php',
         'App\\Http\\Middleware\\Aula' => __DIR__ . '/../..' . '/app/Http/Middleware/Aula.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
+        'App\\Http\\Middleware\\CheckRole' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckRole.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
-        'App\\Http\\Middleware\\Instructor' => __DIR__ . '/../..' . '/app/Http/Middleware/Instructor.php',
-        'App\\Http\\Middleware\\Participant' => __DIR__ . '/../..' . '/app/Http/Middleware/Participant.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
@@ -570,7 +579,12 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'App\\Models\\QuestionType' => __DIR__ . '/../..' . '/app/Models/QuestionType.php',
         'App\\Models\\Room' => __DIR__ . '/../..' . '/app/Models/Room.php',
         'App\\Models\\SectionChapter' => __DIR__ . '/../..' . '/app/Models/SectionChapter.php',
+        'App\\Models\\Survey' => __DIR__ . '/../..' . '/app/Models/Survey.php',
+        'App\\Models\\SurveyGroup' => __DIR__ . '/../..' . '/app/Models/SurveyGroup.php',
+        'App\\Models\\SurveyOption' => __DIR__ . '/../..' . '/app/Models/SurveyOption.php',
+        'App\\Models\\SurveyStatement' => __DIR__ . '/../..' . '/app/Models/SurveyStatement.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\UserSurvey' => __DIR__ . '/../..' . '/app/Models/UserSurvey.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -5546,6 +5560,22 @@ class ComposerStaticInite60347dc79c6f4a5da83c8faac9837c3
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'Yajra\\DataTables\\ApiResourceDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/ApiResourceDataTable.php',
+        'Yajra\\DataTables\\CollectionDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/CollectionDataTable.php',
+        'Yajra\\DataTables\\Contracts\\DataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/DataTable.php',
+        'Yajra\\DataTables\\Contracts\\Formatter' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/Formatter.php',
+        'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
+        'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
+        'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
+        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
+        'Yajra\\DataTables\\Processors\\DataProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/DataProcessor.php',
+        'Yajra\\DataTables\\Processors\\RowProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/RowProcessor.php',
+        'Yajra\\DataTables\\QueryDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/QueryDataTable.php',
+        'Yajra\\DataTables\\Utilities\\Config' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Config.php',
+        'Yajra\\DataTables\\Utilities\\Helper' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Helper.php',
+        'Yajra\\DataTables\\Utilities\\Request' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Request.php',
         'voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     );
 

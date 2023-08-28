@@ -11,6 +11,7 @@ class Publishing extends Model
     use HasFactory;
 
     protected $table = 'publishings';
+    protected $guarded = [];
 
     public function user()
     {

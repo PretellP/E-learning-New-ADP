@@ -11,11 +11,12 @@ class Document extends Model
     use HasFactory;
 
     protected $table = 'documents';
+    protected $guarded = [];
+
 
     public function folder()
     {
         return $this->belongsTo(Folder::class, 'folder_id', 'id');
     }
 
-    protected $guarded = [];
 }

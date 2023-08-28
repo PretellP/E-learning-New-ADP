@@ -11,6 +11,8 @@ class DynamicAlternative extends Model
     use HasFactory;
 
     protected $table = 'dynamic_alternatives';
+    protected $guarded = [];
+
 
     public function question()
     {

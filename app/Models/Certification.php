@@ -10,6 +10,9 @@ class Certification extends Model
 {
     use HasFactory;
 
+    protected $table = 'certifications';
+    protected $guarded = [];
+
     public function event()
     {
         return $this -> belongsTo(Event::class, 'event_id', 'id');
@@ -25,5 +28,4 @@ class Certification extends Model
         return $this -> hasMany(Evaluation::class, 'certification_id', 'id');
     }
 
-    protected $guarded = [];
 }

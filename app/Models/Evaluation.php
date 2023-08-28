@@ -10,10 +10,13 @@ class Evaluation extends Model
 {
     use HasFactory;
 
+    protected $table = 'evaluations';
+    protected $guarded = [];
+
+
     public function certification()
     {
         return $this -> belongsTo(Certification::class, 'certification_id', 'id');
     }
 
-    protected $guarded = [];
 }

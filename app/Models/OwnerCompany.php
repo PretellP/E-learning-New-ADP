@@ -11,6 +11,7 @@ class OwnerCompany extends Model
     use HasFactory;
 
     protected $table = 'owner_companies';
+    protected $guarded = [];
 
     public function exams()
     {

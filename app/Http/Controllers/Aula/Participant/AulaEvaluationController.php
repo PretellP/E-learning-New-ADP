@@ -18,7 +18,7 @@ class AulaEvaluationController extends Controller
     {
         $certifications = getCertificationsFromCourse($course);
 
-        return view('aula2.viewParticipant.courses.evaluations.index', [
+        return view('aula.viewParticipant.courses.evaluations.index', [
             'certifications'=> $certifications,
             'course' => $course
         ]);

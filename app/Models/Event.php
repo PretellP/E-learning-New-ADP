@@ -10,6 +10,9 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $table = 'events';
+    protected $guarded = [];
+
     public function exam()
     {
         return $this->belongsTo(Exam::class, 'exam_id', 'id');
