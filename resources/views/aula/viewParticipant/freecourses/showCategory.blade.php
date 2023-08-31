@@ -24,7 +24,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset($course->url_img)}}"
+                    <img class="card-img-top course-img" src="{{asset('storage/'.$course->url_img)}}"
                         alt="{{$course->description}}">
                 </div>
 

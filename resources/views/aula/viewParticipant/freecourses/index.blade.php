@@ -55,7 +55,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset($pendingCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{asset('storage/'.$pendingCourse->url_img)}}"
                         alt="{{$pendingCourse->description}}">
                 </div>
 
@@ -133,7 +133,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset($finishedCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{asset('storage/'.$finishedCourse->url_img)}}"
                         alt="{{$finishedCourse->description}}">
                 </div>
 
@@ -211,7 +211,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset($recomendedCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{asset('storage/'.$recomendedCourse->url_img)}}"
                         alt="{{$recomendedCourse->description}}">
                 </div>
 

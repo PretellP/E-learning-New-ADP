@@ -103,7 +103,7 @@
 
             <div class="course-header">
                 <div class="img-container">
-                    <img src="{{asset($course->url_img)}}" alt="{{$course->description}}">
+                    <img src="{{asset('storage/'.$course->url_img)}}" alt="{{$course->description}}">
                 </div>
 
             </div>
