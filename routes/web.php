@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\{
     AdminEventsController,
     AdminFreeCoursesController,
     AdminRoomsController,
-    AdminUsersController
+    AdminUsersController,
+    AdminOwnerCompaniesController
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -74,6 +75,18 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/admin/empresas/actualizar/{company}', [AdminCompaniesController::class, 'update'])->name('admin.companies.update');
         Route::delete('/admin/empresas/eliminar/{company}', [AdminCompaniesController::class, 'destroy'])->name('admin.companies.delete');
 
+
+        // ---------------- OWNER COMPANIES ---------------
+
+        Route::get('/admin/empresas-titulares', [AdminOwnerCompaniesController::class, 'index'])->name('admin.ownerCompanies.index');
+        Route::get('/admin/empresas-titulares/editar/{company}', [AdminOwnerCompaniesController::class, 'edit'])->name('admin.ownerCompany.edit');
+        Route::post('/admin/empresas-titulares/validar-registro', [AdminOwnerCompaniesController::class, 'registerValidate'])->name('admin.ownerCompany.registerValidate');
+        Route::post('/admin/empresas-titulares/validar-edición', [AdminOwnerCompaniesController::class, 'editValidate'])->name('admin.ownerCompanies.editValidate');
+        Route::post('/admin/empresas-titulares/registrar', [AdminOwnerCompaniesController::class, 'store'])->name('admin.ownerCompanies.store');
+        Route::post('/admin/empresas-titulares/actualizar/{company}', [AdminOwnerCompaniesController::class, 'update'])->name('admin.ownerCompany.update');
+        Route::delete('/admin/empresas-titulares/eliminar/{company}', [AdminOwnerCompaniesController::class, 'destroy'])->name('admin.ownerCompany.delete');
+
+
         // --------------- ROOMS -------------------------
 
         Route::get('/admin/salas', [AdminRoomsController::class, 'index'])->name('admin.rooms.index');
@@ -87,7 +100,12 @@ Route::group(['middleware' => 'auth'], function(){
 
         // --------------- COURSES ----------------------
 
-
+        Route::get('/admin/cursos', [AdminCourseController::class, 'index'])->name('admin.courses.index');
+        Route::get('/admin/cursos/editar/{course}', [AdminCourseController::class, 'edit'])->name('admin.courses.edit');
+        Route::get('/admin/cursos/ver/{course}', [AdminCourseController::class, 'show'])->name('admin.courses.show');
+        Route::post('/admin/cursos/registrar', [AdminCourseController::class, 'store'])->name('admin.courses.store');
+        Route::post('/admin/cursos/actualizar/{course}', [AdminCourseController::class, 'update'])->name('admin.courses.update');
+        Route::delete('/admin/cursos/eliminar/{course}', [AdminCourseController::class, 'destroy'])->name('admin.courses.delete');
 
         // --------------- FREE COURSES -----------------
 
@@ -107,13 +125,16 @@ Route::group(['middleware' => 'auth'], function(){
 
 
         // ----- ALL COURSES VIEW LIST  ---------------------
-        Route::get('/admin/Cursos/', [AdminCourseController::class, 'index'])->name('admin.course.index');
+
+        // Route::get('/admin/Cursos/', [AdminCourseController::class, 'index'])->name('admin.course.index');
+
         // ----- COURSE FOLDERS VIEWS-----------------------
-        Route::get('/admin/Cursos/{course}', [AdminCourseController::class, 'show'])->name('admin.course.show');
+        // Route::get('/admin/Cursos/{course}', [AdminCourseController::class, 'show'])->name('admin.course.show');
         // ------ folder view  ------------------------------
-        Route::get('/admin/Cursos/{course}/Carpeta/{folder}', [FolderController::class, 'show'])->name('admin.course.folder.view');
+        Route::get('/admin/cursos/carpeta/{folder}/archivos', [DocumentController::class, 'index'])->name('admin.files.index');
+        Route::get('/admin/cursos/{course}/ver-carpeta/{folder}', [FolderController::class, 'show'])->name('admin.courses.folder.view');
         Route::get('/admin/Cursos/Carpeta/descargar/{file}', [DocumentController::class, 'download'])->name('file.download');
-        Route::post('/admin/Cursos/Crear/{course}', [FolderController::class, 'create'])->name('folder.create');
+        Route::post('/admin/cursos/carpeta/crear-carpeta/{course}', [FolderController::class, 'create'])->name('folder.create');
         Route::post('/admin/Cursos/Crear/subfolder/{folder}', [FolderController::class, 'createSubfolder'])->name('subfolder.create');
         Route::post('/admin/Cursos/Carpeta/{folder}/añadirArchivo', [DocumentController::class, 'create'])->name('file.create');
         Route::patch('/admin/Cursos/Carpeta/{folder}/actualizar', [FolderController::class, 'update'])->name('folder.update');

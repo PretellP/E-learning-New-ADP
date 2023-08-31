@@ -61,7 +61,8 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
     min-height: 75vh;
 }
 
-table.dataTable span.status
+table.dataTable span.status,
+span.status
 {
     color: white;
     padding: 0.5em;
@@ -70,7 +71,8 @@ table.dataTable span.status
     background-color: #ce2929c9;
 }
 
-table.dataTable span.status.active
+table.dataTable span.status.active,
+span.status.active
 {
     background-color: #3cb838c7 !important;
 }
@@ -116,6 +118,15 @@ table.dataTable span.status.active
     width: fit-content;
     padding: 0.7em 0;
     position: relative;
+}
+
+.card-header .total-width-container h4 a
+{
+    font-family: 'Roboto-condensed', Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    width: fit-content;
+    padding: 0.7em 0;
 }
 
 .card-header .total-width-container h4::before 
@@ -215,4 +226,261 @@ label.error
 .form-control:focus
 {
     border-color: var(--first-color) !important;
+}
+
+.bootstrap-timepicker-widget table td input
+{
+    width: 40px !important;
+}
+
+.image-preview, #callback-preview
+{
+    width: auto !important;
+    height: 200px !important;
+}
+
+.img-holder
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.img-holder
+.course_img
+{
+    height: 100%;
+}
+
+.content-course-btn
+{
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+
+.content-course-btn i
+{
+    font-size: 1.8em;
+}
+
+
+
+
+
+
+
+
+/* ------------- COURSE SHOW STYLES  ---------------*/
+
+.principal-container.course-show
+{
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 3em;
+}
+
+.title-course-show
+{
+    color: var(--first-color);
+}
+
+.info-course-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.upper-container-info
+{
+    display: flex;
+    gap: 1.5em;
+}
+
+.upper-container-info
+.left-subcontainer-info
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    order: 2;
+}
+
+.inner-container-info
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.inner-container-info
+.row-sub-content
+{
+    min-height: 50px;
+    height: auto;
+    display: flex;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.inner-container-info
+.row-sub-content span
+{
+    display: flex;
+    align-items: center;
+}
+
+.row-sub-content .subtitle
+{
+    min-width: 100px;
+    font-weight: 700;
+    font-size: 1.1em;
+    background-color: rgb(240, 240, 240);
+}
+
+.row-sub-content .data-text
+{
+    width: 100%;
+    border-radius: 0 5px 5px 0;
+    border-top: 1px solid rgb(240, 240, 240);
+    border-right: 1px solid rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.row-sub-content .subtitle,
+.row-sub-content .data-text
+{
+    padding: 1em;
+}
+
+.right-subcontainer-info
+.title-img-course-prev
+{
+    font-weight: 500;
+    font-size: 1.2em;
+}
+
+.upper-container-info
+.right-subcontainer-info
+.img-course-prev-container 
+{   
+    width: 400px;
+    max-height: 250px;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border: 6px solid var(--first-color);
+}
+
+.img-course-prev-container img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.down-container-info
+{
+    margin-top: 1.5em;
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    justify-content: space-around;
+}
+
+.down-container-info >div
+{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.down-container-info
+.sub-title-time-course
+{
+    font-weight: bolder;
+    font-size: 1.1em;
+    text-decoration: underline;
+}
+
+.down-container-info
+.info-time-course
+{
+    font-weight: bolder;
+    color: green;
+    font-size: 1.2em;
+}
+
+.info-content-course-container
+{
+    width: 100%;
+    max-width: 1000px;
+}
+
+.folder-container
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+
+.folder-container
+.folder-card
+{
+    width: 135px;
+    text-align: center;
+    padding: 1em;
+}
+
+.folder-card
+.folder-img
+{
+    width: 100%;
+}
+
+.folder-link
+{
+    transition: none;
+}
+
+.folder-link:hover 
+{
+    background-color: rgba(0, 0, 0, 0.068);
+}
+
+.folder-action-container
+{
+    max-width: 500px;
+}
+
+.folder-inner-container
+{
+    border-top: 1px solid rgba(0, 0, 0, 0.164);
+    padding-top: 3em;
+}
+
+.subfolder-create-input
+{
+    width: 100%;
+    max-width: 500px;
+}
+
+.course-show.folder-view
+{
+    gap: 1em;
+}
+
+.files-section-container
+{
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-file-folder
+{
+    padding: 0.375rem 0.75rem !important;
 }

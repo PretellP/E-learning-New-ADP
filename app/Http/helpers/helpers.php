@@ -487,6 +487,10 @@ function verifyLastSurveyGroup($answersByGroup, $group_position)
     return $answersByGroup->count() == $group_position ? true : false;
 }
 
+function getTimeforHummans($time)
+{
+    return Carbon::parse($time)->format('g:i A');
+}
 
 
 

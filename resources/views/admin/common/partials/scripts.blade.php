@@ -19,6 +19,8 @@
 
 <script src="{{asset('assets/common/modules/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
 
+<script src="{{asset('assets/common/modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}}"></script>
+
 <!-- JS Libraies -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('assets/common/modules/jquery.sparkline.min.js')}}"></script>
@@ -35,6 +37,8 @@
 <script src="{{asset('assets/common/js/scripts.js')}}"></script>
 
 <script src="{{asset('assets/admin/js/custom.js')}}" ></script>
+
+@include('admin.common.partials.sweet')
 
 
 @yield('extra-script')

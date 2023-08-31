@@ -23,7 +23,7 @@
 
 	{{-- Date range picker --}}
 	<link rel="stylesheet" href="{{asset('assets/common/modules/bootstrap-daterangepicker/daterangepicker.css')}}">
-	
+	<link rel="stylesheet" href="{{asset('assets/common/modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css')}}">
 
 	<link rel="stylesheet" href="{{asset('assets/common//modules/izitoast/css/iziToast.min.css')}}">
 

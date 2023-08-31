@@ -30,6 +30,5 @@ class Aula
         }else{
             abort(403, 'Acceso denegado');
         }
-        
     }
 }

@@ -6,18 +6,46 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use DataTables;
 use App\Models\{Folder, Document};
 
 class DocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request, Folder $folder)
     {
-        //
+        if($request->ajax())
+        {
+            $allFiles = DataTables::of(Document::query()
+                                ->with('folder')
+                                ->where('folder_id', $folder->id))
+                                ->addColumn('filename', function($file){
+                                    return '<a href="'.route('file.download', $file).'">'.
+                                                $file->filename
+                                            .'</a> ';
+                                })
+                                ->addColumn('parent_folder', function($file){
+                                    return $file->folder->name;
+                                })
+                                ->addColumn('created_at', function($file){
+                                            return $file->created_at;
+                                })
+                                ->addColumn('updated_at', function($file){
+                                            return $file->updated_at;
+                                })
+                                ->addColumn('action', function($file){
+                               
+                                    $btn = '<a href="javascript:void(0)" data-id="'.
+                                            $file->id.'" data-original-title="delete"
+                                            data-url="'.route('file.destroy', $file).'" class="ms-3 edit btn btn-danger btn-sm
+                                            deleteFile"><i class="fa-solid fa-trash-can"></i></a>';
+                                      
+                                    return $btn;
+                                })
+                                ->rawColumns(['filename','action'])
+                                ->make(true);
+
+            return $allFiles;
+        }
     }
 
     /**
@@ -42,7 +70,7 @@ class DocumentController extends Controller
 
         Storage::putFileAs($folder->folder_path, $file, $uuid);
 
-        return back();
+        return back()->with('flash_message', 'added');
     }   
 
     /**
@@ -112,6 +140,8 @@ class DocumentController extends Controller
         $file->delete();
         Storage::delete($pathToFile);
 
-        return back();
+        return response()->json([
+            "success" => true
+        ]);
     }
 }

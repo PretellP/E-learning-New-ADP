@@ -575,6 +575,7 @@ $(function() {
   // Timepicker
   if(jQuery().timepicker && $(".timepicker").length) {
     $(".timepicker").timepicker({
+      minuteStep: 1,
       icons: {
         up: 'fas fa-chevron-up',
         down: 'fas fa-chevron-down'

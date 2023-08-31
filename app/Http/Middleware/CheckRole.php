@@ -30,6 +30,5 @@ class CheckRole
                 abort(403, 'Acceso denegado');
             }
         }
-
     }
 }

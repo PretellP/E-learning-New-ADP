@@ -36,6 +36,13 @@
                 </a>
             </li>
 
+            <li class="{{setActive('admin.ownerCompanies.*')}}">
+                <a href="{{route('admin.ownerCompanies.index')}}" class="nav-link">
+                    <i class="fa-regular fa-building"></i>
+                    <span>Empresas Titulares</span>
+                </a>
+            </li>
+
             <li class="{{setActive('admin.rooms.*')}}">
                 <a href="{{route('admin.rooms.index')}}" class="nav-link">
                     <i class="fa-solid fa-chalkboard-user"></i>
@@ -43,8 +50,8 @@
                 </a>
             </li>
 
-            <li class="">
-                <a class="nav-link" href="">
+            <li class="{{setActive('admin.courses.*')}}">
+                <a class="nav-link" href="{{route('admin.courses.index')}}">
                     <i class="fa-solid fa-book"></i>
                     <span>Cursos</span>
                 </a>

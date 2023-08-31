@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Course, Document};
+use App\Models\{Course, Document, Folder};
 
 
 class Folder extends Model
@@ -22,5 +22,15 @@ class Folder extends Model
     public function documents()
     {
         return $this->hasMany(Document::class, 'folder_id', 'id');
+    }
+
+    public function subFolders()
+    {
+        return $this->hasMany(Folder::class, 'parent_folder_id', 'id');
+    }
+
+    public function parentFolder()
+    {
+        return $this->belongsTo(Folder::class, 'parent_folder_id', 'id');
     }
 }

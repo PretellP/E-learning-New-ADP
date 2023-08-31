@@ -9,11 +9,7 @@ use App\Models\{Folder, Course, Document};
 
 class FolderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         
@@ -56,7 +52,7 @@ class FolderController extends Controller
 
         Storage::makeDirectory($subfolder->folder_path);
 
-        return back();
+        return back()->with('flash_message', 'added');
     }
 
     /**
@@ -78,8 +74,9 @@ class FolderController extends Controller
      */
     public function show(Course $course, Folder $folder)
     {
-        $files = $folder->documents;
-        $subFolders = Folder::where('parent_folder_id', $folder->id)->get();
+        $folder = $folder->where('id', $folder->id)
+                        ->with(['documents', 'subfolders'])
+                        ->first();
         $parentFoldersCollection = collect();
         $lastFolderId = $folder->parent_folder_id;
 
@@ -90,12 +87,12 @@ class FolderController extends Controller
             $lastFolderId = $parentFolder->parent_folder_id;
         }
 
-        return view('admin.folder.show', [
+        return view('admin.courses.folders.show', [
             'folder' => $folder,
             'parentFoldersCollection' => $parentFoldersCollection->reverse(),
             'course' => $course,
-            'files' => $files,
-            'subFolders' => $subFolders
+            'files' => $folder->documents,
+            'subfolders' => $folder->subfolders
         ]);
     }
 
@@ -123,15 +120,8 @@ class FolderController extends Controller
             'name' => $request->input('foldername')
         ]);
 
-        return back();
+        return back()->with('flash_message', 'updated');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     public function destroy(Folder $folder)
     {
@@ -172,10 +162,10 @@ class FolderController extends Controller
         {
             $parent = Folder::findOrFail($parentFolder);
 
-            return redirect()->route('admin.course.folder.view', [$course, $parent]);
+            return redirect()->route('admin.courses.folder.view', [$course, $parent])->with('flash_message', 'deleted');
         }
         else{
-            return redirect()->route('admin.course.show', $course);
+            return redirect()->route('admin.courses.show', $course)->with('flash_message', 'deleted');
         }
     }
 }

@@ -1,117 +1,284 @@
-@extends('admin.layouts.admin-layout')
+@extends('admin.common.layouts.masterpage')
 
 @section('content')
 
-<div class="pcoded-content">
-    <!-- Page-header start -->
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <div class="page-header-title">
-                        <h5 class="m-b-10">Bootstrap Basic Tables</h5>
-                        <p class="m-b-0">Lorem Ipsum is simply dummy text of the printing</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{route('admin.index')}}"> <i class="fa fa-home"></i> </a>
-                        </li>
-                    </ul>
+<div class="row content">
+
+
+    <div class="main-container-page">
+        <div class="card page-title-container">
+            <div class="card-header">
+                <div class="total-width-container">
+                    <h4>CURSOS</h4>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Page-header end -->
-    <div class="pcoded-inner-content">
-        <!-- Main-body start -->
-        <div class="main-body">
-            <div class="page-wrapper">
-                <!-- Page-body start -->
-                <div class="page-body">
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Lista de cursos</h5>
-                            
-                            <div class="card-header-right">
-                                <ul class="list-unstyled card-option">
-                                    <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                    <li><i class="fa fa-window-maximize full-card"></i></li>
-                                    <li><i class="fa fa-minus minimize-card"></i></li>
-                                    <li><i class="fa fa-refresh reload-card"></i></li>
-                                    <li><i class="fa fa-trash close-card"></i></li>
-                                </ul>
-                            </div>
-                        </div>
+        <div class="card-body card z-index-2 principal-container">
 
-                        <div class="card-block table-border-style">
-                            
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Título</th>
-                                            <th>Subtítulo</th>
-                                            <th>Fecha</th>
-                                            <th>Horas</th>
-                                            <th>Hora de Inicio</th>
-                                            <th>Hora Final</th>
-                                            <th>Estado</th>
-                                            <th>Archivos</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                        @foreach($courses as $key => $course)
+            <div class="mb-4">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#RegisterCourseModal">
+                    <i class="fa-solid fa-square-plus"></i>  &nbsp; Registrar
+                </button>
+            </div>
 
-                                        <tr>
-                                            <th> {{$key+1}} </th>
-                                            <th> {{$course->description}} </th>
-                                            <th> {{$course->subtitle}} </th>
-                                            <th> {{$course->date}} </th>
-                                            <th> {{$course->hours}} </th>
-                                            <th> {{$course->time_start}} </th>
-                                            <th> {{$course->time_end}} </th>
-                                            <th> {{$course->active}} </th>
-                                            <th> <a href="{{route('admin.course.show', $course)}}"> 
-                                                    <i class="fa-regular fa-folder-open fa-xl"></i>
-                                                 </a> 
-                                            </th>
-                                        </tr>
-
-                                        @endforeach
-
-                                    </tbody>
-                                </table>
-
-                               
-
-                            </div>
-
+            <table id="courses-table" class="table table-hover" data-url="{{route('admin.courses.index')}}">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre</th>
+                        <th>Subtítulo</th>
+                        <th>Fecha</th>
+                        <th>Hora Inicio</th>
+                        <th>Hora Fin</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>
             
+        </div>
 
+        
+
+    </div>
+
+</div>
+
+@endsection
+
+@section('modals')
+
+<div class="modal fade" id="RegisterCourseModal" tabindex="-1" aria-labelledby="RegisterCourseModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="RegisterUserModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-square-plus"></i> &nbsp;
+                        Registrar Curso
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="{{route('admin.courses.store')}}" id="registerCourseForm" enctype="multipart/form-data" method="POST" data-validate="">
+                @csrf
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Nombre *</label>
+                            <div class="input-group">
+                                <input type="text" name="name" class="form-control dni"
+                                        placeholder="Ingrese nombre del curso">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Subtítulo (opcional)</label>
+                            <input type="text" name="subtitle" class="form-control"
+                                placeholder="Ingrese subtítulo">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Fecha *</label>
+                            <input type="text" name="date" class="form-control datepicker">
                         </div>
 
-
+                        <div class="form-group col-md-6">
+                            <label>Horas *</label>
+                            <input type="number" name="hours" step="0.1" min="0.1" class="form-control">
+                        </div>
                     </div>
-                    <!-- Hover table card end -->
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Hora de inicio *</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                      <i class="fas fa-clock"></i>
+                                    </div>
+                                  </div>
+                                <input name="timeStart" type="text" class="form-control timepicker">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Hora de fin *</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                      <i class="fas fa-clock"></i>
+                                    </div>
+                                  </div>
+                                <input name="timeEnd" type="text" class="form-control timepicker">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Imagen del curso (opcional) </label>
+                            <div>
+                                <div id="image-preview" class="image-preview">
+                                    <label for="image-upload" id="image-label">Subir Imagen</label>
+                                    <input type="file" name="courseImageRegister" id="image-upload-register">
+                                    <div class="img-holder">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="custom-switch mt-2">
+                            <input type="checkbox" name="courseStatusCheckbox" id="register-course-status-checkbox"
+                                checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span id="txt-register-description-course" class="custom-switch-description">Activo</span>
+                        </label>
+                    </div>
 
                 </div>
-                <!-- Page-body end -->
-            </div>
-        </div>
-        <!-- Main-body end -->
 
-        <div id="styleSelector">
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-    
+
+
+<div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCourseModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-pen-to-square"></i>&nbsp;
+                        Editar Curso
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="" id="editCourseForm" enctype="multipart/form-data" method="POST"'>
+                @csrf
+
+                <input type="hidden" name='id'>
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Nombre</label>
+                            <div class="input-group">
+                                <input type="text" name="name" class="form-control dni"
+                                        placeholder="Ingrese nombre del curso">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Subtítulo</label>
+                            <input type="text" name="subtitle" class="form-control"
+                                placeholder="Ingrese subtítulo">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Fecha</label>
+                            <input type="text" name="date" class="form-control datepicker">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Horas</label>
+                            <input type="number" name="hours" step="0.1" min="0.1" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Hora de inicio</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                      <i class="fas fa-clock"></i>
+                                    </div>
+                                  </div>
+                                <input name="timeStart" type="text" class="form-control timepicker">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Hora de fin</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                      <i class="fas fa-clock"></i>
+                                    </div>
+                                  </div>
+                                <input name="timeEnd" type="text" class="form-control timepicker">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Imagen del curso</label>
+                            <div>
+                                <div id="image-preview" class="image-preview">
+                                    <label for="image-upload" id="image-label">Subir Imagen</label>
+                                    <input type="file" name="courseImageEdit" id="image-upload-edit" data-value="">
+                                    <div class="img-holder">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="custom-switch mt-2">
+                            <input type="checkbox" name="courseStatusCheckbox" id="edit-course-status-checkbox"
+                                checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span id="txt-edit-description-course" class="custom-switch-description">Activo</span>
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @endsection
-   
 

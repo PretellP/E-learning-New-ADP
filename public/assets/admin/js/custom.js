@@ -1,5 +1,7 @@
 $(function(){
 
+    
+
     var DataTableEs = {
         "processing": "Procesando...",
         "lengthMenu": "Mostrar _MENU_ registros",
@@ -270,7 +272,6 @@ $(function(){
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
     })
-
 
     if($('#companies-table').length){
 
@@ -1167,6 +1168,594 @@ $(function(){
 
     }
 
+    if($('#ownerCompanies-table').length){
+        var ownerCompaniesTableEle = $('#ownerCompanies-table');
+        var getDataUrl = ownerCompaniesTableEle.data('url');
+        var ownerCompaniesTable = ownerCompaniesTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns:[
+                {data: 'id', name:'id'},
+                {data: 'name', name:'name'},
+                {data: 'created_at', name:'created_at'},
+                {data: 'action', name:'action', orderable: false, searchable: false},
+            ]
+        });
+
+
+        /* ------------ REGISTRAR -------------*/
+
+        var registerOwnerCompanyForm = $('#registerCompanyForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 50,
+                    remote: {
+                        url: $('#registerCompanyForm').data('validate'),
+                        method: $('#registerCompanyForm').attr('method'),
+                        dataType: 'JSON',
+                        data: {
+                            name: function(){
+                                return $('#registerCompanyForm').find('input[name=name]').val()
+                            }
+                        }
+                    }
+                }
+            },
+            messages: {
+                name: {
+                    remote: 'Esta empresa titular ya está registrada'
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterCompanyModal')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function(data){
+                        registerOwnerCompanyForm.resetForm()
+                        ownerCompaniesTable.draw()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+
+        /* -------------- EDITAR  ---------------*/
+
+        var editOwnerCompanyForm = $('#EditCompanyForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 50,
+                    remote: {
+                        url: $('#EditCompanyForm').data('validate'),
+                        method: $('#EditCompanyForm').attr('method'),
+                        dataType: 'JSON',
+                        data: {
+                            name: function(){
+                                return $('#EditCompanyForm').find('input[name=name]').val()
+                            },
+                            id: function(){
+                                return $('#EditCompanyForm').find('input[name=id]').val()
+                            }
+                        }
+                    }
+                }
+     
+            },
+            messages: {
+                dni: {
+                    remote: 'Esta empresa titular ya está registrada'
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#EditCompanyModal')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function(data){
+                        editOwnerCompanyForm.resetForm()
+                        ownerCompaniesTable.draw()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+        $('body').on('click', '.editCompany', function(){
+            var modal = $('#EditCompanyModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#EditCompanyForm')
+
+            editOwnerCompanyForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+          
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+                    modal.find('input[name=id]').val(data.id);
+                    modal.find('input[name=name]').val(data.name);
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+        })
+
+
+        /* ----------- ELIMINAR ---------------*/
+
+         $('body').on('click', '.deleteCompany', function(){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+                                ownerCompaniesTable.draw();
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                        },
+                        error: function(result){
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+    }
+
+    if($('#courses-table').length){
+        var coursesTableEle = $('#courses-table');
+        var getDataUrl = coursesTableEle.data('url');
+        var coursesTable = coursesTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns:[
+                {data: 'id', name:'id'},
+                {data: 'description', name:'description', orderable: false,},
+                {data: 'subtitle', name:'subtitle'},
+                {data: 'date', name:'date'},
+                {data: 'time_start', name:'time_start'},
+                {data: 'time_end', name:'time_end'},
+                {data: 'status', name:'status'},
+                {data: 'action', name:'action', orderable: false, searchable: false},
+            ]
+        });
+
+        /* ----------- REGISTER --------------*/
+
+        var courseImageRegister = $('input[type="file"][name="courseImageRegister"]');
+        courseImageRegister.val('');
+        courseImageRegister.on("change", function(){
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#registerCourseForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
+            {
+                if(typeof(FileReader)!= 'undefined'){
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        $('<img/>', {'src':e.target.result,'class':'img-fluid course_img'}).
+                        appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                }else{
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            }else{
+                $(img_holder).empty();
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+        })
+
+        $('#register-course-status-checkbox').change(function(){
+            var txtDesc = $('#txt-register-description-course');
+            if(this.checked){
+                txtDesc.html('Activo');
+            }else{
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var registerCourseForm = $('#registerCourseForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                subtitle: {
+                    maxlength: 255
+                },
+                date: {
+                    required: true
+                },
+                hours: {
+                    required: true,
+                    number: true,
+                    step: 0.1
+                },
+                timeStart: {
+                    required: true
+                },
+                timeEnd: {
+                    required: true
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterCourseModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function(data){
+                        registerCourseForm.resetForm()
+                        coursesTable.draw()
+                        loadSpinner.toggleClass('active')
+                        $(img_holder).empty()
+                        modal.modal('toggle')
+                        form.find('input[name=name]').val('')
+                        form.find('input[name=subtitle]').val('')
+                        form.find('input[name=hours]').val('')
+
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+
+        /* -------------- EDIT  ---------------*/
+
+        $('#edit-course-status-checkbox').change(function(){
+            var txtDesc = $('#txt-edit-description-course');
+            if(this.checked){
+                txtDesc.html('Activo');
+            }else{
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var inputCourseEdit = $('input[type="file"][name="courseImageEdit"]');
+        inputCourseEdit.on("change", function(){
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#editCourseForm').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
+            {
+                if(typeof(FileReader)!= 'undefined'){
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        $('<img/>', {'src':e.target.result,'class':'img-fluid course_img'}).
+                        appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                }else{
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            }else{
+                $(img_holder).html(currentImagePath);
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+
+        })
+
+
+        var editCourseForm = $('#editCourseForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                subtitle: {
+                    maxlength: 255
+                },
+                date: {
+                    required: true
+                },
+                hours: {
+                    required: true,
+                    number: true,
+                    step: 0.1
+                },
+                timeStart: {
+                    required: true
+                },
+                timeEnd: {
+                    required: true
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editCourseModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function(data){
+                        editCourseForm.resetForm()
+                        coursesTable.draw()
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+
+                        $(img_holder).empty()
+
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+        
+        $('body').on('click', '.editCourse', function(){
+            var modal = $('#editCourseModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editCourseForm')
+
+            editCourseForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+          
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+
+                    modal.find('input[name=id]').val(data.id);
+                    modal.find('input[name=name]').val(data.name);
+                    modal.find('input[name=subtitle]').val(data.subtitle);
+                    modal.find('input[name=date]').val(data.date);
+                    modal.find('input[name=hours]').val(data.hours);
+                    modal.find('input[name=timeStart]').val(data.time_start);
+                    modal.find('input[name=timeEnd]').val(data.time_end);
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="'+data.url_img+'"></img>');
+                    modal.find('#image-upload-edit').attr('data-value', '<img scr="'+data.url_img+'" class="img-fluid course_img"');
+                    modal.find('#image-upload-edit').val('');
+
+                    if(data.status == 'S'){
+                        modal.find('#edit-course-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-course').html('Activo');
+                    }else{
+                        modal.find('#edit-course-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-course').html('Inactivo');
+                    }
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+        })
+
+        /* ----------- DELETE ---------------*/
+
+        $('body').on('click', '.deleteCourse', function(){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+                                coursesTable.draw();
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                        },
+                        error: function(result){
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+        
+    }
+
+    if($('#files-folder-course-table').length){
+        var filesTableEle = $('#files-folder-course-table');
+        var getDataUrl = filesTableEle.data('url');
+        var filesTable = filesTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns:[
+                {data: 'id', name:'id'},
+                {data: 'name', name:'name'},
+                {data: 'filename', name:'filename', orderable: false},
+                {data: 'size', name:'size'},
+                {data: 'parent_folder', name:'parent_folder', orderable: false},
+                {data: 'created_at', name:'created_at'},
+                {data: 'updated_at', name:'updated_at'},
+                {data: 'action', name:'action', orderable: false, searchable: false},
+            ]
+        });
+
+        $('body').on('click', '.deleteFile', function(){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+                                filesTable.draw();
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '!Archivo eliminado!',
+                                })
+                            }
+                        },
+                        error: function(result){
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+
+        $('#btn-destroy-folder').on('click', function(e){
+            e.preventDefault()
+            var form = $('#delete-folder-form')
+
+            Swal.fire({
+                title: '¿Eliminar carpeta?',
+                text: "¡Esto eliminará todo el contenido de la carpeta!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '¡Sí!',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+            }).then(function(e){
+                if(e.value === true){
+                    form.submit();
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+    }
+
 
 
 
@@ -1189,6 +1778,8 @@ $(function(){
     jQuery.extend(jQuery.validator.messages, {
         required: '<i class="fa-solid fa-circle-exclamation fa-bounce"></i> &nbsp; Este campo es obligatorio',
         email: 'Ingrese un email válido',
+        number: 'Por favor, ingresa un número válido',
+        step: jQuery.validator.format("Ingrese un número múltiplo de {0}"),
         maxlength: jQuery.validator.format("Ingrese menos de {0} caracteres.")
     });
 })
