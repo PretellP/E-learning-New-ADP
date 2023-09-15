@@ -25,7 +25,7 @@ class AdminUsersController extends Controller
                     ->addColumn('name', function($user){
                         return $user->name.' '.$user->paternal;
                     })
-                    ->addColumn('role', function($user){
+                    ->editColumn('role', function($user){
                         switch($user->role){
                             case 'admin':
                                 $role = 'Administrador';
@@ -56,7 +56,7 @@ class AdminUsersController extends Controller
                         }
                         return $role;
                     })
-                    ->addColumn('company', function($user){
+                    ->editColumn('company.description', function($user){
                         $company = $user->company == null ? '' : $user->company->description;
 
                         return $company;

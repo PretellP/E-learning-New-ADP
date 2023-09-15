@@ -45,7 +45,6 @@ class AdminCompaniesController extends Controller
 
             return $allCompanies;
         }
-
         return view('admin.companies.index');
     }
 

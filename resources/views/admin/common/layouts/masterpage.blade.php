@@ -25,6 +25,7 @@
             @include('admin.common.partials.footer')
 
         </div>
+        
     </div>
 
     @include('admin.common.partials.scripts')

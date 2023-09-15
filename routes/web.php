@@ -109,7 +109,12 @@ Route::group(['middleware' => 'auth'], function(){
 
         // --------------- FREE COURSES -----------------
 
-        Route::get('/admin/free-courses', [AdminFreeCoursesController::class, 'index'])->name('admin.freeCourses.index');
+        Route::get('/admin/cursos-libres', [AdminFreeCoursesController::class, 'index'])->name('admin.freeCourses.index');
+        Route::get('/admin/cursos-libres/registrar/obtener-categorias', [AdminFreeCoursesController::class, 'getCategoriesRegisterCourse'])->name('admin.freecourses.getCategoriesRegister');
+        Route::get('/admin/cursos-libres/categorias/editar/{category}', [AdminFreeCoursesController::class, 'getDataCategory'])->name('admin.freecourses.getDataCategory');
+        Route::post('/admin/cursos-libres/categorías/registrar', [AdminFreeCoursesController::class, 'storeCategory'])->name('admin.freeCourses.storeCategory');
+        Route::post('/admin/cursos-libres/categorías/actualizar/{category}', [AdminFreeCoursesController::class, 'updateCategory'])->name('admin.freecourses.categoryUpdate');
+        Route::delete('/admin/cursos-libres/categorías/eliminar/{category}', [AdminFreeCoursesController::class, 'destroyCategory'])->name('admin.freecourses.deleteCategory');
 
         // --------------- EVALUATIONS -------------------
 

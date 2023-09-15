@@ -1,6 +1,6 @@
 $(function(){
 
-    
+    /* ------ GENERAL ------*/
 
     var DataTableEs = {
         "processing": "Procesando...",
@@ -272,6 +272,48 @@ $(function(){
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
     })
+
+
+    /* ---- DROPDOWN BUTTON -------*/
+
+
+    $('.main-content').on('click', '.btn-dropdown-container', function(){
+
+        if (window.matchMedia('(min-width: 992px)').matches) {
+            $('#btn-drowdown-category-list').removeClass('vertical')
+        } else {
+            $('#btn-drowdown-category-list').addClass('vertical')
+        }
+
+        var button = $(this)
+        var txtCont = button.find('.text-dropdown-cont')
+        var parent = button.closest('.principal-inner-container')
+        var dropdownContainer = parent.find('.related-dropdown-container')
+        var actionButtonContainer = parent.find('.action-btn-dropdown-container')
+    
+        if(button.hasClass('show')){
+            txtCont.html('Mostrar')
+        }else{
+            txtCont.html('Ocultar')
+        }
+
+        if(button.hasClass('vertical')){
+            dropdownContainer.slideToggle(300)
+        }else{
+            dropdownContainer.toggle('slide')
+        }
+
+        actionButtonContainer.slideToggle(300)
+        button.toggleClass('show')
+    })
+
+
+
+
+
+
+
+
 
     if($('#companies-table').length){
 
@@ -821,20 +863,20 @@ $(function(){
         /* --------------------------------*/
 
         var usersTableEle = $('#users-table');
-        var getDataUrl = usersTableEle.data('url');
+        var getDataTable = usersTableEle.data('url');
         var usersTable = usersTableEle.DataTable({
             language: DataTableEs,
             serverSide: true,
             processing: true,
-            ajax: getDataUrl,
+            ajax: getDataTable,
             columns:[
                 {data: 'id', name:'id'},
                 {data: 'dni', name:'dni'},
                 {data: 'name', name:'name'},
                 {data: 'email', name:'email'},
-                {data: 'role', name:'role'},
-                {data: 'company', name:'company'},
-                {data: 'status-btn', name:'status-btn'},
+                {data: 'role', name:'role', orderable: false,},
+                {data: 'company.description', name:'company.description', orderable: false},
+                {data: 'status-btn', name:'status-btn', orderable: false, searchable: false},
                 {data: 'action', name:'action', orderable: false, searchable: false},
             ]
         });
@@ -969,7 +1011,7 @@ $(function(){
                 }
             })
 
-            modal.modal('toggle')
+            // modal.modal('toggle')
         })
 
 
@@ -1757,6 +1799,452 @@ $(function(){
     }
 
 
+    if($('#freeCourses-table').length)
+    {
+
+        /*------- CATEGORIES ----------*/
+
+        /* ------- REGISTER ----------*/
+
+        $('#register-category-status-checkbox').change(function(){
+            var txtDesc = $('#txt-register-description-category');
+            if(this.checked){
+                txtDesc.html('Activo');
+            }else{
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var categoryImageRegister = $('input[type="file"][name="categoryImageRegister"]');
+        categoryImageRegister.val('');
+        categoryImageRegister.on("change", function(){
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#registerCategoryForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
+            {
+                if(typeof(FileReader)!= 'undefined'){
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        $('<img/>', {'src':e.target.result,'class':'img-fluid category_img'}).
+                        appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                }else{
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            }else{
+                $(img_holder).empty();
+                categoryImageRegister.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+        })
+
+
+        var registerCategoryForm = $('#registerCategoryForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 100
+                },
+                categoryImageRegister: {
+                    required: true
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterCategoryModal')
+                var img_holder = form.find('.img-holder')
+                
+
+                loadSpinner.toggleClass('active')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function(data){
+
+                        var listContainer = $('#categories-list-container')
+                        listContainer.html(data.html)
+
+                        registerCategoryForm.resetForm()
+                        loadSpinner.toggleClass('active')
+
+                        $(img_holder).empty()
+                        modal.modal('toggle')
+                        form.find('input[name=name]').val('')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+
+        /* ---------- EDIT -----------*/
+
+
+        $('#edit-category-status-checkbox').change(function(){
+            var txtDesc = $('#txt-edit-description-category');
+            if(this.checked){
+                txtDesc.html('Activo');
+            }else{
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editCategoryForm = $('#editCategoryForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editCategoryModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function(data){
+
+                        var listContainer = $('#categories-list-container')
+                        listContainer.html(data.html)
+
+                        editCategoryForm.resetForm()
+                        
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+
+                        $(img_holder).empty()
+
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+        var inputCategoryEdit = $('input[type="file"][name="categoryImageEdit"]');
+        inputCategoryEdit.on("change", function(){
+            $('#editCategoryForm').validate()
+            $('#image-upload-category-edit').rules('add', {required: true})
+
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#editCategoryForm').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
+            {
+                if(typeof(FileReader) != 'undefined'){
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        $('<img/>', {'src':e.target.result,'class':'img-fluid category_img'}).
+                        appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                }else{
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            }else{
+                $(img_holder).html(currentImagePath);
+                inputCategoryEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+
+        })
+
+
+
+        $('.main-content').on('click', '.editCategory-btn', function(){
+            var modal = $('#editCategoryModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editCategoryForm')
+
+            $('#editCategoryForm').validate()
+            $('#image-upload-category-edit').rules('remove', 'required')
+
+            editCategoryForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+          
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+
+                    modal.find('input[name=name]').val(data.description);
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="'+data.url_img+'"></img>');
+                    modal.find('#image-upload-edit').attr('data-value', '<img scr="'+data.url_img+'" class="img-fluid category_img"');
+                    modal.find('#image-upload-edit').val('');
+
+                    if(data.status == 'S'){
+                        modal.find('#edit-category-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-category').html('Activo');
+                    }else{
+                        modal.find('#edit-category-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-category').html('Inactivo');
+                    }
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+        })
+
+
+
+         /* ----------- DELETE ---------------*/
+
+        $('.main-content').on('click', '.deleteCategory-btn', function(){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+
+                                var listContainer = $('#categories-list-container')
+                                listContainer.html(result.html)
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                        },
+                        error: function(result){
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+
+
+
+        /* -----  FREE COURSE TABLE ----------*/
+
+
+         /* -------- SELECT ----------*/
+
+        $('#registerfreeCourseSelect').select2({
+            dropdownParent: $("#RegisterfreeCourseModal"),
+            placeholder: 'Selecciona una categoría'
+        })
+
+
+        var freeCoursesTableEle = $('#freeCourses-table');
+        var getDataUrl = freeCoursesTableEle.data('url');
+        var freeCoursesTable = freeCoursesTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns:[
+                {data: 'id', name:'id'},
+                {data: 'description', name:'description'},
+                {data: 'subtitle', name:'subtitle'},
+                {data: 'course_category.description', name:'courseCategory.description', orderable: false},
+                {data: 'sections', name:'sections', orderable: false},
+                {data: 'chapters', name:'chapters', orderable: false},
+                {data: 'duration', name:'duration', orderable: false},
+                {data: 'active', name:'active', orderable: false, searchable: false},
+                {data: 'recom', name:'recom', orderable: false, searchable: false, className: 'text-center'},
+            ]
+        });
+
+        /* --------- REGISTER ----------*/
+
+        var freeCourseImageRegister = $('input[type="file"][name="courseImageRegister"]');
+        freeCourseImageRegister.val('');
+        freeCourseImageRegister.on("change", function(){
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#registerFreeCourseForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+
+            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
+            {
+                if(typeof(FileReader)!= 'undefined'){
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function(e){
+                        $('<img/>', {'src':e.target.result,'class':'img-fluid freecourse_img'}).
+                        appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                }else{
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            }else{
+                $(img_holder).empty();
+                freeCourseImageRegister.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+        })
+
+
+        $('#register-course-status-checkbox').change(function(){
+            var txtDesc = $('#txt-register-description-course');
+            if(this.checked){
+                txtDesc.html('Activo');
+            }else{
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var registerFreeCourseForm = $('#registerFreeCourseForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                subtitle: {
+                    maxlength: 255
+                },
+                category: {
+                    required: true,
+                },
+                courseImageRegister: {
+                    required: true,
+                },
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterUserModal')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function(data){
+                        registerUserForm.resetForm()
+                        usersTable.draw()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+        $('#btn-register-freecourse-modal').on('click', function(){
+            var button = $(this)
+            var modal = $('#RegisterfreeCourseModal')
+            var loadSpinner = button.find('.loadSpinner')
+            var url = button.data('url')
+            var select = modal.find('#registerfreeCourseSelect')
+
+            loadSpinner.toggleClass('active')
+            registerFreeCourseForm.resetForm()
+            select.html('')
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'JSON',
+                success: function(data){
+                    var categories = data['categories']
+                    select.append('<option></option>')
+
+                    $.each(categories, function(key, values){
+                        select.append('<option value="'+values.id+'">'+values.description+'</option>');
+                    })
+                },  
+                complete: function(data){
+                    loadSpinner.toggleClass('active')
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+        })
+
+    }
+
+ 
+
+
+
+
+
 
 
 
@@ -1783,3 +2271,4 @@ $(function(){
         maxlength: jQuery.validator.format("Ingrese menos de {0} caracteres.")
     });
 })
+

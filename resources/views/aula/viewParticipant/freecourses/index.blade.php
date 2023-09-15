@@ -19,7 +19,7 @@
             @foreach ($categories as $category)
                 
                 <div class="category-card">
-                    <img src="{{asset($category->url_img)}}" alt="{{$category->description}}">
+                    <img src="{{asset('storage/'.$category->url_img)}}" alt="{{$category->description}}">
                     <div class="category-title-container">
                         <div class="box-title">
                             <div class="upper-text">

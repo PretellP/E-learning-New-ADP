@@ -493,6 +493,17 @@ function getTimeforHummans($time)
 }
 
 
+function getStatusClass($status)
+{
+    return $status == 'S' ? 'active' : '';
+}
+
+function getStatusText($status)
+{
+    return $status == 'S' ? 'Activo' : 'Inactivo';
+}
+
+
 
 
 
