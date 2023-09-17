@@ -514,6 +514,10 @@ function getSelectedOption(CourseSection $section, $order)
     return $section->section_order == $order ? 'selected' : '';
 }
 
+function setSectionActive(CourseSection $section, $sectionActive)
+{
+    return $section->id == $sectionActive ? 'active' : '';
+}
 
 
 

@@ -10,7 +10,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
-use App\Models\{CourseCategory, Course, CourseSection};
+use App\Models\{CourseCategory, Course, CourseSection, SectionChapter};
 
 class AdminFreeCoursesController extends Controller
 {
@@ -221,6 +221,12 @@ class AdminFreeCoursesController extends Controller
 
         if($request['verifybtn'] == 'show')
         {
+            $route = route('admin.freeCourses.courses.index', $course);
+
+            return response()->json([
+                "show" => true,
+                "route" => $route
+            ]);
             
         }else{
             if($request->has('fixedCategory')){
@@ -232,6 +238,7 @@ class AdminFreeCoursesController extends Controller
             }
 
             return response()->json([
+                "show" => false,
                 "success" => true,
                 "html" => $html
             ]);
@@ -315,8 +322,11 @@ class AdminFreeCoursesController extends Controller
                         ])
                         ->first();
 
+            $sectionActive = '';
+
             return view('admin.free-courses.courses.index', [
-                'course' => $course
+                'course' => $course,
+                'sectionActive' => $sectionActive
             ]);
         }
         
@@ -397,15 +407,18 @@ class AdminFreeCoursesController extends Controller
     {
         $order = $request['value'];
 
-        CourseSection::where('course_id', $section->course_id)
-                        ->where('section_order', $order)
-                        ->update([
-                            "section_order" => $section->section_order
-                        ]);
+        if($section->section_order != $order){
 
-        $section->update([
-            "section_order" => $order
-        ]);
+            CourseSection::where('course_id', $section->course_id)
+                            ->where('section_order', $order)
+                            ->update([
+                                "section_order" => $section->section_order
+                            ]);
+
+            $section->update([
+                "section_order" => $order
+            ]);
+        }
 
         $course = $section->course()->with(['courseSections' => function($query){
                                         $query->orderBy('section_order', 'ASC')
@@ -413,7 +426,10 @@ class AdminFreeCoursesController extends Controller
                                     }])
                                     ->first();
 
-        $html = view('admin.free-courses.partials.sections-list', compact('course'))->render();
+
+        $sectionActive = $request['id'] != null ? $request['id'] : '';
+
+        $html = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
 
         return response()->json([
             "html" => $html
@@ -423,6 +439,8 @@ class AdminFreeCoursesController extends Controller
 
     public function storeSection(Request $request, Course $course)
     {
+        parse_str($request['form'], $form);
+
         $lastSection = $course->courseSections()
                         ->orderBy('section_order', 'DESC')
                         ->first();
@@ -430,7 +448,7 @@ class AdminFreeCoursesController extends Controller
         $lastOrder = $lastSection == null ? 0 : $lastSection->section_order;
 
         $section = CourseSection::create([
-                        "title" => $request['title'],
+                        "title" => $form['title'],
                         "section_order" => $lastOrder+1,
                         "course_id" => $course->id
                     ]);
@@ -441,12 +459,156 @@ class AdminFreeCoursesController extends Controller
                                     }, 'courseCategory'])
                                     ->first();
 
+        $sectionActive = $request['id'] != null ? $request['id'] : '';
+
         $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course'))->render();
+        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
 
         return response()->json([
             "htmlCourse" => $htmlCourse,
             "htmlSection" => $htmlSection
         ]);
+    }
+
+    public function getDataSection(CourseSection $section)
+    {
+        $sections = CourseSection::where('course_id', $section->course_id)
+                                    ->orderBy('section_order', 'ASC')
+                                    ->get(['id','section_order','course_id']);
+
+        return response()->json([
+            "title" => $section->title,
+            "sections" => $sections,
+            'order' => $section->section_order
+        ]);
+    }
+
+    public function updateSection(Request $request, CourseSection $section)
+    {
+        parse_str($request['form'], $form);
+
+        if($section->section_order != $form['order']){
+            CourseSection::where('course_id', $section->course_id)
+                            ->where('section_order', $form['order'])
+                            ->update([
+                                "section_order" => $section->section_order
+                            ]);
+        }
+
+        $section->update([
+            "title" => $form['title'],
+            "section_order" => $form['order'],
+        ]);
+
+        $course = $section->course()->with(['courseSections' => function($query){
+                                        $query->orderBy('section_order', 'ASC')
+                                            ->with('sectionChapters');
+                                    }, 'courseCategory'])
+                                    ->first();
+
+        $sectionActive = $request['id'] != null ? $request['id'] : '';
+
+        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
+
+        return response()->json([
+            "htmlSection" => $htmlSection
+        ]);
+
+    }
+
+
+    public function destroySection(Request $request, CourseSection $section)
+    {
+        $course_id = $section->course_id;
+        $section->delete();
+
+        $sections = CourseSection::where('course_id', $course_id)
+                                ->orderBy('section_order', 'ASC')->get();
+
+        $order = 1;
+        foreach($sections as $section){
+            $section->update([
+                "section_order" => $order
+            ]);
+            $order++;
+        }
+
+        $is_active = 0;
+        $htmlChapter = '';
+
+        $course = Course::where('id', $course_id)->with(['courseSections' => function($query){
+                                                    $query->orderBy('section_order', 'ASC')
+                                                        ->with('sectionChapters');
+                                                }, 'courseCategory'])
+                                                ->first();
+
+        $sectionActive = $request['id'] != null ? $request['id'] : '';
+
+        $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
+        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
+
+        if($request['active'] == 'active'){
+            $htmlChapter  = view('admin.free-courses.partials.chapter-list-empty')->render();
+            $is_active = 1;
+        }
+
+        return response()->json([
+            "htmlCourse" => $htmlCourse,
+            "htmlSection" => $htmlSection,
+            "is_active" => $is_active,
+            "htmlChapter" => $htmlChapter
+        ]);
+    }
+
+    public function getChapterTable(Request $request, CourseSection $section)
+    {
+        if($request->ajax()){
+
+            if($request['type'] == 'html'){
+
+                $html = view('admin.free-courses.partials.chapters-list')->render();
+
+                return response()->json([
+                    "html" => $html,
+                    'title' => $section->title
+                ]);
+
+            }elseif($request['type'] == 'table'){
+
+                $allChapters = DataTables::of(SectionChapter::where('section_id', $section->id)
+                                                            ->with('progressUsers')
+                                )
+                                ->editColumn('duration', function($chapter){
+                                    return $chapter->duration.' minutos';
+                                })
+                                ->editColumn('description', function($chapter){
+                                    return mb_substr($chapter->description, 0, 100, 'UTF-8').' ...';
+                                })
+                                ->addColumn('view', function($chapter){
+                                    return ' <a href=""> <i class="fa-solid fa-video"></i> </a>';
+                                })
+                                ->addColumn('action', function($chapter){
+                                    $btn = '<button data-id="'.$chapter->id.'" 
+                                            data-url="" 
+                                            data-send=""
+                                            data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
+                                            editChapter"><i class="fa-solid fa-pen-to-square"></i></button>';
+                                    if($chapter->progressUsers->isEmpty())
+                                    {
+                                        $btn.= '<a href="javascript:void(0)" data-id="'.
+                                                $chapter->id.'" data-original-title="delete"
+                                                data-url="" class="ms-3 edit btn btn-danger btn-sm
+                                                deleteChapter"><i class="fa-solid fa-trash-can"></i></a>';
+                                    }
+                                
+                                    return $btn;
+                                })
+                                ->rawColumns(['view', 'action'])
+                                ->make(true);
+
+                return $allChapters;
+            }
+
+        }
     }
 }

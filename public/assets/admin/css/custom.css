@@ -67,7 +67,7 @@ div.dataTables_wrapper div.dataTables_processing
 .principal-container
 {
     min-height: 75vh;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 table.dataTable span.status,
@@ -628,7 +628,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 
 .related-dropdown-container.table-container
 {
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .related-dropdown-container.table-container .row
@@ -1041,14 +1041,14 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
     padding: 20px 0;
     min-width: 100%;
     border-radius: 3px;
-    overflow: hidden;
+    overflow: auto;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.103);
     display: flex;
 }
 
 .course-section-box > div
 {
-    padding: 0 13px;
+    padding: 0 0.3vw;
 }
 
 .course-section-box > div:not(:last-child)
@@ -1080,7 +1080,8 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 .title-container
 {
     cursor: pointer;
-    width: 220px;
+    width: 100%;
+    max-width: 210px;
     transition: all .1s;
 }
 
@@ -1104,7 +1105,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 {
     display: block;
     border-radius: 3px;
-    overflow: hidden;
+    overflow: visible;
     height: auto;
     box-shadow: none;
 }
@@ -1118,7 +1119,23 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 .action-box.clean-list
 .btn-action-container > span
 {
-    padding: 10px;
+    padding: 0.4vw;
+}
+
+.course-section-box.active
+{
+    background-color: rgba(241, 241, 241, 0.705);
+}
+
+.course-section-box.active:hover
+{
+    background-color: rgba(241, 241, 241, 0.705) !important;
+}
+
+.course-section-box.active
+.title-container
+{
+    filter: brightness(0.6);
 }
 
 @media (min-width: 992px)

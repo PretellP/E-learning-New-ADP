@@ -1,6 +1,9 @@
 @foreach ($course->courseSections as $section)
 
-<div class="course-section-box">
+<div class="course-section-box {{setSectionActive($section, $sectionActive)}}"
+            data-active="{{setSectionActive($section, $sectionActive)}}" 
+            data-table="{{route('admin.freeCourses.getChaptersTable', $section)}}"
+            data-id="{{$section->id}}">
     <div class="order-info">
         <span class="text-bold">  
             {{$section->section_order}}
@@ -34,12 +37,13 @@
     </div>
     <div class="action-box clean-list">
         <div class="btn-action-container">
-            <span class="section-edit-btn edit-btn" data-send="">
+            <span class="section-edit-btn edit-btn" data-send="{{route('admin.freeCourses.section.edit', $section)}}"
+                data-url="{{route('admin.freeCourses.sections.update', $section)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
             @if($section->sectionChapters->isEmpty())
                 <span class="delete-btn delete-section-btn"
-                        data-url=""> 
+                        data-url="{{route('admin.freeCourses.sections.delete', $section)}}"> 
                     <i class="fa-solid fa-trash-can"></i> 
                 </span>
             @else

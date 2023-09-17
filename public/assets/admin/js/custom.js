@@ -2206,22 +2206,30 @@ $(function(){
 
                         registerFreeCourseForm.resetForm()
 
-                        if($('#categories-list-container').length){
-                            var listContainer = $('#categories-list-container')
-                            listContainer.html(data.html)
+                        if(data.show == true){
+
+                            window.location.href = data.route
+
+                        }else{
+                            
+                            if($('#categories-list-container').length){
+                                var listContainer = $('#categories-list-container')
+                                listContainer.html(data.html)
+                            }
+
+                            $(img_holder).empty()
+
+                            freeCoursesTable.draw()
+                            form.trigger('reset')
+                            freeCourseImageRegister.val('')
+                            loadSpinner.toggleClass('active')
+                            modal.modal('toggle')
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registrado exitosamente!'
+                            })
                         }
 
-                        $(img_holder).empty()
-
-                        freeCoursesTable.draw()
-                        form.trigger('reset')
-                        freeCourseImageRegister.val('')
-                        loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registrado exitosamente!'
-                        })
                     },
                     error: function(data){
                         console.log(data)
@@ -2266,7 +2274,7 @@ $(function(){
     }
 
 
-    /*---  CATEGORY SHOW  ------*/
+        /*---  CATEGORY SHOW  ------*/
 
     if($('#freecourse-category-show-table').length){
 
@@ -2557,20 +2565,26 @@ $(function(){
 
                         registerFreeCourseForm.resetForm()
 
-                        var boxCategory = $('#categorybox-show')
-                        boxCategory.html(data.html)
+                        if(data.show == true){
 
-                        $(img_holder).empty()
-
-                        freeCoursesCatShowTable.draw()
-                        form.trigger('reset')
-                        freeCourseImageRegister.val('')
-                        loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registrado exitosamente!'
-                        })
+                            window.location.href = data.route
+                        }
+                        else{
+                            var boxCategory = $('#categorybox-show')
+                            boxCategory.html(data.html)
+    
+                            $(img_holder).empty()
+    
+                            freeCoursesCatShowTable.draw()
+                            form.trigger('reset')
+                            freeCourseImageRegister.val('')
+                            loadSpinner.toggleClass('active')
+                            modal.modal('toggle')
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registrado exitosamente!'
+                            })
+                        }
                     },
                     error: function(data){
                         console.log(data)
@@ -2781,24 +2795,31 @@ $(function(){
         })
 
 
-        /* ------ SECTIONS -------*/
+        /* --------- SECTIONS ----------*/
 
-         /* ----------- SELECT -------------*/
+      
+
+        /* ----------- SELECT -------------*/
 
         $('.order-section-select').select2({
             minimumResultsForSearch: -1
         })
+
+        /* -------- UPDATE ORDER ----------*/
 
         $('.main-content').on('change', '.order-section-select', function(){
 
             var url = $(this).data('url')
             var value = $(this).val()
 
+            var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
+
             $.ajax({
                 method: 'POST',
                 url: url,
                 data: {
-                    value: value
+                    value: value,
+                    id: sectionActive
                 },
                 dataType: 'JSON',
                 success: function(data){
@@ -2837,13 +2858,17 @@ $(function(){
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#registerSectionModal')
+                var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
                 
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
                     method: form.attr('method'),
                     url: form.attr('action'),
-                    data: form.serialize(),
+                    data: {
+                        form: form.serialize(),
+                        id: sectionActive
+                    },
                     dataType: 'JSON',
                     success: function(data){
 
@@ -2853,7 +2878,7 @@ $(function(){
                         var boxSections = $('#sections-list-container')
                         boxCourse.html(data.htmlCourse)
                         boxSections.html(data.htmlSection)
-                        
+
                         $('.order-section-select').select2({
                             minimumResultsForSearch: -1
                         })
@@ -2872,6 +2897,244 @@ $(function(){
                 })
             }
         })
+
+
+        /* ----- EDIT --------*/
+
+        $('#editOrderSelect').select2({
+            dropdownParent: $("#editSectionModal"),
+            minimumResultsForSearch: -1
+        })
+
+        var editSectionForm = $('#editSectionForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 100
+                },
+                order: {
+                    required: true
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editSectionModal')
+                var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
+                
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: {
+                        form: form.serialize(),
+                        id: sectionActive
+                    },
+                    dataType: 'JSON',
+                    success: function(data){
+
+                        editSectionForm.resetForm()
+
+                        var boxSections = $('#sections-list-container')
+                        boxSections.html(data.htmlSection)
+
+                        $('.order-section-select').select2({
+                            minimumResultsForSearch: -1
+                        })
+
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+        $('.main-content').on('click', '.section-edit-btn', function(){
+            var button = $(this)
+            var getDataUrl = button.data('send')
+            var url = button.data('url')
+            var modal = $('#editSectionModal')
+            var form = modal.find('#editSectionForm')
+            var select = $('#editOrderSelect')
+            select.html('')
+
+            editSectionForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+
+                    form.find('input[name=title]').val(data.title);
+
+                    $.each(data.sections, function(key, values){
+                        select.append('<option value="'+values.section_order+'">'+values.section_order+'</option>')
+                    }) 
+                    
+                    select.val(data.order).change()
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+
+        })
+
+        /* -------- DELETE ----------*/
+
+        $('.main-content').on('click', '.delete-section-btn', function(){
+            var button = $(this)
+            var url = button.data('url')
+            var active = button.closest('.course-section-box').data('active')
+
+            var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        data: {
+                            active: active,
+                            id: sectionActive
+                        },
+                        dataType: 'JSON',
+                        success: function(data){
+
+                            var courseBox = $('#course-box-container')
+                            var sectionBox = $('#sections-list-container')
+                           
+                            courseBox.html(data.htmlCourse)
+                            sectionBox.html(data.htmlSection)
+
+                            if(data.is_active == 1){
+                                var chapterBox = $('#chapters-list-container')
+                                var topTableInfo = $('#top-chapter-table-title-info')
+                                chapterBox.html(data.htmlChapter)
+                                topTableInfo.html('')
+                            }
+
+                            $('.order-section-select').select2({
+                                minimumResultsForSearch: -1
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registro eliminado!',
+                            })
+
+                        },
+                        error: function(result){
+                            console.log(result)
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+
+
+
+        /* ---------- CHAPTERS ----------*/
+
+          /* ----- CHAPTERS TABLE ------*/
+
+        function chapterTable(ele, lang, url){
+            var chaptersTable = ele.DataTable({
+                language: lang,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    "url": url,
+                    "data": {
+                        "type": "table"
+                    }
+                },
+                order: [[3,'asc']],
+                columns:[
+                    {data: 'title', name:'title', className: 'text-bold'},
+                    {data: 'description', name:'description'},
+                    {data: 'duration', name:'duration'},
+                    {data: 'chapter_order', name:'chapter_order'},
+                    {data: 'view', name:'view', orderable: false, searchable: false, className: 'text-center'},
+                    {data: 'action', name:'action', orderable: false, searchable: false},
+                ],
+                dom: 'rtip'
+            });
+        }
+
+
+        /* ----- SET ACTIVE -----*/
+
+        $('.main-content').on('click', '.course-section-box .title-container', function(){
+            var sectionBox = $(this).closest('.course-section-box')
+
+            if(!sectionBox.hasClass('active')){
+
+                sectionBox.addClass('active').attr('data-active', 'active')
+                sectionBox.siblings().removeClass('active').attr('data-active', '')   
+
+                var url = sectionBox.data('table')
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: {
+                        type: 'html'
+                    },
+                    dataType: 'JSON',
+                    success: function(data){
+
+                        var chaptersBox = $('#chapters-list-container')
+                        var topTableInfo = $('#top-chapter-table-title-info')
+
+                        topTableInfo.html('<span class="text-bold"> de: </span> \
+                                            <span class="title-chapter-top-table">'+data.title+'</span>')
+                        chaptersBox.html(data.html)
+
+                        var chaptersTableEle = $('#freeCourses-chapters-table');
+                        chapterTable(chaptersTableEle, DataTableEs, url);
+
+                    },
+                    error: function(result){
+                        console.log(result)
+                        Toast.fire({
+                            icon: 'error',
+                            title: '¡Ocurrió un error inesperado!',
+                        });
+                    }
+
+                });
+
+            }
+
+        })
+
     }
  
 

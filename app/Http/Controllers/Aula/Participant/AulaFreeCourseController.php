@@ -168,12 +168,14 @@ class AulaFreeCourseController extends Controller
                         ->get();
 
             $sections = $course->courseSections()->with('sectionChapters:id,section_id,title,chapter_order,duration')
-                    ->select('course_sections.id',
-                            'course_sections.course_id',
-                            'course_sections.title',
-                            'course_sections.section_order')
-                    ->orderBy('section_order', 'ASC')
-                    ->get();
+                                                ->select('course_sections.id',
+                                                        'course_sections.course_id',
+                                                        'course_sections.title',
+                                                        'course_sections.section_order')
+                                                ->orderBy('section_order', 'ASC')
+                                                ->withCount('sectionChapters')
+                                                ->having('section_chapters_count', '>', 0)
+                                                ->get();
 
             $current_chapter = $allProgress->where('id', $current_chapter->id)->first();
 

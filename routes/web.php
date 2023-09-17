@@ -56,76 +56,117 @@ Route::group(['middleware' => 'auth'], function(){
 
         // --------------- USERS -------------------------
 
-        Route::get('/admin/usuarios', [AdminUsersController::class, 'index'])->name('admin.users.index');
-        Route::get('/admin/usuarios/registrar/obtener-empresas', [AdminUsersController::class, 'registerGetCompanies'])->name('admin.users.registerGetCompanies');
-        Route::get('/admin/usuarios/editar/{user}', [AdminUsersController::class, 'edit'])->name('admin.user.edit');
-        Route::post('/admin/usuarios/registrar/validar-dni', [AdminUsersController::class, 'registerValidateDni'])->name('admin.users.validateDni');
-        Route::post('/admin/usuarios/editar/validar-dni', [AdminUsersController::class, 'editValidateDni'])->name('admin.user.editValidateDni');
-        Route::post('/admin/usuarios/registrar', [AdminUsersController::class, 'store'])->name('admin.user.store');
-        Route::post('/admin/usuarios/actualizar/{user}', [AdminUsersController::class, 'update'])->name('admin.user.update');
-        Route::delete('/admin/usuarios/eliminar/{user}', [AdminUsersController::class, 'destroy'])->name('admin.user.delete');
+        Route::controller(AdminUsersController::class)->group(function(){
+
+            Route::get('/admin/usuarios', 'index')->name('admin.users.index');
+            Route::get('/admin/usuarios/registrar/obtener-empresas', 'registerGetCompanies')->name('admin.users.registerGetCompanies');
+            Route::get('/admin/usuarios/editar/{user}', 'edit')->name('admin.user.edit');
+            Route::post('/admin/usuarios/registrar/validar-dni', 'registerValidateDni')->name('admin.users.validateDni');
+            Route::post('/admin/usuarios/editar/validar-dni', 'editValidateDni')->name('admin.user.editValidateDni');
+            Route::post('/admin/usuarios/registrar', 'store')->name('admin.user.store');
+            Route::post('/admin/usuarios/actualizar/{user}', 'update')->name('admin.user.update');
+            Route::delete('/admin/usuarios/eliminar/{user}', 'destroy')->name('admin.user.delete');
+
+        });
+
+      
 
 
         // ---------------  COMPANIES --------------------
 
-        Route::get('/admin/empresas', [AdminCompaniesController::class, 'index'])->name('admin.companies.index');
-        Route::get('/admin/empresas/editar/{company}', [AdminCompaniesController::class, 'edit'])->name('admin.companies.edit');
-        Route::post('/admin/empresas/registrar', [AdminCompaniesController::class, 'store'])->name('admin.companies.store');
-        Route::post('/admin/empresas/editar/validar-ruc', [AdminCompaniesController::class, 'EditvalidateRuc'])->name('admin.companies.validateRuc');
-        Route::post('/admin/empresas/actualizar/{company}', [AdminCompaniesController::class, 'update'])->name('admin.companies.update');
-        Route::delete('/admin/empresas/eliminar/{company}', [AdminCompaniesController::class, 'destroy'])->name('admin.companies.delete');
+        Route::controller(AdminCompaniesController::class)->group(function(){
+
+            Route::get('/admin/empresas', 'index')->name('admin.companies.index');
+            Route::get('/admin/empresas/editar/{company}', 'edit')->name('admin.companies.edit');
+            Route::post('/admin/empresas/registrar', 'store')->name('admin.companies.store');
+            Route::post('/admin/empresas/editar/validar-ruc', 'EditvalidateRuc')->name('admin.companies.validateRuc');
+            Route::post('/admin/empresas/actualizar/{company}', 'update')->name('admin.companies.update');
+            Route::delete('/admin/empresas/eliminar/{company}', 'destroy')->name('admin.companies.delete');
+
+        });
+
+       
 
 
         // ---------------- OWNER COMPANIES ---------------
 
-        Route::get('/admin/empresas-titulares', [AdminOwnerCompaniesController::class, 'index'])->name('admin.ownerCompanies.index');
-        Route::get('/admin/empresas-titulares/editar/{company}', [AdminOwnerCompaniesController::class, 'edit'])->name('admin.ownerCompany.edit');
-        Route::post('/admin/empresas-titulares/validar-registro', [AdminOwnerCompaniesController::class, 'registerValidate'])->name('admin.ownerCompany.registerValidate');
-        Route::post('/admin/empresas-titulares/validar-edición', [AdminOwnerCompaniesController::class, 'editValidate'])->name('admin.ownerCompanies.editValidate');
-        Route::post('/admin/empresas-titulares/registrar', [AdminOwnerCompaniesController::class, 'store'])->name('admin.ownerCompanies.store');
-        Route::post('/admin/empresas-titulares/actualizar/{company}', [AdminOwnerCompaniesController::class, 'update'])->name('admin.ownerCompany.update');
-        Route::delete('/admin/empresas-titulares/eliminar/{company}', [AdminOwnerCompaniesController::class, 'destroy'])->name('admin.ownerCompany.delete');
+        Route::controller(AdminOwnerCompaniesController::class)->group(function(){
+
+            Route::get('/admin/empresas-titulares', 'index')->name('admin.ownerCompanies.index');
+            Route::get('/admin/empresas-titulares/editar/{company}', 'edit')->name('admin.ownerCompany.edit');
+            Route::post('/admin/empresas-titulares/validar-registro', 'registerValidate')->name('admin.ownerCompany.registerValidate');
+            Route::post('/admin/empresas-titulares/validar-edición', 'editValidate')->name('admin.ownerCompanies.editValidate');
+            Route::post('/admin/empresas-titulares/registrar', 'store')->name('admin.ownerCompanies.store');
+            Route::post('/admin/empresas-titulares/actualizar/{company}', 'update')->name('admin.ownerCompany.update');
+            Route::delete('/admin/empresas-titulares/eliminar/{company}', 'destroy')->name('admin.ownerCompany.delete');
+
+        });
+
+        
 
 
         // --------------- ROOMS -------------------------
 
-        Route::get('/admin/salas', [AdminRoomsController::class, 'index'])->name('admin.rooms.index');
-        Route::get('/admin/salas/editar/{room}', [AdminRoomsController::class, 'edit'])->name('admin.room.edit');
-        Route::post('/admin/salas/registrar', [AdminRoomsController::class, 'store'])->name('admin.rooms.store');
-        Route::post('/admin/salas/registrar/validar-nombre', [AdminRoomsController::class, 'registerValidateName'])->name('admin.rooms.registerValidateName');
-        Route::post('/admin/salas/editar/validar-nombre', [AdminRoomsController::class, 'editValidateName'])->name('admin.rooms.editValidateName');
-        Route::post('/admin/salas/actualizar/{room}', [AdminRoomsController::class, 'update'])->name('admin.room.update');
-        Route::delete('/admin/salas/eliminar/{room}', [AdminRoomsController::class, 'destroy'])->name('admin.rooms.delete');
+        Route::controller(AdminRoomsController::class)->group(function(){
+
+            Route::get('/admin/salas', 'index')->name('admin.rooms.index');
+            Route::get('/admin/salas/editar/{room}', 'edit')->name('admin.room.edit');
+            Route::post('/admin/salas/registrar', 'store')->name('admin.rooms.store');
+            Route::post('/admin/salas/registrar/validar-nombre', 'registerValidateName')->name('admin.rooms.registerValidateName');
+            Route::post('/admin/salas/editar/validar-nombre', 'editValidateName')->name('admin.rooms.editValidateName');
+            Route::post('/admin/salas/actualizar/{room}', 'update')->name('admin.room.update');
+            Route::delete('/admin/salas/eliminar/{room}', 'destroy')->name('admin.rooms.delete');
+
+        });
+
+       
 
 
         // --------------- COURSES ----------------------
 
-        Route::get('/admin/cursos', [AdminCourseController::class, 'index'])->name('admin.courses.index');
-        Route::get('/admin/cursos/editar/{course}', [AdminCourseController::class, 'edit'])->name('admin.courses.edit');
-        Route::get('/admin/cursos/ver/{course}', [AdminCourseController::class, 'show'])->name('admin.courses.show');
-        Route::post('/admin/cursos/registrar', [AdminCourseController::class, 'store'])->name('admin.courses.store');
-        Route::post('/admin/cursos/actualizar/{course}', [AdminCourseController::class, 'update'])->name('admin.courses.update');
-        Route::delete('/admin/cursos/eliminar/{course}', [AdminCourseController::class, 'destroy'])->name('admin.courses.delete');
+        Route::controller(AdminCourseController::class)->group(function(){
+
+            Route::get('/admin/cursos', 'index')->name('admin.courses.index');
+            Route::get('/admin/cursos/editar/{course}', 'edit')->name('admin.courses.edit');
+            Route::get('/admin/cursos/ver/{course}', 'show')->name('admin.courses.show');
+            Route::post('/admin/cursos/registrar', 'store')->name('admin.courses.store');
+            Route::post('/admin/cursos/actualizar/{course}', 'update')->name('admin.courses.update');
+            Route::delete('/admin/cursos/eliminar/{course}', 'destroy')->name('admin.courses.delete');
+
+        });
+
+      
+
 
         // --------------- FREE COURSES -----------------
 
-        Route::get('/admin/cursos-libres', [AdminFreeCoursesController::class, 'index'])->name('admin.freeCourses.index');
-        Route::get('/admin/cursos-libres/registrar/obtener-categorias', [AdminFreeCoursesController::class, 'getCategoriesRegisterCourse'])->name('admin.freecourses.getCategoriesRegister');
-        Route::get('/admin/cursos-libres/categorias/editar/{category}', [AdminFreeCoursesController::class, 'getDataCategory'])->name('admin.freecourses.getDataCategory');
-        // CATEGORIES - INDEX
-        Route::get('/admin/cursos-libres/categoría/{category}', [AdminFreeCoursesController::class, 'showCategory'])->name('admin.freeCourses.categories.index');
-        Route::post('/admin/cursos-libres/categorías/registrar', [AdminFreeCoursesController::class, 'storeCategory'])->name('admin.freeCourses.storeCategory');
-        Route::post('/admin/cursos-libres/categorías/actualizar/{category}', [AdminFreeCoursesController::class, 'updateCategory'])->name('admin.freecourses.categoryUpdate');
-        Route::post('/admin/cursos-libres/categorías/eliminar/{category}', [AdminFreeCoursesController::class, 'destroyCategory'])->name('admin.freecourses.deleteCategory');
-        // FREE COURSES - INDEX
-        Route::post('/admin/cursos-libres/registrar', [AdminFreeCoursesController::class, 'storeFreecourse'])->name('admin.freecourses.storeFreecourse');
-        // FREE COURSE - SHOW
-        Route::get('/admin/cursos-libres/curso/{course}', [AdminFreeCoursesController::class, 'showCourse'])->name('admin.freeCourses.courses.index');
-        Route::get('/admin/cursos-libres/editar/{course}', [AdminFreeCoursesController::class, 'getDataCourse'])->name('admin.freecourse.getDatacourse');
-        Route::post('/admin/cursos-libres/actualizar/{course}', [AdminFreeCoursesController::class, 'updateFreecourse'])->name('admin.freeCourses.updateFreecourse');
-        Route::post('/admin/cursos-libres/curso/eliminar/{course}', [AdminFreeCoursesController::class, 'destroyCouse'])->name('admin.freecourses.deleteCourse');
-        Route::post('/admin/cursos-libres/sección/actualizar-orden/{section}', [AdminFreeCoursesController::class, 'updateSectionOrder'])->name('admin.freecourses.section.updateOrder');
-        Route::post('/admin/cursos-libres/curso/{course}/secciones/registrar', [AdminFreeCoursesController::class, 'storeSection'])->name('admin.freeCourses.sections.store');
+        Route::controller(AdminFreeCoursesController::class)->group(function(){
+
+            Route::get('/admin/cursos-libres', 'index')->name('admin.freeCourses.index');
+            Route::get('/admin/cursos-libres/registrar/obtener-categorias', 'getCategoriesRegisterCourse')->name('admin.freecourses.getCategoriesRegister');
+            Route::get('/admin/cursos-libres/categorias/editar/{category}', 'getDataCategory')->name('admin.freecourses.getDataCategory');
+            // CATEGORIES - INDEX
+            Route::get('/admin/cursos-libres/categoría/{category}', 'showCategory')->name('admin.freeCourses.categories.index');
+            Route::post('/admin/cursos-libres/categorías/registrar', 'storeCategory')->name('admin.freeCourses.storeCategory');
+            Route::post('/admin/cursos-libres/categorías/actualizar/{category}', 'updateCategory')->name('admin.freecourses.categoryUpdate');
+            Route::post('/admin/cursos-libres/categorías/eliminar/{category}', 'destroyCategory')->name('admin.freecourses.deleteCategory');
+            // FREE COURSES - INDEX
+            Route::post('/admin/cursos-libres/registrar', 'storeFreecourse')->name('admin.freecourses.storeFreecourse');
+            // FREE COURSE - SHOW
+            Route::get('/admin/cursos-libres/curso/{course}', 'showCourse')->name('admin.freeCourses.courses.index');
+            Route::get('/admin/cursos-libres/editar/{course}', 'getDataCourse')->name('admin.freecourse.getDatacourse');
+            Route::get('/admin/cursos-libres/sección/editar/{section}', 'getDataSection')->name('admin.freeCourses.section.edit');
+            Route::get('/admin/cursos-libres/obtener-capítulos/section/{section}', 'getChapterTable')->name('admin.freeCourses.getChaptersTable');
+            Route::post('/admin/cursos-libres/actualizar/{course}', 'updateFreecourse')->name('admin.freeCourses.updateFreecourse');
+            Route::post('/admin/cursos-libres/curso/eliminar/{course}', 'destroyCouse')->name('admin.freecourses.deleteCourse');
+            Route::post('/admin/cursos-libres/sección/actualizar-orden/{section}', 'updateSectionOrder')->name('admin.freecourses.section.updateOrder');
+            Route::post('/admin/cursos-libres/curso/{course}/secciones/registrar', 'storeSection')->name('admin.freeCourses.sections.store');
+            Route::post('/admin/cursos-libres/secciones/actualizar/{section}', 'updateSection')->name('admin.freeCourses.sections.update');
+            Route::post('/admin/cursos-libres/secciones/eliminar/{section}', 'destroySection')->name('admin.freeCourses.sections.delete');
+
+        });
+
+       
 
         // --------------- EVALUATIONS -------------------
 
