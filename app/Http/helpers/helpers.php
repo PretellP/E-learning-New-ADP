@@ -503,6 +503,17 @@ function getStatusText($status)
     return $status == 'S' ? 'Activo' : 'Inactivo';
 }
 
+function getStatusRecomended($status)
+{
+    return $status == 1 ? '<i class="fa-solid fa-star flg-recom-btn active"></i>' :
+                        '<i class="fa-regular fa-star flg-recom-btn"></i>';
+}
+
+function getSelectedOption(CourseSection $section, $order)
+{
+    return $section->section_order == $order ? 'selected' : '';
+}
+
 
 
 

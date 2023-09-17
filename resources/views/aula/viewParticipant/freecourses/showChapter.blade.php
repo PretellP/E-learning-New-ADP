@@ -14,8 +14,10 @@
         </div>
     </div>
 
-    <input type="hidden" id="url-input-video" data-id='{{$current_chapter->id}}' data-time='{{$current_time}}' value='{{route('aula.freecourse.saveTime',
-        $current_chapter)}}'>
+    <input type="hidden" id="url-input-video" 
+                        data-id='{{$current_chapter->id}}' 
+                        data-time='{{$current_time}}' 
+                        value='{{route('aula.freecourse.saveTime', $current_chapter)}}'>
 
     <div class="card-body body-global-container freecourse-view card z-index-2 principal-container">
 

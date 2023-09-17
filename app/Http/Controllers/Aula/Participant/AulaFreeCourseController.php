@@ -25,14 +25,17 @@ class AulaFreeCourseController extends Controller
         $user = Auth::user();
         $categories = CourseCategory::where('status', 'S')->select('id','url_img','description')->get();
 
-        $recomendedCourses = Course::where('course_type', 'FREE')
+        $recomendedCourses = Course::where('course_type', 'FREE') 
+                                    ->where('active', 'S')
                                     ->where('flg_recom', 1)
                                     ->with([
                                         'courseSections'=>fn($query)=>$query->select('id','course_id')
                                         ->with('sectionChapters:id,section_id,duration')
                                     ])
                                     ->with('courseCategory:id,description')
-                                    ->select('id','url_img','description','category_id')->get();
+                                    ->withCount(['courseChapters'])
+                                    ->having('course_chapters_count', '>', 0)
+                                    ->get();
 
         $coursesProgress = $user->progressChapters()
                                 ->with('courseSection:id,course_id')
@@ -45,6 +48,7 @@ class AulaFreeCourseController extends Controller
                                 ->select('id','course_id')
                                 ->with('sectionChapters:id,section_id,duration')
                             ])
+                            ->where('active', 'S')
                             ->with('courseCategory:id,description')
                             ->select('id','url_img','description','category_id')
                             ->get();
@@ -81,54 +85,62 @@ class AulaFreeCourseController extends Controller
     {
         $user = Auth::user();
 
-        $progress = $user->progressChapters()
-                                ->wherePivot('last_seen', 1)
-                                ->whereHas('courseSection', function($query) use ($course){
-                                        $query->where('course_id', $course->id);
-                                })
-                                ->select('section_chapters.id','section_chapters.section_id')
-                                ->first();
+        if($course->active == 'S'){
+            $progress = $user->progressChapters()
+                        ->wherePivot('last_seen', 1)
+                        ->whereHas('courseSection', function($query) use ($course){
+                                $query->where('course_id', $course->id);
+                        })
+                        ->select('section_chapters.id','section_chapters.section_id')
+                        ->first();
 
-        if($progress == null)
-        {
-            $current_chapter = $course->courseSections()
-                                                    ->select('id','section_order','course_id')
-                                                    ->where('section_order', 1)
-                                                    ->with([
-                                                        'sectionChapters'=>fn($query)=>$query
-                                                        ->select('id','section_id','chapter_order')
-                                                        ->where('chapter_order', 1)
-                                                    ])
-                                                    ->first()->sectionChapters->first();
+            if($progress == null)
+            {
+                $current_chapter = $course->courseSections()
+                                                ->select('id','section_order','course_id')
+                                                ->where('section_order', 1)
+                                                ->with([
+                                                    'sectionChapters'=>fn($query)=>$query
+                                                    ->select('id','section_id','chapter_order')
+                                                    ->where('chapter_order', 1)
+                                                ])
+                                                ->first()->sectionChapters->first();
 
-            $user->progressChapters()->attach($current_chapter, [
-                'progress_time' => 0,
-                'last_seen' => 1,
-                'status' => 'P'
-            ]);
+                $user->progressChapters()->attach($current_chapter, [
+                                            'progress_time' => 0,
+                                            'last_seen' => 1,
+                                            'status' => 'P'
+                                          ]);
+            }
+            else
+            {
+                $current_chapter = $progress;
+            }
+
+            return redirect()->route('aula.freecourse.showChapter', [
+                                    'course' => $course,
+                                    'current_chapter' => $current_chapter
+                                    ]);
+        }else{
+            return redirect()->route('aula.freecourse.index');
         }
-        else
-        {
-            $current_chapter = $progress;
-        }
-
-        return redirect()->route('aula.freecourse.showChapter', [
-            'course' => $course,
-            'current_chapter' => $current_chapter
-        ]);
+     
     }
 
 
     public function showCategory(CourseCategory $category)
     {
-        $courses = $category->courses()
+        $courses = $category->courses()     
                             ->select('id','url_img','description','category_id')
                             ->with([
                                 'courseSections'=>fn($query)=>$query
                                 ->select('id','course_id')
                                 ->with('sectionChapters:id,section_id,duration')
                             ])
+                            ->where('active', 'S')
                             ->with('courseCategory:id,description')
+                            ->withCount(['courseChapters'])
+                            ->having('course_chapters_count', '>', 0)
                             ->get();
 
         return view('aula.viewParticipant.freecourses.showCategory', [
@@ -142,56 +154,66 @@ class AulaFreeCourseController extends Controller
     {
         $user = Auth::user();
 
-        $allProgress = $user->progressChapters()->whereHas('courseSection', function($query) use($course){
-                                                    $query->where('course_id', $course->id);
-                                                })
-                                                ->select('section_chapters.id',
-                                                        'section_chapters.section_id',
-                                                        'section_chapters.title',
-                                                        'section_chapters.description',
-                                                        'section_chapters.url_video',
-                                                        'section_chapters.chapter_order')
-                                                ->get();
+        if($course->active == 'S'){
+            $allProgress = $user->progressChapters()->whereHas('courseSection', function($query) use($course){
+                            $query->where('course_id', $course->id);
+                        })
+                        ->select('section_chapters.id',
+                                'section_chapters.section_id',
+                                'section_chapters.title',
+                                'section_chapters.description',
+                                'section_chapters.url_video',
+                                'section_chapters.chapter_order')
 
-        $sections = $course->courseSections()->with('sectionChapters:id,section_id,title,chapter_order,duration')
-                                            ->select('course_sections.id',
-                                                    'course_sections.course_id',
-                                                    'course_sections.title',
-                                                    'course_sections.section_order')
-                                            ->get();
+                        ->get();
 
-        $current_chapter = $allProgress->where('id', $current_chapter->id)->first();
+            $sections = $course->courseSections()->with('sectionChapters:id,section_id,title,chapter_order,duration')
+                    ->select('course_sections.id',
+                            'course_sections.course_id',
+                            'course_sections.title',
+                            'course_sections.section_order')
+                    ->orderBy('section_order', 'ASC')
+                    ->get();
 
-        if($current_chapter != null){
+            $current_chapter = $allProgress->where('id', $current_chapter->id)->first();
+
+            if($current_chapter != null){
             $current_time = $current_chapter->pivot->progress_time;
-        }else{
+            }else{
             return back();
+            }
+
+            $current_section = $sections->filter(function($section) use($current_chapter){
+                        return $section->id == $current_chapter->section_id;
+                    })->first();
+
+            $next_sections = $sections->whereIn('section_order', 
+                    [$current_section->section_order,
+                    $current_section->section_order + 1]);
+
+            $next_chapter = getNextChapter($next_sections, $current_chapter);
+
+            $previous_sections = $sections->whereIn('section_order',
+                        [$current_section->section_order,
+                        $current_section->section_order - 1])->reverse();
+
+            $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
+
+            return view('aula.viewParticipant.freecourses.showChapter', [
+                        'course' => $course,
+                        'sections' => $sections,
+                        'current_chapter' => $current_chapter,
+                        'current_section' => $current_section,
+                        'next_chapter' => $next_chapter,
+                        'previous_chapter' => $previous_chapter,
+                        'current_time' => $current_time,
+                        'allProgress' => $allProgress
+            ]);
+        }else{
+            return redirect()->route('aula.freecourse.index');
         }
 
-        $current_section = $sections->filter(function($section) use($current_chapter){
-                                                return $section->id == $current_chapter->section_id;
-                                            })->first();
-    
-        $next_sections = $sections->whereIn('section_order', 
-                                            [$current_section->section_order,
-                                             $current_section->section_order + 1]);
-        $next_chapter = getNextChapter($next_sections, $current_chapter);
-
-        $previous_sections = $sections->whereIn('section_order',
-                                                [$current_section->section_order,
-                                                 $current_section->section_order - 1])->reverse();
-        $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
-
-        return view('aula.viewParticipant.freecourses.showChapter', [
-            'course' => $course,
-            'sections' => $sections,
-            'current_chapter' => $current_chapter,
-            'current_section' => $current_section,
-            'next_chapter' => $next_chapter,
-            'previous_chapter' => $previous_chapter,
-            'current_time' => $current_time,
-            'allProgress' => $allProgress
-        ]);
+     
     }
 
 

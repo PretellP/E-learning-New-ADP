@@ -112,9 +112,20 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/admin/cursos-libres', [AdminFreeCoursesController::class, 'index'])->name('admin.freeCourses.index');
         Route::get('/admin/cursos-libres/registrar/obtener-categorias', [AdminFreeCoursesController::class, 'getCategoriesRegisterCourse'])->name('admin.freecourses.getCategoriesRegister');
         Route::get('/admin/cursos-libres/categorias/editar/{category}', [AdminFreeCoursesController::class, 'getDataCategory'])->name('admin.freecourses.getDataCategory');
+        // CATEGORIES - INDEX
+        Route::get('/admin/cursos-libres/categoría/{category}', [AdminFreeCoursesController::class, 'showCategory'])->name('admin.freeCourses.categories.index');
         Route::post('/admin/cursos-libres/categorías/registrar', [AdminFreeCoursesController::class, 'storeCategory'])->name('admin.freeCourses.storeCategory');
         Route::post('/admin/cursos-libres/categorías/actualizar/{category}', [AdminFreeCoursesController::class, 'updateCategory'])->name('admin.freecourses.categoryUpdate');
-        Route::delete('/admin/cursos-libres/categorías/eliminar/{category}', [AdminFreeCoursesController::class, 'destroyCategory'])->name('admin.freecourses.deleteCategory');
+        Route::post('/admin/cursos-libres/categorías/eliminar/{category}', [AdminFreeCoursesController::class, 'destroyCategory'])->name('admin.freecourses.deleteCategory');
+        // FREE COURSES - INDEX
+        Route::post('/admin/cursos-libres/registrar', [AdminFreeCoursesController::class, 'storeFreecourse'])->name('admin.freecourses.storeFreecourse');
+        // FREE COURSE - SHOW
+        Route::get('/admin/cursos-libres/curso/{course}', [AdminFreeCoursesController::class, 'showCourse'])->name('admin.freeCourses.courses.index');
+        Route::get('/admin/cursos-libres/editar/{course}', [AdminFreeCoursesController::class, 'getDataCourse'])->name('admin.freecourse.getDatacourse');
+        Route::post('/admin/cursos-libres/actualizar/{course}', [AdminFreeCoursesController::class, 'updateFreecourse'])->name('admin.freeCourses.updateFreecourse');
+        Route::post('/admin/cursos-libres/curso/eliminar/{course}', [AdminFreeCoursesController::class, 'destroyCouse'])->name('admin.freecourses.deleteCourse');
+        Route::post('/admin/cursos-libres/sección/actualizar-orden/{section}', [AdminFreeCoursesController::class, 'updateSectionOrder'])->name('admin.freecourses.section.updateOrder');
+        Route::post('/admin/cursos-libres/curso/{course}/secciones/registrar', [AdminFreeCoursesController::class, 'storeSection'])->name('admin.freeCourses.sections.store');
 
         // --------------- EVALUATIONS -------------------
 

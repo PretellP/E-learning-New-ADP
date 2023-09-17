@@ -30,13 +30,16 @@ class AulaMyProgressController extends Controller
                                 'certifications.assist_user',
                                 'certifications.status',
                                 'certifications.score')
+                        ->whereHas('event.exam.course', function($query3){
+                            $query3->where('active', 'S');
+                        })
                         ->get()->groupBy('event.exam.course.id');
 
         $freeCourses = $user->progressChapters()
                         ->with(['courseSection' => fn($query) => $query
                             ->select('id','course_id')
                             ->with(['course'=>fn($query2)=>$query2
-                                ->select('id','url_img','description')
+                                ->select('id','url_img','description', 'active')
                                 ->with(['courseSections'=>fn($query3)=>$query3
                                     ->select('id','course_id')
                                     ->with('sectionChapters:id,section_id,duration')
@@ -44,7 +47,11 @@ class AulaMyProgressController extends Controller
                             ])
                         ])->select('section_chapters.id',
                                 'section_chapters.section_id')
+                        ->whereHas('courseSection.course', function($query4){
+                            $query4->where('active', 'S');
+                        })
                         ->get()->groupBy('courseSection.course.id');
+
                 
         return view('aula.viewParticipant.myprogress.index', [
             'courses' => $courses,
