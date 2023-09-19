@@ -54,6 +54,11 @@ class LoginController extends Controller
         }
     }
 
+    public function username()
+    {
+        return 'dni';
+    }
+
     /**
      * Create a new controller instance.
      *
