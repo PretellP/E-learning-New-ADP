@@ -419,12 +419,13 @@ function validateSurveys()
             UserSurvey::create([
                 'user_id' => $user->id,
                 'survey_id' => $survey_cl->id,
+                "company_id" => $user->company_id,
                 'date' => getCurrentDate(),
                 'status' => 'pending',
                 'start_time' => null,
                 'end_time' => null,
                 'total_time' => null,
-                'course_id' => null
+                'event_id' => null
             ]);
         }
     }
@@ -437,12 +438,13 @@ function validateSurveys()
             UserSurvey::create([
                 'user_id' => $user->id,
                 'survey_id' => $survey_up->id,
+                "company_id" => $user->company_id,
                 'date' => getCurrentDate(),
                 'status' => 'pending',
                 'start_time' => null,
                 'end_time' => null,
                 'total_time' => null,
-                'course_id' => null
+                'event_id' => null
             ]);
         }
     

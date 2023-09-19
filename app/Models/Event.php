@@ -32,4 +32,9 @@ class Event extends Model
     {
         return $this -> belongsTo(Room::class, 'room_id', 'id');
     }
+
+    public function userSurveys()
+    {
+        return $this->hasMany(UserSurvey::class, 'event_id', 'id');
+    }
 }

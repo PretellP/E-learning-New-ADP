@@ -19,7 +19,6 @@ class AdminCourseController extends Controller
             $allCourses = DataTables::of(Course::query()
                                             ->with(['folders:id,id_course',
                                                     'exams:id,course_id',
-                                                    'userSurveys:id,course_id'
                                             ])->where('course_type', 'REGULAR')
                                 )
                                 ->addColumn('description', function($course){
@@ -45,8 +44,7 @@ class AdminCourseController extends Controller
                                             data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                             editCourse"><i class="fa-solid fa-pen-to-square"></i></button>';
                                     if($course->exams->isEmpty() &&
-                                        $course->folders->isEmpty() &&
-                                        $course->userSurveys->isEmpty())
+                                        $course->folders->isEmpty())
                                     {
                                         $btn.= '<a href="javascript:void(0)" data-id="'.
                                                 $course->id.'" data-original-title="delete"

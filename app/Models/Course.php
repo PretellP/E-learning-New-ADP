@@ -44,9 +44,6 @@ class Course extends Model
         return $this->hasManyThrough(SectionChapter::class, CourseSection::class, 'course_id', 'section_id');
     }
 
-    public function userSurveys()
-    {
-        return $this->hasMany(UserSurvey::class, 'course_id', 'id');
-    }
+
 }
 

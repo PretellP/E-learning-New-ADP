@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{User, Survey, Course, SurveyStatement};
+use App\Models\{User, Survey, Event, SurveyStatement};
 
 class UserSurvey extends Model
 {
@@ -22,9 +22,9 @@ class UserSurvey extends Model
         return $this->belongsTo(Survey::class, 'survey_id', 'id');
     }
 
-    public function course()
+    public function event()
     {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(Event::class, 'event_id', 'id');
     }
 
     public function surveyAnswers()
