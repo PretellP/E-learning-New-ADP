@@ -27,10 +27,15 @@
 
 	<link rel="stylesheet" href="{{asset('assets/common//modules/izitoast/css/iziToast.min.css')}}">
 
+	{{-- DropZone --}}
+
+	<link rel="stylesheet" href="{{asset('assets/common/modules/dropzonejs/dropzone.css')}}">
+
 	<!-- Template CSS -->
 	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
-
+	
+	@yield('extra-head')
 
 
 	<link rel="stylesheet" href="{{asset('assets/admin/css/custom.css')}}">
@@ -38,5 +43,5 @@
 
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 	
-	@yield('extra-head')
+
 </head>

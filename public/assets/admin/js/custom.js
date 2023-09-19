@@ -289,11 +289,17 @@ $(function(){
         var txtCont = button.find('.text-dropdown-cont')
         var parent = button.closest('.principal-inner-container')
         var dropdownContainer = parent.find('.related-dropdown-container')
-        var actionButtonContainer = parent.find('.action-btn-dropdown-container')
+        var actionButtonContainer = parent.find('.action-btn-dropdown-container.outside')
     
         if(button.hasClass('show')){
             txtCont.html('Mostrar')
+            actionButtonContainer.slideToggle(300)
+            actionButtonContainer.addClass('hide')
         }else{
+            if(actionButtonContainer.hasClass('hide')){
+                actionButtonContainer.slideToggle(300)
+            }
+            
             txtCont.html('Ocultar')
         }
 
@@ -302,8 +308,8 @@ $(function(){
         }else{
             dropdownContainer.toggle('slide')
         }
-
-        actionButtonContainer.slideToggle(300)
+        
+        
         button.toggleClass('show')
     })
 
@@ -2941,6 +2947,12 @@ $(function(){
                         var boxSections = $('#sections-list-container')
                         boxSections.html(data.htmlSection)
 
+                        if(data.active == data.id){
+                            var topTableInfo = $('#top-chapter-table-title-info')
+                            topTableInfo.html('<span class="text-bold"> de: </span> \
+                                                <span class="title-chapter-top-table">'+data.title+'</span>')
+                        }
+
                         $('.order-section-select').select2({
                             minimumResultsForSearch: -1
                         })
@@ -3060,9 +3072,9 @@ $(function(){
 
 
 
-        /* ---------- CHAPTERS ----------*/
+        /* ---------- CHAPTERS -----------*/
 
-          /* ----- CHAPTERS TABLE ------*/
+        /* ------- CHAPTERS TABLE ---------*/
 
         function chapterTable(ele, lang, url){
             var chaptersTable = ele.DataTable({
@@ -3082,7 +3094,7 @@ $(function(){
                     {data: 'duration', name:'duration'},
                     {data: 'chapter_order', name:'chapter_order'},
                     {data: 'view', name:'view', orderable: false, searchable: false, className: 'text-center'},
-                    {data: 'action', name:'action', orderable: false, searchable: false},
+                    {data: 'action', name:'action', orderable: false, searchable: false, className: 'action-with'},
                 ],
                 dom: 'rtip'
             });
@@ -3135,6 +3147,468 @@ $(function(){
 
         })
 
+
+        /*-------  REGISTER  ------*/
+
+        var registerChapterForm = $('#registerChapterForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 100
+                },
+                description: {
+                    required: true,
+                    maxlength: 500
+                },
+                video: {
+                    required: true,
+                }
+            },
+        })
+
+        /*----- STORE DATA -------*/
+
+    
+        $('.main-content').on('click', '#btn-register-chapter-modal', function(){
+            var button = $(this)
+            var url = button.data('url')
+            var modal = $('#registerChapterModal')
+
+            if(!$('#input-chapter-video-container').hasClass('dz-clickable')){
+
+                let chapterVideoInput = $("#input-chapter-video-container").dropzone({
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    paramName: "file",
+                    addRemoveLinks: true,
+                    uploadMultiple: false,
+                    autoProcessQueue: false,
+                    maxFiles: 1,
+                    hiddenInputContainer: '#input-chapter-video-container',
+                    maxfilesexceeded: function(file) {
+                        this.removeAllFiles();
+                        this.addFile(file);
+                    },
+                    accept: function(file, done){
+                        $('#registerChapterForm').find('.message-file-invalid').removeClass('show')
+                        if(!file.type.match('video/*')){
+                            Toast.fire({
+                                icon: 'warning',
+                                text: '¡Solo puedes subir videos!'
+                            })
+                            this.removeFile(file);
+                            return false;
+                        }
+                        if(file.size > 50*1024*1024){
+                            Toast.fire({
+                                icon: 'warning',
+                                text: '¡Tu archivo pesa más de 50MB!'
+                            })
+                            this.removeFile(file);
+                            return false;
+                        }
+                        return done();
+                    },
+                    init: function() {
+                        var myDropzone = this;
+
+                        myDropzone.on("processing", function(file) {
+                            this.options.url = $('#btn-register-chapter-modal').data('url');
+                        });
+    
+                        $('#registerChapterForm').on('submit', function(e){
+                            e.preventDefault()
+                            e.stopPropagation();
+                            var messageInvalid = $(this).find('.message-file-invalid')
+    
+                            if(myDropzone.getQueuedFiles().length == 1){
+                                messageInvalid.removeClass('show')
+
+                                if($('#registerChapterForm').valid()){
+                                    myDropzone.processQueue();
+                                }
+                            }
+                            else{
+                                myDropzone.removeAllFiles();
+                                messageInvalid.addClass('show')
+                            }
+                            
+                        })
+                    },
+                    sending: function(file, xhr, formData){
+    
+                        let form = $('#registerChapterForm')
+                        let title = form.find('input[name=title]').val()
+                        let description = form.find('#description-text-area-register').val()
+    
+                        let loadSpinner = form.find('.loadSpinner')
+                        let sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
+    
+                        formData.append('title', title)
+                        formData.append('description', description)
+                        formData.append('sectionActive', sectionActive)
+    
+                        loadSpinner.toggleClass('active')
+    
+                    },
+                    success: function(file, response){
+    
+                        let modal = $('#registerChapterModal')
+                        let form = $('#registerChapterForm')
+                        let loadSpinner = form.find('.loadSpinner')
+                        let urlTable = $('#section-box-'+response.id).data('table')
+    
+                        this.removeAllFiles();
+                        registerChapterForm.resetForm()
+                        form.trigger('reset')
+    
+                        var chaptersBox = $('#chapters-list-container') 
+                        var sectionsBox = $('#sections-list-container')
+                        var courseBox = $('#course-box-container')
+
+                        chaptersBox.html(response.htmlChapter)
+                        sectionsBox.html(response.htmlSection)
+                        courseBox.html(response.htmlCourse)
+
+                        $('.order-section-select').select2({
+                            minimumResultsForSearch: -1
+                        })
+
+                        var chaptersTableEle = $('#freeCourses-chapters-table');
+                        chapterTable(chaptersTableEle, DataTableEs, urlTable);
+    
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+    
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!',
+                        });
+                    },
+                    error: function(file, response){
+                        console.log(response)
+                    }
+                })
+            }
+
+        })
+
+
+        /*--------- EDIT ............*/
+
+
+        $('#editOrderSelectChapter').select2({
+            dropdownParent: $("#editChapterModal"),
+            minimumResultsForSearch: -1
+        })
+
+        var editChapterForm = $('#editChapterForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 100
+                },
+                description: {
+                    required: true,
+                    maxlength: 500
+                },
+            },
+        })
+
+        $('.main-content').on('click', '.editChapter', function(){
+            var button = $(this)
+            var modal = $('#editChapterModal')
+            var getDataUrl = button.data('send')
+            var url = button.data('url')
+            var form = $('#editChapterForm')
+
+            $('#editOrderSelectChapter').html('')
+
+            button.closest('tr').siblings().find('.editChapter').removeClass('active')
+            button.addClass('active')
+
+            if(!$('#input-chapter-video-container-edit').hasClass('dz-clickable')){
+
+                let chapterVideoInputEdit = $("#input-chapter-video-container-edit").dropzone({
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    paramName: "file",
+                    addRemoveLinks: true,
+                    uploadMultiple: false,
+                    autoProcessQueue: false,
+                    maxFiles: 1,
+                    hiddenInputContainer: '#input-chapter-video-container-edit',
+                    maxfilesexceeded: function(file) {
+                        this.removeAllFiles();
+                        this.addFile(file);
+                    },
+                    accept: function(file, done){
+                        if(!file.type.match('video/*')){
+                            Toast.fire({
+                                icon: 'warning',
+                                text: '¡Solo puedes subir videos!'
+                            })
+                            this.removeFile(file);
+                            return false;
+                        }
+                        if(file.size > 50*1024*1024){
+                            Toast.fire({
+                                icon: 'warning',
+                                text: '¡Tu archivo pesa más de 50MB!'
+                            })
+                            this.removeFile(file);
+                            return false;
+                        }
+                        return done();
+                    },
+                    init: function() {
+                        var myDropzone = this;
+    
+                        $('#editChapterForm').on('submit', function(e){
+                            e.preventDefault()
+                            e.stopPropagation();
+
+                            let urlChanged = $('.editChapter.active').data('url');
+
+                            myDropzone.options.url = urlChanged;
+
+                            if($('#editChapterForm').valid()){
+    
+                                if(myDropzone.getQueuedFiles().length == 1){
+                                    myDropzone.processQueue();
+                                }
+                                else{
+                                    myDropzone.removeAllFiles();
+                                    var form = $('#editChapterForm')
+                                    let loadSpinner = form.find('.loadSpinner')
+
+                                    loadSpinner.toggleClass('active')
+                
+                                    $.ajax({
+                                        method: form.attr('method'),
+                                        url: urlChanged,
+                                        data: form.serialize(),
+                                        dataType: 'JSON',
+                                        success:function(data){
+
+                                            let urlTable = $('#section-box-'+data.id).data('table')
+                                            let chaptersBox = $('#chapters-list-container') 
+                                            // let courseBox = $('#course-box-container')
+                                            chaptersBox.html(data.htmlChapter)
+                                            // courseBox.html(response.htmlCourse)
+
+                                            let chaptersTableEle = $('#freeCourses-chapters-table');
+                                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
+
+                                            editChapterForm.resetForm()
+                                            form.trigger('reset')
+
+                                            loadSpinner.toggleClass('active')
+                                            $('#editChapterModal').modal('toggle')
+                                            Toast.fire({
+                                                icon: 'success',
+                                                text: '¡Registro actualizado!'
+                                            });
+                                        },
+                                        error: function(data){
+                                            console.log(data)
+                                        }
+                                    })
+                                }
+                            }
+    
+                        })
+                    },
+                    sending: function(file, xhr, formData){
+                        
+                        let form = $('#editChapterForm')
+                        let title = form.find('input[name=title]').val()
+                        let description = form.find('#description-text-area-edit').val()
+                        let order = form.find('#editOrderSelectChapter').val()
+
+                        let loadSpinner = form.find('.loadSpinner')
+    
+                        formData.append('title', title)
+                        formData.append('description', description)
+                        formData.append('order', order)
+    
+                        loadSpinner.toggleClass('active')
+                    },
+                    success: function(file, response){
+                        this.removeAllFiles();
+                        let form = $('#editChapterForm')
+                        let urlTable = $('#section-box-'+response.id).data('table')
+                        let chaptersBox = $('#chapters-list-container') 
+                        let courseBox = $('#course-box-container')
+                        let loadSpinner = form.find('.loadSpinner')
+
+                        courseBox.html(response.htmlCourse)
+                        chaptersBox.html(response.htmlChapter)
+
+                        var chaptersTableEle = $('#freeCourses-chapters-table');
+                        chapterTable(chaptersTableEle, DataTableEs, urlTable);
+
+                        editChapterForm.resetForm()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        $('#editChapterModal').modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        });
+                    },
+                    error: function(file, response){
+                        console.log(response)
+                    }
+
+                })
+    
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+
+                    var chapter = data.chapter
+                    form.find('input[name=title]').val(chapter.title);
+                    form.find('#description-text-area-edit').val(chapter.description)
+
+                    var select = $('#editOrderSelectChapter')
+
+                    select.select2({
+                        dropdownParent: $("#editChapterModal"),
+                        minimumResultsForSearch: -1
+                    })
+
+                    $.each(data.chapters_list, function(key, values){
+                        select.append('<option value="'+values.chapter_order+'">'+values.chapter_order+'</option>')
+                    }) 
+                    
+                    select.val(chapter.chapter_order).change()
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+            
+        })
+
+
+        /* -------- PREVIEW VIDEO ---------*/
+
+        $('.main-content').on('click', '.preview-chapter-video-button', function(e){
+            e.preventDefault();
+            
+            var modal = $('#previewChapterModal')
+            var url = $(this).data('url')
+            var video_container = $('#video-chapter-container')
+            video_container.html('<video id="chapter-video" class="video-js chapter-video"></video>')
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'JSON',
+                success: function(data){
+
+                    modal.find('.title-preview-section').html(data.section)
+                    modal.find('.title-preview-chapter').html(data.chapter)
+
+                    var playerChapter = videojs('chapter-video', {
+                                        controls: true,
+                                        fluid: true,
+                                        playbackRates: [0.5, 1, 1.5, 2],
+                                        autoplay: false,
+                                        preload: 'auto'
+                                    });
+
+                    playerChapter.src(data.url_video);
+
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+
+        })
+
+        $('#previewChapterModal').on('hidden.bs.modal', function(){
+            videojs('chapter-video').dispose()
+        })
+
+        /* -------- DELETE ----------*/
+
+        $('.main-content').on('click', '.deleteChapter', function(){
+            var button = $(this)
+            var url = button.data('url')
+
+            var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
+
+            Swal.fire({
+                title: '¡Cuidado!',
+                text: "¡Esto también eliminará el progreso de los usuarios!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Continuar y eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+            }).then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        data: {
+                            id: sectionActive
+                        },
+                        dataType: 'JSON',
+                        success: function(data){
+
+                            var courseBox = $('#course-box-container')
+                            var sectionBox = $('#sections-list-container')
+                            var chaptersBox = $('#chapters-list-container') 
+                           
+                            courseBox.html(data.htmlCourse)
+                            sectionBox.html(data.htmlSection)
+                            chaptersBox.html(data.htmlChapter)
+
+                            let urlTable = $('#section-box-'+data.id).data('table')
+                            var chaptersTableEle = $('#freeCourses-chapters-table');
+                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
+
+                            $('.order-section-select').select2({
+                                minimumResultsForSearch: -1
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registro eliminado!',
+                            })
+
+                        },
+                        error: function(result){
+                            console.log(result)
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
     }
  
 
@@ -3153,11 +3627,17 @@ $(function(){
 
 
 
-
-
-
-
-
+    Dropzone.prototype.defaultOptions.dictDefaultMessage = "<i class='fa-solid fa-upload'></i> &nbsp; Selecciona o arrastra y suelta un video";
+                                                                //Tu navegador no soporta 
+    Dropzone.prototype.defaultOptions.dictFallbackMessage = "Your browser does not support drag'n'drop file uploads.";
+    Dropzone.prototype.defaultOptions.dictFallbackText = "Please use the fallback form below to upload your files like in the olden days.";
+    Dropzone.prototype.defaultOptions.dictFileTooBig = "El archivo es demasiado grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.";
+    Dropzone.prototype.defaultOptions.dictInvalidFileType = "No puedes subir archivos de este tipo.";
+    Dropzone.prototype.defaultOptions.dictResponseError = "Server responded with {{statusCode}} code.";
+    Dropzone.prototype.defaultOptions.dictCancelUpload = "Cancelar carga";
+    Dropzone.prototype.defaultOptions.dictCancelUploadConfirmation = "Are you sure you want to cancel this upload?";
+    Dropzone.prototype.defaultOptions.dictRemoveFile = "Quitar archivo ";
+    Dropzone.prototype.defaultOptions.dictMaxFilesExceeded = "No puedes subir más archivos.";
 
 
     jQuery.extend(jQuery.validator.messages, {

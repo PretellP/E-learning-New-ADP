@@ -157,12 +157,17 @@ Route::group(['middleware' => 'auth'], function(){
             Route::get('/admin/cursos-libres/editar/{course}', 'getDataCourse')->name('admin.freecourse.getDatacourse');
             Route::get('/admin/cursos-libres/sección/editar/{section}', 'getDataSection')->name('admin.freeCourses.section.edit');
             Route::get('/admin/cursos-libres/obtener-capítulos/section/{section}', 'getChapterTable')->name('admin.freeCourses.getChaptersTable');
+            Route::get('/admin/cursos-libres/capítulo/editar/{chapter}', 'getDataChapter')->name('admin.freeCourses.chapters.getData');
+            Route::get('/admin/cursos-libres/capítulo/obtener-video/{chapter}', 'getChapterVideoData')->name('admin.freeCourses.chapters.getVideoData');
             Route::post('/admin/cursos-libres/actualizar/{course}', 'updateFreecourse')->name('admin.freeCourses.updateFreecourse');
             Route::post('/admin/cursos-libres/curso/eliminar/{course}', 'destroyCouse')->name('admin.freecourses.deleteCourse');
             Route::post('/admin/cursos-libres/sección/actualizar-orden/{section}', 'updateSectionOrder')->name('admin.freecourses.section.updateOrder');
             Route::post('/admin/cursos-libres/curso/{course}/secciones/registrar', 'storeSection')->name('admin.freeCourses.sections.store');
             Route::post('/admin/cursos-libres/secciones/actualizar/{section}', 'updateSection')->name('admin.freeCourses.sections.update');
             Route::post('/admin/cursos-libres/secciones/eliminar/{section}', 'destroySection')->name('admin.freeCourses.sections.delete');
+            Route::post('/admin/cursos-libres/sección/{section}/registrar-capítlo', 'storeChapter')->name('admin.freeCourses.chapters.store');
+            Route::post('/admin/cursos-libres/capítulos/actualizar/{chapter}', 'updateChapter')->name('admin.freeCourses.chapters.update');
+            Route::post('/admin/cursos-libres/capítulos/eliminar/{chapter}', 'destroyChapter')->name('admin.freeCourses.chapters.delete');
 
         });
 

@@ -32,6 +32,9 @@
 <script src="{{asset('assets/common/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script src="{{asset('assets/common/modules/dropzonejs/min/dropzone.min.js')}}"></script>
+
+@yield('extra-script')
 
 <!-- Template JS File -->
 <script src="{{asset('assets/common/js/scripts.js')}}"></script>
@@ -41,4 +44,3 @@
 @include('admin.common.partials.sweet')
 
 
-@yield('extra-script')

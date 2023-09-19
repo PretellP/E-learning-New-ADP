@@ -15,6 +15,7 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
+        "owen-oj/laravel-getid3": "^2.2",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

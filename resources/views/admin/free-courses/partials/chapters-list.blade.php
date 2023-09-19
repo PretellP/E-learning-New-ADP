@@ -1,5 +1,6 @@
 <div class="action-btn-dropdown-container top-container-inner-box">
-    <button class="btn btn-primary" id="btn-register-section-modal"  data-toggle="modal" data-target="">
+    <button class="btn btn-primary" id="btn-register-chapter-modal" data-url="{{route('admin.freeCourses.chapters.store', $section)}}"  
+        data-toggle="modal" data-target="#registerChapterModal">
         <i class="fa-solid fa-plus"></i> &nbsp; Añadir capítulo
     </button>
 </div>
@@ -12,7 +13,7 @@
             <th>Duración</th>
             <th>Orden</th>
             <th>Previsualizar</th>
-            <th>Acciones</th>
+            <th class="action-with">Acciones</th>
         </tr>
     </thead>
 </table>

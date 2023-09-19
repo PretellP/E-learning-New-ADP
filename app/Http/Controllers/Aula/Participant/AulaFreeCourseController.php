@@ -87,12 +87,12 @@ class AulaFreeCourseController extends Controller
 
         if($course->active == 'S'){
             $progress = $user->progressChapters()
-                        ->wherePivot('last_seen', 1)
-                        ->whereHas('courseSection', function($query) use ($course){
-                                $query->where('course_id', $course->id);
-                        })
-                        ->select('section_chapters.id','section_chapters.section_id')
-                        ->first();
+                            ->wherePivot('last_seen', 1)
+                            ->whereHas('courseSection', function($query) use ($course){
+                                    $query->where('course_id', $course->id);
+                            })
+                            ->select('section_chapters.id','section_chapters.section_id')
+                            ->first();
 
             if($progress == null)
             {
@@ -106,11 +106,21 @@ class AulaFreeCourseController extends Controller
                                                 ])
                                                 ->first()->sectionChapters->first();
 
-                $user->progressChapters()->attach($current_chapter, [
-                                            'progress_time' => 0,
-                                            'last_seen' => 1,
-                                            'status' => 'P'
-                                          ]);
+                $verifyProgress = $user->progressChapters()
+                                        ->where('section_chapter_id', $current_chapter->id)
+                                        ->first();
+                                
+                if($verifyProgress == null){
+                    $user->progressChapters()->attach($current_chapter, [
+                                'progress_time' => 0,
+                                'last_seen' => 1,
+                                'status' => 'P'
+                        ]);
+                }else{
+                    $user->progressChapters()->updateExistingPivot($current_chapter, [
+                                'last_seen' => 1,
+                        ]);
+                }
             }
             else
             {
@@ -156,16 +166,16 @@ class AulaFreeCourseController extends Controller
 
         if($course->active == 'S'){
             $allProgress = $user->progressChapters()->whereHas('courseSection', function($query) use($course){
-                            $query->where('course_id', $course->id);
-                        })
-                        ->select('section_chapters.id',
-                                'section_chapters.section_id',
-                                'section_chapters.title',
-                                'section_chapters.description',
-                                'section_chapters.url_video',
-                                'section_chapters.chapter_order')
+                                $query->where('course_id', $course->id);
+                            })
+                            ->select('section_chapters.id',
+                                    'section_chapters.section_id',
+                                    'section_chapters.title',
+                                    'section_chapters.description',
+                                    'section_chapters.url_video',
+                                    'section_chapters.chapter_order')
 
-                        ->get();
+                            ->get();
 
             $sections = $course->courseSections()->with('sectionChapters:id,section_id,title,chapter_order,duration')
                                                 ->select('course_sections.id',
@@ -177,27 +187,29 @@ class AulaFreeCourseController extends Controller
                                                 ->having('section_chapters_count', '>', 0)
                                                 ->get();
 
+
             $current_chapter = $allProgress->where('id', $current_chapter->id)->first();
 
             if($current_chapter != null){
-            $current_time = $current_chapter->pivot->progress_time;
+                $current_time = $current_chapter->pivot->progress_time;
             }else{
-            return back();
+                abort(404);
             }
 
             $current_section = $sections->filter(function($section) use($current_chapter){
-                        return $section->id == $current_chapter->section_id;
-                    })->first();
+                                    return $section->id == $current_chapter->section_id;
+                                })->first();
+
 
             $next_sections = $sections->whereIn('section_order', 
-                    [$current_section->section_order,
-                    $current_section->section_order + 1]);
+                                    [$current_section->section_order,
+                                    $current_section->section_order + 1]);
+
+            $next_sections = $sections->where('section_order', '>=', $current_section->section_order)->take(2);
 
             $next_chapter = getNextChapter($next_sections, $current_chapter);
 
-            $previous_sections = $sections->whereIn('section_order',
-                        [$current_section->section_order,
-                        $current_section->section_order - 1])->reverse();
+            $previous_sections = $sections->where('section_order', '<=' ,$current_section->section_order)->reverse()->take(2);
 
             $previous_chapter = getPreviousChapter($previous_sections, $current_chapter);
 

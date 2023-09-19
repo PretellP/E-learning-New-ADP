@@ -23,6 +23,11 @@ button:focus
     outline: none !important;
 }
 
+.modal-xl
+{
+    max-width: 1140px;
+}
+
 .input-disabled
 {
     padding: 10px;
@@ -51,12 +56,18 @@ button:focus
     margin-right: 0 !important;
 }
 
+/* ---- DATA TABLES ----------*/
+
 div.dataTables_wrapper div.dataTables_processing
 {
     background-color: rgba(0, 0, 0, 0) !important;
     box-shadow: none !important;
 }
 
+.action-with
+{
+    min-width: 90px;
+}
 
 
 .navbar-bg
@@ -277,6 +288,13 @@ label.error
 .content-course-btn i
 {
     font-size: 1.8em;
+}
+
+
+textarea.form-control
+{
+    min-height: 100px !important;
+    height: auto !important;
 }
 
 
@@ -940,7 +958,6 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 .info-name-course-container
 {
     text-align: center;
-    /* background-color: #ace7f6; */
     min-width: 130px;
 }
 
@@ -1094,7 +1111,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 .course-section-box
 .order-select-container
 {
-    min-width: 150px;
+    min-width: 135px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -1137,6 +1154,121 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a
 {
     filter: brightness(0.6);
 }
+
+
+/* ------ DROP ZONE ------*/
+
+.dropzone
+{
+    min-height: 100px !important;
+    height: 150px !important;
+    padding: 0 !important;
+}
+
+.dropzone .dz-message
+{
+    margin: auto !important;
+}
+
+.dz-default.dz-message
+{
+    font-size: 1.2em !important;
+}
+
+.dropzone .dz-preview .dz-image
+{
+    width: 100px;
+    height: 100px;
+}
+
+#input-chapter-video-container
+{
+    position: relative;
+}
+
+.message-file-invalid
+{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 0.7em;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.103);
+    color: rgb(194, 0, 0);
+}
+
+.message-file-invalid.show
+{
+    display: block;
+}
+
+.preview-chapter-video-button
+{
+    height: 30px;
+    width: 40px;
+    text-align: center;
+    display: inline-block;
+    line-height: 2.2em;
+}
+
+
+/*------  VIDEO JS STYLES  --------*/
+
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before
+{
+    top: 3px !important;
+}
+
+.video-js .vjs-control
+{
+    height: 3em !important;
+}
+
+.video-js .vjs-control-bar
+{
+    background-color: var(--first-color) !important;
+    align-items: center !important;
+    height: 4em !important;
+}
+
+.video-js .vjs-play-control .vjs-icon-placeholder
+{
+    color: var(--third-color);
+}
+
+.vjs-big-play-button
+{
+    background-color: var(--first-color) !important;
+    width: 65px !important;
+    height: 65px !important;
+    margin-top: 0 !important;
+    transform: translateY(-50%);
+    border-radius: 50% !important;
+    border: none !important;
+    opacity: 0.8 !important;
+    transition: all .2s !important;
+}
+
+.vjs-big-play-button:hover
+{
+    opacity: 1 !important;
+}
+
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before
+{
+    position: absolute;
+    transform: translateY(13%);
+}
+
+
+
+
+
+
+
 
 @media (min-width: 992px)
 {

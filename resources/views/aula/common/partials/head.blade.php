@@ -23,6 +23,7 @@
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
 
 
+	@yield('extra-head')
 
 	<link rel="stylesheet" href="{{asset('assets/aula/css/custom.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
@@ -31,6 +32,5 @@
 	<!-- VIDEO.JS ---->
 	<link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
 
-	@yield('extra-head')
 
 </head>

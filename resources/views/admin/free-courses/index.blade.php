@@ -31,7 +31,7 @@
                     </div>
                         
 
-                    <div class="mt-4 action-btn-dropdown-container show top-container-inner-box">
+                    <div class="mt-4 action-btn-dropdown-container outside show top-container-inner-box">
                         <button class="btn btn-primary" id="btn-register-category-modal"  data-toggle="modal" data-target="#RegisterCategoryModal">
                             <i class="fa-solid fa-plus"></i> &nbsp; Registrar
                         </button>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 action-btn-dropdown-container vertical show top-container-inner-box">
+                    <div class="mt-4 action-btn-dropdown-container vertical outside show top-container-inner-box">
                         <button class="btn btn-primary" id="btn-register-freecourse-modal" data-url="{{route('admin.freecourses.getCategoriesRegister')}}">
                             <i class="fa-solid fa-plus"></i> &nbsp; 
                             Registrar

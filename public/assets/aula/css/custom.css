@@ -2758,6 +2758,7 @@ button i
 {
     flex-direction: column;
     margin-top: 1em;
+    align-items: flex-start;
 }
 
 .body-global-container.freecourse-view

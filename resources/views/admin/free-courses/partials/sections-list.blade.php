@@ -3,6 +3,7 @@
 <div class="course-section-box {{setSectionActive($section, $sectionActive)}}"
             data-active="{{setSectionActive($section, $sectionActive)}}" 
             data-table="{{route('admin.freeCourses.getChaptersTable', $section)}}"
+            id="section-box-{{$section->id}}"
             data-id="{{$section->id}}">
     <div class="order-info">
         <span class="text-bold">  

@@ -29,7 +29,7 @@
                 }'>
                     {{-- <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"> --}}
                     
-                    <source src="{{asset($current_chapter->url_video)}}">
+                    <source src="{{asset('storage/'.$current_chapter->url_video)}}">
 
                 </video>
 
