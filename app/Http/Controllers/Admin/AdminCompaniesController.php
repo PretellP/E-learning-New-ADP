@@ -16,7 +16,7 @@ class AdminCompaniesController extends Controller
         if($request->ajax())
         {
             $allCompanies = DataTables::of(Company::query()
-                                            ->with(['users:id,company_id']))
+                                            ->withCount('users'))
                 ->addColumn('status-btn', function($company){
                     $status = $company->active == 'S' ? 'active' : 'inactive';
                     $txtBtn = $status == 'active' ? 'Activo' : 'Inactivo';
@@ -30,7 +30,7 @@ class AdminCompaniesController extends Controller
                             data-send="'.route('admin.companies.edit', $company).'"
                             data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                             editCompany"><i class="fa-solid fa-pen-to-square"></i></button>';
-                    if($company->users->isEmpty())
+                    if($company->users_count == 0)
                     {
                         $btn.= '<a href="javascript:void(0)" data-id="'.
                                 $company->id.'" data-original-title="delete"

@@ -169,12 +169,25 @@
                             <label>Empresa *</label>
                             <div class="input-group">
                                 <select name="company" class="form-control select2" id="registerCompanySelect">
-                            
+                                    
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label> Unidades mineras *</label> 
+                            <select id="registerMiningUnitsSelect" name="id_mining_units[]" class="form-control select2" 
+                                multiple="multiple"> 
+                                <option></option>
+                                @foreach ($miningUnits as $miningUnit)
+                                <option value="{{$miningUnit->id}}"> {{strtoupper($miningUnit->description)}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                   
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label>Cargo (opcional)</label>
@@ -332,6 +345,15 @@
                             
                                 </select>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label> Unidades mineras *</label> 
+                            <select id="editMiningUnitsSelect" name="id_mining_units[]" class="form-control select2" 
+                                multiple="multiple"> 
+                            </select>
                         </div>
                     </div>
 

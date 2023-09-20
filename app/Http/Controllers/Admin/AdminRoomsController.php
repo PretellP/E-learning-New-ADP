@@ -15,7 +15,7 @@ class AdminRoomsController extends Controller
         if($request->ajax())
         {
             $allRooms = DataTables::of(Room::query()
-                                    ->with('events:id,room_id'))
+                                    ->withCount('events'))
                     ->addColumn('created_at', function($room){
                         return $room->created_at;
                     })
@@ -32,7 +32,7 @@ class AdminRoomsController extends Controller
                                 data-send="'.route('admin.room.edit', $room).'"
                                 data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                 editRoom"><i class="fa-solid fa-pen-to-square"></i></button>';
-                        if($room->events->isEmpty())
+                        if($room->events_count == 0)
                         {
                             $btn.= '<a href="javascript:void(0)" data-id="'.
                                     $room->id.'" data-original-title="delete"

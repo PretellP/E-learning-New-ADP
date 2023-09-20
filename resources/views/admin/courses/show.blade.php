@@ -31,7 +31,7 @@
 
                             <span class="title-img-course-prev">Previsualización de imagen:</span>
                             <div class="img-course-prev-container">
-                                <img src="{{asset('storage/'.$course->url_img)}}" alt="">
+                                <img src="{{asset('storage/'.verifyImage($course->url_img))}}" alt="">
                             </div>
 
                         </div>

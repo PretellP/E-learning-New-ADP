@@ -17,8 +17,8 @@ class AdminCourseController extends Controller
     {
         if($request->ajax()){
             $allCourses = DataTables::of(Course::query()
-                                            ->with(['folders:id,id_course',
-                                                    'exams:id,course_id',
+                                            ->withCount(['folders',
+                                                        'exams',
                                             ])->where('course_type', 'REGULAR')
                                 )
                                 ->addColumn('description', function($course){
@@ -43,8 +43,8 @@ class AdminCourseController extends Controller
                                             data-send="'.route('admin.courses.edit', $course).'"
                                             data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                             editCourse"><i class="fa-solid fa-pen-to-square"></i></button>';
-                                    if($course->exams->isEmpty() &&
-                                        $course->folders->isEmpty())
+                                    if($course->exams_count == 0 &&
+                                        $course->folders_count == 0)
                                     {
                                         $btn.= '<a href="javascript:void(0)" data-id="'.
                                                 $course->id.'" data-original-title="delete"
@@ -99,7 +99,7 @@ class AdminCourseController extends Controller
 
     public function edit(Course $course)
     {
-        $url_img = asset('storage/'.$course->url_img);
+        $url_img = asset('storage/'.verifyImage($course->url_img));
 
         return response()->json([
             "id" => $course->id,

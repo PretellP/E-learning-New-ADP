@@ -7,21 +7,22 @@ use Illuminate\Http\Request;
 use DataTables;
 use Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\{User, Company};
+use App\Models\{User, Company, MiningUnit};
 
 class AdminUsersController extends Controller
 {
     public function index(Request $request)
     {
+
         if($request->ajax())
         {   
-            $allUsers = DataTables::of(User::query()
-                                        ->with(['company:id,description', 
-                                                'events:id,user_id',
-                                                'certifications:id,user_id',
-                                                'publishings:id,user_id',
-                                                'userSurveys:id,user_id']
-                                        ))
+            $allUsers = DataTables::of(User::with('company:id,description')
+                                            ->withCount([
+                                                    'events',
+                                                    'certifications',
+                                                    'publishings',
+                                                    'userSurveys']
+                                            ))
                     ->addColumn('name', function($user){
                         return $user->name.' '.$user->paternal;
                     })
@@ -74,10 +75,10 @@ class AdminUsersController extends Controller
                                 data-send="'.route('admin.user.edit', $user).'"
                                 data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                 editUser"><i class="fa-solid fa-pen-to-square"></i></button>';
-                        if($user->events->isEmpty() &&
-                            $user->certifications->isEmpty() &&
-                            $user->publishings->isEmpty() &&
-                            $user->userSurveys->isEmpty())
+                        if($user->events_count == 0 &&
+                            $user->certifications_count == 0 &&
+                            $user->publishings_count == 0 &&
+                            $user->user_surveys_count == 0)
                         {
                             $btn.= '<a href="javascript:void(0)" data-id="'.
                                     $user->id.'" data-original-title="delete"
@@ -91,9 +92,12 @@ class AdminUsersController extends Controller
                     ->make(true);
 
             return $allUsers;
-        }
-
-        return view('admin.users.index');
+        }else{
+            $miningUnits =  MiningUnit::get(['id','description']);
+            return view('admin.users.index', [
+                "miningUnits" => $miningUnits
+            ]);
+        } 
     }
 
     public function registerGetCompanies()
@@ -116,7 +120,7 @@ class AdminUsersController extends Controller
     {
         $status = $request['userStatusCheckbox'] == 'on' ? 'S' : 'N';
 
-        User::create([
+        $user = User::create([
             "url_img" => "storage/img/user_avatar/default.png",
             "dni" => $request['dni'],
             "name" => $request['name'],
@@ -133,6 +137,8 @@ class AdminUsersController extends Controller
             "position"  => $request['position'],
             "profile_survey" => 'N'
         ]);
+
+        $user->miningUnits()->sync($request['id_mining_units']);
 
         return response()->json([
             "success" => "stored successfully"
@@ -189,7 +195,9 @@ class AdminUsersController extends Controller
         return response([
             "user" => $user,
             "role" => $role,
-            "companies" => Company::get(['id','description'])
+            "companies" => Company::get(['id','description']),
+            "miningUnits" => MiningUnit::get(['id', 'description']),
+            "miningUnitsSelect" => $user->miningUnits->pluck('id')->toArray(),
         ]);
     }
 
@@ -213,6 +221,8 @@ class AdminUsersController extends Controller
             "position" => $request['position'],
         ]);
 
+        $user->miningUnits()->sync($request['id_mining_units']);
+
         return response()->json([
             "success" => "updated successfully"
         ]);
@@ -220,6 +230,7 @@ class AdminUsersController extends Controller
 
     public function destroy(User $user)
     {
+        $user->miningUnits()->detach();
         $user->delete();
 
         return response()->json([

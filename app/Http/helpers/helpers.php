@@ -33,9 +33,9 @@ function setActive($routeName)
 
 function getSelectedAnswers($certification)
 {
-    $num_question = count($certification->evaluations()
-                    ->where('selected_alternatives', '!=', null)
-                    ->get());
+    $num_question = $certification->evaluations()
+                                    ->where('selected_alternatives', '!=', null)
+                                    ->count();
                 
     return $num_question;
 }
@@ -522,8 +522,21 @@ function setSectionActive(CourseSection $section, $sectionActive)
 }
 
 
+function verifyUserAvatar($url)
+{
+    return $url == null ? 'img/user_avatar/default.png' : $url;
+}
 
+function verifyImage($url)
+{
+    if($url != null){
+        $url = Storage::exists($url) ? $url : 'img/common/no-image.png';
+    }else{
+        $url = 'img/common/no-image.png';
+    }
 
+    return $url;
+}
 
 
 

@@ -1,7 +1,7 @@
 @foreach ($categories as $category)
 <div class="category-box">
     <div class="img-cat-container">
-        <img class="cat-img" src="{{asset('storage/'.$category->url_img)}}">
+        <img class="cat-img" src="{{asset('storage/'.verifyImage($category->url_img))}}">
     </div>
     <div class="info-cat-container">
         <div class="cat-description">
@@ -18,7 +18,7 @@
                 data-url="{{route('admin.freecourses.categoryUpdate', $category)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
-            @if($category->courses->isEmpty())
+            @if($category->courses_count == 0)
             <span class="delete-btn deleteCategory-btn"
                 data-url="{{route('admin.freecourses.deleteCategory', $category)}}">
                 <i class="fa-solid fa-trash-can"></i>

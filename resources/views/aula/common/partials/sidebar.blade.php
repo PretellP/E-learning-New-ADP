@@ -25,7 +25,7 @@
             <li class="dropdown profile-dropdown {{setActive('aula.profile.*')}}" >
                 <a href="#" class="nav-link has-dropdown">
                     <div class="img-avatar-box">
-                        <img src="{{asset(Auth::user()->url_img)}}" alt="">
+                        <img src="{{asset('storage/'.verifyUserAvatar(Auth::user()->url_img))}}" alt="">
                     </div>
                     <span>
                         <div class="name">

@@ -263,6 +263,20 @@ $(function(){
         }
     })
 
+    const ToastError = Swal.mixin({
+        icon: 'error',
+        text: '¡Ocurrió un error inesperado!',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
     const SwalDelete = Swal.mixin({
         title: '¿Estás seguro?',
         text: "¡Esta acción no podrá ser revertida!",
@@ -855,6 +869,12 @@ $(function(){
             placeholder: 'Selecciona una empresa'
         })
 
+        $('#registerMiningUnitsSelect').select2({
+            dropdownParent: $("#RegisterUserModal"),
+            placeholder: 'Selecciona una o más unidades mineras',
+            closeOnSelect: false
+        });
+
         $('#editRoleSelect').select2({
             dropdownParent: $("#EditUserModal"),
             placeholder: 'Selecciona un rol'
@@ -863,6 +883,12 @@ $(function(){
         $('#editCompanySelect').select2({
             dropdownParent: $("#EditUserModal"),
             placeholder: 'Selecciona una empresa'
+        })
+
+        $('#editMiningUnitsSelect').select2({
+            dropdownParent: $("#EditUserModal"),
+            placeholder: 'Selecciona una o más unidades mineras',
+            closeOnSelect: false
         })
 
 
@@ -948,6 +974,9 @@ $(function(){
                 company: {
                     required: true
                 },
+                "id_mining_units[]":{
+                    required: true
+                },
                 position:{
                     maxlength: 255
                 }
@@ -983,6 +1012,10 @@ $(function(){
                     },
                     error: function(data){
                         console.log(data)
+                        Toast.fire({
+                            icon: 'error',
+                            text: '¡Ocurrió un error inesperado!'
+                        })
                     }
                 })
             }
@@ -1080,6 +1113,9 @@ $(function(){
                 company: {
                     required: true
                 },
+                "id_mining_units[]":{
+                    required: true
+                },
                 position:{
                     maxlength: 255
                 }
@@ -1127,8 +1163,10 @@ $(function(){
             var form = modal.find('#editUserForm')
             var selectCompany = modal.find('#editCompanySelect')
             var selectRole = modal.find('#editRoleSelect')
+            var selectMiningUnits = modal.find('#editMiningUnitsSelect')
 
-            selectCompany.html('');
+            selectCompany.html('')
+            selectMiningUnits.html('')
             editUserForm.resetForm()
             form.trigger('reset')
 
@@ -1159,6 +1197,13 @@ $(function(){
                     })
 
                     selectCompany.val(user.company_id).change()
+
+                    selectMiningUnits.append('<option></option>')
+                    $.each(data.miningUnits, function(key, values){
+                        selectMiningUnits.append('<option value="'+values.id+'">'+values.description+'</option>')
+                    })
+
+                    selectMiningUnits.val(data.miningUnitsSelect).change()
 
                     if(user.active == 'S'){
                         modal.find('#edit-user-status-checkbox').prop('checked', true);
@@ -1217,6 +1262,7 @@ $(function(){
     }
 
     if($('#ownerCompanies-table').length){
+
         var ownerCompaniesTableEle = $('#ownerCompanies-table');
         var getDataUrl = ownerCompaniesTableEle.data('url');
         var ownerCompaniesTable = ownerCompaniesTableEle.DataTable({
@@ -1348,7 +1394,7 @@ $(function(){
             }
         })
 
-        $('body').on('click', '.editCompany', function(){
+        $('.main-content').on('click', '.editCompany', function(){
             var modal = $('#EditCompanyModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -1379,7 +1425,7 @@ $(function(){
 
         /* ----------- ELIMINAR ---------------*/
 
-         $('body').on('click', '.deleteCompany', function(){
+        $('.main-content').on('click', '.deleteCompany', function(){
             var url = $(this).data('url')
 
             SwalDelete.fire().then(function(e){
@@ -1411,6 +1457,172 @@ $(function(){
                 return false;
             });
         })
+    }
+
+    if($('#mining-units-table').length){
+
+        var miningUnitTableEle = $('#mining-units-table');
+        var getDataUrl = miningUnitTableEle.data('url');
+        var miningUnitsTable = miningUnitTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns:[
+                {data: 'id', name:'id'},
+                {data: 'description', name:'description'},
+                {data: 'owner', name:'owner'},
+                {data: 'district', name:'district'},
+                {data: 'Province', name:'Province'},
+                {data: 'action', name:'action', orderable: false, searchable: false},
+            ]
+        });
+
+        /* ------------ REGISTRAR -------------*/
+
+        var registerMiningUnitForm = $('#registerMiningUnitForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterMiningUnitModal')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function(data){
+                        registerMiningUnitForm.resetForm()
+                        miningUnitsTable.draw()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registrado exitosamente!'
+                        })
+                    },
+                    error: function(data){
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+
+        /* ---------------- EDITAR -----------------*/
+
+        var editMiningUnitForm = $('#editMiningUnitForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                }
+            },
+            submitHandler: function(form, event){
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editMiningUnitModal')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function(data){
+                        editMiningUnitForm.resetForm()
+                        miningUnitsTable.draw()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function(data){
+                        ToastError.fire()
+                        // console.log(data)
+                    }
+                })
+            }
+        })
+
+        $('.main-content').on('click', '.editMiningUnit', function(){
+            var button = $(this)
+            var modal = $('#editMiningUnitModal')
+            var form = modal.find('#editMiningUnitForm')
+            var getDataUrl = button.data('send')
+            var url = button.data('url')
+
+            editMiningUnitForm.resetForm()
+            form.trigger('reset')
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function(data){
+
+                    form.find('input[name=description]').val(data.description)
+                    form.find('input[name=owner]').val(data.owner)
+                    form.find('input[name=district]').val(data.district)
+                    form.find('input[name=Province]').val(data.Province)
+
+                },
+                complete: function(data){
+                    modal.modal('toggle')
+                },
+                error: function(data){
+                    console.log(data)
+                }
+            })
+
+        })
+
+        /* ----------- ELIMINAR ---------------*/
+
+        $('.main-content').on('click', '.deleteMiningUnit', function(){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function(e){
+                if(e.value === true){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+                                miningUnitsTable.draw();
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                        },
+                        error: function(result){
+                            ToastError.fire()
+                        }
+                    });
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss){
+                return false;
+            });
+        })
+
     }
 
     if($('#courses-table').length){
@@ -1645,7 +1857,7 @@ $(function(){
             }
         })
         
-        $('body').on('click', '.editCourse', function(){
+        $('.main-content').on('click', '.editCourse', function(){
             var modal = $('#editCourseModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -1692,7 +1904,7 @@ $(function(){
 
         /* ----------- DELETE ---------------*/
 
-        $('body').on('click', '.deleteCourse', function(){
+        $('.main-content').on('click', '.deleteCourse', function(){
             var url = $(this).data('url')
 
             SwalDelete.fire().then(function(e){
@@ -2279,7 +2491,6 @@ $(function(){
 
     }
 
-
         /*---  CATEGORY SHOW  ------*/
 
     if($('#freecourse-category-show-table').length){
@@ -2613,7 +2824,6 @@ $(function(){
         })
 
     }
-
 
         // -------- FREE COURSE SHOW ---------
 

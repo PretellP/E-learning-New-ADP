@@ -18,6 +18,7 @@ class AdminFreeCoursesController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
+            
             $allCourses = DataTables::of(Course::with(['courseCategory',
                                                         'courseSections.sectionChapters'
                                                 ])
@@ -60,7 +61,7 @@ class AdminFreeCoursesController extends Controller
             return $allCourses;
 
         }else{
-            $categories = CourseCategory::with('courses')->get();
+            $categories = CourseCategory::withCount('courses')->get();
 
             return view('admin.free-courses.index', [
                 'categories' => $categories
@@ -314,14 +315,14 @@ class AdminFreeCoursesController extends Controller
 
         }else{
             $course = Course::where('id', $course->id)
-                        ->with('courseCategory')
-                        ->with(['courseSections' => fn($query) =>
-                                $query->orderBy('section_order', 'ASC')
-                                    ->with(['sectionChapters' => fn($query2) =>
-                                        $query2->orderBy('chapter_order', 'ASC')
-                                    ])
-                        ])
-                        ->first();
+                            ->with('courseCategory')
+                            ->with(['courseSections' => fn($query) =>
+                                    $query->orderBy('section_order', 'ASC')
+                                        ->with(['sectionChapters' => fn($query2) =>
+                                            $query2->orderBy('chapter_order', 'ASC')
+                                        ])
+                            ])
+                            ->first();
 
             $sectionActive = '';
 
@@ -335,7 +336,7 @@ class AdminFreeCoursesController extends Controller
 
     public function getDataCourse(Course $course)
     {
-        $url_img = asset('storage/'.$course->url_img);
+        $url_img = asset('storage/'.verifyImage($course->url_img));
 
         return response()->json([
             "description" => $course->description,
@@ -578,7 +579,7 @@ class AdminFreeCoursesController extends Controller
             }elseif($request['type'] == 'table'){
 
                 $allChapters = DataTables::of(SectionChapter::where('section_id', $section->id)
-                                                            ->with('progressUsers')
+      
                                 )
                                 ->editColumn('duration', function($chapter){
                                     return $chapter->duration.' minutos';
@@ -740,7 +741,6 @@ class AdminFreeCoursesController extends Controller
 
     public function getChapterVideoData(SectionChapter $chapter)
     {
-
         $url_video = asset('storage/'.$chapter->url_video);
 
         return response()->json([

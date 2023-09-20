@@ -26,7 +26,7 @@
             <div class="course-box">
                 <div class="course-progress-innerbox">
                     <div class="course-progress-img">
-                        <img src="{{asset('storage/'.$current_course->url_img)}}" alt="">
+                        <img src="{{asset('storage/'.verifyImage($current_course->url_img))}}" alt="">
                     </div>
                     <div class="course-progress-info">
                         <div class="title">

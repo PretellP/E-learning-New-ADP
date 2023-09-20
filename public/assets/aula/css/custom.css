@@ -24,6 +24,19 @@ button:focus
     outline: none !important;
 }
 
+/* -------- GENERAL ----------*/
+
+.empty-records-message
+{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(179, 179, 179);
+    font-weight: 400;
+    font-style: italic;
+}
 
 
 

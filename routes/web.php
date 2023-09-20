@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\{
     AdminFreeCoursesController,
     AdminRoomsController,
     AdminUsersController,
-    AdminOwnerCompaniesController
+    AdminOwnerCompaniesController,
+    AdminMiningUnitsController
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -101,6 +102,20 @@ Route::group(['middleware' => 'auth'], function(){
             Route::delete('/admin/empresas-titulares/eliminar/{company}', 'destroy')->name('admin.ownerCompany.delete');
 
         });
+
+
+
+        /* ------------------ MINING UNITS ----------------------*/
+
+        Route::controller(AdminMiningUnitsController::class)->group(function(){
+
+            Route::get('/admin/unidades-mineras', 'index')->name('admin.miningUnits.index');
+            Route::get('/admin/unidades-mineras/editar/{miningUnit}', 'getDataEdit')->name('admin.miningUnits.getDataEdit');
+            Route::post('/admin/unidades-mineras/registrar', 'store')->name('admin.miningUnits.store');
+            Route::post('/admin/unidades-mineras/actualizar/{miningUnit}', 'update')->name('admin.mininUnits.update');
+            Route::delete('/admin/unidades-mineras/eliminar/{miningUnit}', 'destroy')->name('admin.miningUnits.delete');
+        });
+     
 
         
 

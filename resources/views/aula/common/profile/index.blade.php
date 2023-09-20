@@ -9,7 +9,7 @@
 
         <div class="user-profile-presentation-cont">
             <div class="img-profile-page-box">
-                <img src="{{asset($user->url_img)}}" alt="">
+                <img src="{{asset('storage/'.verifyUserAvatar($user->url_img))}}" alt="">
             </div>
             <div class="user-info-profile-page-box">
                 <div class="name-info-profile-page">
