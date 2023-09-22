@@ -94,7 +94,7 @@
                                             @csrf
                                             <div class="form-group row">
                                                 <div class="col-sm-12">
-                                                    <input name='foldername' type="text" class="form-control"
+                                                    <input name='name' type="text" class="form-control"
                                                         placeholder="Ingresa el nombre de la carpeta" required
                                                         autocomplete="off">
                                                 </div>
@@ -121,7 +121,7 @@
 
                                 @forelse ($folders as $folder)
 
-                                <a href="{{route('admin.courses.folder.view', [$course, $folder])}}" class="folder-link">
+                                <a href="{{route('admin.courses.folder.view', $folder)}}" class="folder-link">
                                     <div class="folder-card">
                                         <img class="folder-img"
                                             src="{{asset('assets/common/images/folder.png')}}" alt="Card image cap">

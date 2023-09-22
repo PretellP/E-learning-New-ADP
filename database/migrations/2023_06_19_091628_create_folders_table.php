@@ -18,7 +18,7 @@ class CreateFoldersTable extends Migration
             $table->string('name');
             $table->bigInteger('parent_folder_id')->unsigned()->nullable();
             $table->integer('level');
-            $table->string('folder_path', 500);
+            $table->string('folder_path', 500)->nullable();
             $table->timestamps();
         });
     }

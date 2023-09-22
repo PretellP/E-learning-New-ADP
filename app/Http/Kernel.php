@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         
         'check.role' => \App\Http\Middleware\CheckRole::class,
         'aula' => \App\Http\Middleware\Aula::class,
+        'check.valid.user' => \App\Http\Middleware\CheckValidUser::class,
     ];
 }

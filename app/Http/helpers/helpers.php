@@ -13,18 +13,21 @@ use App\Models\{
     Company,
     MiningUnits,
     OwnerCompany,
-    Document,
+    // Document,
     CourseSection,
+    File as ModelsFile,
     SectionChapter,
     Survey,
     UserSurvey,
     SurveyStatement,
     SurveyOption
 };
+use Illuminate\Http\File;
 
 date_default_timezone_set("America/Lima");
 
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File as FacadesFile;
 
 function setActive($routeName)
 {
@@ -539,6 +542,54 @@ function verifyImage($url)
 }
 
 
+//  PROBAR
+
+// function normalizeInputStatus($data)
+// {
+//     if(isset($data['active'])){
+//         $data['active'] = 'S';
+//     }else {
+//         $data['active'] = 'N';
+//     }
+
+//     if(isset($data['flg_test_exam'])){
+//         $data['flg_test_exam'] = 'S';
+//     }else {
+//         $data['flg_test_exam'] = 'N';
+//     }
+
+//     if(isset($data['flg_public'])){
+//         $data['flg_public'] = 'S';
+//     }else {
+//         $data['flg_public'] = 'N';
+//     }
+    
+//     if(isset($data['flg_asist'])){
+//         $data['flg_asist'] = 'S';
+//     }else {
+//         $data['flg_asist'] = 'N';
+//     }
+
+//     if(isset($data['flg_survey_course'])){
+//         $data['flg_survey_course'] = 'S';
+//     }else {
+//         $data['flg_survey_course'] = 'N';
+//     }
+
+//     if(isset($data['flg_survey_evaluation'])){
+//         $data['flg_survey_evaluation'] = 'S';
+//     }else {
+//         $data['flg_survey_evaluation'] = 'N';
+//     }
+
+//     if(isset($data['assist_user'])){
+//         $data['assist_user'] = 'S';
+//     }else {
+//         $data['assist_user'] = 'N';
+//     }
+
+//     return $data;
+// }
 
 
 
@@ -560,13 +611,11 @@ function verifyImage($url)
 
 
 
-
-function getFileExtension(Document $document)
+function getFileExtension(ModelsFile $file)
 {
-    $folder = $document->folder;
-    $pathToFile = $folder->folder_path.$document->uuid;
+    $pathToFile = $file->file_url;
 
-    $fileExt = File::extension($pathToFile);
+    $fileExt = FacadesFile::extension($pathToFile);
 
     switch($fileExt)
     {

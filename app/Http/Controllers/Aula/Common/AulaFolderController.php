@@ -6,16 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\{
     Course,
+    File,
     Folder
 };
+use App\Services\FoldersService;
 
 class AulaFolderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Course $course)
     {
         $folders = $course->folders()->where('level', 1)->get();
@@ -26,88 +23,22 @@ class AulaFolderController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show(FoldersService $foldersService, Course $course, Folder $folder)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Course $course, Folder $folder)
-    {
-        $files = $folder->documents;
-        $subFolders = Folder::where('parent_folder_id', $folder->id)->get();
-        $parentFoldersCollection = collect();
-        $lastFolderId = $folder->parent_folder_id;
-
-        for($i=1; $i<$folder->level; $i++)
-        {
-            $parentFolder = Folder::where('id', $lastFolderId)->first();
-            $parentFoldersCollection = $parentFoldersCollection->push($parentFolder);
-            $lastFolderId = $parentFolder->parent_folder_id;
-        }
+        $folder = $folder->loadMissing(['files', 'subfolders']);
+        $parentFoldersCollection = $foldersService->getParentFolders($folder->parent_folder_id, $folder->level);
 
         return view('aula.common.courses.folders.show', [
             'folder' => $folder,
-            'parentFoldersCollection' => $parentFoldersCollection->reverse(),
+            'parentFoldersCollection' => $parentFoldersCollection,
             'course' => $course,
-            'files' => $files,
-            'subFolders' => $subFolders
         ]);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function downloadFile(FoldersService $foldersService, File $file)
     {
-        //
-    }
+        $storage = env('FILESYSTEM_DRIVER');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $foldersService->downloadFile($file, $storage);
     }
 }

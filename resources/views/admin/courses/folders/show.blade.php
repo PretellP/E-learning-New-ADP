@@ -12,8 +12,8 @@
                     <h4>
                         <a href="{{route('admin.courses.index')}}">CURSOS</a>
                         <span> / <a href="{{route('admin.courses.show', $course)}}"> {{$course->description}} </a> </span>
-                        @foreach ($parentFoldersCollection as $parent_folder) 
-                         / <a href="{{route('admin.courses.folder.view', [$course, $parent_folder])}}"> {{$parent_folder->name}} </a>
+                        @foreach ($parent_folder_collection as $parent_folder) 
+                         / <a href="{{route('admin.courses.folder.view', $parent_folder)}}"> {{$parent_folder->name}} </a>
                         @endforeach
                         <span> / {{$folder->name}}</span>
 
@@ -42,7 +42,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <div class="input-group">
-                                            <input name='foldername' type="text" class="form-control" placeholder="Ingresa el nombre de la carpeta" required autocomplete="off" value="{{$folder->name}}">
+                                            <input name='name' type="text" class="form-control" placeholder="Ingresa el nombre de la carpeta" required autocomplete="off" value="{{$folder->name}}">
                                             <div class="input-group-prepend">
                                                 <button type="submit" class="btn btn-primary">    
                                                     <i class="fa-solid fa-arrows-rotate fa-lg"></i>
@@ -81,7 +81,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="input-group subfolder-create-input">
-                                                    <input name='subfoldername' type="text" class="form-control" placeholder="Ingresa el nombre de subcarpeta" required autocomplete="off">
+                                                    <input name='name' type="text" class="form-control" placeholder="Ingresa el nombre de subcarpeta" required autocomplete="off">
                                                     <div class="input-group-prepend">
                                                         <button type="submit" class="btn btn-primary">    
                                                             <i class="fa-solid fa-plus fa-lg"></i>
@@ -103,9 +103,9 @@
                 <div class="row mb-4">
                     <div class="col-sm-12 folder-container">
     
-                        @forelse ($subfolders as $subfolder)
+                        @forelse ($folder->subfolders as $subfolder)
     
-                        <a href="{{route('admin.courses.folder.view', [$course, $subfolder])}}" class="folder-link">
+                        <a href="{{route('admin.courses.folder.view', $subfolder)}}" class="folder-link">
                             <div class="folder-card">
                                 <img class="card-img-top folder-img" src="{{asset('assets/common/images/folder.png')}}" alt="Card image cap">
                                 <div>
@@ -136,15 +136,8 @@
                     </div>
                     <div>
                         
-                        <form action="{{route('file.create', $folder)}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('admin.folders.file.store', $folder)}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            
-                            <div class="form-group row">
-                            
-                                <div class="col-sm-12">
-                                    <input name='filename' type="text" class="form-control" placeholder="Ingresa el nombre del archivo" required autocomplete="off">
-                                </div>
-                            </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
@@ -175,8 +168,8 @@
                                     <tr>
                                         <th>N°</th>
                                         <th>Nombre</th>
-                                        <th>Nombre de Archivo</th>
-                                        <th>Tamaño(Bytes) </th>
+                                        <th>Tipo</th>
+                                        <th>Categoría</th>
                                         <th>Pertenece a</th>
                                         <th>Creado el</th>
                                         <th>Actualizado el</th>

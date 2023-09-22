@@ -42,13 +42,13 @@
 
         <div class="subfolders-box mb-4 folders-container">
 
-            @foreach ($subFolders as $subFolder)
+            @foreach ($folder->subfolders as $subfolder)
 
-            <a href="{{route('aula.course.folder.show', [$course, $subFolder])}}" class="folder-link">
+            <a href="{{route('aula.course.folder.show', [$course, $subfolder])}}" class="folder-link">
                 <div class="folder-block subfolder">
                     <img class="card-img-top folder-img" src="{{asset('assets/common/images/subfolder.png')}}">
                     <div class="card-body">
-                        <p class="card-text">{{$subFolder->name}}</p>
+                        <p class="card-text">{{$subfolder->name}}</p>
                     </div>
                 </div>
             </a>
@@ -61,7 +61,7 @@
 
         <div class="files-container">
 
-            @forelse ($files as $file)
+            @forelse ($folder->files as $file)
 
             <div class="file-box">
                 <a href="{{route('aula.file.download', $file)}}">
@@ -69,7 +69,7 @@
                     <img src="{{asset('assets/common/images/file-types/'.getFileExtension($file).'.svg')}}" alt="">
 
                     <div class="filename">
-                        {{$file->filename}}
+                        {{basename($file->file_url)}}
                     </div>
 
                 </a>

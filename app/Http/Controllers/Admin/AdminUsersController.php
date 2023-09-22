@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DataTables;
+use Yajra\DataTables\DataTables;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\{User, Company, MiningUnit};
@@ -13,7 +13,6 @@ class AdminUsersController extends Controller
 {
     public function index(Request $request)
     {
-
         if($request->ajax())
         {   
             $allUsers = DataTables::of(User::with('company:id,description')

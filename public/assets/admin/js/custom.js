@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
 
     /* ------ GENERAL ------*/
 
@@ -17,11 +17,11 @@ $(function(){
             "last": "Último",
             "next": "Siguiente",
             "previous": "Anterior"
-            },
+        },
         "aria": {
             "sortAscending": ": Activar para ordenar la columna de manera ascendente",
             "sortDescending": ": Activar para ordenar la columna de manera descendente"
-            },
+        },
         "buttons": {
             "copy": "Copiar",
             "colvis": "Visibilidad",
@@ -29,102 +29,102 @@ $(function(){
             "colvisRestore": "Restaurar visibilidad",
             "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
             "copySuccess": {
-            "1": "Copiada 1 fila al portapapeles",
-            "_": "Copiadas %ds fila al portapapeles"
+                "1": "Copiada 1 fila al portapapeles",
+                "_": "Copiadas %ds fila al portapapeles"
             },
-        "copyTitle": "Copiar al portapapeles",
-        "csv": "CSV",
-        "excel": "Excel",
-        "pageLength": {
-        "-1": "Mostrar todas las filas",
-        "_": "Mostrar %d filas"
-        },
-        "pdf": "PDF",
-        "print": "Imprimir",
-        "renameState": "Cambiar nombre",
-        "updateState": "Actualizar",
-        "createState": "Crear Estado",
-        "removeAllStates": "Remover Estados",
-        "removeState": "Remover",
-        "savedStates": "Estados Guardados",
-        "stateRestore": "Estado %d"
+            "copyTitle": "Copiar al portapapeles",
+            "csv": "CSV",
+            "excel": "Excel",
+            "pageLength": {
+                "-1": "Mostrar todas las filas",
+                "_": "Mostrar %d filas"
+            },
+            "pdf": "PDF",
+            "print": "Imprimir",
+            "renameState": "Cambiar nombre",
+            "updateState": "Actualizar",
+            "createState": "Crear Estado",
+            "removeAllStates": "Remover Estados",
+            "removeState": "Remover",
+            "savedStates": "Estados Guardados",
+            "stateRestore": "Estado %d"
         },
         "autoFill": {
             "cancel": "Cancelar",
             "fill": "Rellene todas las celdas con <i>%d</i>",
             "fillHorizontal": "Rellenar celdas horizontalmente",
             "fillVertical": "Rellenar celdas verticalmentemente"
-            },
+        },
         "decimal": ",",
         "searchBuilder": {
             "add": "Añadir condición",
             "button": {
-            "0": "Constructor de búsqueda",
-            "_": "Constructor de búsqueda (%d)"
+                "0": "Constructor de búsqueda",
+                "_": "Constructor de búsqueda (%d)"
             },
             "clearAll": "Borrar todo",
             "condition": "Condición",
             "conditions": {
-        "date": {
-            "after": "Despues",
-            "before": "Antes",
-            "between": "Entre",
-            "empty": "Vacío",
-            "equals": "Igual a",
-            "notBetween": "No entre",
-            "notEmpty": "No Vacio",
-            "not": "Diferente de"
-        },
-        "number": {
-            "between": "Entre",
-            "empty": "Vacio",
-            "equals": "Igual a",
-            "gt": "Mayor a",
-            "gte": "Mayor o igual a",
-            "lt": "Menor que",
-            "lte": "Menor o igual que",
-            "notBetween": "No entre",
-            "notEmpty": "No vacío",
-            "not": "Diferente de"
-        },
-        "string": {
-            "contains": "Contiene",
-            "empty": "Vacío",
-            "endsWith": "Termina en",
-            "equals": "Igual a",
-            "notEmpty": "No Vacio",
-            "startsWith": "Empieza con",
-            "not": "Diferente de",
-            "notContains": "No Contiene",
-            "notStartsWith": "No empieza con",
-            "notEndsWith": "No termina con"
-        },
-        "array": {
-            "not": "Diferente de",
-            "equals": "Igual",
-            "empty": "Vacío",
-            "contains": "Contiene",
-            "notEmpty": "No Vacío",
-            "without": "Sin"
-        }
-        },
-        "data": "Data",
-        "deleteTitle": "Eliminar regla de filtrado",
-        "leftTitle": "Criterios anulados",
-        "logicAnd": "Y",
-        "logicOr": "O",
-        "rightTitle": "Criterios de sangría",
-        "title": {
-        "0": "Constructor de búsqueda",
-        "_": "Constructor de búsqueda (%d)"
-        },
-        "value": "Valor"
+                "date": {
+                    "after": "Despues",
+                    "before": "Antes",
+                    "between": "Entre",
+                    "empty": "Vacío",
+                    "equals": "Igual a",
+                    "notBetween": "No entre",
+                    "notEmpty": "No Vacio",
+                    "not": "Diferente de"
+                },
+                "number": {
+                    "between": "Entre",
+                    "empty": "Vacio",
+                    "equals": "Igual a",
+                    "gt": "Mayor a",
+                    "gte": "Mayor o igual a",
+                    "lt": "Menor que",
+                    "lte": "Menor o igual que",
+                    "notBetween": "No entre",
+                    "notEmpty": "No vacío",
+                    "not": "Diferente de"
+                },
+                "string": {
+                    "contains": "Contiene",
+                    "empty": "Vacío",
+                    "endsWith": "Termina en",
+                    "equals": "Igual a",
+                    "notEmpty": "No Vacio",
+                    "startsWith": "Empieza con",
+                    "not": "Diferente de",
+                    "notContains": "No Contiene",
+                    "notStartsWith": "No empieza con",
+                    "notEndsWith": "No termina con"
+                },
+                "array": {
+                    "not": "Diferente de",
+                    "equals": "Igual",
+                    "empty": "Vacío",
+                    "contains": "Contiene",
+                    "notEmpty": "No Vacío",
+                    "without": "Sin"
+                }
+            },
+            "data": "Data",
+            "deleteTitle": "Eliminar regla de filtrado",
+            "leftTitle": "Criterios anulados",
+            "logicAnd": "Y",
+            "logicOr": "O",
+            "rightTitle": "Criterios de sangría",
+            "title": {
+                "0": "Constructor de búsqueda",
+                "_": "Constructor de búsqueda (%d)"
+            },
+            "value": "Valor"
         },
         "searchPanes": {
             "clearMessage": "Borrar todo",
             "collapse": {
-            "0": "Paneles de búsqueda",
-            "_": "Paneles de búsqueda (%d)"
+                "0": "Paneles de búsqueda",
+                "_": "Paneles de búsqueda (%d)"
             },
             "count": "{total}",
             "countFiltered": "{shown} ({total})",
@@ -133,19 +133,19 @@ $(function(){
             "title": "Filtros Activos - %d",
             "showMessage": "Mostrar Todo",
             "collapseMessage": "Colapsar Todo"
-            },
+        },
         "select": {
             "cells": {
-            "1": "1 celda seleccionada",
-            "_": "%d celdas seleccionadas"
+                "1": "1 celda seleccionada",
+                "_": "%d celdas seleccionadas"
             },
             "columns": {
-            "1": "1 columna seleccionada",
-            "_": "%d columnas seleccionadas"
+                "1": "1 columna seleccionada",
+                "_": "%d columnas seleccionadas"
             },
             "rows": {
-            "1": "1 fila seleccionada",
-            "_": "%d filas seleccionadas"
+                "1": "1 fila seleccionada",
+                "_": "%d filas seleccionadas"
             }
         },
         "thousands": ".",
@@ -157,79 +157,79 @@ $(function(){
             "seconds": "Segundos",
             "unknown": "-",
             "amPm": [
-            "AM",
-            "PM"
+                "AM",
+                "PM"
             ],
             "months": {
-            "0": "Enero",
-            "1": "Febrero",
-            "2": "Marzo",
-            "3": "Abril",
-            "4": "Mayo",
-            "5": "Junio",
-            "6": "Julio",
-            "7": "Agosto",
-            "8": "Septiembre",
-            "9": "Octubre",
-            "10": "Noviembre",
-            "11": "Diciembre"
+                "0": "Enero",
+                "1": "Febrero",
+                "2": "Marzo",
+                "3": "Abril",
+                "4": "Mayo",
+                "5": "Junio",
+                "6": "Julio",
+                "7": "Agosto",
+                "8": "Septiembre",
+                "9": "Octubre",
+                "10": "Noviembre",
+                "11": "Diciembre"
             },
             "weekdays": [
-            "Dom",
-            "Lun",
-            "Mar",
-            "Mie",
-            "Jue",
-            "Vie",
-            "Sab"
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mie",
+                "Jue",
+                "Vie",
+                "Sab"
             ]
         },
         "editor": {
             "close": "Cerrar",
             "create": {
-            "button": "Nuevo",
-            "title": "Crear Nuevo Registro",
-            "submit": "Crear"
+                "button": "Nuevo",
+                "title": "Crear Nuevo Registro",
+                "submit": "Crear"
             },
             "edit": {
-            "button": "Editar",
-            "title": "Editar Registro",
-            "submit": "Actualizar"
+                "button": "Editar",
+                "title": "Editar Registro",
+                "submit": "Actualizar"
             },
             "remove": {
-            "button": "Eliminar",
-            "title": "Eliminar Registro",
-            "submit": "Eliminar",
-            "confirm": {
-                "1": "¿Está seguro que desea eliminar 1 fila?",
-                "_": "¿Está seguro que desea eliminar %d filas?"
-            }
+                "button": "Eliminar",
+                "title": "Eliminar Registro",
+                "submit": "Eliminar",
+                "confirm": {
+                    "1": "¿Está seguro que desea eliminar 1 fila?",
+                    "_": "¿Está seguro que desea eliminar %d filas?"
+                }
             },
             "error": {
-            "system": "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\/a&gt;).</a>"
+                "system": "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\/a&gt;).</a>"
             },
             "multi": {
-            "title": "Múltiples Valores",
-            "info": "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
-            "restore": "Deshacer Cambios",
-            "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
+                "title": "Múltiples Valores",
+                "info": "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                "restore": "Deshacer Cambios",
+                "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
             }
         },
         "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
         "stateRestore": {
             "creationModal": {
-            "button": "Crear",
-            "name": "Nombre:",
-            "order": "Clasificación",
-            "paging": "Paginación",
-            "search": "Busqueda",
-            "select": "Seleccionar",
-            "columns": {
-                "search": "Búsqueda de Columna",
-                "visible": "Visibilidad de Columna"
-            },
-            "title": "Crear Nuevo Estado",
-            "toggleLabel": "Incluir:"
+                "button": "Crear",
+                "name": "Nombre:",
+                "order": "Clasificación",
+                "paging": "Paginación",
+                "search": "Busqueda",
+                "select": "Seleccionar",
+                "columns": {
+                    "search": "Búsqueda de Columna",
+                    "visible": "Visibilidad de Columna"
+                },
+                "title": "Crear Nuevo Estado",
+                "toggleLabel": "Incluir:"
             },
             "emptyError": "El nombre no puede estar vacio",
             "removeConfirm": "¿Seguro que quiere eliminar este %s?",
@@ -246,7 +246,7 @@ $(function(){
     };
 
     $.ajaxSetup({
-        headers:{
+        headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
@@ -258,8 +258,8 @@ $(function(){
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
 
@@ -272,8 +272,8 @@ $(function(){
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
 
@@ -291,7 +291,7 @@ $(function(){
     /* ---- DROPDOWN BUTTON -------*/
 
 
-    $('.main-content').on('click', '.btn-dropdown-container', function(){
+    $('.main-content').on('click', '.btn-dropdown-container', function () {
 
         if (window.matchMedia('(min-width: 992px)').matches) {
             $('#btn-drowdown-category-list').removeClass('vertical')
@@ -304,26 +304,26 @@ $(function(){
         var parent = button.closest('.principal-inner-container')
         var dropdownContainer = parent.find('.related-dropdown-container')
         var actionButtonContainer = parent.find('.action-btn-dropdown-container.outside')
-    
-        if(button.hasClass('show')){
+
+        if (button.hasClass('show')) {
             txtCont.html('Mostrar')
             actionButtonContainer.slideToggle(300)
             actionButtonContainer.addClass('hide')
-        }else{
-            if(actionButtonContainer.hasClass('hide')){
+        } else {
+            if (actionButtonContainer.hasClass('hide')) {
                 actionButtonContainer.slideToggle(300)
             }
-            
+
             txtCont.html('Ocultar')
         }
 
-        if(button.hasClass('vertical')){
+        if (button.hasClass('vertical')) {
             dropdownContainer.slideToggle(300)
-        }else{
+        } else {
             dropdownContainer.toggle('slide')
         }
-        
-        
+
+
         button.toggleClass('show')
     })
 
@@ -335,7 +335,7 @@ $(function(){
 
 
 
-    if($('#companies-table').length){
+    if ($('#companies-table').length) {
 
         var companiesTableEle = $('#companies-table');
         var getDataUrl = companiesTableEle.data('url');
@@ -344,23 +344,23 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description'},
-                {data: 'abbreviation', name:'abbreviation'},
-                {data: 'ruc', name:'ruc'},
-                {data: 'address', name:'address'},
-                {data: 'telephone', name:'telephone'},
-                {data: 'status-btn', name:'status-btn'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'abbreviation', name: 'abbreviation' },
+                { data: 'ruc', name: 'ruc' },
+                { data: 'address', name: 'address' },
+                { data: 'telephone', name: 'telephone' },
+                { data: 'status-btn', name: 'status-btn' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
-        $('#register-company-status-checkbox').change(function(){
+        $('#register-company-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-company');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -382,7 +382,7 @@ $(function(){
                             method: $('#registerCompanyForm').attr('method'),
                             dataType: 'JSON',
                             data: {
-                                ruc: function(){
+                                ruc: function () {
                                     return $('#registerCompanyForm').find('input[name=ruc]').val()
                                 },
                                 type: 'validate'
@@ -416,7 +416,7 @@ $(function(){
                     remote: 'Este RUC ya está registrado'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -432,7 +432,7 @@ $(function(){
                         type: 'store'
                     },
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerCompanyForm.resetForm()
                         companiesTable.draw()
                         form.trigger('reset')
@@ -443,7 +443,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -452,17 +452,17 @@ $(function(){
 
         /* ---------- ELIMINAR ---------*/
 
-        $('body').on('click', '.deleteCompany', function(){
+        $('.main-content').on('click', '.deleteCompany', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 companiesTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -470,28 +470,28 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
 
         /* ------------ EDITAR --------*/
 
-        $('#edit-company-status-checkbox').change(function(){
+        $('#edit-company-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-company');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -510,10 +510,10 @@ $(function(){
                         type: 'POST',
                         dataType: 'JSON',
                         data: {
-                            ruc: function(){
+                            ruc: function () {
                                 return $('#EditCompanyForm').find('input[name=ruc]').val()
                             },
-                            id: function(){
+                            id: function () {
                                 return $('#EditCompanyForm').find('input[name=id]').val()
                             }
                         },
@@ -545,7 +545,7 @@ $(function(){
                     remote: 'Este RUC ya está registrado'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -558,7 +558,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         console.log(data)
                         companiesTable.draw()
                         loadSpinner.toggleClass('active')
@@ -568,14 +568,14 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('body').on('click', '.editCompany', function(){
+        $('.main-content').on('click', '.editCompany', function () {
             var modal = $('#EditCompanyModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -583,12 +583,12 @@ $(function(){
             editCompanyform.resetForm();
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=id]').val(data.id);
                     modal.find('input[name=name]').val(data.description);
@@ -600,19 +600,18 @@ $(function(){
                     modal.find('input[name=referPhone]').val(data.telephone_ref);
                     modal.find('input[name=referEmail]').val(data.email_ref);
 
-                    if(data.active == 'S')
-                    {
+                    if (data.active == 'S') {
                         modal.find('#edit-company-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-company').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-company-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-company').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -620,7 +619,7 @@ $(function(){
 
     }
 
-    if($('#rooms-table').length){
+    if ($('#rooms-table').length) {
 
         var roomsTableEle = $('#rooms-table');
         var getDataUrl = roomsTableEle.data('url');
@@ -629,22 +628,22 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description'},
-                {data: 'capacity', name:'capacity'},
-                {data: 'created_at', name:'created_at'},
-                {data: 'status-btn', name:'status-btn'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'capacity', name: 'capacity' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'status-btn', name: 'status-btn' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
 
-        $('#register-room-status-checkbox').change(function(){
+        $('#register-room-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-room');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -661,7 +660,7 @@ $(function(){
                         method: $('#registerRoomForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            name: function(){
+                            name: function () {
                                 return $('#registerRoomForm').find('input[name=name]').val()
                             }
                         }
@@ -676,7 +675,7 @@ $(function(){
                     remote: 'Esta sala ya está registrada'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -689,7 +688,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerRoomForm.resetForm()
                         roomsTable.draw()
                         form.trigger('reset')
@@ -700,7 +699,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -710,11 +709,11 @@ $(function(){
         /* ---------- EDITAR ----------*/
 
 
-        $('#edit-room-status-checkbox').change(function(){
+        $('#edit-room-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-room');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -729,10 +728,10 @@ $(function(){
                         method: $('#editRoomForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            name: function(){
+                            name: function () {
                                 return $('#editRoomForm').find('input[name=name]').val()
                             },
-                            id: function(){
+                            id: function () {
                                 return $('#editRoomForm').find('input[name=id]').val()
                             }
                         }
@@ -747,7 +746,7 @@ $(function(){
                     remote: 'Esta sala ya está registrada'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -760,7 +759,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         roomsTable.draw()
                         form.trigger('reset')
                         loadSpinner.toggleClass('active')
@@ -770,15 +769,15 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
-        
 
-        $('body').on('click', '.editRoom', function(){
+
+        $('.main-content').on('click', '.editRoom', function () {
             var modal = $('#EditRoomModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -787,30 +786,30 @@ $(function(){
             editRoomForm.resetForm();
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=id]').val(data.id);
                     modal.find('input[name=name]').val(data.description);
                     modal.find('input[name=capacity]').val(data.capacity);
                     modal.find('input[name=url]').val(data.url_zoom);
 
-                    if(data.active == 'S'){
+                    if (data.active == 'S') {
                         modal.find('#edit-room-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-room').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-room-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-room').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -819,17 +818,17 @@ $(function(){
 
         /* ----------- ELIMINAR ---------------*/
 
-        $('body').on('click', '.deleteRoom', function(){
+        $('.main-content').on('click', '.deleteRoom', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 roomsTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -837,17 +836,17 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -855,7 +854,7 @@ $(function(){
 
     }
 
-    if($('#users-table').length){
+    if ($('#users-table').length) {
 
         /* -------- SELECT ----------*/
 
@@ -901,24 +900,24 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataTable,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'dni', name:'dni'},
-                {data: 'name', name:'name'},
-                {data: 'email', name:'email'},
-                {data: 'role', name:'role', orderable: false,},
-                {data: 'company.description', name:'company.description', orderable: false},
-                {data: 'status-btn', name:'status-btn', orderable: false, searchable: false},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'dni', name: 'dni' },
+                { data: 'name', name: 'name' },
+                { data: 'email', name: 'email' },
+                { data: 'role', name: 'role', orderable: false, },
+                { data: 'company.description', name: 'company.description', orderable: false },
+                { data: 'status-btn', name: 'status-btn', orderable: false, searchable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
 
-        $('#register-user-status-checkbox').change(function(){
+        $('#register-user-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-user');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -936,7 +935,7 @@ $(function(){
                         method: $('#registerUserForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            dni: function(){
+                            dni: function () {
                                 return $('#registerUserForm').find('input[name=dni]').val()
                             }
                         }
@@ -974,10 +973,10 @@ $(function(){
                 company: {
                     required: true
                 },
-                "id_mining_units[]":{
+                "id_mining_units[]": {
                     required: true
                 },
-                position:{
+                position: {
                     maxlength: 255
                 }
             },
@@ -986,7 +985,7 @@ $(function(){
                     remote: 'Este usuario ya está registrado'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -999,7 +998,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerUserForm.resetForm()
                         usersTable.draw()
                         form.trigger('reset')
@@ -1010,7 +1009,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                         Toast.fire({
                             icon: 'error',
@@ -1021,7 +1020,7 @@ $(function(){
             }
         })
 
-        $('#btn-register-user-modal').on('click', function(){
+        $('#btn-register-user-modal').on('click', function () {
             var modal = $('#RegisterUserModal')
             var button = $(this)
             var select = modal.find('#registerCompanySelect')
@@ -1034,18 +1033,18 @@ $(function(){
                 type: 'GET',
                 url: url,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
                     var companies = data['companies']
                     select.append('<option></option>')
 
-                    $.each(companies, function(key, values){
-                        select.append('<option value="'+values.id+'">'+values.description+'</option>');
+                    $.each(companies, function (key, values) {
+                        select.append('<option value="' + values.id + '">' + values.description + '</option>');
                     })
-                },  
-                complete: function(data){
+                },
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -1056,11 +1055,11 @@ $(function(){
 
         /* -------------- EDITAR  ---------------*/
 
-        $('#edit-user-status-checkbox').change(function(){
+        $('#edit-user-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-user');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -1075,10 +1074,10 @@ $(function(){
                         method: $('#editUserForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            dni: function(){
+                            dni: function () {
                                 return $('#editUserForm').find('input[name=dni]').val()
                             },
-                            id: function(){
+                            id: function () {
                                 return $('#editUserForm').find('input[name=id]').val()
                             }
                         }
@@ -1113,10 +1112,10 @@ $(function(){
                 company: {
                     required: true
                 },
-                "id_mining_units[]":{
+                "id_mining_units[]": {
                     required: true
                 },
-                position:{
+                position: {
                     maxlength: 255
                 }
             },
@@ -1125,7 +1124,7 @@ $(function(){
                     remote: 'Este usuario ya está registrado'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1138,7 +1137,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         usersTable.draw()
                         form.trigger('reset')
                         loadSpinner.toggleClass('active')
@@ -1148,15 +1147,15 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
-        
 
-        $('body').on('click', '.editUser', function(){
+
+        $('.main-content').on('click', '.editUser', function () {
             var modal = $('#EditUserModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -1171,12 +1170,12 @@ $(function(){
             form.trigger('reset')
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     var user = data['user'];
 
@@ -1192,50 +1191,50 @@ $(function(){
 
                     selectRole.val(user.role).change();
                     selectCompany.append('<option></option>')
-                    $.each(data['companies'], function(key, values){
-                        selectCompany.append('<option value="'+values.id+'">'+values.description+'</option>')
+                    $.each(data['companies'], function (key, values) {
+                        selectCompany.append('<option value="' + values.id + '">' + values.description + '</option>')
                     })
 
                     selectCompany.val(user.company_id).change()
 
                     selectMiningUnits.append('<option></option>')
-                    $.each(data.miningUnits, function(key, values){
-                        selectMiningUnits.append('<option value="'+values.id+'">'+values.description+'</option>')
+                    $.each(data.miningUnits, function (key, values) {
+                        selectMiningUnits.append('<option value="' + values.id + '">' + values.description + '</option>')
                     })
 
                     selectMiningUnits.val(data.miningUnitsSelect).change()
 
-                    if(user.active == 'S'){
+                    if (user.active == 'S') {
                         modal.find('#edit-user-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-user').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-user-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-user').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
         })
 
 
-         /* ----------- ELIMINAR ---------------*/
+        /* ----------- ELIMINAR ---------------*/
 
-        $('body').on('click', '.deleteUser', function(){
+        $('.main-content').on('click', '.deleteUser', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 usersTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -1243,17 +1242,17 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -1261,7 +1260,7 @@ $(function(){
 
     }
 
-    if($('#ownerCompanies-table').length){
+    if ($('#ownerCompanies-table').length) {
 
         var ownerCompaniesTableEle = $('#ownerCompanies-table');
         var getDataUrl = ownerCompaniesTableEle.data('url');
@@ -1270,11 +1269,11 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'name', name:'name'},
-                {data: 'created_at', name:'created_at'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
@@ -1291,7 +1290,7 @@ $(function(){
                         method: $('#registerCompanyForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            name: function(){
+                            name: function () {
                                 return $('#registerCompanyForm').find('input[name=name]').val()
                             }
                         }
@@ -1303,7 +1302,7 @@ $(function(){
                     remote: 'Esta empresa titular ya está registrada'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1316,7 +1315,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerOwnerCompanyForm.resetForm()
                         ownerCompaniesTable.draw()
                         form.trigger('reset')
@@ -1327,7 +1326,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -1347,23 +1346,23 @@ $(function(){
                         method: $('#EditCompanyForm').attr('method'),
                         dataType: 'JSON',
                         data: {
-                            name: function(){
+                            name: function () {
                                 return $('#EditCompanyForm').find('input[name=name]').val()
                             },
-                            id: function(){
+                            id: function () {
                                 return $('#EditCompanyForm').find('input[name=id]').val()
                             }
                         }
                     }
                 }
-     
+
             },
             messages: {
                 dni: {
                     remote: 'Esta empresa titular ya está registrada'
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1376,7 +1375,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         editOwnerCompanyForm.resetForm()
                         ownerCompaniesTable.draw()
                         form.trigger('reset')
@@ -1387,14 +1386,14 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('.main-content').on('click', '.editCompany', function(){
+        $('.main-content').on('click', '.editCompany', function () {
             var modal = $('#EditCompanyModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -1404,19 +1403,19 @@ $(function(){
             form.trigger('reset')
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
                     modal.find('input[name=id]').val(data.id);
                     modal.find('input[name=name]').val(data.name);
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -1425,17 +1424,17 @@ $(function(){
 
         /* ----------- ELIMINAR ---------------*/
 
-        $('.main-content').on('click', '.deleteCompany', function(){
+        $('.main-content').on('click', '.deleteCompany', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 ownerCompaniesTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -1443,23 +1442,23 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
     }
 
-    if($('#mining-units-table').length){
+    if ($('#mining-units-table').length) {
 
         var miningUnitTableEle = $('#mining-units-table');
         var getDataUrl = miningUnitTableEle.data('url');
@@ -1468,13 +1467,13 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description'},
-                {data: 'owner', name:'owner'},
-                {data: 'district', name:'district'},
-                {data: 'Province', name:'Province'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'owner', name: 'owner' },
+                { data: 'district', name: 'district' },
+                { data: 'Province', name: 'Province' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
@@ -1486,7 +1485,7 @@ $(function(){
                     required: true,
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1499,7 +1498,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerMiningUnitForm.resetForm()
                         miningUnitsTable.draw()
                         form.trigger('reset')
@@ -1510,7 +1509,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -1526,7 +1525,7 @@ $(function(){
                     required: true,
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1539,7 +1538,7 @@ $(function(){
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         editMiningUnitForm.resetForm()
                         miningUnitsTable.draw()
                         form.trigger('reset')
@@ -1550,7 +1549,7 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         ToastError.fire()
                         // console.log(data)
                     }
@@ -1558,7 +1557,7 @@ $(function(){
             }
         })
 
-        $('.main-content').on('click', '.editMiningUnit', function(){
+        $('.main-content').on('click', '.editMiningUnit', function () {
             var button = $(this)
             var modal = $('#editMiningUnitModal')
             var form = modal.find('#editMiningUnitForm')
@@ -1573,7 +1572,7 @@ $(function(){
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     form.find('input[name=description]').val(data.description)
                     form.find('input[name=owner]').val(data.owner)
@@ -1581,10 +1580,10 @@ $(function(){
                     form.find('input[name=Province]').val(data.Province)
 
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -1593,17 +1592,17 @@ $(function(){
 
         /* ----------- ELIMINAR ---------------*/
 
-        $('.main-content').on('click', '.deleteMiningUnit', function(){
+        $('.main-content').on('click', '.deleteMiningUnit', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 miningUnitsTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -1611,21 +1610,22 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             ToastError.fire()
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
 
     }
 
-    if($('#courses-table').length){
+    if ($('#courses-table').length) {
+
         var coursesTableEle = $('#courses-table');
         var getDataUrl = coursesTableEle.data('url');
         var coursesTable = coursesTableEle.DataTable({
@@ -1633,15 +1633,15 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description', orderable: false,},
-                {data: 'subtitle', name:'subtitle'},
-                {data: 'date', name:'date'},
-                {data: 'time_start', name:'time_start'},
-                {data: 'time_end', name:'time_end'},
-                {data: 'status', name:'status'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'subtitle', name: 'subtitle' },
+                { data: 'date', name: 'date' },
+                { data: 'time_start', name: 'time_start' },
+                { data: 'time_end', name: 'time_end' },
+                { data: 'active', name: 'active' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
@@ -1649,26 +1649,25 @@ $(function(){
 
         var courseImageRegister = $('input[type="file"][name="courseImageRegister"]');
         courseImageRegister.val('');
-        courseImageRegister.on("change", function(){
+        courseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#registerCourseForm').find('.img-holder');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader)!= 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid course_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid course_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).empty();
                 Toast.fire({
                     icon: 'warning',
@@ -1677,11 +1676,11 @@ $(function(){
             }
         })
 
-        $('#register-course-status-checkbox').change(function(){
+        $('#register-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-course');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -1710,7 +1709,7 @@ $(function(){
                     required: true
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
@@ -1729,7 +1728,7 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         registerCourseForm.resetForm()
                         coursesTable.draw()
                         loadSpinner.toggleClass('active')
@@ -1744,7 +1743,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -1754,37 +1753,36 @@ $(function(){
 
         /* -------------- EDIT  ---------------*/
 
-        $('#edit-course-status-checkbox').change(function(){
+        $('#edit-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-course');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
 
         var inputCourseEdit = $('input[type="file"][name="courseImageEdit"]');
-        inputCourseEdit.on("change", function(){
+        inputCourseEdit.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#editCourseForm').find('.img-holder');
             var currentImagePath = $(this).data('value');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader)!= 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid course_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid course_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).html(currentImagePath);
                 Toast.fire({
                     icon: 'warning',
@@ -1819,7 +1817,7 @@ $(function(){
                     required: true
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -1837,7 +1835,7 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
                         editCourseForm.resetForm()
                         coursesTable.draw()
                         loadSpinner.toggleClass('active')
@@ -1850,14 +1848,14 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
-        
-        $('.main-content').on('click', '.editCourse', function(){
+
+        $('.main-content').on('click', '.editCourse', function () {
             var modal = $('#editCourseModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -1867,12 +1865,12 @@ $(function(){
             form.trigger('reset')
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=id]').val(data.id);
                     modal.find('input[name=name]').val(data.name);
@@ -1881,22 +1879,22 @@ $(function(){
                     modal.find('input[name=hours]').val(data.hours);
                     modal.find('input[name=timeStart]').val(data.time_start);
                     modal.find('input[name=timeEnd]').val(data.time_end);
-                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="'+data.url_img+'"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="'+data.url_img+'" class="img-fluid course_img"');
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid course_img"');
                     modal.find('#image-upload-edit').val('');
 
-                    if(data.status == 'S'){
+                    if (data.status == 'S') {
                         modal.find('#edit-course-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-course').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-course-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-course').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -1904,17 +1902,17 @@ $(function(){
 
         /* ----------- DELETE ---------------*/
 
-        $('.main-content').on('click', '.deleteCourse', function(){
+        $('.main-content').on('click', '.deleteCourse', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 coursesTable.draw();
                                 Toast.fire({
                                     icon: 'success',
@@ -1922,24 +1920,25 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
-        
+
     }
 
-    if($('#files-folder-course-table').length){
+    if ($('#files-folder-course-table').length) {
+
         var filesTableEle = $('#files-folder-course-table');
         var getDataUrl = filesTableEle.data('url');
         var filesTable = filesTableEle.DataTable({
@@ -1947,52 +1946,52 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'name', name:'name'},
-                {data: 'filename', name:'filename', orderable: false},
-                {data: 'size', name:'size'},
-                {data: 'parent_folder', name:'parent_folder', orderable: false},
-                {data: 'created_at', name:'created_at'},
-                {data: 'updated_at', name:'updated_at'},
-                {data: 'action', name:'action', orderable: false, searchable: false},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'filename', name: 'filename', orderable: false },
+                { data: 'file_type', name: 'file_type' },
+                { data: 'category', name: 'category' },
+                { data: 'parent_folder', name: 'parent_folder', orderable: false },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });
 
-        $('body').on('click', '.deleteFile', function(){
+        $('.main-content').on('click', '.deleteFile', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         type: 'DELETE',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
                                 filesTable.draw();
                                 Toast.fire({
                                     icon: 'success',
-                                    text: '!Archivo eliminado!',
+                                    text: '¡Archivo eliminado!',
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
 
-        $('#btn-destroy-folder').on('click', function(e){
+        $('#btn-destroy-folder').on('click', function (e) {
             e.preventDefault()
             var form = $('#delete-folder-form')
 
@@ -2004,23 +2003,24 @@ $(function(){
                 confirmButtonText: '¡Sí!',
                 cancelButtonText: 'Cancelar',
                 reverseButtons: true,
-            }).then(function(e){
-                if(e.value === true){
+            }).then(function (e) {
+                if (e.value === true) {
                     form.submit();
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
     }
 
 
+
+
     /* ---- FREECOURSES INDEX  -----*/
 
-    if($('#freeCourses-table').length)
-    {
+    if ($('#freeCourses-table').length) {
 
         /* ----- FREECOURSES TABLE ------*/
 
@@ -2031,16 +2031,16 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description'},
-                {data: 'subtitle', name:'subtitle'},
-                {data: 'course_category.description', name:'courseCategory.description', orderable: false},
-                {data: 'sections', name:'sections', orderable: false},
-                {data: 'chapters', name:'chapters', orderable: false},
-                {data: 'duration', name:'duration', orderable: false},
-                {data: 'active', name:'active', orderable: false, searchable: false},
-                {data: 'recom', name:'recom', orderable: false, searchable: false, className: 'text-center'},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'subtitle', name: 'subtitle' },
+                { data: 'course_category.description', name: 'courseCategory.description', orderable: false },
+                { data: 'sections', name: 'sections', orderable: false },
+                { data: 'chapters', name: 'chapters', orderable: false },
+                { data: 'duration', name: 'duration', orderable: false },
+                { data: 'active', name: 'active', orderable: false, searchable: false },
+                { data: 'recom', name: 'recom', orderable: false, searchable: false, className: 'text-center' },
             ],
             // dom: 'rtip'
         });
@@ -2051,37 +2051,36 @@ $(function(){
 
         /* ------- REGISTER ----------*/
 
-        $('#register-category-status-checkbox').change(function(){
+        $('#register-category-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-category');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
 
         var categoryImageRegister = $('input[type="file"][name="categoryImageRegister"]');
         categoryImageRegister.val('');
-        categoryImageRegister.on("change", function(){
+        categoryImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#registerCategoryForm').find('.img-holder');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader)!= 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid category_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).empty();
                 categoryImageRegister.val('')
                 Toast.fire({
@@ -2102,14 +2101,14 @@ $(function(){
                     required: true
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#RegisterCategoryModal')
                 var img_holder = form.find('.img-holder')
-                
+
 
                 loadSpinner.toggleClass('active')
 
@@ -2122,7 +2121,7 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         var listContainer = $('#categories-list-container')
                         listContainer.html(data.html)
@@ -2138,7 +2137,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -2149,11 +2148,11 @@ $(function(){
         /* ---------- EDIT -----------*/
 
 
-        $('#edit-category-status-checkbox').change(function(){
+        $('#edit-category-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-category');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -2165,7 +2164,7 @@ $(function(){
                     maxlength: 100
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -2183,13 +2182,13 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         var listContainer = $('#categories-list-container')
                         listContainer.html(data.html)
                         freeCoursesTable.draw()
                         editCategoryForm.resetForm()
-                        
+
                         loadSpinner.toggleClass('active')
                         modal.modal('toggle')
 
@@ -2200,7 +2199,7 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -2208,30 +2207,29 @@ $(function(){
         })
 
         var inputCategoryEdit = $('input[type="file"][name="categoryImageEdit"]');
-        inputCategoryEdit.on("change", function(){
+        inputCategoryEdit.on("change", function () {
             $('#editCategoryForm').validate()
-            $('#image-upload-category-edit').rules('add', {required: true})
+            $('#image-upload-category-edit').rules('add', { required: true })
 
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#editCategoryForm').find('.img-holder');
             var currentImagePath = $(this).data('value');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader) != 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid category_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).html(currentImagePath);
                 inputCategoryEdit.val('')
                 Toast.fire({
@@ -2243,7 +2241,7 @@ $(function(){
         })
 
 
-        $('.main-content').on('click', '.editCategory-btn', function(){
+        $('.main-content').on('click', '.editCategory-btn', function () {
             var modal = $('#editCategoryModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -2256,30 +2254,30 @@ $(function(){
             form.trigger('reset')
 
             form.attr('action', url)
-          
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=name]').val(data.description);
-                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="'+data.url_img+'"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="'+data.url_img+'" class="img-fluid category_img"');
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"');
                     modal.find('#image-upload-edit').val('');
 
-                    if(data.status == 'S'){
+                    if (data.status == 'S') {
                         modal.find('#edit-category-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-category').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-category-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-category').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -2287,19 +2285,19 @@ $(function(){
 
 
 
-         /* ----------- DELETE ---------------*/
+        /* ----------- DELETE ---------------*/
 
-        $('.main-content').on('click', '.deleteCategory-btn', function(){
+        $('.main-content').on('click', '.deleteCategory-btn', function () {
             var url = $(this).data('url')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         method: 'POST',
                         url: url,
                         dataType: 'JSON',
-                        success: function(result){
-                            if(result.success === true){
+                        success: function (result) {
+                            if (result.success === true) {
 
                                 var listContainer = $('#categories-list-container')
                                 listContainer.html(result.html)
@@ -2310,17 +2308,17 @@ $(function(){
                                 })
                             }
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -2330,7 +2328,7 @@ $(function(){
         /* ------------  FREE COURSES ------------*/
 
 
-         /* ----------- SELECT -------------*/
+        /* ----------- SELECT -------------*/
 
         $('#registerfreeCourseSelect').select2({
             dropdownParent: $("#RegisterfreeCourseModal"),
@@ -2341,27 +2339,26 @@ $(function(){
         /* ----------- REGISTER -----------*/
 
         var freeCourseImageRegister = $('input[type="file"][name="courseImageRegister"]');
-            freeCourseImageRegister.val('');
-            freeCourseImageRegister.on("change", function(){
+        freeCourseImageRegister.val('');
+        freeCourseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#registerFreeCourseForm').find('.img-holder');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader)!= 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid freecourse_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid freecourse_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).empty();
                 freeCourseImageRegister.val('')
                 Toast.fire({
@@ -2372,16 +2369,16 @@ $(function(){
         })
 
 
-        $('#register-course-status-checkbox').change(function(){
+        $('#register-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-course');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
 
-        $('#registerFreeCourseForm button[type=submit]').click(function(){
+        $('#registerFreeCourseForm button[type=submit]').click(function () {
             $('button[type=submit]', $(this).parents('form')).removeAttr('clicked').removeAttr('name')
             $(this).attr('clicked', 'true').attr('name', 'verifybtn')
         })
@@ -2402,7 +2399,7 @@ $(function(){
                     required: true,
                 },
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
@@ -2410,7 +2407,7 @@ $(function(){
                 var loadSpinner = button.find('.loadSpinner')
                 var modal = $('#RegisterfreeCourseModal')
                 var img_holder = form.find('.img-holder')
-                
+
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
@@ -2420,17 +2417,17 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         registerFreeCourseForm.resetForm()
 
-                        if(data.show == true){
+                        if (data.show == true) {
 
                             window.location.href = data.route
 
-                        }else{
-                            
-                            if($('#categories-list-container').length){
+                        } else {
+
+                            if ($('#categories-list-container').length) {
                                 var listContainer = $('#categories-list-container')
                                 listContainer.html(data.html)
                             }
@@ -2449,14 +2446,14 @@ $(function(){
                         }
 
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('#btn-register-freecourse-modal').on('click', function(){
+        $('#btn-register-freecourse-modal').on('click', function () {
             var button = $(this)
             var modal = $('#RegisterfreeCourseModal')
             var loadSpinner = button.find('.loadSpinner')
@@ -2471,19 +2468,19 @@ $(function(){
                 type: 'GET',
                 url: url,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
                     var categories = data['categories']
                     select.append('<option></option>')
 
-                    $.each(categories, function(key, values){
-                        select.append('<option value="'+values.id+'">'+values.description+'</option>');
+                    $.each(categories, function (key, values) {
+                        select.append('<option value="' + values.id + '">' + values.description + '</option>');
                     })
-                },  
-                complete: function(data){
+                },
+                complete: function (data) {
                     loadSpinner.toggleClass('active')
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -2491,9 +2488,9 @@ $(function(){
 
     }
 
-        /*---  CATEGORY SHOW  ------*/
+    /*---  CATEGORY SHOW  ------*/
 
-    if($('#freecourse-category-show-table').length){
+    if ($('#freecourse-category-show-table').length) {
 
         var freeCoursesTableCatShowEle = $('#freecourse-category-show-table');
         var getDataUrl = freeCoursesTableCatShowEle.data('url');
@@ -2502,16 +2499,16 @@ $(function(){
             serverSide: true,
             processing: true,
             ajax: getDataUrl,
-            columns:[
-                {data: 'id', name:'id'},
-                {data: 'description', name:'description'},
-                {data: 'subtitle', name:'subtitle'},
-                {data: 'course_category.description', name:'courseCategory.description', orderable: false},
-                {data: 'sections', name:'sections', orderable: false},
-                {data: 'chapters', name:'chapters', orderable: false},
-                {data: 'duration', name:'duration', orderable: false},
-                {data: 'active', name:'active', orderable: false, searchable: false},
-                {data: 'recom', name:'recom', orderable: false, searchable: false, className: 'text-center'},
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'subtitle', name: 'subtitle' },
+                { data: 'course_category.description', name: 'courseCategory.description', orderable: false },
+                { data: 'sections', name: 'sections', orderable: false },
+                { data: 'chapters', name: 'chapters', orderable: false },
+                { data: 'duration', name: 'duration', orderable: false },
+                { data: 'active', name: 'active', orderable: false, searchable: false },
+                { data: 'recom', name: 'recom', orderable: false, searchable: false, className: 'text-center' },
             ]
         });
 
@@ -2519,11 +2516,11 @@ $(function(){
         /* ---------- EDIT -----------*/
 
 
-        $('#edit-category-status-checkbox').change(function(){
+        $('#edit-category-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-category');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
@@ -2535,7 +2532,7 @@ $(function(){
                     maxlength: 100
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
@@ -2553,7 +2550,7 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         var boxCategory = $('#categorybox-show')
                         var boxDescription = $('#description-span')
@@ -2564,7 +2561,7 @@ $(function(){
                         freeCoursesCatShowTable.draw()
 
                         editCategoryForm.resetForm()
-                        
+
                         loadSpinner.toggleClass('active')
                         modal.modal('toggle')
 
@@ -2575,7 +2572,7 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -2583,30 +2580,29 @@ $(function(){
         })
 
         var inputCategoryEdit = $('input[type="file"][name="categoryImageEdit"]');
-        inputCategoryEdit.on("change", function(){
+        inputCategoryEdit.on("change", function () {
             $('#editCategoryForm').validate()
-            $('#image-upload-category-edit').rules('add', {required: true})
+            $('#image-upload-category-edit').rules('add', { required: true })
 
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#editCategoryForm').find('.img-holder');
             var currentImagePath = $(this).data('value');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader) != 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid category_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).html(currentImagePath);
                 inputCategoryEdit.val('')
                 Toast.fire({
@@ -2618,7 +2614,7 @@ $(function(){
         })
 
 
-        $('.main-content').on('click', '.editCategory-btn', function(){
+        $('.main-content').on('click', '.editCategory-btn', function () {
             var modal = $('#editCategoryModal')
             var getDataUrl = $(this).data('send')
             var url = $(this).data('url')
@@ -2631,30 +2627,30 @@ $(function(){
             form.trigger('reset')
 
             form.attr('action', url)
-        
+
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=name]').val(data.description);
-                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="'+data.url_img+'"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="'+data.url_img+'" class="img-fluid category_img"></img>');
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"></img>');
                     modal.find('#image-upload-edit').val('');
 
-                    if(data.status == 'S'){
+                    if (data.status == 'S') {
                         modal.find('#edit-category-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-category').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-category-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-category').html('Inactivo');
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -2663,13 +2659,13 @@ $(function(){
 
         /* ----------- DELETE ---------------*/
 
-        $('.main-content').on('click', '.deleteCategory-btn', function(){
+        $('.main-content').on('click', '.deleteCategory-btn', function () {
             var button = $(this)
             var url = button.data('url')
             var place = button.data('place')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         method: 'POST',
                         url: url,
@@ -2677,20 +2673,20 @@ $(function(){
                             place: place
                         },
                         dataType: 'JSON',
-                        success: function(result){
+                        success: function (result) {
                             window.location.href = result.route
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -2704,26 +2700,25 @@ $(function(){
 
         var freeCourseImageRegister = $('input[type="file"][name="courseImageRegister"]');
         freeCourseImageRegister.val('');
-        freeCourseImageRegister.on("change", function(){
+        freeCourseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#registerFreeCourseForm').find('.img-holder');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader)!= 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid freecourse_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid freecourse_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).empty();
                 freeCourseImageRegister.val('')
                 Toast.fire({
@@ -2733,16 +2728,16 @@ $(function(){
             }
         })
 
-        $('#register-course-status-checkbox').change(function(){
+        $('#register-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-register-description-course');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
 
-        $('#registerFreeCourseForm button[type=submit]').click(function(){
+        $('#registerFreeCourseForm button[type=submit]').click(function () {
             $('button[type=submit]', $(this).parents('form')).removeAttr('clicked').removeAttr('name')
             $(this).attr('clicked', 'true').attr('name', 'verifybtn')
         })
@@ -2760,7 +2755,7 @@ $(function(){
                     required: true,
                 },
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
@@ -2768,7 +2763,7 @@ $(function(){
                 var loadSpinner = button.find('.loadSpinner')
                 var modal = $('#RegisterfreeCourseModal')
                 var img_holder = form.find('.img-holder')
-                
+
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
@@ -2778,20 +2773,20 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         registerFreeCourseForm.resetForm()
 
-                        if(data.show == true){
+                        if (data.show == true) {
 
                             window.location.href = data.route
                         }
-                        else{
+                        else {
                             var boxCategory = $('#categorybox-show')
                             boxCategory.html(data.html)
-    
+
                             $(img_holder).empty()
-    
+
                             freeCoursesCatShowTable.draw()
                             form.trigger('reset')
                             freeCourseImageRegister.val('')
@@ -2803,14 +2798,14 @@ $(function(){
                             })
                         }
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('#btn-register-freecourse-modal').on('click', function(){
+        $('#btn-register-freecourse-modal').on('click', function () {
             var button = $(this)
             var modal = $('#RegisterfreeCourseModal')
             var loadSpinner = button.find('.loadSpinner')
@@ -2825,48 +2820,46 @@ $(function(){
 
     }
 
-        // -------- FREE COURSE SHOW ---------
+    // -------- FREE COURSE SHOW ---------
 
-    if($('#course-box-container').length)
-    {
+    if ($('#course-box-container').length) {
 
         /* --------- EDIT --------------*/
 
-        $('#edit-course-status-checkbox').change(function(){
+        $('#edit-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-course');
-            if(this.checked){
+            if (this.checked) {
                 txtDesc.html('Activo');
-            }else{
+            } else {
                 txtDesc.html('Inactivo')
             }
         });
 
         var freeCourseImageEdit = $('input[type="file"][name="courseImageEdit"]');
         freeCourseImageEdit.val('');
-        freeCourseImageEdit.on("change", function(){
+        freeCourseImageEdit.on("change", function () {
             $('#editFreeCourseForm').validate()
-            $('#image-upload-freecourse-edit').rules('add', {required: true})
+            $('#image-upload-freecourse-edit').rules('add', { required: true })
 
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#editFreeCourseForm').find('.img-holder');
             var currentImagePath = $(this).data('value');
-            var img_extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-            if(img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png')
-            {
-                if(typeof(FileReader) != 'undefined'){
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
                     img_holder.empty()
                     var reader = new FileReader();
-                    reader.onload = function(e){
-                        $('<img/>', {'src':e.target.result,'class':'img-fluid course_img'}).
-                        appendTo(img_holder);
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid course_img' }).
+                            appendTo(img_holder);
                     }
                     img_holder.show();
                     reader.readAsDataURL($(this)[0].files[0]);
-                }else{
+                } else {
                     $(img_holder).html('Este navegador no soporta Lector de Archivos');
                 }
-            }else{
+            } else {
                 $(img_holder).html(currentImagePath);
                 freeCourseImageEdit.val('')
                 Toast.fire({
@@ -2887,14 +2880,14 @@ $(function(){
                     maxlength: 255
                 },
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#editFreeCourseModal')
                 var img_holder = form.find('.img-holder')
-                
+
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
@@ -2904,7 +2897,7 @@ $(function(){
                     processData: false,
                     contentType: false,
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         editFreeCourseForm.resetForm()
 
@@ -2924,14 +2917,14 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('.main-content').on('click', '#freecourse-edit-btn', function(){
+        $('.main-content').on('click', '#freecourse-edit-btn', function () {
             var button = $(this)
             var getDataUrl = button.data('send')
             var modal = $('#editFreeCourseModal')
@@ -2943,32 +2936,32 @@ $(function(){
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('input[name=name]').val(data.description);
                     modal.find('input[name=subtitle]').val(data.subtitle);
-                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="'+data.url_img+'"></img>');
-                    modal.find('#image-upload-freecourse-edit').attr('data-value', '<img class="img-fluid course_img" id="image-course-edit" scr="'+data.url_img+'" >');
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#image-upload-freecourse-edit').attr('data-value', '<img class="img-fluid course_img" id="image-course-edit" scr="' + data.url_img + '" >');
                     modal.find('#image-upload-freecourse-edit').val('');
 
-                    if(data.status == 'S'){
+                    if (data.status == 'S') {
                         modal.find('#edit-course-status-checkbox').prop('checked', true);
                         $('#txt-edit-description-course').html('Activo');
-                    }else{
+                    } else {
                         modal.find('#edit-course-status-checkbox').prop('checked', false);
                         $('#txt-edit-description-course').html('Inactivo');
                     }
 
-                    if(data.recom == 1){
+                    if (data.recom == 1) {
                         modal.find('#edit-course-recom-checkbox').prop('checked', true);
-                    }else{
+                    } else {
                         modal.find('#edit-course-recom-checkbox').prop('checked', false);
                     }
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -2978,13 +2971,13 @@ $(function(){
 
         /* ----------- DELETE ---------------*/
 
-        $('.main-content').on('click', '.delete-course-btn', function(){
+        $('.main-content').on('click', '.delete-course-btn', function () {
             var button = $(this)
             var url = button.data('url')
             var type = button.data('type')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         method: 'POST',
                         url: url,
@@ -2992,20 +2985,20 @@ $(function(){
                             type: type
                         },
                         dataType: 'JSON',
-                        success: function(result){
+                        success: function (result) {
                             window.location.href = result.route
                         },
-                        error: function(result){
+                        error: function (result) {
                             Toast.fire({
                                 icon: 'error',
                                 title: '¡Ocurrió un error inesperado!',
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -3013,7 +3006,7 @@ $(function(){
 
         /* --------- SECTIONS ----------*/
 
-      
+
 
         /* ----------- SELECT -------------*/
 
@@ -3023,7 +3016,7 @@ $(function(){
 
         /* -------- UPDATE ORDER ----------*/
 
-        $('.main-content').on('change', '.order-section-select', function(){
+        $('.main-content').on('change', '.order-section-select', function () {
 
             var url = $(this).data('url')
             var value = $(this).val()
@@ -3038,7 +3031,7 @@ $(function(){
                     id: sectionActive
                 },
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
                     var sectionList = $('#sections-list-container')
                     sectionList.html(data.html)
                     $('.order-section-select').select2({
@@ -3049,7 +3042,7 @@ $(function(){
                         text: '¡Registro actualizado!',
                     });
                 },
-                error: function(result){
+                error: function (result) {
                     Toast.fire({
                         icon: 'error',
                         title: '¡Ocurrió un error inesperado!',
@@ -3068,14 +3061,14 @@ $(function(){
                     maxlength: 100
                 },
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#registerSectionModal')
                 var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
-                
+
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
@@ -3086,7 +3079,7 @@ $(function(){
                         id: sectionActive
                     },
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         registerSectionForm.resetForm()
 
@@ -3107,7 +3100,7 @@ $(function(){
                             text: '¡Registrado exitosamente!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
@@ -3132,14 +3125,14 @@ $(function(){
                     required: true
                 }
             },
-            submitHandler: function(form, event){
+            submitHandler: function (form, event) {
                 event.preventDefault()
 
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#editSectionModal')
                 var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
-                
+
                 loadSpinner.toggleClass('active')
 
                 $.ajax({
@@ -3150,17 +3143,17 @@ $(function(){
                         id: sectionActive
                     },
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         editSectionForm.resetForm()
 
                         var boxSections = $('#sections-list-container')
                         boxSections.html(data.htmlSection)
 
-                        if(data.active == data.id){
+                        if (data.active == data.id) {
                             var topTableInfo = $('#top-chapter-table-title-info')
                             topTableInfo.html('<span class="text-bold"> de: </span> \
-                                                <span class="title-chapter-top-table">'+data.title+'</span>')
+                                                <span class="title-chapter-top-table">'+ data.title + '</span>')
                         }
 
                         $('.order-section-select').select2({
@@ -3175,14 +3168,14 @@ $(function(){
                             text: '¡Registro actualizado!'
                         })
                     },
-                    error: function(data){
+                    error: function (data) {
                         console.log(data)
                     }
                 })
             }
         })
 
-        $('.main-content').on('click', '.section-edit-btn', function(){
+        $('.main-content').on('click', '.section-edit-btn', function () {
             var button = $(this)
             var getDataUrl = button.data('send')
             var url = button.data('url')
@@ -3200,20 +3193,20 @@ $(function(){
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     form.find('input[name=title]').val(data.title);
 
-                    $.each(data.sections, function(key, values){
-                        select.append('<option value="'+values.section_order+'">'+values.section_order+'</option>')
-                    }) 
-                    
+                    $.each(data.sections, function (key, values) {
+                        select.append('<option value="' + values.section_order + '">' + values.section_order + '</option>')
+                    })
+
                     select.val(data.order).change()
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
@@ -3222,15 +3215,15 @@ $(function(){
 
         /* -------- DELETE ----------*/
 
-        $('.main-content').on('click', '.delete-section-btn', function(){
+        $('.main-content').on('click', '.delete-section-btn', function () {
             var button = $(this)
             var url = button.data('url')
             var active = button.closest('.course-section-box').data('active')
 
             var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
 
-            SwalDelete.fire().then(function(e){
-                if(e.value === true){
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         method: 'POST',
                         url: url,
@@ -3239,15 +3232,15 @@ $(function(){
                             id: sectionActive
                         },
                         dataType: 'JSON',
-                        success: function(data){
+                        success: function (data) {
 
                             var courseBox = $('#course-box-container')
                             var sectionBox = $('#sections-list-container')
-                           
+
                             courseBox.html(data.htmlCourse)
                             sectionBox.html(data.htmlSection)
 
-                            if(data.is_active == 1){
+                            if (data.is_active == 1) {
                                 var chapterBox = $('#chapters-list-container')
                                 var topTableInfo = $('#top-chapter-table-title-info')
                                 chapterBox.html(data.htmlChapter)
@@ -3264,7 +3257,7 @@ $(function(){
                             })
 
                         },
-                        error: function(result){
+                        error: function (result) {
                             console.log(result)
                             Toast.fire({
                                 icon: 'error',
@@ -3272,10 +3265,10 @@ $(function(){
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
@@ -3286,7 +3279,7 @@ $(function(){
 
         /* ------- CHAPTERS TABLE ---------*/
 
-        function chapterTable(ele, lang, url){
+        function chapterTable(ele, lang, url) {
             var chaptersTable = ele.DataTable({
                 language: lang,
                 serverSide: true,
@@ -3297,14 +3290,14 @@ $(function(){
                         "type": "table"
                     }
                 },
-                order: [[3,'asc']],
-                columns:[
-                    {data: 'title', name:'title', className: 'text-bold'},
-                    {data: 'description', name:'description'},
-                    {data: 'duration', name:'duration'},
-                    {data: 'chapter_order', name:'chapter_order'},
-                    {data: 'view', name:'view', orderable: false, searchable: false, className: 'text-center'},
-                    {data: 'action', name:'action', orderable: false, searchable: false, className: 'action-with'},
+                order: [[3, 'asc']],
+                columns: [
+                    { data: 'title', name: 'title', className: 'text-bold' },
+                    { data: 'description', name: 'description' },
+                    { data: 'duration', name: 'duration' },
+                    { data: 'chapter_order', name: 'chapter_order' },
+                    { data: 'view', name: 'view', orderable: false, searchable: false, className: 'text-center' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, className: 'action-with' },
                 ],
                 dom: 'rtip'
             });
@@ -3313,13 +3306,13 @@ $(function(){
 
         /* ----- SET ACTIVE -----*/
 
-        $('.main-content').on('click', '.course-section-box .title-container', function(){
+        $('.main-content').on('click', '.course-section-box .title-container', function () {
             var sectionBox = $(this).closest('.course-section-box')
 
-            if(!sectionBox.hasClass('active')){
+            if (!sectionBox.hasClass('active')) {
 
                 sectionBox.addClass('active').attr('data-active', 'active')
-                sectionBox.siblings().removeClass('active').attr('data-active', '')   
+                sectionBox.siblings().removeClass('active').attr('data-active', '')
 
                 var url = sectionBox.data('table')
 
@@ -3330,20 +3323,20 @@ $(function(){
                         type: 'html'
                     },
                     dataType: 'JSON',
-                    success: function(data){
+                    success: function (data) {
 
                         var chaptersBox = $('#chapters-list-container')
                         var topTableInfo = $('#top-chapter-table-title-info')
 
                         topTableInfo.html('<span class="text-bold"> de: </span> \
-                                            <span class="title-chapter-top-table">'+data.title+'</span>')
+                                            <span class="title-chapter-top-table">'+ data.title + '</span>')
                         chaptersBox.html(data.html)
 
                         var chaptersTableEle = $('#freeCourses-chapters-table');
                         chapterTable(chaptersTableEle, DataTableEs, url);
 
                     },
-                    error: function(result){
+                    error: function (result) {
                         console.log(result)
                         Toast.fire({
                             icon: 'error',
@@ -3378,13 +3371,13 @@ $(function(){
 
         /*----- STORE DATA -------*/
 
-    
-        $('.main-content').on('click', '#btn-register-chapter-modal', function(){
+
+        $('.main-content').on('click', '#btn-register-chapter-modal', function () {
             var button = $(this)
             var url = button.data('url')
             var modal = $('#registerChapterModal')
 
-            if(!$('#input-chapter-video-container').hasClass('dz-clickable')){
+            if (!$('#input-chapter-video-container').hasClass('dz-clickable')) {
 
                 let chapterVideoInput = $("#input-chapter-video-container").dropzone({
                     url: url,
@@ -3397,13 +3390,13 @@ $(function(){
                     autoProcessQueue: false,
                     maxFiles: 1,
                     hiddenInputContainer: '#input-chapter-video-container',
-                    maxfilesexceeded: function(file) {
+                    maxfilesexceeded: function (file) {
                         this.removeAllFiles();
                         this.addFile(file);
                     },
-                    accept: function(file, done){
+                    accept: function (file, done) {
                         $('#registerChapterForm').find('.message-file-invalid').removeClass('show')
-                        if(!file.type.match('video/*')){
+                        if (!file.type.match('video/*')) {
                             Toast.fire({
                                 icon: 'warning',
                                 text: '¡Solo puedes subir videos!'
@@ -3411,7 +3404,7 @@ $(function(){
                             this.removeFile(file);
                             return false;
                         }
-                        if(file.size > 50*1024*1024){
+                        if (file.size > 50 * 1024 * 1024) {
                             Toast.fire({
                                 icon: 'warning',
                                 text: '¡Tu archivo pesa más de 50MB!'
@@ -3421,60 +3414,60 @@ $(function(){
                         }
                         return done();
                     },
-                    init: function() {
+                    init: function () {
                         var myDropzone = this;
 
-                        myDropzone.on("processing", function(file) {
+                        myDropzone.on("processing", function (file) {
                             this.options.url = $('#btn-register-chapter-modal').data('url');
                         });
-    
-                        $('#registerChapterForm').on('submit', function(e){
+
+                        $('#registerChapterForm').on('submit', function (e) {
                             e.preventDefault()
                             e.stopPropagation();
                             var messageInvalid = $(this).find('.message-file-invalid')
-    
-                            if(myDropzone.getQueuedFiles().length == 1){
+
+                            if (myDropzone.getQueuedFiles().length == 1) {
                                 messageInvalid.removeClass('show')
 
-                                if($('#registerChapterForm').valid()){
+                                if ($('#registerChapterForm').valid()) {
                                     myDropzone.processQueue();
                                 }
                             }
-                            else{
+                            else {
                                 myDropzone.removeAllFiles();
                                 messageInvalid.addClass('show')
                             }
-                            
+
                         })
                     },
-                    sending: function(file, xhr, formData){
-    
+                    sending: function (file, xhr, formData) {
+
                         let form = $('#registerChapterForm')
                         let title = form.find('input[name=title]').val()
                         let description = form.find('#description-text-area-register').val()
-    
+
                         let loadSpinner = form.find('.loadSpinner')
                         let sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
-    
+
                         formData.append('title', title)
                         formData.append('description', description)
                         formData.append('sectionActive', sectionActive)
-    
+
                         loadSpinner.toggleClass('active')
-    
+
                     },
-                    success: function(file, response){
-    
+                    success: function (file, response) {
+
                         let modal = $('#registerChapterModal')
                         let form = $('#registerChapterForm')
                         let loadSpinner = form.find('.loadSpinner')
-                        let urlTable = $('#section-box-'+response.id).data('table')
-    
+                        let urlTable = $('#section-box-' + response.id).data('table')
+
                         this.removeAllFiles();
                         registerChapterForm.resetForm()
                         form.trigger('reset')
-    
-                        var chaptersBox = $('#chapters-list-container') 
+
+                        var chaptersBox = $('#chapters-list-container')
                         var sectionsBox = $('#sections-list-container')
                         var courseBox = $('#course-box-container')
 
@@ -3488,16 +3481,16 @@ $(function(){
 
                         var chaptersTableEle = $('#freeCourses-chapters-table');
                         chapterTable(chaptersTableEle, DataTableEs, urlTable);
-    
+
                         loadSpinner.toggleClass('active')
                         modal.modal('toggle')
-    
+
                         Toast.fire({
                             icon: 'success',
                             text: '¡Registrado exitosamente!',
                         });
                     },
-                    error: function(file, response){
+                    error: function (file, response) {
                         console.log(response)
                     }
                 })
@@ -3527,7 +3520,7 @@ $(function(){
             },
         })
 
-        $('.main-content').on('click', '.editChapter', function(){
+        $('.main-content').on('click', '.editChapter', function () {
             var button = $(this)
             var modal = $('#editChapterModal')
             var getDataUrl = button.data('send')
@@ -3539,7 +3532,7 @@ $(function(){
             button.closest('tr').siblings().find('.editChapter').removeClass('active')
             button.addClass('active')
 
-            if(!$('#input-chapter-video-container-edit').hasClass('dz-clickable')){
+            if (!$('#input-chapter-video-container-edit').hasClass('dz-clickable')) {
 
                 let chapterVideoInputEdit = $("#input-chapter-video-container-edit").dropzone({
                     url: url,
@@ -3552,12 +3545,12 @@ $(function(){
                     autoProcessQueue: false,
                     maxFiles: 1,
                     hiddenInputContainer: '#input-chapter-video-container-edit',
-                    maxfilesexceeded: function(file) {
+                    maxfilesexceeded: function (file) {
                         this.removeAllFiles();
                         this.addFile(file);
                     },
-                    accept: function(file, done){
-                        if(!file.type.match('video/*')){
+                    accept: function (file, done) {
+                        if (!file.type.match('video/*')) {
                             Toast.fire({
                                 icon: 'warning',
                                 text: '¡Solo puedes subir videos!'
@@ -3565,7 +3558,7 @@ $(function(){
                             this.removeFile(file);
                             return false;
                         }
-                        if(file.size > 50*1024*1024){
+                        if (file.size > 50 * 1024 * 1024) {
                             Toast.fire({
                                 icon: 'warning',
                                 text: '¡Tu archivo pesa más de 50MB!'
@@ -3575,10 +3568,10 @@ $(function(){
                         }
                         return done();
                     },
-                    init: function() {
+                    init: function () {
                         var myDropzone = this;
-    
-                        $('#editChapterForm').on('submit', function(e){
+
+                        $('#editChapterForm').on('submit', function (e) {
                             e.preventDefault()
                             e.stopPropagation();
 
@@ -3586,27 +3579,27 @@ $(function(){
 
                             myDropzone.options.url = urlChanged;
 
-                            if($('#editChapterForm').valid()){
-    
-                                if(myDropzone.getQueuedFiles().length == 1){
+                            if ($('#editChapterForm').valid()) {
+
+                                if (myDropzone.getQueuedFiles().length == 1) {
                                     myDropzone.processQueue();
                                 }
-                                else{
+                                else {
                                     myDropzone.removeAllFiles();
                                     var form = $('#editChapterForm')
                                     let loadSpinner = form.find('.loadSpinner')
 
                                     loadSpinner.toggleClass('active')
-                
+
                                     $.ajax({
                                         method: form.attr('method'),
                                         url: urlChanged,
                                         data: form.serialize(),
                                         dataType: 'JSON',
-                                        success:function(data){
+                                        success: function (data) {
 
-                                            let urlTable = $('#section-box-'+data.id).data('table')
-                                            let chaptersBox = $('#chapters-list-container') 
+                                            let urlTable = $('#section-box-' + data.id).data('table')
+                                            let chaptersBox = $('#chapters-list-container')
                                             // let courseBox = $('#course-box-container')
                                             chaptersBox.html(data.htmlChapter)
                                             // courseBox.html(response.htmlCourse)
@@ -3624,35 +3617,35 @@ $(function(){
                                                 text: '¡Registro actualizado!'
                                             });
                                         },
-                                        error: function(data){
+                                        error: function (data) {
                                             console.log(data)
                                         }
                                     })
                                 }
                             }
-    
+
                         })
                     },
-                    sending: function(file, xhr, formData){
-                        
+                    sending: function (file, xhr, formData) {
+
                         let form = $('#editChapterForm')
                         let title = form.find('input[name=title]').val()
                         let description = form.find('#description-text-area-edit').val()
                         let order = form.find('#editOrderSelectChapter').val()
 
                         let loadSpinner = form.find('.loadSpinner')
-    
+
                         formData.append('title', title)
                         formData.append('description', description)
                         formData.append('order', order)
-    
+
                         loadSpinner.toggleClass('active')
                     },
-                    success: function(file, response){
+                    success: function (file, response) {
                         this.removeAllFiles();
                         let form = $('#editChapterForm')
-                        let urlTable = $('#section-box-'+response.id).data('table')
-                        let chaptersBox = $('#chapters-list-container') 
+                        let urlTable = $('#section-box-' + response.id).data('table')
+                        let chaptersBox = $('#chapters-list-container')
                         let courseBox = $('#course-box-container')
                         let loadSpinner = form.find('.loadSpinner')
 
@@ -3671,19 +3664,19 @@ $(function(){
                             text: '¡Registro actualizado!'
                         });
                     },
-                    error: function(file, response){
+                    error: function (file, response) {
                         console.log(response)
                     }
 
                 })
-    
+
             }
 
             $.ajax({
                 type: 'GET',
                 url: getDataUrl,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     var chapter = data.chapter
                     form.find('input[name=title]').val(chapter.title);
@@ -3696,28 +3689,28 @@ $(function(){
                         minimumResultsForSearch: -1
                     })
 
-                    $.each(data.chapters_list, function(key, values){
-                        select.append('<option value="'+values.chapter_order+'">'+values.chapter_order+'</option>')
-                    }) 
-                    
+                    $.each(data.chapters_list, function (key, values) {
+                        select.append('<option value="' + values.chapter_order + '">' + values.chapter_order + '</option>')
+                    })
+
                     select.val(chapter.chapter_order).change()
                 },
-                complete: function(data){
+                complete: function (data) {
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
-            
+
         })
 
 
         /* -------- PREVIEW VIDEO ---------*/
 
-        $('.main-content').on('click', '.preview-chapter-video-button', function(e){
+        $('.main-content').on('click', '.preview-chapter-video-button', function (e) {
             e.preventDefault();
-            
+
             var modal = $('#previewChapterModal')
             var url = $(this).data('url')
             var video_container = $('#video-chapter-container')
@@ -3727,37 +3720,37 @@ $(function(){
                 type: 'GET',
                 url: url,
                 dataType: 'JSON',
-                success: function(data){
+                success: function (data) {
 
                     modal.find('.title-preview-section').html(data.section)
                     modal.find('.title-preview-chapter').html(data.chapter)
 
                     var playerChapter = videojs('chapter-video', {
-                                        controls: true,
-                                        fluid: true,
-                                        playbackRates: [0.5, 1, 1.5, 2],
-                                        autoplay: false,
-                                        preload: 'auto'
-                                    });
+                        controls: true,
+                        fluid: true,
+                        playbackRates: [0.5, 1, 1.5, 2],
+                        autoplay: false,
+                        preload: 'auto'
+                    });
 
                     playerChapter.src(data.url_video);
 
                     modal.modal('toggle')
                 },
-                error: function(data){
+                error: function (data) {
                     console.log(data)
                 }
             })
 
         })
 
-        $('#previewChapterModal').on('hidden.bs.modal', function(){
+        $('#previewChapterModal').on('hidden.bs.modal', function () {
             videojs('chapter-video').dispose()
         })
 
         /* -------- DELETE ----------*/
 
-        $('.main-content').on('click', '.deleteChapter', function(){
+        $('.main-content').on('click', '.deleteChapter', function () {
             var button = $(this)
             var url = button.data('url')
 
@@ -3771,8 +3764,8 @@ $(function(){
                 confirmButtonText: 'Continuar y eliminar',
                 cancelButtonText: 'Cancelar',
                 reverseButtons: true,
-            }).then(function(e){
-                if(e.value === true){
+            }).then(function (e) {
+                if (e.value === true) {
                     $.ajax({
                         method: 'POST',
                         url: url,
@@ -3780,17 +3773,17 @@ $(function(){
                             id: sectionActive
                         },
                         dataType: 'JSON',
-                        success: function(data){
+                        success: function (data) {
 
                             var courseBox = $('#course-box-container')
                             var sectionBox = $('#sections-list-container')
-                            var chaptersBox = $('#chapters-list-container') 
-                           
+                            var chaptersBox = $('#chapters-list-container')
+
                             courseBox.html(data.htmlCourse)
                             sectionBox.html(data.htmlSection)
                             chaptersBox.html(data.htmlChapter)
 
-                            let urlTable = $('#section-box-'+data.id).data('table')
+                            let urlTable = $('#section-box-' + data.id).data('table')
                             var chaptersTableEle = $('#freeCourses-chapters-table');
                             chapterTable(chaptersTableEle, DataTableEs, urlTable);
 
@@ -3804,7 +3797,7 @@ $(function(){
                             })
 
                         },
-                        error: function(result){
+                        error: function (result) {
                             console.log(result)
                             Toast.fire({
                                 icon: 'error',
@@ -3812,15 +3805,15 @@ $(function(){
                             });
                         }
                     });
-                }else{
+                } else {
                     e.dismiss;
                 }
-            }, function(dismiss){
+            }, function (dismiss) {
                 return false;
             });
         })
     }
- 
+
 
 
 
@@ -3838,7 +3831,7 @@ $(function(){
 
 
     Dropzone.prototype.defaultOptions.dictDefaultMessage = "<i class='fa-solid fa-upload'></i> &nbsp; Selecciona o arrastra y suelta un video";
-                                                                //Tu navegador no soporta 
+    //Tu navegador no soporta 
     Dropzone.prototype.defaultOptions.dictFallbackMessage = "Your browser does not support drag'n'drop file uploads.";
     Dropzone.prototype.defaultOptions.dictFallbackText = "Please use the fallback form below to upload your files like in the olden days.";
     Dropzone.prototype.defaultOptions.dictFileTooBig = "El archivo es demasiado grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.";

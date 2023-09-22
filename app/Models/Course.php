@@ -10,7 +10,9 @@ use App\Models\{
     CourseCategory, 
     CourseSection,
     UserSurvey,
-    SectionChapter};
+    SectionChapter,
+    File
+};
 
 class Course extends Model
 {
@@ -44,6 +46,9 @@ class Course extends Model
         return $this->hasManyThrough(SectionChapter::class, CourseSection::class, 'course_id', 'section_id');
     }
 
-
+    public function image()
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
 }
 

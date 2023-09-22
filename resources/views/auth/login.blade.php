@@ -16,6 +16,13 @@
 		</div>
 
 		<div class="right-container container">
+
+			@if (session('error'))
+			<div class="alert alert-danger">
+					{{ session('error') }}
+			</div>
+			@endif
+			
 			<div class="right-form-container">
 
 				<div class="cont-txt-login d-flex">

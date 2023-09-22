@@ -2255,6 +2255,7 @@ fieldset .box-quiz-body .box-answers
 {
     padding: 15px;
     text-align: center;
+    max-width: 200px;
 }
 
 .files-container .file-box img

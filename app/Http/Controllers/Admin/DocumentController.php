@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use DataTables;
+use Yajra\DataTables\DataTables;
 use App\Models\{Folder, Document};
 
 class DocumentController extends Controller

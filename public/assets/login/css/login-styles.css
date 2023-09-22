@@ -140,8 +140,19 @@ a
   margin: 0 !important;
   padding: 50px !important;
   box-shadow: -10px 0px 40px rgba(0, 0, 0, 0.2);
-  overflow: auto;
+  overflow: visible;
+  z-index: 1;
+  position: relative;
 }
+
+.right-container
+.alert-danger
+{
+  position: absolute;
+  top: 0;
+  transform: translateY(-120%);
+}
+
 
 .right-container
 .right-form-container

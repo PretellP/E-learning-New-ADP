@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use DataTables;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Owenoj\LaravelGetId3\GetId3;
+use Yajra\DataTables\DataTables;
 
 use App\Models\{CourseCategory, Course, CourseSection, SectionChapter};
+
 
 class AdminFreeCoursesController extends Controller
 {

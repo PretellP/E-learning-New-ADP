@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DataTables;
-use Auth;
 use App\Models\{User, Company};
-
+use Yajra\DataTables\DataTables;
 
 class AdminCompaniesController extends Controller
 {
