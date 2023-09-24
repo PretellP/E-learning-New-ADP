@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Models\File;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 
-class FilesService
+class FileService
 {
-    public function store($model, $file_type, $category,  $file, $storage, $belongsTo)
+    public function store($model, $file_type, $category, $file, $storage, $belongsTo, $relation)
     {
         $directory = $this->makeDirectory($model, $file_type, $category, $belongsTo);
         $filename = $this->getFileName($directory, $file, $storage);
@@ -21,13 +22,19 @@ class FilesService
             "category" => $category,
         ]);
 
-        return $model->files()->save($stored_file);
+        if ($relation == 'one_one') {
+            return $model->file()->save($stored_file);
+        } elseif ($relation == 'one_many') {
+            return $model->files()->save($stored_file);
+        }
+
+        throw new Exception('No es posible completar la solicitud');
     }
 
-    public function destroy(File $file, $storage)
+    public function destroy($file = null, $storage)
     {
-        if($file){
-            if(Storage::disk($storage)->exists($file->file_path)){
+        if ($file) {
+            if (Storage::disk($storage)->exists($file->file_path)) {
                 Storage::disk($storage)->delete($file->file_path);
             }
             return $file->delete();
@@ -48,8 +55,8 @@ class FilesService
 
     private function getFileName($directory, $file, $storage)
     {
-        $filename = $file->getClientOriginalName();
-        $name_array = explode('.',$filename);
+        $filename = preg_replace('/\s+/', '-', $file->getClientOriginalName());
+        $name_array = explode('.', $filename);
         $origin_filename = $name_array[0];
         $extension = $name_array[1];
 
@@ -71,11 +78,10 @@ class FilesService
 
     public function download($file, $storage)
     {
-        if(Storage::disk($storage)->exists($file->file_path)){
+        if (Storage::disk($storage)->exists($file->file_path)) {
             return Storage::disk($storage)->download($file->file_path);
         }
 
         return false;
     }
-
 }

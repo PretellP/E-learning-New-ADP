@@ -16,7 +16,7 @@ class CreateCourseCategoriesTable extends Migration
         Schema::create('course_categories', function (Blueprint $table) {
             $table->id();
             $table->string('description', 100);
-            $table->string('url_img', 500);
+            $table->string('url_img', 500);  // ELIMINAR
             $table->string('status', 1);
             $table->timestamps();
         });

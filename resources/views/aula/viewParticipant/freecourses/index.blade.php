@@ -19,7 +19,7 @@
             @foreach ($categories as $category)
                 
                 <div class="category-card">
-                    <img src="{{asset('storage/'.$category->url_img)}}" alt="{{$category->description}}">
+                    <img src="{{verifyImage($category->file)}}" alt="{{$category->description}}">
                     <div class="category-title-container">
                         <div class="box-title">
                             <div class="upper-text">
@@ -55,7 +55,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset('storage/'.$pendingCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{verifyImage($pendingCourse->file)}}"
                         alt="{{$pendingCourse->description}}">
                 </div>
 
@@ -90,7 +90,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTime($pendingCourse)}}
+                            Duración: {{getFreeCourseTime($pendingCourse->course_chapters_sum_duration)}}
                         </div>
                     </div>
 
@@ -133,7 +133,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset('storage/'.$finishedCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{verifyImage($finishedCourse->file)}}"
                         alt="{{$finishedCourse->description}}">
                 </div>
 
@@ -169,7 +169,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTime($finishedCourse)}}
+                            Duración: {{getFreeCourseTime($finishedCourse->course_chapters_sum_duration)}}
                         </div>
                     </div>
 
@@ -211,7 +211,7 @@
 
             <div class="card course-card">
                 <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{asset('storage/'.$recomendedCourse->url_img)}}"
+                    <img class="card-img-top course-img" src="{{verifyImage($recomendedCourse->file)}}"
                         alt="{{$recomendedCourse->description}}">
                 </div>
 
@@ -247,7 +247,7 @@
                     <div class="course-info-box">
                         <div class="hours-box">
                             <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTime($recomendedCourse)}}
+                            Duración: {{getFreeCourseTime($recomendedCourse->course_chapters_sum_duration)}}
                         </div>
                     </div>
 

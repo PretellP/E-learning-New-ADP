@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Controllers\{
-    HomeController
-};
 use App\Http\Controllers\Admin\{
     AdminController,
     AdminCourseController,
     FolderController,
-    DocumentController,
     AdminAnnouncementsController,
     AdminCompaniesController,
     AdminEvaluationsController,
@@ -17,7 +13,6 @@ use App\Http\Controllers\Admin\{
     AdminUsersController,
     AdminOwnerCompaniesController,
     AdminMiningUnitsController,
-    FileController
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -39,7 +34,6 @@ use App\Http\Controllers\Aula\Instructor\{
 };
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 
 
 Route::get('/', function () {
@@ -242,48 +236,52 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
     // -------  RUTAS DE LA INTERFAZ AULA ---------------
 
-    Route::group(['middleware' => 'aula'], function () {
-        Route::get('/aula/inicio', [AulaHomeController::class, 'index'])->name('aula.index');
-        Route::get('/aula/perfil', [AulaProfileController::class, 'index'])->name('aula.profile.index');
-        Route::get('/aula/e-learning', [AulaCourseController::class, 'index'])->name('aula.course.index');
+    Route::group(['middleware' => 'aula', 'prefix' => 'aula'], function () {
+
+        Route::get('/inicio', [AulaHomeController::class, 'index'])->name('aula.index');
+        Route::get('/perfil', [AulaProfileController::class, 'index'])->name('aula.profile.index');
+
+        Route::get('/e-learning', [AulaCourseController::class, 'index'])->name('aula.course.index');
 
         Route::group(['middleware' => 'check.role:participants'], function () {
-            Route::get('/aula/e-learning/Alumno/{course}', [AulaCoursePartController::class, 'show'])->name('aula.course.participant.show');
-            Route::get('/aula/e-learning/Alumno/{course}/evaluaciones', [AulaEvaluationController::class, 'index'])->name('aula.course.evaluation.index');
-            Route::get('/aula/e-learning/Alumno/{certification}/pregunta/{num_question}', [QuizController::class, 'show'])->name('aula.course.quiz.show');
-            Route::get('/aula/e-learning/Alumno/{course}/curso-online', [AulaOnlineLessonController::class, 'index'])->name('aula.course.onlinelesson.index');
-            Route::get('/aula/e-learning/Alumno/clase-online/{event}', [AulaOnlineLessonController::class, 'show'])->name('aula.course.onlinelesson.show');
+
+            Route::get('/e-learning/Alumno/{course}', [AulaCoursePartController::class, 'show'])->name('aula.course.participant.show');
+            Route::get('/e-learning/Alumno/{course}/evaluaciones', [AulaEvaluationController::class, 'index'])->name('aula.course.evaluation.index');
+            Route::get('/e-learning/Alumno/{certification}/pregunta/{num_question}', [QuizController::class, 'show'])->name('aula.course.quiz.show');
+            Route::get('/e-learning/Alumno/{course}/curso-online', [AulaOnlineLessonController::class, 'index'])->name('aula.course.onlinelesson.index');
+            Route::get('/e-learning/Alumno/clase-online/{event}', [AulaOnlineLessonController::class, 'show'])->name('aula.course.onlinelesson.show');
 
 
-            Route::get('/aula/cursos-libres', [AulaFreeCourseController::class, 'index'])->name('aula.freecourse.index');
-            Route::get('/aula/cursos-libres/categoria/{category}', [AulaFreeCourseController::class, 'showCategory'])->name('aula.freecourse.showCategory');
-            Route::get('/aula/cursos-libres/curso/{course}/{current_chapter}', [AulaFreeCourseController::class, 'showChapter'])->name('aula.freecourse.showChapter');
-            Route::post('/aula/cursos-libres/iniciar/{course}', [AulaFreeCourseController::class, 'start'])->name('aula.freecourse.start');
-            Route::post('/aula/cursos-libres/AjaxSavetime/{current_chapter}', [AulaFreeCourseController::class, 'updateProgressTime'])->name('aula.freecourse.saveTime');
-            Route::patch('/aula/cursos-libres/actualizar/{current_chapter}/{new_chapter}/{course}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
+            Route::get('/cursos-libres', [AulaFreeCourseController::class, 'index'])->name('aula.freecourse.index');
+            Route::get('/cursos-libres/categoria/{category}', [AulaFreeCourseController::class, 'showCategory'])->name('aula.freecourse.showCategory');
+            Route::get('/cursos-libres/curso/{course}/{current_chapter}', [AulaFreeCourseController::class, 'showChapter'])->name('aula.freecourse.showChapter');
+            Route::post('/cursos-libres/iniciar/{course}', [AulaFreeCourseController::class, 'start'])->name('aula.freecourse.start');
+            Route::post('/cursos-libres/AjaxSavetime/{current_chapter}', [AulaFreeCourseController::class, 'updateProgressTime'])->name('aula.freecourse.saveTime');
+            Route::patch('/cursos-libres/actualizar/{current_chapter}/{new_chapter}/{course}', [AulaFreeCourseController::class, 'updateChapter'])->name('aula.freecourse.update');
 
 
-            Route::get('/aula/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');
+            Route::get('/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');
 
-            Route::get('/aula/encuestas', [AulaSurveysController::class, 'index'])->name('aula.surveys.index');
-            Route::get('/aula/encuesta/{user_survey}/{num_question}', [AulaSurveysController::class, 'show'])->name('aula.surveys.show');
-            Route::post('/aula/encuestas/iniciar/{userSurvey}', [AulaSurveysController::class, 'start'])->name('aula.surveys.start');
-            Route::patch('/aula/encuestas/actualizar/{user_survey}/{group_id}', [AulaSurveysController::class, 'update'])->name('aula.surveys.update');
+            Route::get('/encuestas', [AulaSurveysController::class, 'index'])->name('aula.surveys.index');
+            Route::get('/encuesta/{user_survey}/{num_question}', [AulaSurveysController::class, 'show'])->name('aula.surveys.show');
+            Route::post('/encuestas/iniciar/{userSurvey}', [AulaSurveysController::class, 'start'])->name('aula.surveys.start');
+            Route::patch('/encuestas/actualizar/{user_survey}/{group_id}', [AulaSurveysController::class, 'update'])->name('aula.surveys.update');
         });
 
         Route::group(['middleware' => 'check.role:instructor'], function () {
-            Route::get('/aula/e-learning/Instructor/{course}', [AulaCourseInstController::class, 'show'])->name('aula.course.instructor.show');
+            Route::get('/e-learning/Instructor/{course}', [AulaCourseInstController::class, 'show'])->name('aula.course.instructor.show');
         });
 
 
-        Route::get('/aula/e-learning/{course}/carpetas', [AulaFolderController::class, 'index'])->name('aula.course.folder.index');
-        Route::get('/aula/e-learning/{course}/carpeta/{folder}', [AulaFolderController::class, 'show'])->name('aula.course.folder.show');
+        Route::get('/e-learning/{course}/carpetas', [AulaFolderController::class, 'index'])->name('aula.course.folder.index');
+        Route::get('/e-learning/{course}/carpeta/{folder}', [AulaFolderController::class, 'show'])->name('aula.course.folder.show');
 
-        Route::get('/aula/e-learning/Carpeta/descargar/{file}', [AulaFolderController::class, 'downloadFile'])->name('aula.file.download');
+        Route::get('/e-learning/Carpeta/descargar/{file}', [AulaFolderController::class, 'downloadFile'])->name('aula.file.download');
 
-        Route::get('/aula/e-learning/ajax-certification/{certification}', [AulaEvaluationController::class, 'getAjaxCertification'])->name('aula.course.ajax.certification');
+        Route::get('/e-learning/ajax-certification/{certification}', [AulaEvaluationController::class, 'getAjaxCertification'])->name('aula.course.ajax.certification');
 
-        Route::post('/aula/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
-        Route::patch('/aula/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
+        Route::post('/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
+        Route::patch('/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
+
     });
 });

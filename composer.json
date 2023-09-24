@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.4",
         "owen-oj/laravel-getid3": "^2.2",
+        "staudenmeir/eloquent-has-many-deep": "1.14",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

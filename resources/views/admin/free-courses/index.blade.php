@@ -125,7 +125,7 @@
                         <div class="form-group col-md-12">
                             <label>Nombre *</label>
                             <div class="input-group">
-                                <input type="text" name="name" class="form-control name"
+                                <input type="text" name="description" class="form-control name"
                                         placeholder="Ingrese nombre de la categoría">
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                             <div>
                                 <div id="image-preview" class="image-preview">
                                     <label for="image-upload" id="image-label">Subir Imagen</label>
-                                    <input type="file" name="categoryImageRegister" id="image-upload-register">
+                                    <input type="file" name="image" id="input-category-image-register">
                                     <div class="img-holder">
 
                                     </div>
@@ -148,7 +148,7 @@
 
                     <div class="form-group">
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="categoryStatusCheckbox" id="register-category-status-checkbox"
+                            <input type="checkbox" name="status" id="register-category-status-checkbox"
                                 checked class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-register-description-category" class="custom-switch-description">Activo</span>
@@ -196,7 +196,7 @@
                         <div class="form-group col-md-12">
                             <label>Nombre *</label>
                             <div class="input-group">
-                                <input type="text" name="name" class="form-control name"
+                                <input type="text" name="description" class="form-control name"
                                         placeholder="Ingrese nombre de la categoría">
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                             <div>
                                 <div id="image-preview" class="image-preview">
                                     <label for="image-upload" id="image-label">Actualizar Imagen</label>
-                                    <input type="file" name="categoryImageEdit" id="image-upload-category-edit" data-value="">
+                                    <input type="file" name="image" id="image-upload-category-edit" data-value="">
                                     <div class="img-holder">
 
                                     </div>
@@ -219,7 +219,7 @@
 
                     <div class="form-group">
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="categoryStatusCheckbox" id="edit-category-status-checkbox"
+                            <input type="checkbox" name="status" id="edit-category-status-checkbox"
                                 checked class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-edit-description-category" class="custom-switch-description">Activo</span>

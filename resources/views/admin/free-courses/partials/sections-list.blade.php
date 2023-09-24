@@ -19,7 +19,7 @@
     <div class="chapters-count">
         <div class="little-text"> Capítulos: </div>
         <span class="text-bold">
-            {{$section->sectionChapters->count()}}
+            {{$section->section_chapters_count}}
         </span>
     </div>
     <div class="order-select-container">
@@ -42,7 +42,7 @@
                 data-url="{{route('admin.freeCourses.sections.update', $section)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
-            @if($section->sectionChapters->isEmpty())
+            @if($section->section_chapters_count == 0)
                 <span class="delete-btn delete-section-btn"
                         data-url="{{route('admin.freeCourses.sections.delete', $section)}}"> 
                     <i class="fa-solid fa-trash-can"></i> 

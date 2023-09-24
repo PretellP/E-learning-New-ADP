@@ -71,7 +71,7 @@
                         <div class="form-group col-md-12">
                             <label>Nombre *</label>
                             <div class="input-group">
-                                <input type="text" name="name" class="form-control dni"
+                                <input type="text" name="description" class="form-control dni"
                                         placeholder="Ingrese nombre del curso">
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                                       <i class="fas fa-clock"></i>
                                     </div>
                                   </div>
-                                <input name="timeStart" type="text" class="form-control timepicker">
+                                <input name="time_start" type="text" class="form-control timepicker">
                             </div>
                         </div>
 
@@ -118,7 +118,7 @@
                                       <i class="fas fa-clock"></i>
                                     </div>
                                   </div>
-                                <input name="timeEnd" type="text" class="form-control timepicker">
+                                <input name="time_end" type="text" class="form-control timepicker">
                             </div>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                             <div>
                                 <div id="image-preview" class="image-preview">
                                     <label for="image-upload" id="image-label">Subir Imagen</label>
-                                    <input type="file" name="courseImageRegister" id="image-upload-register">
+                                    <input type="file" name="image" id="course-image-register">
                                     <div class="img-holder">
 
                                     </div>
@@ -140,7 +140,7 @@
 
                     <div class="form-group">
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="courseStatusCheckbox" id="register-course-status-checkbox"
+                            <input type="checkbox" name="active" id="register-course-status-checkbox"
                                 checked class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-register-description-course" class="custom-switch-description">Activo</span>
@@ -188,7 +188,7 @@
                         <div class="form-group col-md-12">
                             <label>Nombre</label>
                             <div class="input-group">
-                                <input type="text" name="name" class="form-control dni"
+                                <input type="text" name="description" class="form-control dni"
                                         placeholder="Ingrese nombre del curso">
                             </div>
                         </div>
@@ -223,7 +223,7 @@
                                       <i class="fas fa-clock"></i>
                                     </div>
                                   </div>
-                                <input name="timeStart" type="text" class="form-control timepicker">
+                                <input name="time_start" type="text" class="form-control timepicker">
                             </div>
                         </div>
 
@@ -235,7 +235,7 @@
                                       <i class="fas fa-clock"></i>
                                     </div>
                                   </div>
-                                <input name="timeEnd" type="text" class="form-control timepicker">
+                                <input name="time_end" type="text" class="form-control timepicker">
                             </div>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
                             <div>
                                 <div id="image-preview" class="image-preview">
                                     <label for="image-upload" id="image-label">Subir Imagen</label>
-                                    <input type="file" name="courseImageEdit" id="image-upload-edit" data-value="">
+                                    <input type="file" name="image" id="input-course-image-update" data-value="">
                                     <div class="img-holder">
 
                                     </div>
@@ -257,7 +257,7 @@
 
                     <div class="form-group">
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="courseStatusCheckbox" id="edit-course-status-checkbox"
+                            <input type="checkbox" name="active" id="edit-course-status-checkbox"
                                 checked class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-edit-description-course" class="custom-switch-description">Activo</span>

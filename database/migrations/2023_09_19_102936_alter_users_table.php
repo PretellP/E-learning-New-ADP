@@ -13,7 +13,7 @@ class AlterUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {   // DESHACER MIGRACIÓN
             $table->string('url_img')->after('id')->nullable();
         });
     }

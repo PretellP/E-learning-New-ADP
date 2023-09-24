@@ -295,6 +295,7 @@ label.error
 .course_img
 {
     height: 100%;
+    object-fit: cover;
 }
 
 .content-course-btn

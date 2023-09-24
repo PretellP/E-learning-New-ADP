@@ -13,7 +13,7 @@ class CreateDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {    // ELIMINAR TABLA
             $table->id();
             $table->string('uuid');
             $table->string('name');

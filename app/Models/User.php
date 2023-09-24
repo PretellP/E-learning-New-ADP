@@ -87,4 +87,37 @@ class User extends Authenticatable
         return $this->hasMany(UserSurvey::class, 'user_id', 'id');
     }
 
+    public function getTranslatedRole()
+    {
+        switch($this->role){
+            case 'admin':
+                $role = 'Administrador';
+                break;
+            case 'super_admin':
+                $role = 'Super Admin';
+                break;
+            case 'security_manager':
+                $role = 'Ingeniero de seguridad';
+                break;
+            case 'security_manager_admin':
+                $role = 'Gerente de seguridad';
+                break;
+            case 'supervisor':
+                $role = 'Supervisor';
+                break;
+            case 'technical_support':
+                $role = 'Soporte técnico';
+                break;
+            case 'participants':
+                $role = 'Participante';
+                break;
+            case 'instructor':
+                $role = 'Instructor';
+                break;
+            default:
+                $role = '';
+        }
+        return $role;
+    }
+
 }

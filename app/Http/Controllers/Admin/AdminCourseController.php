@@ -3,96 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\Course\StoreCourseRequest;
 use Illuminate\Support\Facades\Storage;
-use Auth;
 use Carbon\Carbon;
-use App\Models\{Course, Folder};
-use Yajra\DataTables\DataTables;
+use App\Models\{Course};
+use App\Services\CourseService;
+use Exception;
 
 class AdminCourseController extends Controller
 {
+    private $courseService;
+
+    public function __construct(CourseService $service)
+    {
+        $this->courseService = $service;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $allCourses = DataTables::of(
-                Course::query()
-                    ->withCount([
-                        'folders',
-                        'exams',
-                    ])->where('course_type', 'REGULAR')
-            )
-                ->editColumn('description', function ($course) {
-                    return '<a href="' . route('admin.courses.show', $course) . '" class="content-course-btn">' . $course->description . '</a>';
-                })
-                ->editColumn('time_start', function ($course) {
-                    return (Carbon::parse($course->time_start))->format('g:i A');
-                })
-                ->editColumn('time_end', function ($course) {
-                    return (Carbon::parse($course->time_end))->format('g:i A');
-                })
-                ->editColumn('active', function ($course) {
-                    $status = $course->active == 'S' ? 'active' : 'inactive';
-                    $txtBtn = $status == 'active' ? 'Activo' : 'Inactivo';
-                    $statusBtn = '<span class="status ' . $status . '">' . $txtBtn . '</span>';
-
-                    return $statusBtn;
-                })
-                ->addColumn('action', function ($course) {
-                    $btn = '<button data-toggle="modal" data-id="' .
-                        $course->id . '" data-url="' . route('admin.courses.update', $course) . '" 
-                                            data-send="' . route('admin.courses.edit', $course) . '"
-                                            data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
-                                            editCourse"><i class="fa-solid fa-pen-to-square"></i></button>';
-                    if (
-                        $course->exams_count == 0 &&
-                        $course->folders_count == 0
-                    ) {
-                        $btn .= '<a href="javascript:void(0)" data-id="' .
-                            $course->id . '" data-original-title="delete"
-                                                data-url="' . route('admin.courses.delete', $course) . '" class="ms-3 edit btn btn-danger btn-sm
-                                                deleteCourse"><i class="fa-solid fa-trash-can"></i></a>';
-                    }
-
-                    return $btn;
-                })
-                ->rawColumns(['description', 'active', 'action'])
-                ->make(true);
-
-            return $allCourses;
+            return $this->courseService->getDataTable();
         }
         return view('admin.courses.index');
     }
 
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-        $status = $request['courseStatusCheckbox'] == 'on' ? 'S' : 'N';
-        $storeUrl = 'img/courses/default.jpg';
+        $storage = env('FILESYSTEM_DRIVER');
 
-        if ($request->hasFile('courseImageRegister')) {
-            $path = 'img/courses/';
-            $file = $request->file('courseImageRegister');
-            $uuid = $file->hashName();
-            $storeUrl = $path . $uuid;
-
-            Storage::putFileAs($path, $file, $uuid);
+        try{
+            $this->courseService->store($request, $storage);
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
         }
-
-        $timeStart = Carbon::parse(Carbon::createFromFormat('g:i A', $request['timeStart']))->format('h:i:s');
-        $timeEnd = Carbon::parse(Carbon::createFromFormat('g:i A', $request['timeEnd']))->format('h:i:s');
-
-        Course::create([
-            "course_type" => 'REGULAR',
-            "description" => $request['name'],
-            "subtitle" => $request['subtitle'],
-            "date" => $request['date'],
-            "hours" => $request['hours'],
-            "time_start" => $timeStart,
-            "time_end" => $timeEnd,
-            "url_img" => $storeUrl,
-            "active" => $status
-        ]);
 
         return response()->json([
             'success' => true
@@ -101,7 +45,9 @@ class AdminCourseController extends Controller
 
     public function edit(Course $course)
     {
-        $url_img = asset('storage/' . verifyImage($course->url_img));
+        $course->loadCourseImage();
+
+        $url_img = verifyImage($course->file);
 
         return response()->json([
             "id" => $course->id,
@@ -116,39 +62,16 @@ class AdminCourseController extends Controller
         ]);
     }
 
-    public function update(Request $request, Course $course)
+    public function update(CourseRequest $request, Course $course)
     {
-        $status = $request['courseStatusCheckbox'] == 'on' ? 'S' : 'N';
+        $course->loadCourseImage();
+        $storage = env('FILESYSTEM_DRIVER');
 
-        if ($request->hasFile('courseImageEdit')) {
-            $path = 'img/courses/';
-            $file_path = $course->url_img;
-            if ($course->url_img != null && Storage::exists($file_path)) {
-                Storage::delete($file_path);
-            }
-            $file = $request->file('courseImageEdit');
-            $uuid = $file->hashName();
-            $store_url = $path . $uuid;
-
-            Storage::putFileAs($path, $file, $uuid);
-            $url_img = $store_url;
-        } else {
-            $url_img = $course->url_img;
+        try{
+            $this->courseService->update($request, $storage, $course);
+        }catch (Exception $e) {
+            abort(500, $e->getMessage());
         }
-
-        $timeStart = Carbon::parse(Carbon::createFromFormat('g:i A', $request['timeStart']))->format('h:i:s');
-        $timeEnd = Carbon::parse(Carbon::createFromFormat('g:i A', $request['timeEnd']))->format('h:i:s');
-
-        $course->update([
-            "description" => $request['name'],
-            "subtitle" => $request['subtitle'],
-            "date" => $request['date'],
-            "hours" => $request['hours'],
-            "time_start" => $timeStart,
-            "time_end" => $timeEnd,
-            "url_img" => $url_img,
-            "active" => $status
-        ]);
 
         return response()->json([
             "success" => true
@@ -157,13 +80,14 @@ class AdminCourseController extends Controller
 
     public function destroy(Course $course)
     {
-        $img_path = $course->url_img;
+        $course->loadCourseImage();
+        $storage = env('FILESYSTEM_DRIVER');
 
-        if (basename($img_path) != 'default.jpg') {
-            Storage::delete($img_path);
+        try{
+            $this->courseService->destroy($storage, $course);
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
         }
-
-        $course->delete();
 
         return response()->json([
             "success" => true
@@ -172,7 +96,18 @@ class AdminCourseController extends Controller
 
     public function show(Course $course)
     {
-        $folders = $course->folders()->where('level', 1)->get();
+        $course->loadMissing(
+            [
+                'file' => fn ($query) =>
+                $query->where('file_type', 'imagenes')
+                    ->where('category', 'cursos'),
+
+                'folders' => fn ($query2) =>
+                $query2->where('level', 1)
+            ],
+        );
+
+        $folders = $course->folders;
 
         return view('admin.courses.show', [
             'course' => $course,

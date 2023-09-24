@@ -1,5 +1,5 @@
 <div class="img-course-container">
-    <img src="{{asset('storage/'.$course->url_img)}}">
+    <img src="{{verifyImage($course->file)}}">
 </div>
 <div class="info-course-general-container">
     <div class="info-name-course-container">
@@ -24,13 +24,13 @@
             <div class="sections-cont">
                 <span class="little-text">Secciones: </span>
                 <span class="text-bold">
-                    {{$course->courseSections->count()}} 
+                    {{$course->course_sections_count}} 
                 </span>
             </div>
             <div class="chapters-cont">
                 <span class="little-text">Capítulos: </span>
                 <span class="text-bold">
-                    {{getFreeCourseTotalChapters($course)}} 
+                    {{$course->course_chapters_count}} 
                 </span>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 Duración: 
             </span>
             <div class="text-no-wrap">
-                {{getFreeCourseTime($course)}} 
+                {{getFreeCourseTime($course->course_chapters_sum_duration)}} 
             </div>
         </div>
         <div class="status-icon-container">
@@ -66,7 +66,7 @@
             <span id="freecourse-edit-btn" class="edit-btn" data-send="{{route('admin.freecourse.getDatacourse', $course)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
-            @if($course->courseSections->isEmpty())
+            @if($course->course_sections_count == 0)
                 <span class="delete-btn delete-course-btn"
                         data-url="{{route('admin.freecourses.deleteCourse', $course)}}" data-type="soft"> 
                     <i class="fa-solid fa-trash-can"></i> 

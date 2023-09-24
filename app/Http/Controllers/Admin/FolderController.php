@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{FileRequest, FolderRequest};
-use App\Services\{FoldersService};
+use App\Services\{FolderService};
 use Exception;
 
 use App\Models\{Folder, Course, File};
@@ -13,7 +13,7 @@ class FolderController extends Controller
 {
     private $folderService;
 
-    public function __construct(FoldersService $service)
+    public function __construct(FolderService $service)
     {
         $this->folderService = $service;
     }
@@ -31,7 +31,7 @@ class FolderController extends Controller
 
     public function show(Folder $folder)
     {
-        $folder = $folder->loadMissing(['subfolders', 'course']);
+        $folder->loadMissing(['subfolders', 'course']);
         $course = $folder->course;
 
         $parent_folder_collection = $this->folderService->getParentFolders($folder->parent_folder_id, $folder->level);

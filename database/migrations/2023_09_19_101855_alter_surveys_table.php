@@ -13,7 +13,7 @@ class AlterSurveysTable extends Migration
      */
     public function up()
     {
-        Schema::table('surveys', function (Blueprint $table) {
+        Schema::table('surveys', function (Blueprint $table) {   // DESHACER MIGRACIÓN 
             $table->string('url_img')->after('destined_to')->nullable();
         });
     }

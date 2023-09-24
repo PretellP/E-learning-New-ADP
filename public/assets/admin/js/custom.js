@@ -1647,7 +1647,7 @@ $(function () {
 
         /* ----------- REGISTER --------------*/
 
-        var courseImageRegister = $('input[type="file"][name="courseImageRegister"]');
+        var courseImageRegister = $("#course-image-register");
         courseImageRegister.val('');
         courseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
@@ -1687,7 +1687,7 @@ $(function () {
 
         var registerCourseForm = $('#registerCourseForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 255
                 },
@@ -1702,10 +1702,10 @@ $(function () {
                     number: true,
                     step: 0.1
                 },
-                timeStart: {
+                time_start: {
                     required: true
                 },
-                timeEnd: {
+                time_end: {
                     required: true
                 }
             },
@@ -1734,7 +1734,7 @@ $(function () {
                         loadSpinner.toggleClass('active')
                         $(img_holder).empty()
                         modal.modal('toggle')
-                        form.find('input[name=name]').val('')
+                        form.find('input[name=description]').val('')
                         form.find('input[name=subtitle]').val('')
                         form.find('input[name=hours]').val('')
 
@@ -1762,7 +1762,7 @@ $(function () {
             }
         });
 
-        var inputCourseEdit = $('input[type="file"][name="courseImageEdit"]');
+        var inputCourseEdit = $('#input-course-image-update');
         inputCourseEdit.on("change", function () {
             var img_path = $(this)[0].value;
             var img_holder = $(this).closest('#editCourseForm').find('.img-holder');
@@ -1795,7 +1795,7 @@ $(function () {
 
         var editCourseForm = $('#editCourseForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 255
                 },
@@ -1810,10 +1810,10 @@ $(function () {
                     number: true,
                     step: 0.1
                 },
-                timeStart: {
+                time_start: {
                     required: true
                 },
-                timeEnd: {
+                time_end: {
                     required: true
                 }
             },
@@ -1873,15 +1873,15 @@ $(function () {
                 success: function (data) {
 
                     modal.find('input[name=id]').val(data.id);
-                    modal.find('input[name=name]').val(data.name);
+                    modal.find('input[name=description]').val(data.name);
                     modal.find('input[name=subtitle]').val(data.subtitle);
                     modal.find('input[name=date]').val(data.date);
                     modal.find('input[name=hours]').val(data.hours);
-                    modal.find('input[name=timeStart]').val(data.time_start);
-                    modal.find('input[name=timeEnd]').val(data.time_end);
+                    modal.find('input[name=time_start]').val(data.time_start);
+                    modal.find('input[name=time_end]').val(data.time_end);
                     modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="' + data.url_img + '"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid course_img"');
-                    modal.find('#image-upload-edit').val('');
+                    modal.find('#input-course-image-update').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid course_img"');
+                    modal.find('#input-course-image-update').val('');
 
                     if (data.status == 'S') {
                         modal.find('#edit-course-status-checkbox').prop('checked', true);
@@ -2060,7 +2060,7 @@ $(function () {
             }
         });
 
-        var categoryImageRegister = $('input[type="file"][name="categoryImageRegister"]');
+        var categoryImageRegister = $('#input-category-image-register');
         categoryImageRegister.val('');
         categoryImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
@@ -2093,11 +2093,11 @@ $(function () {
 
         var registerCategoryForm = $('#registerCategoryForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 100
                 },
-                categoryImageRegister: {
+                image: {
                     required: true
                 }
             },
@@ -2131,7 +2131,7 @@ $(function () {
 
                         $(img_holder).empty()
                         modal.modal('toggle')
-                        form.find('input[name=name]').val('')
+                        form.find('input[name=description]').val('')
                         Toast.fire({
                             icon: 'success',
                             text: '¡Registrado exitosamente!'
@@ -2159,7 +2159,7 @@ $(function () {
 
         var editCategoryForm = $('#editCategoryForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 100
                 }
@@ -2206,7 +2206,7 @@ $(function () {
             }
         })
 
-        var inputCategoryEdit = $('input[type="file"][name="categoryImageEdit"]');
+        var inputCategoryEdit = $('#image-upload-category-edit');
         inputCategoryEdit.on("change", function () {
             $('#editCategoryForm').validate()
             $('#image-upload-category-edit').rules('add', { required: true })
@@ -2261,10 +2261,10 @@ $(function () {
                 dataType: 'JSON',
                 success: function (data) {
 
-                    modal.find('input[name=name]').val(data.description);
+                    modal.find('input[name=description]').val(data.description);
                     modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="' + data.url_img + '"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"');
-                    modal.find('#image-upload-edit').val('');
+                    modal.find('#image-upload-category-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"');
+                    modal.find('#image-upload-category-edit').val('');
 
                     if (data.status == 'S') {
                         modal.find('#edit-category-status-checkbox').prop('checked', true);
@@ -2527,7 +2527,7 @@ $(function () {
 
         var editCategoryForm = $('#editCategoryForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 100
                 }
@@ -2579,7 +2579,7 @@ $(function () {
             }
         })
 
-        var inputCategoryEdit = $('input[type="file"][name="categoryImageEdit"]');
+        var inputCategoryEdit = $('#image-upload-category-edit');
         inputCategoryEdit.on("change", function () {
             $('#editCategoryForm').validate()
             $('#image-upload-category-edit').rules('add', { required: true })
@@ -2634,10 +2634,10 @@ $(function () {
                 dataType: 'JSON',
                 success: function (data) {
 
-                    modal.find('input[name=name]').val(data.description);
+                    modal.find('input[name=description]').val(data.description);
                     modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="' + data.url_img + '"></img>');
-                    modal.find('#image-upload-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"></img>');
-                    modal.find('#image-upload-edit').val('');
+                    modal.find('#image-upload-category-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"></img>');
+                    modal.find('#image-upload-category-edit').val('');
 
                     if (data.status == 'S') {
                         modal.find('#edit-category-status-checkbox').prop('checked', true);

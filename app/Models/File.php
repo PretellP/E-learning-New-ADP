@@ -12,7 +12,12 @@ class File extends Model
     protected $table = 'files';
 
     protected $fillable = [
-        'file_path', 'file_url', 'file_type', 'category', 'fileable_id', 'fileable_type',
+        'file_path',
+        'file_url',
+        'file_type', 
+        'category', 
+        'fileable_id', 
+        'fileable_type',
     ];
 
     public function fileable()

@@ -26,7 +26,7 @@ class CourseRequest extends FormRequest
         return [
             'description'   => ['required', 'max:255'],
             'subtitle'      => ['nullable', 'max:255'],
-            'date'          => ['required', 'date','date_format:Y-m-d'],
+            'date'          => ['required'],
             'hours'         => ['required', 'numeric', 'max:999.99', 'min:0.5'],
             'time_start'    => ['required'],
             'time_end'      => ['required'],

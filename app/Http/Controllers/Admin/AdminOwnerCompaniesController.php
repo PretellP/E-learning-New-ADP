@@ -4,40 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Auth;
-use App\Models\{User, OwnerCompany};
+use App\Models\{OwnerCompany};
+use App\Services\OwnerCompanyService;
 
 class AdminOwnerCompaniesController extends Controller
 {
+    private $ownerCompanyService;
+
+    public function __construct(OwnerCompanyService $service)
+    {
+        $this->ownerCompanyService = $service;
+    }
+
     public function index(Request $request)
     {
-        if($request->ajax()){
-            $allOwnerCompanies = DataTables::of(OwnerCompany::query()
-                                                ->withCount('exams'))
-                                ->addColumn('created_at', function($company){
-                                    return $company->created_at;
-                                })
-                                ->addColumn('action', function($company){
-                                    $btn = '<button data-toggle="modal" data-id="'.
-                                    $company->id.'" data-url="'.route('admin.ownerCompany.update', $company).'" 
-                                    data-send="'.route('admin.ownerCompany.edit', $company).'"
-                                    data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
-                                    editCompany"><i class="fa-solid fa-pen-to-square"></i></button>';
-                                    if($company->exams_count == 0)
-                                    {
-                                        $btn.= '<a href="javascript:void(0)" data-id="'.
-                                                $company->id.'" data-original-title="delete"
-                                                data-url="'.route('admin.ownerCompany.delete', $company).'" class="ms-3 edit btn btn-danger btn-sm
-                                                deleteCompany"><i class="fa-solid fa-trash-can"></i></a>';
-                                    }
-                                
-                                    return $btn;
-                                })
-                                ->rawColumns(['action'])
-                                ->make(true);
-
-            return $allOwnerCompanies;
+        if ($request->ajax()) {
+            return $this->ownerCompanyService->getDataTable();
         }
 
         return view('admin.ownerCompanies.index');
@@ -72,10 +54,9 @@ class AdminOwnerCompaniesController extends Controller
         $id = $request['id'];
         $company = OwnerCompany::where('name', $request['name'])->first();
 
-        if($company == null){
+        if ($company == null) {
             $valid = 'true';
-        }
-        elseif($company->id == $id){
+        } elseif ($company->id == $id) {
             $valid = 'true';
         }
 
@@ -92,7 +73,7 @@ class AdminOwnerCompaniesController extends Controller
     }
 
     public function destroy(OwnerCompany $company)
-    {   
+    {
         $company->delete();
 
         return response()->json([

@@ -9,7 +9,7 @@ use App\Models\{
     File,
     Folder
 };
-use App\Services\FoldersService;
+use App\Services\FolderService;
 
 class AulaFolderController extends Controller
 {
@@ -23,10 +23,10 @@ class AulaFolderController extends Controller
         ]);
     }
 
-    public function show(FoldersService $foldersService, Course $course, Folder $folder)
+    public function show(FolderService $folderService, Course $course, Folder $folder)
     {
-        $folder = $folder->loadMissing(['files', 'subfolders']);
-        $parentFoldersCollection = $foldersService->getParentFolders($folder->parent_folder_id, $folder->level);
+        $folder->loadMissing(['files', 'subfolders']);
+        $parentFoldersCollection = $folderService->getParentFolders($folder->parent_folder_id, $folder->level);
 
         return view('aula.common.courses.folders.show', [
             'folder' => $folder,
@@ -35,10 +35,10 @@ class AulaFolderController extends Controller
         ]);
     }
 
-    public function downloadFile(FoldersService $foldersService, File $file)
+    public function downloadFile(FolderService $folderService, File $file)
     {
         $storage = env('FILESYSTEM_DRIVER');
 
-        return $foldersService->downloadFile($file, $storage);
+        return $folderService->downloadFile($file, $storage);
     }
 }

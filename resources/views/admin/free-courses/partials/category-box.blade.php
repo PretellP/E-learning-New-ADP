@@ -1,5 +1,5 @@
 <div class="img-cat-container">
-    <img class="cat-img" src="{{asset('storage/'.$category->url_img)}}">
+    <img class="cat-img" src="{{verifyImage($category->file)}}">
 </div>
 <div class="info-cat-container">
     <div class="cat-description">
@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="action-box">
-    <div class="btn-action-container">
+    <div class="btn-action-container"> 
         <span class="edit-btn editCategory-btn"
             data-send="{{route('admin.freecourses.getDataCategory', $category)}}" 
             data-url="{{route('admin.freecourses.categoryUpdate', $category)}}"> 

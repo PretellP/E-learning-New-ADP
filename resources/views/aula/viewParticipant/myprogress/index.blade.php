@@ -20,26 +20,28 @@
 
         <div class="course-progress-container mb-6">
             @foreach ($courses as $course)
+
             @php
-            $current_course = $course->first()->event->exam->course;
+            $certifications = getProgressCertificationsFromCourse($course)
             @endphp
+
             <div class="course-box">
                 <div class="course-progress-innerbox">
                     <div class="course-progress-img">
-                        <img src="{{asset('storage/'.verifyImage($current_course->url_img))}}" alt="">
+                        <img src="{{verifyImage($course->file)}}" alt="">
                     </div>
                     <div class="course-progress-info">
                         <div class="title">
-                            {{$current_course->description}}
+                            {{$course->description}}
                         </div>
                         <a class="btn-start"
-                            href="{{route('aula.course.participant.show', ['course'=>$current_course])}}"
+                            href="{{route('aula.course.participant.show', $course)}}"
                             class="btn-start">
                             Ingresar
                         </a>
                         <div class="extra-info">
                             <i class="fa-regular fa-clock"></i> &nbsp;
-                            Duración: {{$current_course->hours}} hrs.
+                            Duración: {{$course->hours}} hrs.
                         </div>
                     </div>
 
@@ -47,24 +49,23 @@
 
                 <div class="progress-bar-line-box course-progress-assist">
                     <div class="info-progress-txt info-assist">
-                        Tienes {{$course->where('assist_user', 'S')->count()}} de {{$course->count()}} asistencias
+                        Tienes {{$certifications->where('assist_user', 'S')->count()}} de {{$certifications->count()}} asistencias
                     </div>
                     <div class="progress-line assist">
-                        @foreach ($course as $certification)
+                        @foreach ($certifications as $certification)
                         @if ($certification->assist_user == 'S')
                         <div class="progress-bar assist"></div>
                         @else
                         <div class="progress-bar no-assist"></div>
                         @endif
                         @endforeach
-
                     </div>
                 </div>
 
                 <div class="progress-bar-line-box course-progress-evaluations">
                     <div class="info-progress-txt info-evaluations">
                         @php
-                        $pe_count = $course->where('status', 'pending')->count();
+                        $pe_count = $certifications->where('status', 'pending')->count();
                         @endphp
                         Tienes <span> {{$pe_count}} </span>
                         @if ($pe_count == 1)
@@ -74,7 +75,7 @@
                         @endif
                     </div>
                     <div class="progress-line assist">
-                        @foreach ($course->sortBy('id') as $evaluation)
+                        @foreach ($certifications->sortBy('id') as $evaluation)
                         @if ($evaluation->status == 'finished')
                         <div class="progress-bar finished"></div>
                         @elseif($evaluation->status == 'pending')
@@ -83,13 +84,13 @@
                         @endforeach
                     </div>
                 </div>
-                <div id='chart-{{$current_course->id}}' class="course-progress-results"
-                    data-approved='{{$course->where('status', 'finished' )->where('score', '>=', 10)->count()}}'
-                    data-suspended='{{$course->where('status', 'finished')->where('score', '<', 10)->count()}}'>
+                <div id='chart-{{$course->id}}' class="course-progress-results"
+                    data-approved='{{$certifications->where('status', 'finished' )->where('score', '>=', 10)->count()}}'
+                    data-suspended='{{$certifications->where('status', 'finished')->where('score', '<', 10)->count()}}'>
                         <div class="progress-evaluation-title">Resultados</div>
                         <span class="progress-evaluation-subtitle">
                             @php
-                            $evaluations_count = $course->where('status', 'finished')->count();
+                            $evaluations_count = $certifications->where('status', 'finished')->count();
                             @endphp
                             @if ($evaluations_count == 1)
                             {{$evaluations_count}} Evaluación total
@@ -97,7 +98,7 @@
                             {{$evaluations_count}} Evaluaciones totales
                             @endif
                         </span>
-                        <canvas class="canva-progress" id="progress-chart-{{$current_course->id}}"></canvas>
+                        <canvas class="canva-progress" id="progress-chart-{{$course->id}}"></canvas>
                 </div>
             </div>
             @endforeach
@@ -112,37 +113,36 @@
         <div class="course-progress-container mb-6">
             @foreach ($freeCourses as $freeCourse)
             @php
-                $currentFreeCourse = $freeCourse->first()->courseSection->course;
-                $totalChapters = getFreeCourseTotalChapters($currentFreeCourse);
-                $completedChapters = getCompletedChapters($freeCourse);
+                $totalChapters = $freeCourse->course_chapters_count;
+                $completedChapters = getCompletedChapters($freeCourse->courseChapters);
             @endphp
             <div class="course-box">
                 <div class="course-progress-innerbox">
                     <div class="course-progress-img">
-                        <img src="{{asset('storage/'.$currentFreeCourse->url_img)}}" alt="">
+                        <img src="{{verifyImage($freeCourse->file)}}" alt="">
                     </div>
                     <div class="course-progress-info">
                         <div class="title">
-                            {{$currentFreeCourse->description}}
+                            {{$freeCourse->description}}
                         </div>
                         <a class="btn-start" href="" onclick="event.preventDefault();
                         document.getElementById('freecourse-start-form').submit();" class="btn-start">
                             Ingresar
                         </a>
-                        <form id='freecourse-start-form' method="POST" action="{{route('aula.freecourse.start', ["course" => $currentFreeCourse])}}#chapter-title-head"> 
-                            @csrf 
+                        <form id='freecourse-start-form' method="POST" action="{{route('aula.freecourse.start', ["course" => $freeCourse])}}"> 
+                            @csrf
                         </form>
                         <div class="extra-info">
                             <i class="fa-regular fa-clock"></i> &nbsp;
-                            Duración: {{getFreeCourseTime($currentFreeCourse)}}
+                            Duración: {{getFreeCourseTime($freeCourse->course_chapters_sum_duration)}}
                         </div>
                     </div>
                 </div>
 
                 <div class="freecourse-progress-results" >
-                    <div id='chart-{{$currentFreeCourse->id}}' class="freecourse-progress-chart-box" 
+                    <div id='chart-{{$freeCourse->id}}' class="freecourse-progress-chart-box" 
                         data-total='{{$totalChapters - $completedChapters}}' data-completed='{{$completedChapters}}'>
-                        <canvas class="freecourse-chart" id="freecourse-chart-{{$currentFreeCourse->id}}"></canvas>
+                        <canvas class="freecourse-chart" id="freecourse-chart-{{$freeCourse->id}}"></canvas>
                     </div>
                     <div class="freecourse-progress-percentage-box">
                         <div class="txt-perc-info">

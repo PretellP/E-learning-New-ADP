@@ -1,7 +1,7 @@
 @foreach ($categories as $category)
 <div class="category-box">
     <div class="img-cat-container">
-        <img class="cat-img" src="{{asset('storage/'.verifyImage($category->url_img))}}">
+        <img class="cat-img" src="{{verifyImage($category->file)}}">
     </div>
     <div class="info-cat-container">
         <div class="cat-description">
@@ -28,7 +28,6 @@
                 <i class="fa-solid fa-trash-can"></i>
             </span>
             @endif
-
         </div>
 
         <div class="btn-show">

@@ -106,7 +106,7 @@
             <div class="course-header">
                 
                 <div class="img-container">
-                    <img src="{{asset('storage/'.$course->url_img)}}" alt="{{$course->description}}">
+                    <img src="{{verifyImage($course->file)}}" alt="{{$course->description}}">
                 </div>
 
             </div>
@@ -121,7 +121,7 @@
                 $chapter_count = 1;
                 @endphp
 
-                @foreach ($sections as $key => $section)
+                @foreach ($sections as $section)
 
                 <div class="card section-accordion">
 
@@ -132,20 +132,14 @@
                             aria-controls="collapse-{{$section->id}}">
                             <div class="info-section-txt">
                                 <span>
-                                    {{$key+1}}. {{$section->title}}
+                                    {{$loop->iteration}}. {{$section->title}}
                                 </span>
                                 <i class="fa-solid fa-chevron-down"></i>
                             </div>
 
                             <div class="info-count">
-                                {{getNFinishedChapters($section, $allProgress)}}/{{count($section->sectionChapters)}}
-                                @php
-                                $section_duration = $section->sectionChapters
-                                                    ->sum(function($chapter){
-                                                        return $chapter->duration;
-                                                    })
-                                @endphp
-                                | {{$section_duration}} min
+                                {{getNFinishedChapters($section, $allProgress)}}/{{$section->section_chapters_count}}
+                                | {{$section->section_chapters_sum_duration}} min
                             </div>
                         </button>
 

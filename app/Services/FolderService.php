@@ -7,7 +7,7 @@ use Exception;
 use Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class FoldersService
+class FolderService
 {
 
     public function store($request, int $course_id)
@@ -130,24 +130,26 @@ class FoldersService
         $file_type = 'archivos';
         $category = 'cursos';
         $belongsTo = 'folder';
+        $relation = 'one_many';
 
-        return app(FilesService::class)->store(
+        return app(FileService::class)->store(
             $folder,
             $file_type,
             $category,
             $file,
             $storage,
-            $belongsTo
+            $belongsTo,
+            $relation
         );
     }
 
     public function destroyFile(File $file, $storage)
     {
-        return app(FilesService::class)->destroy($file, $storage);
+        return app(FileService::class)->destroy($file, $storage);
     }
 
     public function downloadFile(File $file, $storage)
     {
-        return app(FilesService::class)->download($file, $storage);
+        return app(FileService::class)->download($file, $storage);
     }
 }

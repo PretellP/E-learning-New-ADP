@@ -7,19 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     Folder,
     Exam,
-    CourseCategory, 
+    CourseCategory,
     CourseSection,
-    UserSurvey,
     SectionChapter,
-    File
+    File,
+    Certification
 };
 
 class Course extends Model
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     use HasFactory;
 
     protected $table = 'courses';
-    protected $guarded = [];
+    protected $fillable = [
+        'description',
+        'subtitle',
+        'date',
+        'hours',
+        'time_start',
+        'time_end',
+        'active',
+        'course_type',
+        'flg_public',
+        'flg_recom'
+    ];
 
     public function folders()
     {
@@ -46,9 +59,48 @@ class Course extends Model
         return $this->hasManyThrough(SectionChapter::class, CourseSection::class, 'course_id', 'section_id');
     }
 
-    public function image()
+    public function courseCertifications()
+    {
+        return $this->hasManyDeep(Certification::class, [Exam::class, Event::class])
+                    ->withIntermediate(Event::class, ['id','exam_id','user_id']);
+    }
+
+    public function file()
     {
         return $this->morphOne(File::class, 'fileable');
     }
-}
 
+    public function loadCourseImage()
+    {
+        return $this->loadMissing([
+            'file' => fn ($query) =>
+            $query->where('file_type', 'imagenes')
+                ->where('category', 'cursos')
+        ]);
+    }
+
+    public function loadFreeCourseImage()
+    {
+        return $this->loadMissing([
+            'file' => fn ($query2) =>
+            $query2->where('file_type', 'imagenes')
+                ->where('category', 'cursoslibres')
+        ]);
+    }
+
+    public function loadFreeCourseRelationships()
+    {
+        return $this->loadMissing(
+            [
+                'courseCategory',
+                'courseSections' => fn ($query) =>
+                $query->orderBy('section_order', 'ASC')
+                    ->withCount('sectionChapters'),
+                'file' => fn ($query2) =>
+                $query2->where('file_type', 'imagenes')
+                    ->where('category', 'cursoslibres')
+            ]
+        )->loadCount(['courseSections', 'courseChapters'])
+            ->loadSum('courseChapters', 'duration');
+    }
+}
