@@ -13,7 +13,7 @@ class AddForeignKeysToDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('documents', function (Blueprint $table) {
+        Schema::table('documents', function (Blueprint $table) { // ELIMINAR MIGRACIÓN
             $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');;
         });
     }

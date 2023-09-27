@@ -14,7 +14,7 @@ class AddForeignKeyToDynamicQuestionsTable extends Migration
     public function up()
     {
         Schema::table('dynamic_questions', function (Blueprint $table) {
-            $table->foreignId('question_type_id')->nullable()->constrained('question_types');
+            $table->foreignId('question_type_id')->nullable()->default('1')->constrained('question_types');
         });
     }
 

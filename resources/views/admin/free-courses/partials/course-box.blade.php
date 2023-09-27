@@ -1,8 +1,8 @@
-<div class="img-course-container">
+<div class="img-element-container">
     <img src="{{verifyImage($course->file)}}">
 </div>
-<div class="info-course-general-container">
-    <div class="info-name-course-container">
+<div class="info-element-general-container">
+    <div class="info-name-element-container">
         <div class="name-info">
             {{$course->description}}
         </div>
@@ -36,7 +36,7 @@
         </div>
        
     </div>
-    <div class="course-status-cont">
+    <div class="element-status-cont">
         <div class="duration-cont">
             <span class="little-text">
                 Duración: 
@@ -61,7 +61,7 @@
         </div>
         
     </div>
-    <div class="action-box course-box">
+    <div class="action-box info-element-box">
         <div class="btn-action-container">
             <span id="freecourse-edit-btn" class="edit-btn" data-send="{{route('admin.freecourse.getDatacourse', $course)}}">
                 <i class="fa-solid fa-pen-to-square"></i>

@@ -189,8 +189,6 @@ class AdminFreeCoursesController extends Controller
         }
     }
 
-
-
     // ------- CATEGORIES INDEX ----------
 
 

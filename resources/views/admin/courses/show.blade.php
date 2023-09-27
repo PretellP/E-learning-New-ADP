@@ -21,7 +21,7 @@
 
             <div class="info-course-container">
 
-                <h5 class="title-course-show">Información General: </h5>
+                <h5 class="title-header-show">Información General: </h5>
 
                 <div class="mt-4">
 
@@ -77,7 +77,7 @@
 
             <div class="info-content-course-container ">
 
-                <h5 class="title-course-show">Contenido: </h5>
+                <h5 class="title-header-show">Contenido: </h5>
 
                 <div class="mt-4">
                     <div class="page-body">

@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         // DB::table('evaluations')
         //     ->where('is_correct', 1)
         //     ->update([
-        //         "points" => 1
+        //         "points" => 2
         //     ]);
     }
 }

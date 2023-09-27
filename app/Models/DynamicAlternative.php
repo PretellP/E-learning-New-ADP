@@ -11,7 +11,11 @@ class DynamicAlternative extends Model
     use HasFactory;
 
     protected $table = 'dynamic_alternatives';
-    protected $guarded = [];
+    protected $fillable = [
+        'description',
+        'is_correct',
+        'dynamic_question_id'
+    ];
 
 
     public function question()

@@ -15,7 +15,12 @@ class DynamicQuestion extends Model
     use HasFactory;
    
     protected $table = 'dynamic_questions';
-    protected $guarded = [];
+    protected $fillable = [
+        'statement',
+        'points',
+        'exam_id',
+        'question_type_id'
+    ];
 
 
     public function exam()

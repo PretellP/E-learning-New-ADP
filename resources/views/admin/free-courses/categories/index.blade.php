@@ -15,7 +15,7 @@
 
         <div class="card-body card z-index-2 principal-container">
 
-            <h5 class="title-course-show">
+            <h5 class="title-header-show">
                 <i class="fa-solid fa-chevron-left fa-xs"></i>
                 <a href="{{route('admin.freeCourses.index')}}"> 
                     Inicio
@@ -28,7 +28,7 @@
 
             </div>
 
-            <h5 class="title-course-show mb-4">
+            <h5 class="title-header-show mb-4">
                 Cursos de:
                 <span id="description-span" class="to-capitalize">
                     {{mb_strtolower($category->description, 'UTF-8')}}

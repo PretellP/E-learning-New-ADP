@@ -98,15 +98,15 @@ class QuizController extends Controller
                 {
                     if ($i > 0)
                     {
-                        $alt_ids = $alt_ids.",";
+                        $alt_ids.= ",";
                     }
 
-                    $alt_ids = $alt_ids.$alternative->id;
+                    $alt_ids.= $alternative->id;
                 }
 
                 if($question->question_type_id == 5)
                 {
-                    $alt_ids = $alt_ids.":";
+                    $alt_ids.= ":";
 
                     $droppable_options = (getDroppableOptionsFromQuestion($question))->shuffle();
 

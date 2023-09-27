@@ -1,6 +1,7 @@
 
 <script src="{{asset('assets/common/modules/jquery.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script> --}}
+<script src="{{asset('assets/common/js/jquery.validator.js')}}"></script>
 <script src="{{asset('assets/common/modules/popper.js')}}"></script>
 <script src="{{asset('assets/common/modules/tooltip.js')}}"></script>
 <script src="{{asset('assets/common/modules/bootstrap/js/bootstrap.min.js')}}"></script>

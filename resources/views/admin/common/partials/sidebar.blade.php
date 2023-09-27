@@ -71,10 +71,10 @@
                 </a>
             </li>
 
-            <li class="{{setActive('admin.evaluations.*')}}">
-                <a href="{{route('admin.evaluations.index')}}" class="nav-link">
+            <li class="{{setActive('admin.exams.*')}}">
+                <a href="{{route('admin.exams.index')}}" class="nav-link">
                     <i class="fa-solid fa-file-signature"></i>
-                    <span>Evaluaciones</span>
+                    <span>Exámenes</span>
                 </a>
             </li>
 

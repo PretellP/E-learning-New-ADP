@@ -2018,6 +2018,9 @@ $(function () {
 
 
 
+
+
+
     /* ---- FREECOURSES INDEX  -----*/
 
     if ($('#freeCourses-table').length) {
@@ -2438,7 +2441,7 @@ $(function () {
                             form.trigger('reset')
                             freeCourseImageRegister.val('')
                             loadSpinner.toggleClass('active')
-                            modal.modal('toggle')
+                            modal.modal('hide')
                             Toast.fire({
                                 icon: 'success',
                                 text: '¡Registrado exitosamente!'
@@ -3821,6 +3824,791 @@ $(function () {
 
 
 
+    // -------- EXAMS  INDEX-----------------
+
+    if ($('#exams-table').length) {
+
+        /* ----- EXAMS TABLE ------*/
+
+        var examsTableEle = $('#exams-table');
+        var getDataUrl = examsTableEle.data('url');
+        var examsTable = examsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'title', name: 'title' },
+                { data: 'owner_company.name', name: 'ownerCompany.name' },
+                { data: 'course.description', name: 'course.description' },
+                { data: 'exam_time', name: 'exam_time' },
+                { data: 'active', name: 'active' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            // dom: 'rtip'
+        });
+
+
+        // ----- REGISTER ----------
+
+        $('#registerOwnerCompanySelect').select2({
+            dropdownParent: $("#RegisterExamModal"),
+            placeholder: 'Selecciona una empresa titular'
+        })
+
+        $('#registerCourseSelect').select2({
+            dropdownParent: $("#RegisterExamModal"),
+            placeholder: 'Selecciona un curso'
+        })
+
+        $('#register-exam-status-checkbox').change(function () {
+            var txtDesc = $('#txt-register-description-exam');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        $('#registerExamForm button[type=submit]').click(function () {
+            $('button[type=submit]', $(this).parents('form')).removeAttr('clicked').removeAttr('name')
+            $(this).attr('clicked', 'true').attr('name', 'verifybtn')
+        })
+
+        var registerExamForm = $('#registerExamForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 255
+                },
+                owner_company_id: {
+                    required: true
+                },
+                course_id: {
+                    required: true
+                },
+                exam_time: {
+                    required: true,
+                    number: true,
+                    step: 1,
+                    min: 1,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var modal = $('#RegisterExamModal')
+                var button = form.find('button[type=submit][clicked=true]')
+                var loadSpinner = button.find('.loadSpinner')
+                var coursesSelect = form.find('#registerOwnerCompanySelect')
+                var ownerCompaniesSelect = form.find('#registerCourseSelect')
+
+                modal.find('.btn-save').attr('disabled', 'disabled')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        registerExamForm.resetForm()
+
+                        form.trigger('reset');
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                        modal.find('.btn-save').removeAttr('disabled')
+
+                        coursesSelect.val('').change()
+                        ownerCompaniesSelect.val('').change()
+
+                        if (data.success) {
+
+                            if (data.show) {
+
+                                window.location.href = data.route
+
+                            } else {
+                                examsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registrado exitosamente!'
+                                })
+                            }
+
+                        } else {
+
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        // ------------- EDIT ---------------
+
+        $('#editOwnerCompanySelect').select2({
+            dropdownParent: $("#editExamModal"),
+            placeholder: 'Selecciona una empresa titular'
+        })
+
+        $('#editCourseSelect').select2({
+            dropdownParent: $("#editExamModal"),
+            placeholder: 'Selecciona un curso'
+        })
+
+        $('#edit-exam-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-description-exam');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editExamForm = $('#editExamForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 255
+                },
+                owner_company_id: {
+                    required: true
+                },
+                course_id: {
+                    required: true
+                },
+                exam_time: {
+                    required: true,
+                    number: true,
+                    step: 1,
+                    min: 1,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editExamModal')
+                modal.find('.btn-save').attr('disabled', 'disabled')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        editExamForm.resetForm()
+                        modal.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+
+                        if (data.success) {
+
+                            examsTable.draw()
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registro actualizado!'
+                            })
+
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('.main-content').on('click', '.editExam-btn', function () {
+
+            var modal = $('#editExamModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editExamForm')
+            var courseSelect = modal.find('#editCourseSelect')
+            var companySelect = modal.find('#editOwnerCompanySelect')
+
+            $('#editExamForm').validate()
+
+            editExamForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let exam = data.exam
+
+                    modal.find('input[name=title]').val(exam.title)
+                    modal.find('input[name=exam_time]').val(exam.exam_time)
+
+                    courseSelect.append('<option></option>')
+                    $.each(data.courses, function (key, values) {
+                        courseSelect.append('<option value="' + values.id + '">' + values.description + '</option>')
+                    })
+                    courseSelect.val(exam.course_id).change()
+
+                    companySelect.append('<option></option>')
+                    $.each(data.ownerCompanies, function (key, values) {
+                        companySelect.append('<option value="' + values.id + '">' + values.name + '</option>')
+                    })
+                    companySelect.val(exam.owner_company_id).change()
+
+                    if (exam.active == 'S') {
+                        modal.find('#edit-exam-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-exam').html('Activo');
+                    } else {
+                        modal.find('#edit-exam-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-exam').html('Inactivo');
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+
+        /* ----------- DELETE ---------------*/
+
+        $('.main-content').on('click', '.deleteExam-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                            if (result.success === true) {
+
+                                examsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message,
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+    }
+
+    // -------- EXAM SHOW ---------------
+
+    if ($('#questions-table').length) {
+
+
+
+        /* ----- QUESTIONs TABLE ------*/
+
+        var questionsTableEle = $('#questions-table');
+        var getDataUrl = questionsTableEle.data('url');
+        var questionsTable = questionsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'question_type.description', name: 'questionType.description' },
+                { data: 'statement', name: 'statement' },
+                { data: 'points', name: 'points' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+        });
+
+        // ------------- EDIT EXAM ---------------
+
+        $('#editOwnerCompanySelect').select2({
+            dropdownParent: $("#editExamModal"),
+            placeholder: 'Selecciona una empresa titular'
+        })
+
+        $('#editCourseSelect').select2({
+            dropdownParent: $("#editExamModal"),
+            placeholder: 'Selecciona un curso'
+        })
+
+        $('#edit-exam-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-description-exam');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editExamForm = $('#editExamForm').validate({
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 255
+                },
+                owner_company_id: {
+                    required: true
+                },
+                course_id: {
+                    required: true
+                },
+                exam_time: {
+                    required: true,
+                    number: true,
+                    step: 1,
+                    min: 1,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editExamModal')
+                modal.find('.btn-save').attr('disabled', 'disabled')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        editExamForm.resetForm()
+                        modal.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+
+                        if (data.success) {
+
+                            let data_show = data.data_show
+
+                            var exam_box = $('#exam-box-container')
+                            var title_cont = $('#exam-description-text-principal')
+                            exam_box.html(data_show.html)
+                            title_cont.html(data_show.title)
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registro actualizado!'
+                            })
+
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('.main-content').on('click', '#exam-edit-btn', function () {
+
+            var modal = $('#editExamModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editExamForm')
+            var courseSelect = modal.find('#editCourseSelect')
+            var companySelect = modal.find('#editOwnerCompanySelect')
+
+            $('#editExamForm').validate()
+
+            editExamForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let exam = data.exam
+
+                    modal.find('input[name=title]').val(exam.title)
+                    modal.find('input[name=exam_time]').val(exam.exam_time)
+
+                    courseSelect.append('<option></option>')
+                    $.each(data.courses, function (key, values) {
+                        courseSelect.append('<option value="' + values.id + '">' + values.description + '</option>')
+                    })
+                    courseSelect.val(exam.course_id).change()
+
+                    companySelect.append('<option></option>')
+                    $.each(data.ownerCompanies, function (key, values) {
+                        companySelect.append('<option value="' + values.id + '">' + values.name + '</option>')
+                    })
+                    companySelect.val(exam.owner_company_id).change()
+
+                    if (exam.active == 'S') {
+                        modal.find('#edit-exam-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-exam').html('Activo');
+                    } else {
+                        modal.find('#edit-exam-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-exam').html('Inactivo');
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+
+        /* ----------- DELETE EXAM ---------------*/
+
+        $('.main-content').on('click', '.delete-exam-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        data: {
+                            place: 'show'
+                        },
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                            if (result.success === true) {
+
+                                window.location.href = result.route
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message,
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+
+
+
+        /* ------------
+                        QUESTIONS  CREATE
+                                           --------------*/
+
+        /* ----------- GENERAL ------------ */
+
+        $('#registerQuestionTypeSelect').select2({
+            placeholder: 'Selecciona un tipo de enunciado'
+        })
+
+        $('.main-content').on('change', '#registerQuestionTypeSelect', function () {
+
+            var value = $(this).val()
+            var url = $(this).data('url')
+
+            $('#registerQuestionTypeSelect').select2({
+                placeholder: 'Selecciona un tipo de enunciado',
+                disabled: true
+            })
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                    value: value
+                },
+                dataType: 'JSON',
+                success: function (data) {
+
+                    if (data.success) {
+                        let questionBox = $('#question-type-container')
+                        questionBox.html(data.html)
+                    }
+                    else {
+                        Toast.fire({
+                            icon: 'error',
+                            text: data.message
+                        })
+                    }
+
+                },
+                complete: function (data) {
+                    $('#registerQuestionTypeSelect').select2({
+                        placeholder: 'Selecciona un tipo de enunciado',
+                        disabled: false
+                    })
+                },
+                error: function (data) {
+                    console.log(data)
+                    ToastError.fire()
+                }
+            })
+
+        })
+
+        function addAlternativeHtml(question_type, count) {
+            if (question_type == 1) {
+                return '<tr class="alternative-row"> \
+                            <td> \
+                                <div class="input-group"> \
+                                    <div class="input-group-prepend"> \
+                                        <div class="input-group-text text-bold alternative-number"> \
+                                            '+ (parseInt(count) + 1) + ' \
+                                        </div> \
+                                    </div> \
+                                    <input type="text" name="alternative[]" class="form-control alternative no-label-error" \
+                                        placeholder="Ingresa la alternativa"> \
+                                </div> \
+                            </td> \
+                            <td class="text-center flex-center"> \
+                                <label class="is_correct_button position-relative"> \
+                                    <input type="radio" name="is_correct" value="'+ count + '" class="selectgroup-input"> \
+                                    <span class="selectgroup-button selectgroup-button-icon is_correct_btn"> \
+                                        <i class="fa-solid fa-check"></i> \
+                                    </span> \
+                                </label> \
+                            </td> \
+                            <td class="text-center btn-action-container"> \
+                                <span class="delete-btn delete-alternative-btn"> \
+                                    <i class="fa-solid fa-trash-can"></i> \
+                                </span> \
+                            </td> \
+                        </tr>'
+            }
+            else {
+                return "";
+            }
+
+        }
+
+
+        // ---------------- AÑADIR ALTERNATIVA --------------
+
+        $('.main-content').on('click', '.add_alternative_button', function () {
+
+            /*--------------- QUESTION TYPE 1 ------------------*/
+
+            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
+                var type = $('input#typeQuestionValue').val()
+                var alternativesTable = $('#alternatives-table')
+
+                let count = alternativesTable.find('.alternative-row').length
+                alternativesTable.append(addAlternativeHtml(type, count))
+
+            }
+
+        })
+
+
+        // -------------- ELIMINAR ALTERNATIVA ----------------
+
+        $('.main-content').on('click', '.delete-alternative-btn', function () {
+
+            /*--------------- QUESTION TYPE 1 ------------------*/
+
+            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
+
+                let row = $(this).closest('tr.alternative-row')
+                row.remove()
+
+                $('tr.alternative-row').each(function (index) {
+                    $(this).find('.alternative-number').html(index + 1)
+                    $(this).find('input[name=is_correct]').val(index)
+                })
+            }
+        })
+
+
+        // -------------- CAMBIAR PREGUNTA CORRECTA ---------------
+
+        $('.main-content').on('change', '.alternative-row input[name=is_correct]', function () {
+
+            /*--------------- QUESTION TYPE 1 ------------------*/
+
+            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
+
+                let row = $(this).closest('tr.alternative-row')
+                row.find('.delete-btn').removeClass('delete-alternative-btn').addClass('disabled')
+                row.siblings().find('.delete-btn').removeClass('disabled').addClass('delete-alternative-btn')
+
+            }
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // ------------------ REGISTRAR -----------------------
+
+        var storeQuestions = $('#registerQuestionForm').validate({
+            rules: {
+                question_type_id: {
+                    required: true,
+                },
+                statement: {
+                    required: true,
+                    maxlength: 1000,
+                },
+                points: {
+                    required: true,
+                    number: true,
+                    step: 1,
+                    min: 1,
+                },
+                'alternative[]': {
+                    required: true,
+                    maxlength: 500,
+                },
+                is_correct: {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#registerQuestionModal')
+
+                modal.find('.btn-save').attr('disabled', 'disabled')
+
+                loadSpinner.toggleClass('active')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            let data_show = data.data_show
+                            let exam_box = $('#exam-box-container')
+                            let question_box = $('#question-type-container')
+
+                            exam_box.html(data_show.html)
+                            question_box.html(data_show.htmlQuestion)
+                            questionsTable.draw()
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registrado con éxito!'
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        storeQuestions.resetForm()
+                        modal.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3831,7 +4619,6 @@ $(function () {
 
 
     Dropzone.prototype.defaultOptions.dictDefaultMessage = "<i class='fa-solid fa-upload'></i> &nbsp; Selecciona o arrastra y suelta un video";
-    //Tu navegador no soporta 
     Dropzone.prototype.defaultOptions.dictFallbackMessage = "Your browser does not support drag'n'drop file uploads.";
     Dropzone.prototype.defaultOptions.dictFallbackText = "Please use the fallback form below to upload your files like in the olden days.";
     Dropzone.prototype.defaultOptions.dictFileTooBig = "El archivo es demasiado grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.";
@@ -3844,9 +4631,10 @@ $(function () {
 
 
     jQuery.extend(jQuery.validator.messages, {
-        required: '<i class="fa-solid fa-circle-exclamation fa-bounce"></i> &nbsp; Este campo es obligatorio',
+        required: '<i class="fa-solid fa-circle-exclamation"></i> &nbsp; Este campo es obligatorio',
         email: 'Ingrese un email válido',
         number: 'Por favor, ingresa un número válido',
+        min: jQuery.validator.format('Por favor, ingrese un valor mayor o igual a {0}'),
         step: jQuery.validator.format("Ingrese un número múltiplo de {0}"),
         maxlength: jQuery.validator.format("Ingrese menos de {0} caracteres.")
     });

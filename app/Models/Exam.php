@@ -15,7 +15,14 @@ class Exam extends Model
     use HasFactory;
 
     protected $table = 'exams';
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'exam_time',
+        'course_id',
+        'owner_company_id',
+        'active',
+        'exam_type'
+    ];
 
     public function questions()
     {
@@ -35,6 +42,13 @@ class Exam extends Model
     public function ownerCompany()
     {
         return $this->belongsTo(OwnerCompany::class, 'owner_company_id', 'id');
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load(['ownerCompany:id,name', 'course:id,description'])
+                    ->loadCount(['questions', 'events'])
+                    ->loadSum('questions', 'points');
     }
 
 }

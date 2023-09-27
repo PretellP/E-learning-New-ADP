@@ -14,7 +14,7 @@ class AlterCoursesTable extends Migration
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->string('course_type', 100)->nullable();
+            $table->string('course_type', 100)->default('REGULAR');
             $table->string('url_img', 500)->nullable(); // ELIMINAR
             $table->boolean('flg_recom')->after('active')->nullable();
         });

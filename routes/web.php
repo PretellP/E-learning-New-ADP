@@ -6,8 +6,9 @@ use App\Http\Controllers\Admin\{
     FolderController,
     AdminAnnouncementsController,
     AdminCompaniesController,
-    AdminEvaluationsController,
+    AdminDynamicQuestionsController,
     AdminEventsController,
+    AdminExamsController,
     AdminFreeCoursesController,
     AdminRoomsController,
     AdminUsersController,
@@ -165,9 +166,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
             });
 
         });
-
-        // --------- FILES ----------------
-
       
 
         // --------------- FREE COURSES -----------------
@@ -207,29 +205,39 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
 
 
+        Route::group(['prefix' => 'examenes'], function () {
+
+            Route::controller(AdminExamsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.exams.index');
+                Route::get('/editar/{exam}', 'edit')->name('admin.exams.edit');
+                Route::post('/registrar', 'store')->name('admin.exams.store');
+                Route::post('/actualizar/{exam}', 'update')->name('admin.exams.update');
+                Route::post('/eliminar/{exam}', 'destroy')->name('admin.exams.destroy');
+            });
+
+
+
+            Route::controller(AdminDynamicQuestionsController::class)->group(function () {
+
+                Route::get('/ver/{exam}', 'show')->name('admin.exams.showQuestions');
+                Route::get('/obtener-tipo-de-enunciado', 'getQuestionType')->name('admin.exams.questions.getType');
+                Route::post('/registrar-enunciado/{exam}', 'store')->name('admin.exams.questions.store');
+            });
+        });
+
         // --------------- EVALUATIONS -------------------
 
-        Route::get('/admin/evaluaciones', [AdminEvaluationsController::class, 'index'])->name('admin.evaluations.index');
+       
 
         // --------------- EVENTS ------------------------
 
-        Route::get('/admin/eventos', [AdminEventsController::class, 'index'])->name('admin.events.index');
+        Route::get('/eventos', [AdminEventsController::class, 'index'])->name('admin.events.index');
 
         // --------------- ANNOUNCEMENTS ----------------
 
-        Route::get('/admin/anuncios', [AdminAnnouncementsController::class, 'index'])->name('admin.announcements.index');
-
-
-        // ----- ALL COURSES VIEW LIST  ---------------------
-
-        // Route::get('/admin/Cursos/', [AdminCourseController::class, 'index'])->name('admin.course.index');
-
-        // ----- COURSE FOLDERS VIEWS-----------------------
-        // Route::get('/admin/Cursos/{course}', [AdminCourseController::class, 'show'])->name('admin.course.show');
-        // ------ folder view  ------------------------------
-
-
-
+        Route::get('/anuncios', [AdminAnnouncementsController::class, 'index'])->name('admin.announcements.index');
+        
 
     });
 

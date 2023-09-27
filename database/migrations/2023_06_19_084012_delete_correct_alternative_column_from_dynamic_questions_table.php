@@ -11,10 +11,10 @@ class DeleteCorrectAlternativeColumnFromDynamicQuestionsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up()  // ELIMINAR MIGRACIÓN
     {
-        Schema::table('dynamic_questions', function (Blueprint $table) {  // REVISAR - oruede que no funcione con 
-            $table->dropColumn('correct_alternative_id');                 // los quizz antiguos
+        Schema::table('dynamic_questions', function (Blueprint $table) {  // REVISAR - puede que no funcione con 
+            $table->dropColumn('correct_alternative_id');             // los quizz antiguos
         });
     }
 

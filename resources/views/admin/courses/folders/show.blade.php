@@ -26,7 +26,7 @@
 
             <div class="folder-action-container">
 
-                <h5 class="title-course-show">Carpeta:   <span> {{$folder->name}} </span> </h5>
+                <h5 class="title-header-show">Carpeta:   <span> {{$folder->name}} </span> </h5>
               
 
                 <div class="mt-4">
@@ -62,7 +62,7 @@
 
             <div class="folder-inner-container">
 
-                <h5 class="title-course-show mb-4"> Subcarpetas: </span> </h5>
+                <h5 class="title-header-show mb-4"> Subcarpetas: </span> </h5>
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -127,7 +127,7 @@
 
             <div class="folder-inner-container">
 
-                <h5 class="title-course-show mb-4"> Archivos: </span> </h5>
+                <h5 class="title-header-show mb-4"> Archivos: </span> </h5>
 
 
                 <div class="files-section-container">
