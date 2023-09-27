@@ -34,11 +34,11 @@
 
             <div class="principal-splitted-container mt-1 mb-2">
 
-                <div class="principal-inner-container">
+                <div class="principal-inner-container total-width">
 
                     <div class="inner-title-container">
                         <div id="" class="btn-dropdown-container show">
-                            <h5 class="title-header-show"> Creación de Enunciados </h5>
+                            <h5 class="title-header-show"> Creación de enunciados </h5>
                             <div class="btn-row-container">
                                 <div>
                                     <span class="text-dropdown-cont">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="related-dropdown-container total-width">
+                    <div class="related-dropdown-container">
 
                         <form id="registerQuestionForm" action="{{ route('admin.exams.questions.store', $exam) }}" method="POST">
                             @csrf
@@ -74,8 +74,6 @@
 
 
                             <div id="question-type-container">
-{{-- 
-                                @include('admin.exams.partials.questionTypes.unique_answer') --}}
 
                             </div>
 
@@ -93,12 +91,6 @@
             <h5 class="title-header-show mb-4">
                 Lista de enunciados:
             </h5>
-
-            {{-- <div class="mb-4">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#registerQuestionModal">
-                    <i class="fa-solid fa-square-plus"></i> &nbsp; Añadir enunciado
-                </button>
-            </div> --}}
 
             <table id="questions-table" class="table table-hover"
                 data-url="{{ route('admin.exams.showQuestions', $exam) }}">
@@ -207,77 +199,5 @@
         </div>
     </div>
 </div>
-
-{{-- <div class="modal fade" id="registerQuestionModal" tabindex="-1" aria-labelledby="registerQuestionModal"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="registerQuestionModalLabel">
-                    <div class="section-title mt-0">
-                        <i class="fa-solid fa-square-plus"></i> &nbsp;
-                        Registrar Enunciado
-                    </div>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <form action="{{ route('admin.exams.questions.store', $exam) }}" id="registerQuestionForm" method="POST">
-                @csrf
-
-                <div class="modal-body">
-
-                    <div class="form-row questionTypeSelect">
-                        <div class="form-group col-12">
-                            <label>Selecciona un tipo de enunciado *</label>
-                            <div class="input-group">
-                                <select name="question_type_id" class="form-control select2"
-                                    id="registerQuestionTypeSelect">
-                                    <option></option>
-                                    @foreach ($questionTypes as $questionType)
-                                    <option value="{{ $questionType->id }}"> {{ $questionType->description }} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <label>Ingresa el enunciado *</label>
-                            <input type="text" name="statement" class="form-control statement" placeholder="Enunciado">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label>Puntos *</label>
-                            <input type="number" name="points" class="form-control points"
-                                placeholder="Ingresa el puntaje del enunciado">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-save" value="index">
-                        Guardar
-                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-save" value="show">
-                        Guardar y ver
-                        &nbsp;
-                        <i class="fa-solid fa-caret-right"></i>
-                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
 
 @endsection

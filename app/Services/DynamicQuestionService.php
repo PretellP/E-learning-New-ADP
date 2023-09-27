@@ -56,6 +56,12 @@ class dynamicQuestionService
             case 1:
                 return view('admin.exams.partials.questionTypes.unique_answer', compact("questionType_id"))->render();
                 break;
+            case 2:
+                return view('admin.exams.partials.questionTypes.multiple_answer', compact('questionType_id'))->render();
+                break;
+            case 3:
+                return view('admin.exams.partials.questionTypes.true_false', compact('questionType_id'))->render();
+                break;
             default:
                 return '';
         }

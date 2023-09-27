@@ -4447,8 +4447,37 @@ $(function () {
                             </td> \
                         </tr>'
             }
+            else if (question_type == 2) {
+                return '<tr class="alternative-row"> \
+                            <td> \
+                                <div class="input-group"> \
+                                    <div class="input-group-prepend"> \
+                                        <div class="input-group-text text-bold alternative-number"> \
+                                            '+ (parseInt(count) + 1) + ' \
+                                        </div> \
+                                    </div> \
+                                    <input type="text" name="alternative[]" class="form-control alternative no-label-error" \
+                                        placeholder="Ingresa la alternativa"> \
+                                </div> \
+                            </td> \
+                            <td class="text-center flex-center"> \
+                                <div class="custom-checkbox custom-input-height flex-center"> \
+                                    <input type="checkbox" name="is_correct_'+ count + '" data-checkboxes="alternatives-multiple-checkbox" \
+                                        class="custom-control-input" id="checkbox-'+ count +'"> \
+                                    <label for="checkbox-'+ count +'" class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0"> \
+                                        <i class="fa-solid fa-check"></i> \
+                                    <label> \
+                                </div> \
+                            </td> \
+                            <td class="text-center btn-action-container"> \
+                                <span class="delete-btn delete-alternative-btn"> \
+                                    <i class="fa-solid fa-trash-can"></i> \
+                                </span> \
+                            </td> \
+                        </tr>'
+            }
             else {
-                return "";
+                return ""
             }
 
         }
@@ -4458,15 +4487,18 @@ $(function () {
 
         $('.main-content').on('click', '.add_alternative_button', function () {
 
-            /*--------------- QUESTION TYPE 1 ------------------*/
+            var questionType = $('input#typeQuestionValue').val()
 
-            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
+            /*--------------- QUESTION: RESPUESTA ÚNICA ------------------*/
+            /*--------------- QUESTION: RESPUESTA MÚLTIPLE ------------------*/
+
+            if (questionType == 1 || questionType == 2) {
+
                 var type = $('input#typeQuestionValue').val()
                 var alternativesTable = $('#alternatives-table')
 
                 let count = alternativesTable.find('.alternative-row').length
                 alternativesTable.append(addAlternativeHtml(type, count))
-
             }
 
         })
@@ -4476,16 +4508,30 @@ $(function () {
 
         $('.main-content').on('click', '.delete-alternative-btn', function () {
 
-            /*--------------- QUESTION TYPE 1 ------------------*/
+            var questionType = $('input#typeQuestionValue').val()
+            var row = $(this).closest('tr.alternative-row')
 
-            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
 
-                let row = $(this).closest('tr.alternative-row')
+            /*--------------- QUESTION: RESPUESTA ÚNICA  ------------------*/
+
+            if (questionType == 1) {
                 row.remove()
 
                 $('tr.alternative-row').each(function (index) {
                     $(this).find('.alternative-number').html(index + 1)
                     $(this).find('input[name=is_correct]').val(index)
+                })
+            }
+
+            /*--------------- QUESTION: RESPUESTA MÚLTIPLE  ------------------*/
+            
+            if (questionType == 2) {
+                row.remove()
+
+                $('tr.alternative-row').each(function (index) {
+                    $(this).find('.alternative-number').html(index + 1)
+                    $(this).find('input[type=checkbox]').attr('name', 'is_correct_'+index).attr('id', 'checkbox-'+index)
+                            .next('label').attr('for', 'checkbox-'+index)
                 })
             }
         })
@@ -4495,9 +4541,11 @@ $(function () {
 
         $('.main-content').on('change', '.alternative-row input[name=is_correct]', function () {
 
-            /*--------------- QUESTION TYPE 1 ------------------*/
+            var questionType = $('input#typeQuestionValue').val()
 
-            if ($('input#typeQuestionValue').length && $('input#typeQuestionValue').val() == 1) {
+            /*--------------- QUESTION: RESPUESTA ÚNICA ------------------*/
+
+            if (questionType == 1) {
 
                 let row = $(this).closest('tr.alternative-row')
                 row.find('.delete-btn').removeClass('delete-alternative-btn').addClass('disabled')
@@ -4506,13 +4554,6 @@ $(function () {
             }
 
         })
-
-
-
-
-
-
-
 
 
 
@@ -4549,9 +4590,8 @@ $(function () {
                 event.preventDefault()
                 var form = $(form)
                 var loadSpinner = form.find('.loadSpinner')
-                var modal = $('#registerQuestionModal')
 
-                modal.find('.btn-save').attr('disabled', 'disabled')
+                form.find('.btn-save').attr('disabled', 'disabled')
 
                 loadSpinner.toggleClass('active')
 
@@ -4586,7 +4626,7 @@ $(function () {
                     },
                     complete: function (data) {
                         storeQuestions.resetForm()
-                        modal.find('.btn-save').removeAttr('disabled')
+                        form.find('.btn-save').removeAttr('disabled')
                         loadSpinner.toggleClass('active')
                         modal.modal('hide')
                     },

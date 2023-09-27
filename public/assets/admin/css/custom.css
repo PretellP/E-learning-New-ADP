@@ -97,6 +97,21 @@ input.no-label-error ~ label.error
     display: none !important;
 }
 
+.margin-0
+{
+    margin: 0 !important;
+}
+
+.custom-input-height
+{
+    height: 42px !important;
+}
+
+.not-user-allowed
+{
+    pointer-events: none !important;
+}
+
 /* ------------ SELECT 2 ---------*/
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-results__option[aria-selected=true], .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -360,6 +375,11 @@ textarea.form-control
 
 /* ----------- DROPDOWN ---------------*/
 
+.total-width
+{
+    width: 100% !important;
+}
+
 
 .principal-splitted-container
 {
@@ -422,7 +442,7 @@ textarea.form-control
 .related-dropdown-container.total-width
 {
     width: 100vw;
-    max-width: 1000px;
+    max-width: 1200px;
 }
 
 
@@ -1409,6 +1429,7 @@ body.sidebar-mini .main-sidebar::after
     line-height: 25px;
     border-radius: 50%;
     padding: 0 !important;
+    margin: 0 !important;
 }
 
 .is_correct_button 
@@ -1421,6 +1442,22 @@ body.sidebar-mini .main-sidebar::after
 {
     font-size: 1.4em;
     line-height: 42px;
+}
+
+.custom-checkbox-question
+{
+    height: 30px;
+    width: 30px;
+    min-width: 0 !important;
+    padding: 0 !important;
+    line-height: 30px;
+    border-radius: 20%;
+}
+
+input[type=checkbox]:checked ~ label.custom-checkbox-question
+{
+    background-color: var(--first-color);
+    color: white;
 }
 
 
