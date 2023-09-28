@@ -60,8 +60,10 @@ class AdminDynamicQuestionsController extends Controller
         $html = '';
         $htmlQuestion = '';
 
+        $storage = env('FILESYSTEM_DRIVER');
+
         try {
-            $question = $this->dynamicQuestionService->store($request->all(), $exam);
+            $question = $this->dynamicQuestionService->store($request, $exam, $storage);
 
             $exam->loadRelationships();
             $html = view('admin.exams.partials.exam-box', compact('exam'))->render();

@@ -4,7 +4,7 @@
 
 <div class="form-row statement-points-group">
 
-    <div class="form-group col-10">
+    <div class="form-group col-9">
         <label>Enunciado *</label>
         <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado">
     </div>
@@ -18,14 +18,11 @@
 
 <hr>
 
-<div class="flex-between mb-3">
-    <h5 class="subtitle-header-show">
+<div class="mb-3">
+    <h5 class="subtitle-header-show mb-3">
         Alternativas:
     </h5>
 
-    <a href="javascript:void(0);" class="add_alternative_button">
-        <i class="fa-solid fa-square-plus"></i> &nbsp; Añadir alternativa
-    </a>
 </div>
 
 <table class="table table-hover table-sm">
@@ -34,7 +31,7 @@
         <tr>
             <th class="text-bold">Descripción</th>
             <th class="text-bold text-center stretch-width"> Alternativas correctas </th>
-            <th class="text-bold text-center stretch-width"> Acción </th>
+            <th class="text-bold text-center stretch-width"></th>
         </tr>
     </thead>
     <tbody id="alternatives-table">
@@ -71,6 +68,9 @@
 
 </table>
 
+<a href="javascript:void(0);" class="add_alternative_button add_custom_button mt-3">
+    <i class="fa-solid fa-plus fa-2xs"></i> &nbsp; Añadir alternativa
+</a>
 
 <hr>
 

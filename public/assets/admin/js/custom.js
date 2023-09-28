@@ -330,6 +330,50 @@ $(function () {
 
 
 
+    $.caretTo = function (el, index) {
+        if (el.createTextRange) {
+            var range = el.createTextRange();
+            range.move("character", index);
+            range.select();
+        } else if (el.selectionStart != null) {
+            el.focus();
+            el.setSelectionRange(index, index);
+        }
+    };
+
+    $.fn.caretTo = function (index, offset) {
+        return this.queue(function (next) {
+            if (isNaN(index)) {
+                var i = $(this).val().indexOf(index);
+
+                if (offset === true) {
+                    i += index.length;
+                } else if (offset) {
+                    i += offset;
+                }
+
+                $.caretTo(this, i);
+            } else {
+                $.caretTo(this, index);
+            }
+
+            next();
+        });
+    };
+
+    $.fn.caretToStart = function () {
+        return this.caretTo(0);
+    };
+
+    $.fn.caretToEnd = function () {
+        return this.queue(function (next) {
+            $.caretTo(this, $(this).val().length);
+            next();
+        });
+    };
+
+
+
 
 
 
@@ -4052,6 +4096,9 @@ $(function () {
             var courseSelect = modal.find('#editCourseSelect')
             var companySelect = modal.find('#editOwnerCompanySelect')
 
+            courseSelect.html('')
+            companySelect.html('')
+
             $('#editExamForm').validate()
 
             editExamForm.resetForm()
@@ -4148,7 +4195,6 @@ $(function () {
     // -------- EXAM SHOW ---------------
 
     if ($('#questions-table').length) {
-
 
 
         /* ----- QUESTIONs TABLE ------*/
@@ -4270,6 +4316,9 @@ $(function () {
             var form = modal.find('#editExamForm')
             var courseSelect = modal.find('#editCourseSelect')
             var companySelect = modal.find('#editOwnerCompanySelect')
+
+            courseSelect.html('')
+            companySelect.html('')
 
             $('#editExamForm').validate()
 
@@ -4463,11 +4512,70 @@ $(function () {
                             <td class="text-center flex-center"> \
                                 <div class="custom-checkbox custom-input-height flex-center"> \
                                     <input type="checkbox" name="is_correct_'+ count + '" data-checkboxes="alternatives-multiple-checkbox" \
-                                        class="custom-control-input" id="checkbox-'+ count +'"> \
-                                    <label for="checkbox-'+ count +'" class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0"> \
+                                        class="custom-control-input" id="checkbox-'+ count + '"> \
+                                    <label for="checkbox-'+ count + '" class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0"> \
                                         <i class="fa-solid fa-check"></i> \
                                     <label> \
                                 </div> \
+                            </td> \
+                            <td class="text-center btn-action-container"> \
+                                <span class="delete-btn delete-alternative-btn"> \
+                                    <i class="fa-solid fa-trash-can"></i> \
+                                </span> \
+                            </td> \
+                        </tr>'
+            }
+            else if (question_type == 4) {
+                return '<tr class="alternative-row"> \
+                            <td> \
+                                <div class="input-group"> \
+                                    <div class="input-group-prepend"> \
+                                        <div class="input-group-text text-bold alternative-number"> \
+                                        '+ (parseInt(count) + 1) + ' \
+                                        </div> \
+                                    </div> \
+                                    <input type="text" name="alternative[]" class="form-control alternative no-label-error" \
+                                        placeholder="Ingresa la(s) respuesta(s)"> \
+                                </div> \
+                            </td> \
+                            <td class="text-center btn-action-container"> \
+                                <span class="delete-btn delete-alternative-btn"> \
+                                    <i class="fa-solid fa-trash-can"></i> \
+                                </span> \
+                            </td> \
+                        </tr>'
+            }
+            else if (question_type == 5) {
+                return '<tr class="alternative-row"> \
+                            <td class="input-matching-column input-matching-column-width"> \
+                                <div class="input-group"> \
+                                    <div class="input-group-prepend"> \
+                                        <div class="input-group-text text-bold alternative-number"> \
+                                        '+ (parseInt(count) + 1) + ' \
+                                        </div> \
+                                    </div> \
+                                    <input type="text" name="alternative[]" class="form-control alternative no-label-error" \
+                                        placeholder="Ingresa la alternativa"> \
+                                    <span class="position-relative image-icon-alternative"> \
+                                        <label for="alternative-image-'+ count + '" class="margin-0"> \
+                                            <i class="fa-solid fa-image fa-xl"></i> \
+                                            <span class="inner-icon-context"> \
+                                                <i class="fa-solid fa-plus fa-xs"></i> \
+                                            </span> \
+                                        </label> \
+                                        <input type="file" name="image-'+ count + '" id="alternative-image-' + count + '" class="input-alternative-image" data-value=""> \
+                                    </span> \
+                                </div> \
+                                <div class="img-alternative-holder position-relative"> \
+                                </div> \
+                            </td> \
+                            <td class="text-center relation-icon-column"> \
+                                <span class="matching-relation-column"> \
+                                </span> \
+                            </td> \
+                            <td class="input-matching-column-width"> \
+                                <input type="text" name="droppable-option[]" class="form-control droppable no-label-error" \
+                                    placeholder="Ingresa la respuesta"> \
                             </td> \
                             <td class="text-center btn-action-container"> \
                                 <span class="delete-btn delete-alternative-btn"> \
@@ -4491,15 +4599,14 @@ $(function () {
 
             /*--------------- QUESTION: RESPUESTA ÚNICA ------------------*/
             /*--------------- QUESTION: RESPUESTA MÚLTIPLE ------------------*/
+            /*--------------- QUESTION: RELLAR ESPACIO EN BLANCO ------------------*/
+            /*--------------- QUESTION: RELACIONAR ------------------*/
 
-            if (questionType == 1 || questionType == 2) {
+            var type = $('input#typeQuestionValue').val()
+            var alternativesTable = $('#alternatives-table')
 
-                var type = $('input#typeQuestionValue').val()
-                var alternativesTable = $('#alternatives-table')
-
-                let count = alternativesTable.find('.alternative-row').length
-                alternativesTable.append(addAlternativeHtml(type, count))
-            }
+            let count = alternativesTable.find('.alternative-row').length
+            alternativesTable.append(addAlternativeHtml(type, count))
 
         })
 
@@ -4524,14 +4631,38 @@ $(function () {
             }
 
             /*--------------- QUESTION: RESPUESTA MÚLTIPLE  ------------------*/
-            
+
             if (questionType == 2) {
                 row.remove()
 
                 $('tr.alternative-row').each(function (index) {
                     $(this).find('.alternative-number').html(index + 1)
-                    $(this).find('input[type=checkbox]').attr('name', 'is_correct_'+index).attr('id', 'checkbox-'+index)
-                            .next('label').attr('for', 'checkbox-'+index)
+                    $(this).find('input[type=checkbox]').attr('name', 'is_correct_' + index).attr('id', 'checkbox-' + index)
+                        .next('label').attr('for', 'checkbox-' + index)
+                })
+            }
+
+            /*--------------- QUESTION: RELLENAR EL ESPACIO EN BLANCO  ------------------*/
+
+            if (questionType == 4) {
+                row.remove()
+
+                $('tr.alternative-row').each(function (index) {
+                    $(this).find('.alternative-number').html(index + 1)
+                })
+            }
+
+            /*--------------- QUESTION: RELACIONAR  ------------------*/
+
+            if (questionType == 5) {
+                row.remove()
+
+                $('tr.alternative-row').each(function (index) {
+                    $(this).find('.alternative-number').html(index + 1)
+                    $(this).find('.image-icon-alternative label').attr('for', 'alternative-image-' + index)
+                    $(this).find('input[type=file].input-alternative-image').attr('name', 'image-' + index)
+                        .attr('id', 'alternative-image-' + index)
+
                 })
             }
         })
@@ -4559,6 +4690,97 @@ $(function () {
 
 
 
+        // -------------- AÑADIR ESPACIO EN BLANCO ---------------
+
+        $('.main-content').on('click', '.add-blank-space-btn', function () {
+
+            var curPos = document.getElementById("statement-fill-blank").selectionStart;
+
+            var input = $('#statement-fill-blank')
+            let value = input.val();
+
+            if (value != '') {
+                input.val(value.slice(0, curPos) + ' ___________ ' + value.slice(curPos));
+                input.caretTo(curPos + 13);
+            }
+        })
+
+
+
+
+        // -------------- CARGAR IMAGEN ----------------
+
+        $('.main-content').on('change', 'input[type=file].input-alternative-image', function () {
+            var img_path = $(this).val();
+
+            if (img_path != '') {
+                var row = $(this).closest('.alternative-row')
+                var column = row.find('.input-matching-column')
+                var img_holder = row.find('.img-alternative-holder')
+
+                var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+                if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+
+                    if (typeof (FileReader) != 'undefined') {
+                        img_holder.empty()
+                        var reader = new FileReader()
+
+                        reader.onload = function (e) {
+                            $('<img/>', { 'src': e.target.result, 'class': 'img-fluid alternative_img' }).
+                                appendTo(img_holder);
+                        }
+
+                        img_holder.append('<span class="delete-image-alternative"> \
+                                            <i class="fa-regular fa-circle-xmark fa-lg"></i> \
+                                        </span>')
+
+                        reader.readAsDataURL($(this)[0].files[0])
+
+                        column.addClass('with-image')
+                        column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-arrows-rotate"></i>')
+
+                        img_holder.addClass('show')
+                    }
+                    else {
+                        img_holder.html('Este navegador no soporta Lector de Archivos');
+                    }
+                }
+                else {
+                    column.removeClass('with-image')
+                    column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
+                    img_holder.removeClass('show').empty()
+                    $(this).val('')
+
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '¡Selecciona una imagen!'
+                    });
+                }
+            }
+
+        })
+
+
+        // ------------ ELIMINAR IMAGEN ----------------
+
+        $('.main-content').on('click', '.delete-image-alternative', function () {
+
+            var row = $(this).closest('.alternative-row')
+            var column = row.find('.input-matching-column')
+            var img_input = row.find('input[type=file].input-alternative-image')
+            var img_holder = row.find('.img-alternative-holder')
+
+            column.removeClass('with-image')
+            column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
+            img_holder.removeClass('show').empty()
+            img_input.val('')
+
+        })
+
+
+
+
 
 
         // ------------------ REGISTRAR -----------------------
@@ -4582,6 +4804,10 @@ $(function () {
                     required: true,
                     maxlength: 500,
                 },
+                'droppable-option[]': {
+                    required: true,
+                    maxlength: 500,
+                },
                 is_correct: {
                     required: true
                 }
@@ -4595,10 +4821,14 @@ $(function () {
 
                 loadSpinner.toggleClass('active')
 
+                var formData = new FormData(form[0])
+
                 $.ajax({
                     method: form.attr('method'),
                     url: form.attr('action'),
-                    data: form.serialize(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     dataType: 'JSON',
                     success: function (data) {
 

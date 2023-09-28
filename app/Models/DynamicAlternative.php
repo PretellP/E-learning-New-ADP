@@ -25,6 +25,19 @@ class DynamicAlternative extends Model
 
     public function droppableOptions()
     {
-        return $this -> hasMany(DroppableOption::class, 'dynamic_alternative_id', 'id');
+        return $this -> hasOne(DroppableOption::class, 'dynamic_alternative_id', 'id');
+    }
+
+    public function file()
+    {
+        return $this -> morphOne(File::class, 'fileable');
+    }
+
+    public function loadImage()
+    {
+        return $this->load([
+            'file' => fn ($query) =>
+            $query->where('file_type', 'imagenes')
+        ]);
     }
 }

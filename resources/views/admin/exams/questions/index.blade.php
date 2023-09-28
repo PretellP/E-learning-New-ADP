@@ -39,6 +39,7 @@
                     <div class="inner-title-container">
                         <div id="" class="btn-dropdown-container show">
                             <h5 class="title-header-show"> Creación de enunciados </h5>
+                            
                             <div class="btn-row-container">
                                 <div>
                                     <span class="text-dropdown-cont">
@@ -52,7 +53,7 @@
 
                     <div class="related-dropdown-container">
 
-                        <form id="registerQuestionForm" action="{{ route('admin.exams.questions.store', $exam) }}" method="POST">
+                        <form id="registerQuestionForm" action="{{ route('admin.exams.questions.store', $exam) }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-row questionTypeSelect">

@@ -55,13 +55,14 @@ class dynamicQuestionService
         switch ($questionType_id) {
             case 1:
                 return view('admin.exams.partials.questionTypes.unique_answer', compact("questionType_id"))->render();
-                break;
             case 2:
                 return view('admin.exams.partials.questionTypes.multiple_answer', compact('questionType_id'))->render();
-                break;
             case 3:
                 return view('admin.exams.partials.questionTypes.true_false', compact('questionType_id'))->render();
-                break;
+            case 4:
+                return view('admin.exams.partials.questionTypes.fill_in_the_blank', compact('questionType_id'))->render();
+            case 5:
+                return view('admin.exams.partials.questionTypes.matching', compact('questionType_id'))->render();
             default:
                 return '';
         }
@@ -69,16 +70,16 @@ class dynamicQuestionService
         throw new Exception('No es posible completar la solicitud');
     }
 
-    public function store($request, Exam $exam)
+    public function store($request, Exam $exam, $storage)
     {
-        $question = DynamicQuestion::create($request + [
+        $question = DynamicQuestion::create($request->all() + [
             "exam_id" => $exam->id
         ]);
 
         if ($question) {
-            $isStored = app(dynamicAlternativeService::class)->store($request, $question);
+            $isStored = app(dynamicAlternativeService::class)->store($request, $question, $storage);
 
-            if($isStored){
+            if ($isStored) {
                 return $question;
             }
         }

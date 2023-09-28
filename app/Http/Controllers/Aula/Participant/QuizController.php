@@ -177,7 +177,7 @@ class QuizController extends Controller
 
                     $input_value = request('option-'.$droppable_option_id);
 
-                    if($i > 0 && $send_alt != "" && $input_value != "")
+                    if ($i > 0 && $send_alt != "" && $input_value != "")
                     {
                         $send_alt = $send_alt.",";
                     }

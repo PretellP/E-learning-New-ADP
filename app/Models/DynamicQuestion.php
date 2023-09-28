@@ -38,4 +38,8 @@ class DynamicQuestion extends Model
         return $this->hasMany(DynamicAlternative::class, 'dynamic_question_id', 'id');
     }
 
+    public function droppableOptions()
+    {
+        return $this->hasManyThrough(DroppableOption::class, DynamicAlternative::class, 'dynamic_question_id', 'dynamic_alternative_id');
+    }
 }

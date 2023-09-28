@@ -6,6 +6,8 @@
 <script src="{{asset('assets/common/modules/tooltip.js')}}"></script>
 <script src="{{asset('assets/common/modules/bootstrap/js/bootstrap.min.js')}}"></script>
 
+
+
 <script src="{{asset('assets/common/modules/datatables/datatables.min.js')}}"></script>
 <script src="{{asset('assets/common/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js')}}"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
