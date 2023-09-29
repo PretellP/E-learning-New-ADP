@@ -514,7 +514,7 @@ textarea.form-control {
 .info-element-box {
     display: flex;
     gap: 10px;
-    width: fit-content;
+    /* width: fit-content; */
     border-radius: 3px;
     overflow: hidden;
     height: 140px;
@@ -638,6 +638,18 @@ textarea.form-control {
     background-color: var(--first-color) !important;
 }
 
+.little-text-width
+{
+    width: 130px;
+    display: inline-block;
+}
+
+#dropdown-questions-create input,
+#dropdown-questions-create .select2-container .select2-selection--multiple, 
+#dropdown-questions-create .select2-container .select2-selection--single
+{
+    border-color: rgba(88, 88, 88, 0.363);
+}
 
 
 /*    SWEET ALERT ----*/
@@ -1264,7 +1276,9 @@ body.sidebar-mini .main-sidebar::after {
 
 
 
-/* ------------------ CREATE QUESTIONS ------------------*/
+/* ------------------- CREATE QUESTIONS ---------------------- */
+
+
 
 .questionTypeSelect {
     width: 1000px;
@@ -1340,7 +1354,7 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 {
     display: block;
     background-color: rgb(224, 224, 224);
-    height: 8px;
+    height: 6px;
     width: 100%;
     position: relative;
 }
@@ -1352,8 +1366,8 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 17px;
+    height: 17px;
     border-radius: 50%;
     background-color: rgb(224, 224, 224);
 }

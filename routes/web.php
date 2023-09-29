@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\{
     AdminAnnouncementsController,
     AdminCompaniesController,
     AdminDynamicQuestionsController,
+    AdminDynamicAlternativeController,
     AdminEventsController,
     AdminExamsController,
     AdminFreeCoursesController,
@@ -220,10 +221,20 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
             Route::controller(AdminDynamicQuestionsController::class)->group(function () {
 
-                Route::get('/ver/{exam}', 'show')->name('admin.exams.showQuestions');
+                Route::get('/ver/{exam}', 'index')->name('admin.exams.showQuestions');
+                Route::get('/ver-enunciado/{question}', 'show')->name('admin.exams.questions.show');
                 Route::get('/obtener-tipo-de-enunciado', 'getQuestionType')->name('admin.exams.questions.getType');
                 Route::post('/registrar-enunciado/{exam}', 'store')->name('admin.exams.questions.store');
+                Route::post('/actualizar-enunciado/{question}', 'update')->name('admin.exams.questions.update');
+                Route::post('/eliminar-enunciado/{question}', 'destroy')->name('admin.exams.questions.destroy');
             });
+
+            Route::controller(AdminDynamicAlternativeController::class)->group(function () {
+
+                Route::post('/alternativa/{alternative}/eliminar', 'destroy')->name('admin.exams.alternatives.destroy');
+                Route::post('/alternativa/{alternative}/eliminar-archivo', 'destroyFile')->name('admin.exams.alternatives.deleteFile');
+            });
+
         });
 
         // --------------- EVALUATIONS -------------------

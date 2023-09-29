@@ -23,4 +23,24 @@ class droppableOptionService
 
         return $success;
     }
+
+    public function update(DroppableOption $droppable, $description)
+    {
+        return $droppable->update([
+            "description" => $description
+        ]);
+    }
+
+    public function destroy(DroppableOption $droppable)
+    {
+        $success = false;
+
+        $isDeleted = $droppable->delete();
+
+        if($isDeleted){
+            $success = true;
+        }
+
+        return $success;
+    }
 }

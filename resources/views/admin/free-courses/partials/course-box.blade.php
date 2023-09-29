@@ -22,13 +22,13 @@
         </div>
         <div class="counts-cont">
             <div class="sections-cont">
-                <span class="little-text">Secciones: </span>
+                <span class="little-text little-text-width">Secciones: </span>
                 <span class="text-bold">
                     {{$course->course_sections_count}} 
                 </span>
             </div>
             <div class="chapters-cont">
-                <span class="little-text">Capítulos: </span>
+                <span class="little-text little-text-width">Capítulos: </span>
                 <span class="text-bold">
                     {{$course->course_chapters_count}} 
                 </span>

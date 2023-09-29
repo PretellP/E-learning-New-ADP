@@ -7,12 +7,13 @@
     <div class="form-group col-9">
         <label>Enunciado *</label>
         <input id="statement-fill-blank" type="text" name="statement" class="form-control statement"
-            placeholder="Ingresa el enunciado">
+            placeholder="Ingresa el enunciado" value="@if(isset($question)){{ $question->statement }}@endif">
     </div>
 
     <div class="form-group col-2">
         <label>Puntos *</label>
-        <input type="number" name="points" class="form-control points">
+        <input type="number" name="points" class="form-control points"
+            value="@if(isset($question)){{ $question->points }}@endif">
     </div>
 
 </div>
@@ -35,9 +36,6 @@
     <h5 class="subtitle-header-show mb-3">
         Respuestas:
     </h5>
-
-
-
 </div>
 
 <table class="table table-hover table-sm">
@@ -49,7 +47,40 @@
         </tr>
     </thead>
     <tbody id="alternatives-table">
-        <tr class="alternative-row">
+
+        @if(isset($question))
+
+        @foreach ($question->alternatives as $i => $alternative)
+
+        <tr class="alternative-row" data-index="{{ $i }}">
+
+            <input type="hidden" value="{{ $alternative->id }}" name="stored-alternatives[]">
+
+            <td>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text text-bold alternative-number">
+                            {{ $i+1 }}
+                        </div>
+                    </div>
+                    <input type="text" name="alternative[]" class="form-control alternative no-label-error"
+                        placeholder="Ingresa la(s) respuesta(s)" value="{{ $alternative->description }}">
+                </div>
+            </td>
+            <td class="text-center btn-action-container">
+                <span data-stored="true"
+                    data-url="{{ route('admin.exams.alternatives.destroy', $alternative) }}"
+                    class="delete-btn @if($i == 0) disabled @else delete-alternative-btn @endif">
+                    <i class="fa-solid fa-trash-can"></i>
+                </span>
+            </td>
+        </tr>
+
+        @endforeach
+
+        @else
+
+        <tr class="alternative-row" data-index="0">
             <td>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -67,6 +98,9 @@
                 </span>
             </td>
         </tr>
+
+        @endif
+
     </tbody>
 
 </table>

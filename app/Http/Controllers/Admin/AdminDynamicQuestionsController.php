@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Exam, QuestionType};
+use App\Models\{DynamicQuestion, Exam, QuestionType};
 use App\Services\dynamicQuestionService;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AdminDynamicQuestionsController extends Controller
         $this->dynamicQuestionService = $service;
     }
 
-    public function show(Request $request, Exam $exam)
+    public function index(Request $request, Exam $exam)
     {
         if ($request->ajax()) {
             return $this->dynamicQuestionService->getDataTable($exam->id);
@@ -32,6 +32,17 @@ class AdminDynamicQuestionsController extends Controller
         ));
     }
 
+    public function show(DynamicQuestion $question)
+    {
+        $question->loadRelationships();
+        $questionType_id = $question->question_type_id;
+
+        return view('admin.exams.questions.show', compact(
+            'question',
+            'questionType_id'
+        ));
+    }
+
     public function getQuestionType(Request $request)
     {
         $html = '';
@@ -39,8 +50,7 @@ class AdminDynamicQuestionsController extends Controller
         $message = '';
 
         try {
-
-            $html = $this->dynamicQuestionService->getQuestionTypeView($request['value']);
+            $html = $this->dynamicQuestionService->getQuestionTypeView(null, $request['value']);
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -56,9 +66,9 @@ class AdminDynamicQuestionsController extends Controller
     public function store(Request $request, Exam $exam)
     {
         $success = true;
-        $message = '';
-        $html = '';
-        $htmlQuestion = '';
+        $message = null;
+        $html = null;
+        $htmlQuestion = null;
 
         $storage = env('FILESYSTEM_DRIVER');
 
@@ -67,7 +77,7 @@ class AdminDynamicQuestionsController extends Controller
 
             $exam->loadRelationships();
             $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
-            $htmlQuestion = $this->dynamicQuestionService->getQuestionTypeView($question->question_type_id);
+            $htmlQuestion = $this->dynamicQuestionService->getQuestionTypeView(null, $question->question_type_id);
 
         } catch (Exception $e) {
             $success = false;
@@ -81,6 +91,70 @@ class AdminDynamicQuestionsController extends Controller
                 "html" => $html,
                 "htmlQuestion" => $htmlQuestion
             ]
+        ]);
+    }
+
+    public function update(Request $request, DynamicQuestion $question)
+    {
+        $question->loadRelationships();
+
+        $success = true;
+        $message = null;
+        $html = null;
+
+        $storage = env('FILESYSTEM_DRIVER');
+
+        try{
+            $question = $this->dynamicQuestionService->update($request, $question, $storage);
+            
+            $question->loadRelationships();
+            $html = $this->dynamicQuestionService->getQuestionTypeView($question, $question->question_type_id);
+        }   
+        catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+            "html" => $html,
+            "statement" => $question->statement
+        ]);
+    }
+
+    public function destroy(Request $request, DynamicQuestion $question)
+    {
+        $question->loadRelationships();
+        $exam = $question->exam;
+        
+        $success = true;
+        $message = null;
+        $route = null;
+        $html = null;
+
+        $storage = env('FILESYSTEM_DRIVER');
+
+        try{
+            $this->dynamicQuestionService->destroy($question, $storage);
+
+            $exam->loadRelationships();
+            $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
+        }
+        catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if($request->has('place')){
+            $route = route('admin.exams.showQuestions', $exam);
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+            "route" => $route,
+            "html" => $html
         ]);
     }
 }

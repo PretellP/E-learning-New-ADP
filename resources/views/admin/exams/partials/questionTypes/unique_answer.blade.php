@@ -6,12 +6,14 @@
 
     <div class="form-group col-9">
         <label>Enunciado *</label>
-        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado">
+        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado"
+            value="@if(isset($question)){{ $question->statement }}@endif">
     </div>
 
     <div class="form-group col-2">
         <label>Puntos *</label>
-        <input type="number" name="points" class="form-control points">
+        <input type="number" name="points" class="form-control points"
+            value="@if(isset($question)){{ $question->points }}@endif">
     </div>
 
 </div>
@@ -19,11 +21,11 @@
 <hr>
 
 <div class="mb-3">
+
     <h5 class="subtitle-header-show mb-3">
         Alternativas:
     </h5>
 
-     
 </div>
 
 <table class="table table-hover table-sm">
@@ -35,8 +37,50 @@
             <th class="text-bold text-center stretch-width"></th>
         </tr>
     </thead>
-   <tbody id="alternatives-table">
-        <tr class="alternative-row">
+    <tbody id="alternatives-table">
+
+        @if(isset($question))
+
+        @foreach ($question->alternatives as $i => $alternative)
+
+        <tr class="alternative-row" data-index="{{ $i }}">
+
+            <input type="hidden" value="{{ $alternative->id }}" name="stored-alternatives[]">
+
+            <td>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text text-bold alternative-number">
+                            {{ $i+1 }}
+                        </div>
+                    </div>
+                    <input type="text" name="alternative[]" class="form-control alternative no-label-error"
+                        placeholder="Ingresa la alternativa" value="{{ $alternative->description }}">
+                </div>
+            </td>
+            <td class="text-center flex-center">
+                <label class="is_correct_button position-relative">
+                    <input type="radio" name="is_correct" value="{{ $i }}" class="selectgroup-input"
+                        @if($alternative->is_correct == 1) checked @endif>
+                    <span class="selectgroup-button selectgroup-button-icon is_correct_btn">
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+                </label>
+            </td>
+            <td class="text-center btn-action-container">
+                <span data-stored="true"
+                    data-url="{{ route('admin.exams.alternatives.destroy', $alternative) }}"
+                    class="delete-btn @if($alternative->is_correct == 1) disabled @else delete-alternative-btn @endif">
+                    <i class="fa-solid fa-trash-can"></i>
+                </span>
+            </td>
+        </tr>
+
+        @endforeach
+
+        @else
+
+        <tr class="alternative-row" data-index="0">
             <td>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -58,11 +102,15 @@
             </td>
             <td class="text-center btn-action-container">
                 <span class="delete-btn disabled">
-                    <i class="fa-solid fa-trash-can"></i> 
+                    <i class="fa-solid fa-trash-can"></i>
                 </span>
             </td>
         </tr>
-   </tbody>
+
+        @endif
+
+
+    </tbody>
 
 </table>
 

@@ -23,7 +23,7 @@ class DynamicAlternative extends Model
         return $this -> belongsTo(DynamicQuestion::class, 'dynamic_question_id', 'id');
     }
 
-    public function droppableOptions()
+    public function droppableOption()
     {
         return $this -> hasOne(DroppableOption::class, 'dynamic_alternative_id', 'id');
     }
@@ -31,6 +31,11 @@ class DynamicAlternative extends Model
     public function file()
     {
         return $this -> morphOne(File::class, 'fileable');
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load(['file', 'droppableOption', 'question']);
     }
 
     public function loadImage()

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     Exam, 
     DynamicAlternative,
-    QuestionType
+    QuestionType,
+    File
 };
 
 class DynamicQuestion extends Model
@@ -41,5 +42,22 @@ class DynamicQuestion extends Model
     public function droppableOptions()
     {
         return $this->hasManyThrough(DroppableOption::class, DynamicAlternative::class, 'dynamic_question_id', 'dynamic_alternative_id');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load(
+            [
+                'files',
+                'exam',
+                'questionType', 
+                'alternatives' => fn ($query) => 
+                    $query->with(['file', 'droppableOption'])
+            ]);
     }
 }

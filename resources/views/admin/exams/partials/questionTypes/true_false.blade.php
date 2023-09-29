@@ -6,12 +6,14 @@
 
     <div class="form-group col-9">
         <label>Enunciado *</label>
-        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado">
+        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado"
+        value="@if(isset($question)){{ $question->statement }}@endif">
     </div>
 
     <div class="form-group col-2">
         <label>Puntos *</label>
-        <input type="number" name="points" class="form-control points">
+        <input type="number" name="points" class="form-control points"
+        value="@if(isset($question)){{ $question->points }}@endif">
     </div>
 
 </div>
@@ -35,7 +37,42 @@
     </thead>
    <tbody id="alternatives-table">
 
-        <tr class="alternative-row">
+        @if(isset($question))
+
+        @foreach ($question->alternatives as $i => $alternative)
+            
+        <tr class="alternative-row" data-index="{{ $i }}">
+
+            <input type="hidden" value="{{ $alternative->id }}" name="stored-alternatives[]">
+
+            <td>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text text-bold alternative-number">
+                            {{ $i+1 }}
+                        </div>
+                    </div>
+                    <input type="text" readonly="readonly" name="alternative[]"
+                        class="not-user-allowed form-control alternative no-label-error"
+                        placeholder="Ingresa la alternativa" value="{{ $alternative->description }}">
+                </div>
+            </td>
+            <td class="text-center flex-center">
+                <label class="is_correct_button position-relative">
+                    <input type="radio" name="is_correct" value="{{ $i }}" class="selectgroup-input" @if($alternative->is_correct == 1) checked @endif>
+                    <span class="selectgroup-button selectgroup-button-icon is_correct_btn">
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+                </label>
+            </td>
+        </tr>
+
+        @endforeach
+
+        @else
+
+        <tr class="alternative-row" data-index="0">
+            
             <td>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -58,7 +95,7 @@
             </td>
         </tr>
 
-        <tr class="alternative-row">
+        <tr class="alternative-row" data-index="1">
             <td>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -80,6 +117,10 @@
                 </label>
             </td>
         </tr>
+
+        @endif
+
+       
 
    </tbody>
 

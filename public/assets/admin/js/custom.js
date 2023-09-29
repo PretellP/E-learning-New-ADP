@@ -4412,64 +4412,229 @@ $(function () {
 
 
 
-        /* ------------
-                        QUESTIONS  CREATE
-                                           --------------*/
 
-        /* ----------- GENERAL ------------ */
 
-        $('#registerQuestionTypeSelect').select2({
-            placeholder: 'Selecciona un tipo de enunciado'
-        })
+        // --------------- QUESTIONS -----------------
 
-        $('.main-content').on('change', '#registerQuestionTypeSelect', function () {
 
-            var value = $(this).val()
-            var url = $(this).data('url')
 
-            $('#registerQuestionTypeSelect').select2({
-                placeholder: 'Selecciona un tipo de enunciado',
-                disabled: true
-            })
+        // ------------------ REGISTRAR -----------------------
 
-            $.ajax({
-                type: 'GET',
-                url: url,
-                data: {
-                    value: value
+        var storeQuestions = $('#registerQuestionForm').validate({
+            rules: {
+                question_type_id: {
+                    required: true,
                 },
-                dataType: 'JSON',
-                success: function (data) {
+                statement: {
+                    required: true,
+                    maxlength: 1000,
+                },
+                points: {
+                    required: true,
+                    number: true,
+                    step: 1,
+                    min: 1,
+                },
+                'alternative[]': {
+                    required: true,
+                    maxlength: 500,
+                },
+                'droppable-option[]': {
+                    required: true,
+                    maxlength: 500,
+                },
+                is_correct: {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
 
-                    if (data.success) {
-                        let questionBox = $('#question-type-container')
-                        questionBox.html(data.html)
+                Swal.fire({
+                    title: 'Registrar enunciado',
+                    text: 'Confirme antes de continuar',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.value) {
+
+                        form.find('.btn-save').attr('disabled', 'disabled')
+
+                        loadSpinner.toggleClass('active')
+        
+                        var formData = new FormData(form[0])
+        
+                        $.ajax({
+                            method: form.attr('method'),
+                            url: form.attr('action'),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'JSON',
+                            success: function (data) {
+        
+                                if (data.success) {
+        
+                                    let data_show = data.data_show
+                                    let exam_box = $('#exam-box-container')
+                                    let question_box = $('#question-type-container')
+        
+                                    exam_box.html(data_show.html)
+                                    question_box.html(data_show.htmlQuestion)
+                                    questionsTable.draw()
+        
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: '¡Registrado con éxito!'
+                                    })
+                                }
+                                else {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        text: data.message
+                                    })
+                                }
+                            },
+                            complete: function (data) {
+                                storeQuestions.resetForm()
+                                form.find('.btn-save').removeAttr('disabled')
+                                loadSpinner.toggleClass('active')
+                            },
+                            error: function (data) {
+                                console.log(data)
+                                ToastError.fire()
+                            }
+                        })
+
                     }
                     else {
-                        Toast.fire({
-                            icon: 'error',
-                            text: data.message
-                        })
+                        return false;
                     }
+                });
 
-                },
-                complete: function (data) {
-                    $('#registerQuestionTypeSelect').select2({
-                        placeholder: 'Selecciona un tipo de enunciado',
-                        disabled: false
-                    })
-                },
-                error: function (data) {
-                    console.log(data)
-                    ToastError.fire()
+               
+            }
+        })
+
+
+        // ------------------- ELIMINAR -------------------
+
+        $('.main-content').on('click', '.deleteQuestion-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                            if (result.success === true) {
+
+                                let exam_box = $('#exam-box-container')
+
+                                exam_box.html(result.html)
+                                questionsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message,
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result)
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                } else {
+                    e.dismiss;
                 }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+
+    }
+
+
+
+    // ---------- QUESTIONS GENERAL ----------
+
+
+    if ($('#question-type-container').length) {
+
+        if ($('#dropdown-questions-create').length) {
+
+            $('#registerQuestionTypeSelect').select2({
+                placeholder: 'Selecciona un tipo de enunciado'
             })
 
-        })
+            $('.main-content').on('change', '#registerQuestionTypeSelect', function () {
+
+                var value = $(this).val()
+                var url = $(this).data('url')
+
+                $('#registerQuestionTypeSelect').select2({
+                    placeholder: 'Selecciona un tipo de enunciado',
+                    disabled: true
+                })
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: {
+                        value: value
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+                            let questionBox = $('#question-type-container')
+                            questionBox.html(data.html)
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        $('#registerQuestionTypeSelect').select2({
+                            placeholder: 'Selecciona un tipo de enunciado',
+                            disabled: false
+                        })
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+
+            })
+        }
 
         function addAlternativeHtml(question_type, count) {
             if (question_type == 1) {
-                return '<tr class="alternative-row"> \
+                return '<tr class="alternative-row" data-index="' + count + '"> \
                             <td> \
                                 <div class="input-group"> \
                                     <div class="input-group-prepend"> \
@@ -4497,7 +4662,7 @@ $(function () {
                         </tr>'
             }
             else if (question_type == 2) {
-                return '<tr class="alternative-row"> \
+                return '<tr class="alternative-row" data-index="' + count + '"> \
                             <td> \
                                 <div class="input-group"> \
                                     <div class="input-group-prepend"> \
@@ -4526,7 +4691,7 @@ $(function () {
                         </tr>'
             }
             else if (question_type == 4) {
-                return '<tr class="alternative-row"> \
+                return '<tr class="alternative-row" data-index="' + count + '"> \
                             <td> \
                                 <div class="input-group"> \
                                     <div class="input-group-prepend"> \
@@ -4546,7 +4711,7 @@ $(function () {
                         </tr>'
             }
             else if (question_type == 5) {
-                return '<tr class="alternative-row"> \
+                return '<tr class="alternative-row" data-index="' + count + '"> \
                             <td class="input-matching-column input-matching-column-width"> \
                                 <div class="input-group"> \
                                     <div class="input-group-prepend"> \
@@ -4590,6 +4755,78 @@ $(function () {
 
         }
 
+        function deleteAlternative(row, questionType) {
+
+            /*--------------- QUESTION: RELLLENAR ESPACIO EN BLANCO  ------------------*/
+
+            if (questionType == 4) {
+
+                let row_index = row.data('index')
+                let currentVal = $('#statement-fill-blank').val()
+                let regex = /\[+ ___________ +\]/gm
+
+                let matches = [...currentVal.matchAll(regex)];
+
+
+                if (row_index > 0 && row_index in matches) {
+
+                    let match = matches[row_index]
+                    let match_start = match.index
+                    let match_end = match_start + match[0].length
+
+                    console.log(match_start, match_end)
+
+                    $('#statement-fill-blank').
+                        val(currentVal.substring(0, match_start) + "" + currentVal.substring(match_end + 1))
+                }
+
+            }
+
+            row.remove()
+
+            $('tr.alternative-row').each(function (index) {
+
+                $(this).attr('data-index', index)
+                $(this).find('.alternative-number').html(index + 1)
+
+                /*--------------- QUESTION: RESPUESTA ÚNICA  ------------------*/
+
+                if (questionType == 1) {
+
+                    $(this).find('input[name=is_correct]').val(index)
+                }
+
+                /*--------------- QUESTION: RESPUESTA MÚLTIPLE  ------------------*/
+
+                if (questionType == 2) {
+
+                    $(this).find('input[type=checkbox]').attr('name', 'is_correct_' + index).attr('id', 'checkbox-' + index)
+                        .next('label').attr('for', 'checkbox-' + index)
+                }
+
+                /*--------------- QUESTION: RELACIONAR  ------------------*/
+
+                if (questionType == 5) {
+
+                    $(this).find('.image-icon-alternative label').attr('for', 'alternative-image-' + index)
+                    $(this).find('input[type=file].input-alternative-image').attr('name', 'image-' + index)
+                        .attr('id', 'alternative-image-' + index)
+
+                }
+            })
+        }
+
+        function deleteImage(row) {
+            var column = row.find('.input-matching-column')
+            var img_input = row.find('input[type=file].input-alternative-image')
+            var img_holder = row.find('.img-alternative-holder')
+
+            column.removeClass('with-image')
+            column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
+            img_holder.removeClass('show').empty()
+            img_input.val('')
+        }
+
 
         // ---------------- AÑADIR ALTERNATIVA --------------
 
@@ -4617,53 +4854,54 @@ $(function () {
 
             var questionType = $('input#typeQuestionValue').val()
             var row = $(this).closest('tr.alternative-row')
+            var dataStored = $(this).data('stored')
 
+            if (dataStored == true) {
 
-            /*--------------- QUESTION: RESPUESTA ÚNICA  ------------------*/
+                var url = $(this).data('url')
 
-            if (questionType == 1) {
-                row.remove()
+                SwalDelete.fire().then(function (e) {
+                    if (e.value === true) {
+                        $.ajax({
+                            method: 'POST',
+                            url: url,
+                            dataType: 'JSON',
+                            success: function (result) {
 
-                $('tr.alternative-row').each(function (index) {
-                    $(this).find('.alternative-number').html(index + 1)
-                    $(this).find('input[name=is_correct]').val(index)
-                })
+                                if (result.success === true) {
+
+                                    deleteAlternative(row, questionType)
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: '¡Registro eliminado!',
+                                    })
+                                }
+                                else {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        text: result.message,
+                                    })
+                                }
+                            },
+                            error: function (result) {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: '¡Ocurrió un error inesperado!',
+                                });
+                            }
+                        });
+                    } else {
+                        e.dismiss;
+                    }
+                }, function (dismiss) {
+                    return false;
+                });
+
             }
+            else {
+                deleteAlternative(row, questionType)
 
-            /*--------------- QUESTION: RESPUESTA MÚLTIPLE  ------------------*/
-
-            if (questionType == 2) {
-                row.remove()
-
-                $('tr.alternative-row').each(function (index) {
-                    $(this).find('.alternative-number').html(index + 1)
-                    $(this).find('input[type=checkbox]').attr('name', 'is_correct_' + index).attr('id', 'checkbox-' + index)
-                        .next('label').attr('for', 'checkbox-' + index)
-                })
-            }
-
-            /*--------------- QUESTION: RELLENAR EL ESPACIO EN BLANCO  ------------------*/
-
-            if (questionType == 4) {
-                row.remove()
-
-                $('tr.alternative-row').each(function (index) {
-                    $(this).find('.alternative-number').html(index + 1)
-                })
-            }
-
-            /*--------------- QUESTION: RELACIONAR  ------------------*/
-
-            if (questionType == 5) {
-                row.remove()
-
-                $('tr.alternative-row').each(function (index) {
-                    $(this).find('.alternative-number').html(index + 1)
-                    $(this).find('.image-icon-alternative label').attr('for', 'alternative-image-' + index)
-                    $(this).find('input[type=file].input-alternative-image').attr('name', 'image-' + index)
-                        .attr('id', 'alternative-image-' + index)
-
-                })
             }
         })
 
@@ -4688,8 +4926,6 @@ $(function () {
 
 
 
-
-
         // -------------- AÑADIR ESPACIO EN BLANCO ---------------
 
         $('.main-content').on('click', '.add-blank-space-btn', function () {
@@ -4700,11 +4936,25 @@ $(function () {
             let value = input.val();
 
             if (value != '') {
-                input.val(value.slice(0, curPos) + ' ___________ ' + value.slice(curPos));
-                input.caretTo(curPos + 13);
+                input.val(value.slice(0, curPos) + ' [ ' + '_'.repeat(11) + ' ] ' + value.slice(curPos));
+                input.caretTo(curPos + 17);
+            }
+
+            var currentVal = $('#statement-fill-blank').val()
+
+            var regex = /\[+ ___________ +\]/gm
+
+            var alternativesTable = $('#alternatives-table')
+
+            let matches = [...currentVal.matchAll(regex)];
+            let count = alternativesTable.find('.alternative-row').length
+            var type = $('input#typeQuestionValue').val()
+
+
+            if (matches.length > count) {
+                alternativesTable.append(addAlternativeHtml(type, count))
             }
         })
-
 
 
 
@@ -4767,110 +5017,167 @@ $(function () {
         $('.main-content').on('click', '.delete-image-alternative', function () {
 
             var row = $(this).closest('.alternative-row')
-            var column = row.find('.input-matching-column')
-            var img_input = row.find('input[type=file].input-alternative-image')
-            var img_holder = row.find('.img-alternative-holder')
+            var dataStored = $(this).data('stored')
+            var url = $(this).data('url')
 
-            column.removeClass('with-image')
-            column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
-            img_holder.removeClass('show').empty()
-            img_input.val('')
+            if (dataStored) {
 
-        })
+                var url = $(this).data('url')
 
+                SwalDelete.fire().then(function (e) {
+                    if (e.value === true) {
+                        $.ajax({
+                            method: 'POST',
+                            url: url,
+                            dataType: 'JSON',
+                            success: function (result) {
 
+                                if (result.success === true) {
 
+                                    deleteImage(row)
 
-
-
-        // ------------------ REGISTRAR -----------------------
-
-        var storeQuestions = $('#registerQuestionForm').validate({
-            rules: {
-                question_type_id: {
-                    required: true,
-                },
-                statement: {
-                    required: true,
-                    maxlength: 1000,
-                },
-                points: {
-                    required: true,
-                    number: true,
-                    step: 1,
-                    min: 1,
-                },
-                'alternative[]': {
-                    required: true,
-                    maxlength: 500,
-                },
-                'droppable-option[]': {
-                    required: true,
-                    maxlength: 500,
-                },
-                is_correct: {
-                    required: true
-                }
-            },
-            submitHandler: function (form, event) {
-                event.preventDefault()
-                var form = $(form)
-                var loadSpinner = form.find('.loadSpinner')
-
-                form.find('.btn-save').attr('disabled', 'disabled')
-
-                loadSpinner.toggleClass('active')
-
-                var formData = new FormData(form[0])
-
-                $.ajax({
-                    method: form.attr('method'),
-                    url: form.attr('action'),
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'JSON',
-                    success: function (data) {
-
-                        if (data.success) {
-
-                            let data_show = data.data_show
-                            let exam_box = $('#exam-box-container')
-                            let question_box = $('#question-type-container')
-
-                            exam_box.html(data_show.html)
-                            question_box.html(data_show.htmlQuestion)
-                            questionsTable.draw()
-
-                            Toast.fire({
-                                icon: 'success',
-                                text: '¡Registrado con éxito!'
-                            })
-                        }
-                        else {
-                            Toast.fire({
-                                icon: 'error',
-                                text: data.message
-                            })
-                        }
-                    },
-                    complete: function (data) {
-                        storeQuestions.resetForm()
-                        form.find('.btn-save').removeAttr('disabled')
-                        loadSpinner.toggleClass('active')
-                        modal.modal('hide')
-                    },
-                    error: function (data) {
-                        console.log(data)
-                        ToastError.fire()
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: '¡Registro eliminado!',
+                                    })
+                                }
+                                else {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        text: result.message,
+                                    })
+                                }
+                            },
+                            error: function (result) {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: '¡Ocurrió un error inesperado!',
+                                });
+                            }
+                        });
+                    } else {
+                        e.dismiss;
                     }
-                })
+                }, function (dismiss) {
+                    return false;
+                });
+
             }
+            else {
+                deleteImage(row)
+            }
+
         })
 
+
+
+
+        if ($('#question-box-container').length) {
+
+            // ------------------ ACTUALIZAR -----------------------
+
+            var updateQuestions = $('#updateQuestionForm').validate({
+                rules: {
+                    question_type_id: {
+                        required: true,
+                    },
+                    statement: {
+                        required: true,
+                        maxlength: 1000,
+                    },
+                    points: {
+                        required: true,
+                        number: true,
+                        step: 1,
+                        min: 1,
+                    },
+                    'alternative[]': {
+                        required: true,
+                        maxlength: 500,
+                    },
+                    'droppable-option[]': {
+                        required: true,
+                        maxlength: 500,
+                    },
+                    is_correct: {
+                        required: true
+                    }
+                },
+                submitHandler: function (form, event) {
+                    event.preventDefault()
+                    var form = $(form)
+                    var loadSpinner = form.find('.loadSpinner')
+
+                    Swal.fire({
+                        title: 'Actualizar registro',
+                        text: 'Confirme los cambios antes de continuar',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Confirmar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.value) {
+
+                            form.find('.btn-save').attr('disabled', 'disabled')
+
+                            loadSpinner.toggleClass('active')
+
+                            var formData = new FormData(form[0])
+
+                            $.ajax({
+                                method: form.attr('method'),
+                                url: form.attr('action'),
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                dataType: 'JSON',
+                                success: function (data) {
+
+                                    if (data.success) {
+
+                                        let question_box = $('#question-type-container')
+                                        let question_statement = $('#question-statement-container')
+
+                                        question_box.html(data.html)
+                                        question_statement.html(data.statement)
+
+                                        Toast.fire({
+                                            icon: 'success',
+                                            text: '¡Registro actualizado!'
+                                        })
+                                    }
+                                    else {
+                                        Toast.fire({
+                                            icon: 'error',
+                                            text: data.message
+                                        })
+                                    }
+                                },
+                                complete: function (data) {
+
+                                    form.find('.btn-save').removeAttr('disabled')
+                                    loadSpinner.toggleClass('active')
+
+                                },
+                                error: function (data) {
+                                    console.log(data)
+                                    ToastError.fire()
+                                }
+                            })
+
+                        } else {
+                            return false;
+                        }
+                    })
+
+
+                }
+            })
+
+        }
 
     }
-
 
 
 

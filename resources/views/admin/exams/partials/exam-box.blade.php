@@ -29,13 +29,13 @@
         </div>
         <div class="counts-cont">
             <div class="sections-cont">
-                <span class="little-text">N° de enunciados: </span>
+                <span class="little-text little-text-width">N° de enunciados: </span>
                 <span class="text-bold">
                    {{ $exam->questions_count }}
                 </span>
             </div>
             <div class="chapters-cont">
-                <span class="little-text">Puntaje total: </span>
+                <span class="little-text little-text-width">Puntaje total: </span>
                 <span class="text-bold">
                     {{ $exam->questions_sum_points }}
                 </span>

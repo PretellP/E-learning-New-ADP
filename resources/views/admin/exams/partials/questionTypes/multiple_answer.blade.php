@@ -6,12 +6,14 @@
 
     <div class="form-group col-9">
         <label>Enunciado *</label>
-        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado">
+        <input type="text" name="statement" class="form-control statement" placeholder="Ingresa el enunciado"
+            value="@if(isset($question)){{ $question->statement }}@endif">
     </div>
 
     <div class="form-group col-2">
         <label>Puntos *</label>
-        <input type="number" name="points" class="form-control points">
+        <input type="number" name="points" class="form-control points"
+            value="@if(isset($question)){{ $question->points }}@endif">
     </div>
 
 </div>
@@ -34,8 +36,55 @@
             <th class="text-bold text-center stretch-width"></th>
         </tr>
     </thead>
+
     <tbody id="alternatives-table">
-        <tr class="alternative-row">
+
+        @if(isset($question))
+
+        @foreach ($question->alternatives as $i => $alternative)
+
+        <tr class="alternative-row" data-index="{{ $i }}">
+
+            <input type="hidden" value="{{ $alternative->id }}" name="stored-alternatives[]">
+
+            <td>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text text-bold alternative-number">
+                            {{ $i+1 }}
+                        </div>
+                    </div>
+                    <input type="text" name="alternative[]" class="form-control alternative no-label-error"
+                        placeholder="Ingresa la alternativa" value="{{ $alternative->description }}">
+                </div>
+            </td>
+            <td class="text-center flex-center">
+
+                <div class="custom-checkbox custom-input-height flex-center">
+                    <input type="checkbox" name="is_correct_{{ $i }}" data-checkboxes="alternatives-multiple-checkbox"
+                        class="custom-control-input" id="checkbox-{{ $i }}" @if($alternative->is_correct == 1) checked
+                    @endif>
+                    <label for="checkbox-{{ $i }}"
+                        class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0">
+                        <i class="fa-solid fa-check"></i>
+                        <label>
+                </div>
+
+            </td>
+            <td class="text-center btn-action-container">
+                <span data-stored="true"
+                    data-url="{{ route('admin.exams.alternatives.destroy', $alternative) }}"
+                    class="delete-btn @if($i == 0) disabled @else delete-alternative-btn @endif">
+                    <i class="fa-solid fa-trash-can"></i>
+                </span>
+            </td>
+        </tr>
+
+        @endforeach
+
+        @else
+
+        <tr class="alternative-row" data-index="0">
             <td>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -52,11 +101,12 @@
                 <div class="custom-checkbox custom-input-height flex-center">
                     <input type="checkbox" name="is_correct_0" data-checkboxes="alternatives-multiple-checkbox"
                         class="custom-control-input" id="checkbox-0" checked='checked'>
-                    <label for="checkbox-0" class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0">
+                    <label for="checkbox-0"
+                        class="selectgroup-button selectgroup-button-icon custom-checkbox-question margin-0">
                         <i class="fa-solid fa-check"></i>
-                    <label>
+                        <label>
                 </div>
-                
+
             </td>
             <td class="text-center btn-action-container">
                 <span class="delete-btn disabled">
@@ -64,6 +114,10 @@
                 </span>
             </td>
         </tr>
+
+        @endif
+
+
     </tbody>
 
 </table>

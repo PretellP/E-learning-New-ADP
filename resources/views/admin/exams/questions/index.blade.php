@@ -51,7 +51,7 @@
                         </div>
                     </div>
 
-                    <div class="related-dropdown-container">
+                    <div id="dropdown-questions-create" class="related-dropdown-container">
 
                         <form id="registerQuestionForm" action="{{ route('admin.exams.questions.store', $exam) }}" method="POST" enctype="multipart/form-data">
                             @csrf
