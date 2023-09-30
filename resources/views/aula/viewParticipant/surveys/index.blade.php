@@ -24,7 +24,7 @@
 
             <div class="survey-container">
                 <div class="survey-img-container">
-                    <img class="card-img-top survey-img" src="{{asset('storage/'.verifyImage($userSurvey->survey->url_img))}}"
+                    <img class="card-img-top survey-img" src="{{verifyImage($userSurvey->survey->file)}}"
                         alt="Card image cap">
                 </div>
 

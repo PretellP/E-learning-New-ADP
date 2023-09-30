@@ -22,7 +22,10 @@ class AulaSurveysController extends Controller
                                             ->whereHas('survey', function($query){
                                                 $query->where('active', 'S');
                                             })
-                                            ->with('survey:id,name,destined_to,url_img,active')
+                                            ->with(['survey' => fn ($query) => 
+                                                $query->with('file')
+                                                    ->select('id', 'name', 'destined_to', 'active')
+                                            ])
                                             ->get();
 
         return view('aula.viewParticipant.surveys.index', [

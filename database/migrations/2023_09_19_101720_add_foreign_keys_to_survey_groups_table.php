@@ -27,6 +27,7 @@ class AddForeignKeysToSurveyGroupsTable extends Migration
     {
         Schema::table('survey_groups', function (Blueprint $table) {
             $table->dropForeign(['survey_id']);
+            $table->dropColumn('survey_id');
         });
     }
 }

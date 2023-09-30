@@ -15,7 +15,6 @@ class AlterDynamicAlternativesTable extends Migration
     {
         Schema::table('dynamic_alternatives', function (Blueprint $table) {
             $table->boolean('is_correct')->after('description')->nullable();
-            $table->string('url_img', 500)->after('description')->nullable();  // ELIMINAR
         });
     }
 
@@ -28,7 +27,6 @@ class AlterDynamicAlternativesTable extends Migration
     {
         Schema::table('dynamic_alternatives', function (Blueprint $table) {
             $table->dropColumn('is_correct');
-            $table->dropColumn('url_img');
         });
     }
 }

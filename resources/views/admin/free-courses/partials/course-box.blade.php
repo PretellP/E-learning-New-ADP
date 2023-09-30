@@ -63,12 +63,12 @@
     </div>
     <div class="action-box info-element-box">
         <div class="btn-action-container">
-            <span id="freecourse-edit-btn" class="edit-btn" data-send="{{route('admin.freecourse.getDatacourse', $course)}}">
+            <span id="freecourse-edit-btn" class="edit-btn" data-send="{{route('admin.freecourse.courses.edit', $course)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
             @if($course->course_sections_count == 0)
                 <span class="delete-btn delete-course-btn"
-                        data-url="{{route('admin.freecourses.deleteCourse', $course)}}" data-type="soft"> 
+                        data-url="{{route('admin.freecourses.courses.delete', $course)}}" data-type="soft"> 
                     <i class="fa-solid fa-trash-can"></i> 
                 </span>
             @else

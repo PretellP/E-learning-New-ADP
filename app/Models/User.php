@@ -25,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'url_img', 'dni', 'name',
+        'dni', 'name',
         'paternal', 'maternal', 'email',
         'password', 'telephone', 'role', 
         'cip', 'signature', 'active',
@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this -> hasMany(Event::class, 'user_id', 'id');
     }
 
+    public function responsableEvents()
+    {
+        return $this -> hasMany(Events::class, 'responsable_id', 'id');
+    }
+
     public function company()
     {
         return $this -> belongsTo(Company::class, 'company_id', 'id');
@@ -84,40 +89,38 @@ class User extends Authenticatable
 
     public function userSurveys()
     {
-        return $this->hasMany(UserSurvey::class, 'user_id', 'id');
+        return $this -> hasMany(UserSurvey::class, 'user_id', 'id');
     }
 
-    public function getTranslatedRole()
+    static function getInstructorsQuery()
     {
-        switch($this->role){
-            case 'admin':
-                $role = 'Administrador';
-                break;
-            case 'super_admin':
-                $role = 'Super Admin';
-                break;
-            case 'security_manager':
-                $role = 'Ingeniero de seguridad';
-                break;
-            case 'security_manager_admin':
-                $role = 'Gerente de seguridad';
-                break;
-            case 'supervisor':
-                $role = 'Supervisor';
-                break;
-            case 'technical_support':
-                $role = 'Soporte técnico';
-                break;
-            case 'participants':
-                $role = 'Participante';
-                break;
-            case 'instructor':
-                $role = 'Instructor';
-                break;
-            default:
-                $role = '';
-        }
-        return $role;
+        return User::whereIn('role', ['instructor']);
     }
 
+    static function getResponsablesQuery()
+    {
+        return User::where('company_id', 10);
+    }
+
+
+
+
+    
+    /* ----------- ACCESSORS ------------*/
+
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->paternal;
+    }
+
+    public function getFullNameCompleteAttribute()
+    {
+        return $this->name . ' ' . $this->paternal . ' ' . $this->maternal;
+    }
+
+    public function getFullNameCompleteReverseAttribute()
+    {
+        return $this->paternal . ' ' . $this->maternal  . ', ' . $this->name;
+    }
 }

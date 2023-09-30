@@ -27,6 +27,7 @@ class AddForeingKeysToSectionChaptersTable extends Migration
     {
         Schema::table('section_chapters', function (Blueprint $table) {
             $table->dropForeign(['section_id']);
+            $table->dropColumn('section_id');
         });
     }
 }

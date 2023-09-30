@@ -27,6 +27,7 @@ class AddForeignKeysToCourseSectionsTable extends Migration
     {
         Schema::table('course_sections', function (Blueprint $table) {
             $table->dropForeign(['course_id']);
+            $table->dropColumn('course_id');
         });
     }
 }

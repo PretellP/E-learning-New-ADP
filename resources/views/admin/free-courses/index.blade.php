@@ -125,7 +125,7 @@
                     </button>
                 </div>
 
-                <form action="{{route('admin.freeCourses.storeCategory')}}" id="registerCategoryForm"
+                <form action="{{route('admin.freeCourses.categories.store')}}" id="registerCategoryForm"
                     enctype="multipart/form-data" method="POST" data-validate="">
                     @csrf
 
@@ -271,7 +271,7 @@
                     </button>
                 </div>
 
-                <form action="{{route('admin.freecourses.storeFreecourse')}}" id="registerFreeCourseForm"
+                <form action="{{route('admin.freecourses.courses.store')}}" id="registerFreeCourseForm"
                     enctype="multipart/form-data" method="POST" data-validate="">
                     @csrf
 

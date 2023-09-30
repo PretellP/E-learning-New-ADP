@@ -17,10 +17,10 @@ class UserService
                                                     'userSurveys']
                                             ))
                     ->addColumn('name', function($user){
-                        return $user->name.' '.$user->paternal;
+                        return $user->full_name;
                     })
                     ->editColumn('role', function($user){
-                        return $user->getTranslatedRole();
+                        return config('parameters')['roles'][$user->role];
                     })
                     ->editColumn('company.description', function($user){
                         $company = $user->company == null ? '' : $user->company->description;
@@ -58,4 +58,6 @@ class UserService
 
         return $allUsers;
     }
+
+    
 }

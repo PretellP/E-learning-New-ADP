@@ -40,26 +40,10 @@ class FreeCourseService
                 ->withSum('courseChapters', 'duration');
     }
 
-    public function attachSectionRelationships($query)
-    {
-        return $query->with('sectionChapters')
-                    ->orderBy('section_order', 'ASC')
-                    ->withSum('sectionChapters', 'duration')
-                    ->withCount('sectionChapters');
-    }
 
-    static function withCategoryRelationshipsQuery()
-    {
-        return CourseCategory::with(
-            [
-                'file' => fn ($query) =>
-                $query->where('file_type', 'imagenes')
-            ]
-        )
-            ->withCount('courses');
-    }
-    
+
     // CLASSROOM FREE COURSE
+
 
     public function getPendingAndFinishedCourses($allCourses, $coursesProgress)
     {
@@ -128,6 +112,7 @@ class FreeCourseService
     }
 
 
+
     // ADMIN FREE COURSE
 
     public function getCoursesDataTable(int $category_id = null)
@@ -180,133 +165,34 @@ class FreeCourseService
         return $allCourses;
     }
 
-    // CATEGORY 
 
-    public function storeCategory($request, $storage)
-    {
-        $data = normalizeInputStatus($request->validated());
 
-        $categoryModel = CourseCategory::create($data + [
-            "url_img" => '',
-        ]);
 
-        if ($categoryModel) {
-            if ($request->hasFile('image')) {
 
-                $file_type = 'imagenes';
-                $category = 'cursoslibres';
-                $belongsTo = 'cursoslibres';
-                $relation = 'one_one';
+  
 
-                $file = $request->file('image');
 
-                return app(FileService::class)->store(
-                    $categoryModel,
-                    $file_type,
-                    $category,
-                    $file,
-                    $storage,
-                    $belongsTo,
-                    $relation
-                );
-            }
-            return $categoryModel;
-        }
 
-        throw new Exception('Ocurrio un error al realizar el registro');
-    }
 
-    public function updateCategory($request, $storage, CourseCategory $categoryModel)
-    {
-        $data = normalizeInputStatus($request->validated());
 
-        $isUpdated = $categoryModel->update($data);
-
-        if($isUpdated)
-        {
-            if($request->hasFile('image'))
-            {
-                app(FileService::class)->destroy($categoryModel->file, $storage);
-
-                $file_type = 'imagenes';
-                $category = 'cursoslibres';
-                $file = $request->file('image');
-                $belongsTo = 'cursoslibres';
-                $relation = 'one_one';
-
-                return app(FileService::class)->store(
-                    $categoryModel,
-                    $file_type,
-                    $category,
-                    $file,
-                    $storage,
-                    $belongsTo,
-                    $relation
-                );
-            }
-
-            return $isUpdated;
-        };
-
-        throw new Exception('Ocurrió un error al realizar el registro');
-    }
-
-    public function destroyCategory($storage, CourseCategory $categoryModel)
-    {
-        app(FileService::class)->destroy($categoryModel->file, $storage);
-
-        return $categoryModel->delete();
-
-        throw new Exception('No es posible eliminar el registro');
-    }   
 
     // SHOW COURSE
 
-    public function getChaptersDataTable($section_id)
-    {
-        $allChapters = DataTables::of(
-            SectionChapter::where('section_id', $section_id)
 
-        )
-            ->editColumn('duration', function ($chapter) {
-                return $chapter->duration . ' minutos';
-            })
-            ->editColumn('description', function ($chapter) {
-                $description = $chapter->description;
-                if (strlen($chapter->description) > 100) {
-                    $description =  mb_substr($chapter->description, 0, 100, 'UTF-8') . ' ...';
-                }
-                return $description;
-            })
-            ->addColumn('view', function ($chapter) {
-                return ' <a href="javascript:void(0);" class="preview-chapter-video-button"
-                                        data-url="' . route('admin.freeCourses.chapters.getVideoData', $chapter) . '"> 
-                                        <i class="fa-solid fa-video"></i>
-                                    </a>';
-            })
-            ->addColumn('action', function ($chapter) {
-                $btn = '<button data-id="' . $chapter->id . '" 
-                                    data-url="' . route('admin.freeCourses.chapters.update', $chapter) . '" 
-                                    data-send="' . route('admin.freeCourses.chapters.getData', $chapter) . '"
-                                    data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
-                                    editChapter"><i class="fa-solid fa-pen-to-square"></i></button>';
 
-                $btn .= '<button href="javascript:void(0)" data-id="' .
-                    $chapter->id . '" data-original-title="delete"
-                                    data-url="' . route('admin.freeCourses.chapters.delete', $chapter) .
-                    '" class="ms-3 delete btn btn-danger btn-sm
-                                    deleteChapter"><i class="fa-solid fa-trash-can"></i></button>';
-
-                return $btn;
-            })
-            ->rawColumns(['view', 'action'])
-            ->make(true);
-
-        return $allChapters;
-    }
 
     public function updateCourse($request, Course $course)
     {
         // app(FileService::class)->
     }
+
+
+    public function attachSectionRelationships($query)
+    {
+        return $query->with('sectionChapters')
+                    ->orderBy('section_order', 'ASC')
+                    ->withSum('sectionChapters', 'duration')
+                    ->withCount('sectionChapters');
+    }
+
 }

@@ -134,7 +134,7 @@
                     </button>
                 </div>
 
-                <form action="{{route('admin.freeCourses.updateFreecourse', $course)}}" id="editFreeCourseForm"
+                <form action="{{route('admin.freeCourses.courses.update', $course)}}" id="editFreeCourseForm"
                     enctype="multipart/form-data" method="POST" data-validate="">
                     @csrf
 

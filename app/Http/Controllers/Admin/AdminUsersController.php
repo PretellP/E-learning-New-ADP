@@ -24,9 +24,12 @@ class AdminUsersController extends Controller
             return $this->userService->getDataTable();
         }else{
             $miningUnits =  MiningUnit::get(['id','description']);
-            return view('admin.users.index', [
-                "miningUnits" => $miningUnits
-            ]);
+            $roles = config('parameters')['roles'];
+            
+            return view('admin.users.index', compact(
+                'miningUnits',
+                'roles'
+            ));
         } 
     }
 
@@ -93,7 +96,7 @@ class AdminUsersController extends Controller
 
     public function edit(User $user)
     {
-        $role = $user->getTranslatedRole();
+        $role = config('parameters')['roles'][$user->role];
 
         return response([
             "user" => $user,

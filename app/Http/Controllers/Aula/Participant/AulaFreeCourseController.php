@@ -26,7 +26,7 @@ class AulaFreeCourseController extends Controller
         $user = Auth::user();
         $categories = $this->freeCourseService->withCategoryRelationshipsQuery()
                                             ->where('status', 'S')
-                                            ->select('id', 'url_img', 'description')
+                                            ->select('id', 'description')
                                             ->get();
 
         $coursesProgress = $user->progressChapters()

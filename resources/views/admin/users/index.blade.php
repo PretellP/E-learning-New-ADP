@@ -148,12 +148,9 @@
                             <div class="input-group">
                                 <select name="role" class="form-control select2" id="registerRoleSelect">
                                     <option></option>
-                                    <option value="instructor">Instructor</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="participants">Participante</option>
-                                    <option value="security_manager">Ingeniero de Seguridad</option>
-                                    <option value="security_manager_admin">Gerente de Seguridad</option>
-                                    <option value="technical_support">Soporte Técnico</option>
+                                    @foreach($roles as $key => $role)
+                                        <option value="{{ $key }}"> {{ $role }} </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -321,12 +318,9 @@
                             <div class="input-group">
                                 <select name="role" class="form-control select2" id="editRoleSelect">
                                     <option></option>
-                                    <option value="instructor">Instructor</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="participants">Participante</option>
-                                    <option value="security_manager">Ingeniero de Seguridad</option>
-                                    <option value="security_manager_admin">Gerente de Seguridad</option>
-                                    <option value="technical_support">Soporte Técnico</option>
+                                    @foreach($roles as $key => $role)
+                                        <option value="{{ $key }}"> {{ $role }} </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

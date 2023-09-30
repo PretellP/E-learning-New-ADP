@@ -158,7 +158,7 @@
                 </button>
             </div>
 
-            <form action="{{route('admin.freecourses.storeFreecourse')}}" id="registerFreeCourseForm" enctype="multipart/form-data" method="POST" data-validate="">
+            <form action="{{route('admin.freecourses.courses.store')}}" id="registerFreeCourseForm" enctype="multipart/form-data" method="POST" data-validate="">
                 @csrf
 
                 <input type="hidden" name="place" value="index">

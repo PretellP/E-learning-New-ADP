@@ -27,6 +27,7 @@ class AddForeingKeysToPublishingsTable extends Migration
     {
         Schema::table('publishings', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 }

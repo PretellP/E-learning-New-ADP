@@ -2,7 +2,7 @@
 
 <div class="course-section-box {{setSectionActive($section, $sectionActive)}}"
             data-active="{{setSectionActive($section, $sectionActive)}}" 
-            data-table="{{route('admin.freeCourses.getChaptersTable', $section)}}"
+            data-table="{{route('admin.freeCourses.chapters.getDataTable', $section)}}"
             id="section-box-{{$section->id}}"
             data-id="{{$section->id}}">
     <div class="order-info">
@@ -26,7 +26,7 @@
         <span class="little-text">Orden: </span>
         <div class="input-group">
             <select name="order"
-                data-url="{{route('admin.freecourses.section.updateOrder', $section)}}"
+                data-url="{{route('admin.freecourses.sections.updateOrder', $section)}}"
                 class="form-control select2 order-section-select">
                 @foreach ($course->courseSections as $order)
                     <option {{getSelectedOption($section, $order->section_order)}} value="{{$order->section_order}}"> 
@@ -38,7 +38,7 @@
     </div>
     <div class="action-box clean-list">
         <div class="btn-action-container">
-            <span class="section-edit-btn edit-btn" data-send="{{route('admin.freeCourses.section.edit', $section)}}"
+            <span class="section-edit-btn edit-btn" data-send="{{route('admin.freeCourses.sections.edit', $section)}}"
                 data-url="{{route('admin.freeCourses.sections.update', $section)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>

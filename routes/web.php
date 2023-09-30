@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\{
     FolderController,
     AdminAnnouncementsController,
     AdminCompaniesController,
+    AdminCourseCategoriesController,
+    AdminCourseSectionsController,
     AdminDynamicQuestionsController,
     AdminDynamicAlternativeController,
     AdminEventsController,
@@ -15,6 +17,7 @@ use App\Http\Controllers\Admin\{
     AdminUsersController,
     AdminOwnerCompaniesController,
     AdminMiningUnitsController,
+    AdminSectionChaptersController,
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -165,9 +168,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                     Route::delete('/archivo/{file}/eliminar', 'destroyFile')->name('admin.folders.file.destroy');
                 });
             });
-
         });
-      
 
         // --------------- FREE COURSES -----------------
 
@@ -176,35 +177,54 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
             Route::controller(AdminFreeCoursesController::class)->group(function () {
 
                 Route::get('/', 'index')->name('admin.freeCourses.index');
-                Route::get('/registrar/obtener-categorias', 'getCategoriesRegisterCourse')->name('admin.freecourses.getCategoriesRegister');
-                Route::get('/categorias/editar/{category}', 'getDataCategory')->name('admin.freecourses.getDataCategory');
-                // CATEGORIES - INDEX
-                Route::get('/categoría/{category}', 'showCategory')->name('admin.freeCourses.categories.index');
-                Route::post('/categorías/registrar', 'storeCategory')->name('admin.freeCourses.storeCategory');
-                Route::post('/categorías/actualizar/{category}', 'updateCategory')->name('admin.freecourses.categoryUpdate');
-                Route::post('/categorías/eliminar/{category}', 'destroyCategory')->name('admin.freecourses.deleteCategory');
-                // FREE COURSES - INDEX
-                Route::post('/registrar', 'storeFreecourse')->name('admin.freecourses.storeFreecourse');
-                // FREE COURSE - SHOW
-                Route::get('/curso/{course}', 'showCourse')->name('admin.freeCourses.courses.index');
-                Route::get('/editar/{course}', 'getDataCourse')->name('admin.freecourse.getDatacourse');
-                Route::get('/sección/editar/{section}', 'getDataSection')->name('admin.freeCourses.section.edit');
-                Route::get('/obtener-capítulos/section/{section}', 'getChapterTable')->name('admin.freeCourses.getChaptersTable');
-                Route::get('/capítulo/editar/{chapter}', 'getDataChapter')->name('admin.freeCourses.chapters.getData');
-                Route::get('/capítulo/obtener-video/{chapter}', 'getChapterVideoData')->name('admin.freeCourses.chapters.getVideoData');
-                Route::post('/actualizar/{course}', 'updateFreecourse')->name('admin.freeCourses.updateFreecourse');
-                Route::post('/curso/eliminar/{course}', 'destroyCouse')->name('admin.freecourses.deleteCourse');
-                Route::post('/sección/actualizar-orden/{section}', 'updateSectionOrder')->name('admin.freecourses.section.updateOrder');
-                Route::post('/curso/{course}/secciones/registrar', 'storeSection')->name('admin.freeCourses.sections.store');
-                Route::post('/secciones/actualizar/{section}', 'updateSection')->name('admin.freeCourses.sections.update');
-                Route::post('/secciones/eliminar/{section}', 'destroySection')->name('admin.freeCourses.sections.delete');
-                Route::post('/sección/{section}/registrar-capítlo', 'storeChapter')->name('admin.freeCourses.chapters.store');
-                Route::post('/capítulos/actualizar/{chapter}', 'updateChapter')->name('admin.freeCourses.chapters.update');
-                Route::post('/capítulos/eliminar/{chapter}', 'destroyChapter')->name('admin.freeCourses.chapters.delete');
+                Route::get('/obtener-categorias', 'getCategoriesRegisterCourse')->name('admin.freecourses.getCategoriesRegister');
+                Route::get('/curso/{course}', 'show')->name('admin.freeCourses.courses.index');
+                Route::get('/editar/{course}', 'edit')->name('admin.freecourse.courses.edit');
+                Route::post('/registrar', 'store')->name('admin.freecourses.courses.store');
+                Route::post('/actualizar/{course}', 'update')->name('admin.freeCourses.courses.update');
+                Route::post('/curso/eliminar/{course}', 'destroy')->name('admin.freecourses.courses.delete');
+            });
+
+            Route::group(['prefix' => 'categorías'], function () {
+
+                Route::controller(AdminCourseCategoriesController::class)->group(function () {
+
+                    Route::get('/{category}', 'index')->name('admin.freeCourses.categories.index');
+                    Route::get('/editar/{category}', 'edit')->name('admin.freecourses.categories.edit');
+                    Route::post('/registrar', 'store')->name('admin.freeCourses.categories.store');
+                    Route::post('/actualizar/{category}', 'update')->name('admin.freecourses.categories.update');
+                    Route::post('/eliminar/{category}', 'destroy')->name('admin.freecourses.categories.delete');
+                });
+            });
+
+            Route::group(['prefix' => 'secciones'], function () {
+
+                Route::controller(AdminCourseSectionsController::class)->group(function () {
+
+                    Route::get('/editar/{section}', 'edit')->name('admin.freeCourses.sections.edit');
+                    Route::post('/curso/{course}/secciones/registrar', 'store')->name('admin.freeCourses.sections.store');
+                    Route::post('/actualizar-orden/{section}', 'updateOrder')->name('admin.freecourses.sections.updateOrder');
+                    Route::post('/actualizar/{section}', 'update')->name('admin.freeCourses.sections.update');
+                    Route::post('/eliminar/{section}', 'destroy')->name('admin.freeCourses.sections.delete');
+                });
+            });
+
+            Route::group(['prefix' => 'capítulos'], function () {
+
+                Route::controller(AdminSectionChaptersController::class)->group(function () {
+
+                    Route::get('/obtener-capítulos/{section}', 'getDataTable')->name('admin.freeCourses.chapters.getDataTable');
+                    Route::get('/editar/{chapter}', 'edit')->name('admin.freeCourses.chapters.edit');
+                    Route::get('/obtener-video/{chapter}', 'getVideoData')->name('admin.freeCourses.chapters.getVideoData');
+                    Route::post('/sección/{section}/registrar-capítlo', 'store')->name('admin.freeCourses.chapters.store');
+                    Route::post('/actualizar/{chapter}', 'update')->name('admin.freeCourses.chapters.update');
+                    Route::post('/capítulos/eliminar/{chapter}', 'destroy')->name('admin.freeCourses.chapters.delete');
+                });
             });
         });
 
 
+        // -------------------- EXAMS ---------------------
 
         Route::group(['prefix' => 'examenes'], function () {
 
@@ -216,8 +236,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/actualizar/{exam}', 'update')->name('admin.exams.update');
                 Route::post('/eliminar/{exam}', 'destroy')->name('admin.exams.destroy');
             });
-
-
 
             Route::controller(AdminDynamicQuestionsController::class)->group(function () {
 
@@ -234,22 +252,29 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/alternativa/{alternative}/eliminar', 'destroy')->name('admin.exams.alternatives.destroy');
                 Route::post('/alternativa/{alternative}/eliminar-archivo', 'destroyFile')->name('admin.exams.alternatives.deleteFile');
             });
-
         });
 
-        // --------------- EVALUATIONS -------------------
 
-       
 
         // --------------- EVENTS ------------------------
 
-        Route::get('/eventos', [AdminEventsController::class, 'index'])->name('admin.events.index');
+        Route::group(['prefix' => 'eventos'], function () {
+
+            Route::controller(AdminEventsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.events.index');
+                Route::get('/crear/obtener-data', 'create')->name('admin.events.create');
+                Route::get('/editar/{event}/obtener-data', 'edit')->name('admin.events.edit');
+                Route::post('/registrar', 'store')->name('admin.events.store');
+                Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
+                Route::delete('/eliminar/{event}', 'destroy')->name('admin.events.destroy');
+            });
+        });
+
 
         // --------------- ANNOUNCEMENTS ----------------
 
         Route::get('/anuncios', [AdminAnnouncementsController::class, 'index'])->name('admin.announcements.index');
-        
-
     });
 
 
@@ -301,6 +326,5 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
         Route::post('/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
         Route::patch('/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
-
     });
 });

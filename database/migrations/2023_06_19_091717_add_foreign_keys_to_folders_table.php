@@ -27,6 +27,7 @@ class AddForeignKeysToFoldersTable extends Migration
     {
         Schema::table('folders', function (Blueprint $table) {
             $table->dropForeign(['id_course']);
+            $table->dropColumn('id_course');
         });
     }
 }

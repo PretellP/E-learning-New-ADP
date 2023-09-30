@@ -163,10 +163,6 @@ class dynamicAlternativeService
 
         $success = $alternative->delete();
 
-        if (!$success) {
-            return false;
-        }
-
         return $success;
     }
 

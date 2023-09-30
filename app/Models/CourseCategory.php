@@ -14,7 +14,7 @@ class CourseCategory extends Model
     protected $table = 'course_categories';
     
     protected $fillable = [
-        'description', 'status', 'url_img'
+        'description', 'status'
     ];
 
     public function courses()

@@ -17,7 +17,6 @@ class AlterEvaluationsTable extends Migration
             $table->double('points', 8, 2)->after('selected_alternative')->nullable();
             $table->renameColumn('correct_alternative', 'correct_alternatives');
             $table->renameColumn('selected_alternative', 'selected_alternatives');
-            // $table->dropColumn('is_correct');
         });
     }
 
@@ -31,7 +30,6 @@ class AlterEvaluationsTable extends Migration
         Schema::table('evaluations', function (Blueprint $table) {
             $table->renameColumn('correct_alternatives', 'correct_alternative');
             $table->renameColumn('selected_alternatives', 'selected_alternative');
-            // $table->boolean('is_correct')->after('statement');
             $table->dropColumn('points');
         });
     }

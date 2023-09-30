@@ -82,7 +82,7 @@
                         <i class="fa-regular fa-circle-xmark fa-lg"></i>
                     </span>
 
-                    <img src="{{ $alternative->file->file_url }}" class="img-fluid alternative_img">
+                    <img src="{{ verifyImage($alternative->file) }}" class="img-fluid alternative_img">
 
                     @endif
 

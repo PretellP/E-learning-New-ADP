@@ -27,7 +27,7 @@
             <div class="carousel-container">
                 <div id="publishings-owlcarousel" class="publishings-owlcarousel owl-carousel owl-theme slider">
                     @forelse ($bannerPublishings as $banner)
-                        <img class='banner-img' src="{{asset($banner->url_img)}}" alt="">
+                        <img class='banner-img' src="{{verifyImage($banner->file)}}" alt="">
                     @empty
                     <h4 class="text-center empty-records-message">
                         Aún no hay publicaciones
@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="box-publishing-img">
-                            <img src="{{asset($card->url_img)}}" alt="">
+                            <img src="{{verifiyImage($card->file)}}" alt="">
                         </div>
                     </div>
                 </div>

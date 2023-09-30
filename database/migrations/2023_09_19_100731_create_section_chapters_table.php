@@ -18,7 +18,6 @@ class CreateSectionChaptersTable extends Migration
             $table->string('title', 100);
             $table->string('description', 500);
             $table->integer('chapter_order');
-            $table->string('url_video', 500); // Eliminar
             $table->integer('duration');
             $table->timestamps();
         });

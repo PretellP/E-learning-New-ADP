@@ -4466,9 +4466,9 @@ $(function () {
                         form.find('.btn-save').attr('disabled', 'disabled')
 
                         loadSpinner.toggleClass('active')
-        
+
                         var formData = new FormData(form[0])
-        
+
                         $.ajax({
                             method: form.attr('method'),
                             url: form.attr('action'),
@@ -4477,17 +4477,17 @@ $(function () {
                             contentType: false,
                             dataType: 'JSON',
                             success: function (data) {
-        
+
                                 if (data.success) {
-        
+
                                     let data_show = data.data_show
                                     let exam_box = $('#exam-box-container')
                                     let question_box = $('#question-type-container')
-        
+
                                     exam_box.html(data_show.html)
                                     question_box.html(data_show.htmlQuestion)
                                     questionsTable.draw()
-        
+
                                     Toast.fire({
                                         icon: 'success',
                                         text: '¡Registrado con éxito!'
@@ -4517,7 +4517,7 @@ $(function () {
                     }
                 });
 
-               
+
             }
         })
 
@@ -5176,6 +5176,595 @@ $(function () {
             })
 
         }
+
+    }
+
+
+
+
+
+
+
+
+
+
+    // ------------- EVENTS  INDEX------------------
+
+
+    if ($('#events-table').length) {
+
+
+        /* ----- EVENTS TABLE ------*/
+
+        var eventsTableEle = $('#events-table');
+        var getDataUrl = eventsTableEle.data('url');
+        var eventsTable = eventsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'type', name: 'type' },
+                { data: 'date', name: 'date' },
+                { data: 'exam.course.description', name: 'exam.course.description' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'responsable.name', name: 'responsable.name' },
+                { data: 'flg_asist', name: 'flg_asist' },
+                { data: 'active', name: 'active' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            order: [
+                [3, 'desc']
+            ]
+            // dom: 'rtip'
+        });
+
+
+        // --------------- REGISTRAR -----------------
+
+        $('#registerTypeSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un tipo de evento'
+        })
+
+        $('#registerInstructorSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un instructor'
+        })
+
+        $('#registerResponsableSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un responsable'
+        })
+
+        $('#registerRoomSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un sala'
+        })
+
+        $('#registerOwnerCompanySelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona una empresa titular'
+        })
+
+        $('#registerExamSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un examen'
+        })
+
+        $('#registerTestExamSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un examen de prueba'
+        })
+
+        $('#registerElearningSelect').select2({
+            dropdownParent: $("#registerEventModal"),
+            placeholder: 'Selecciona un e-learning'
+        })
+
+
+        $('#register-status-checkbox').change(function () {
+            var txtDesc = $('#txt-register-status');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var registerEventForm = $('#registerEventForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                    maxlength: 255
+                },
+                type: {
+                    required: true,
+                },
+                date: {
+                    required: true
+                },
+                user_id: {
+                    required: true
+                },
+                responsable_id: {
+                    required: true
+                },
+                room_id: {
+                    required: true
+                },
+                exam_id: {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#registerEventModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            eventsTable.draw()
+                            registerEventForm.resetForm()
+                            form.trigger('reset');
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registrado exitosamente!'
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('.main-content').on('click', '#btn-register-event-modal', function () {
+            var button = $(this)
+            var url = button.data('url')
+            var modal = $('#registerEventModal')
+            var loadSpinner = button.find('.loadSpinner')
+            var form = modal.find('#registerEventForm')
+
+            var typeSelect = form.find('#registerTypeSelect')
+            var instructorSelect = form.find('#registerInstructorSelect')
+            var responsableSelect = form.find('#registerResponsableSelect')
+            var roomSelect = form.find('#registerRoomSelect')
+            var ownerCompanySelect = form.find('#registerOwnerCompanySelect')
+            var examSelect = form.find('#registerExamSelect')
+            var testExamSelect = form.find('#registerTestExamSelect')
+            var elearningSelect = form.find('#registerElearningSelect')
+
+            var dateInput = form.find('input[name=date]')
+
+            typeSelect.empty()
+            instructorSelect.empty()
+            responsableSelect.empty()
+            roomSelect.empty()
+            ownerCompanySelect.empty()
+            examSelect.empty()
+            testExamSelect.empty()
+            elearningSelect.empty()
+
+            dateInput.val(moment().format('YYYY-MM-DD'))
+
+            loadSpinner.toggleClass('active')
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    typeSelect.append('<option></option>')
+                    $.each(data.types, function (key, values) {
+                        typeSelect.append('<option value="' + key + '">' + values + '</option>')
+                    })
+
+                    instructorSelect.append('<option></option>')
+                    $.each(data.instructors, function (key, values) {
+                        instructorSelect.append('<option value="' + values.id + '">' +
+                            values.name + ' ' + values.paternal +
+                            '</option>')
+                    })
+
+                    responsableSelect.append('<option></option>')
+                    $.each(data.responsables, function (key, values) {
+                        responsableSelect.append('<option value="' + values.id + '">' +
+                            values.name + ' ' + values.paternal +
+                            '</option>')
+                    })
+
+                    roomSelect.append('<option></option>')
+                    $.each(data.rooms, function (key, values) {
+                        roomSelect.append('<option value="' + values.id + '">' +
+                            values.description +
+                            '</option>')
+                    })
+
+                    ownerCompanySelect.append('<option></option>')
+                    $.each(data.ownerCompanies, function (key, values) {
+                        ownerCompanySelect.append('<option value="' + values.id + '">' +
+                            values.name +
+                            '</option>')
+                    })
+
+                    examSelect.append('<option></option>')
+                    $.each(data.exams, function (key, values) {
+                        examSelect.append('<option value="' + values.id + '">' +
+                            values.title +
+                            '</option>')
+                    })
+
+                    testExamSelect.append('<option></option>')
+                    $.each(data.examsTest, function (key, values) {
+                        testExamSelect.append('<option value="' + values.id + '">' +
+                            values.title +
+                            '</option>')
+                    })
+
+                    elearningSelect.append('<option></option>')
+                    $.each(data.eLearnings, function (key, values) {
+                        elearningSelect.append('<option value="' + values.id + '">' +
+                            values.title +
+                            '</option>')
+                    })
+
+                },
+                complete: function (data) {
+                    loadSpinner.toggleClass('active')
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+
+
+        /* -------------- EDITAR ---------------*/
+
+
+        $('#editTypeSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un tipo de evento'
+        })
+
+        $('#editInstructorSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un instructor'
+        })
+
+        $('#editResponsableSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un responsable'
+        })
+
+        $('#editRoomSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un sala'
+        })
+
+        $('#editOwnerCompanySelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona una empresa titular'
+        })
+
+        $('#editExamSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un examen'
+        })
+
+        $('#editTestExamSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un examen de prueba'
+        })
+
+        $('#editElearningSelect').select2({
+            dropdownParent: $("#editEventModal"),
+            placeholder: 'Selecciona un e-learning'
+        })
+
+
+        $('#edit-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-status');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editEventForm = $('#editEventForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                    maxlength: 255
+                },
+                type: {
+                    required: true,
+                },
+                date: {
+                    required: true
+                },
+                user_id: {
+                    required: true
+                },
+                responsable_id: {
+                    required: true
+                },
+                room_id: {
+                    required: true
+                },
+                exam_id: {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editEventModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            eventsTable.draw()
+                            editEventForm.resetForm()
+                            form.trigger('reset');
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: '¡Registro actualizado!'
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+
+        $('.main-content').on('click', '.editEvent-btn', function () {
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var modal = $('#editEventModal');
+            var form = modal.find('#editEventForm')
+
+            var typeSelect = form.find('#editTypeSelect')
+            var instructorSelect = form.find('#editInstructorSelect')
+            var responsableSelect = form.find('#editResponsableSelect')
+            var roomSelect = form.find('#editRoomSelect')
+            var ownerCompanySelect = form.find('#editOwnerCompanySelect')
+            var examSelect = form.find('#editExamSelect')
+            var testExamSelect = form.find('#editTestExamSelect')
+            var elearningSelect = form.find('#editElearningSelect')
+
+            var activeChk = form.find('#edit-status-checkbox')
+            var flgTestChk = form.find('#edit-flg-test-checkbox')
+            var flgAssist = form.find('#edit-flg-assist-checkbox')
+
+            typeSelect.empty()
+            instructorSelect.empty()
+            responsableSelect.empty()
+            roomSelect.empty()
+            ownerCompanySelect.empty()
+            examSelect.empty()
+            testExamSelect.empty()
+            elearningSelect.empty()
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let all = data.all
+                    let selected = data.selected
+
+                    let info = data.info
+
+                    if (all != null) {
+
+                        typeSelect.append('<option></option>')
+                        $.each(all.types, function (key, values) {
+                            typeSelect.append('<option value="' + key + '">' + values + '</option>')
+                        })
+                        typeSelect.val(selected.type).change()
+
+                        instructorSelect.append('<option></option>')
+                        $.each(all.instructors, function (key, values) {
+                            instructorSelect.append('<option value="' + values.id + '">' +
+                                values.name + ' ' + values.paternal +
+                                '</option>')
+                        })
+                        instructorSelect.val(selected.instructor).change()
+
+                        responsableSelect.append('<option></option>')
+                        $.each(all.responsables, function (key, values) {
+                            responsableSelect.append('<option value="' + values.id + '">' +
+                                values.name + ' ' + values.paternal +
+                                '</option>')
+                        })
+                        responsableSelect.val(selected.responsable).change()
+
+                        roomSelect.append('<option></option>')
+                        $.each(all.rooms, function (key, values) {
+                            roomSelect.append('<option value="' + values.id + '">' +
+                                values.description +
+                                '</option>')
+                        })
+                        roomSelect.val(selected.room).change()
+
+                        ownerCompanySelect.append('<option></option>')
+                        $.each(all.ownerCompanies, function (key, values) {
+                            ownerCompanySelect.append('<option value="' + values.id + '">' +
+                                values.name +
+                                '</option>')
+                        })
+                        ownerCompanySelect.val(selected.ownerCompany).change()
+
+                        examSelect.append('<option></option>')
+                        $.each(all.exams, function (key, values) {
+                            examSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+                        examSelect.val(selected.exam).change()
+
+                        testExamSelect.append('<option></option>')
+                        $.each(all.examsTest, function (key, values) {
+                            testExamSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+                        testExamSelect.val(selected.testExam).change()
+
+                        elearningSelect.append('<option></option>')
+                        $.each(all.eLearnings, function (key, values) {
+                            elearningSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+                        elearningSelect.val(selected.eLearning).change()
+                    }
+
+                    if (info != null) {
+
+                        if (info.active == 'S') {
+                            activeChk.prop('checked', true);
+                            $('#txt-edit-status').html('Activo');
+                        } else {
+                            activeChk.prop('checked', false);
+                            $('#txt-edit-status').html('Inactivo');
+                        }
+
+                        if (info.flg_test == 'S') {
+                            flgTestChk.prop('checked', true);
+                        } else {
+                            flgTestChk.prop('checked', false);
+                        }
+
+                        if (info.flg_assit == 'S') {
+                            flgAssist.prop('checked', true);
+                        } else {
+                            flgAssist.prop('checked', false);
+                        }
+
+                        form.find('input[name=description]').val(info.description)
+
+                        $('#dateinputEdit').data('daterangepicker').setStartDate(info.date);
+                        $("#dateinputEdit").data('daterangepicker').setEndDate(info.date);
+                        
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+
+        })
+
+
+        /* ------------- ELIMINAR ----------------*/
+
+        $('.main-content').on('click', '.deleteEvent-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+                                eventsTable.draw();
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro eliminado!',
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error inesperado!',
+                            });
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
 
     }
 

@@ -20,6 +20,11 @@ class Survey extends Model
 
     public function userSurveys()
     {
-        return $this->hasMany(UserSurvey::class, 'survey_id','id');
+        return $this->hasMany(UserSurvey::class, 'survey_id', 'id');
+    }
+
+    public function file()
+    {
+        return $this->morphOne(File::class, 'fileable');
     }
 }

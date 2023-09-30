@@ -15,7 +15,6 @@ class AlterCoursesTable extends Migration
     {
         Schema::table('courses', function (Blueprint $table) {
             $table->string('course_type', 100)->default('REGULAR');
-            $table->string('url_img', 500)->nullable(); // ELIMINAR
             $table->boolean('flg_recom')->after('active')->nullable();
         });
     }
@@ -29,7 +28,6 @@ class AlterCoursesTable extends Migration
     {
         Schema::table('courses', function (Blueprint $table) {
             $table->dropColumn('course_type');
-            $table->dropColumn('url_img');
             $table->dropColumn('flg_recom');
         });
     }

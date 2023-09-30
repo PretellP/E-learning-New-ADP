@@ -454,6 +454,18 @@ function verifyImage($file)
     return $url;
 }
 
+function getTranslatedEventType($type)
+{
+    if($type == 'present' || $type == 'P'){
+        $translated = 'Presencial';
+    }
+    else {
+        $translated = 'Virtual';
+    }
+    
+    return $translated;
+}
+
 
 
 function normalizeInputStatus($data)
@@ -466,35 +478,15 @@ function normalizeInputStatus($data)
 
     $data['flg_test_exam'] = isset($data['flg_test_exam']) ? 'S' : 'N';
 
-    if (isset($data['flg_public'])) {
-        $data['flg_public'] = 'S';
-    } else {
-        $data['flg_public'] = 'N';
-    }
+    $data['flg_public'] = isset($data['flg_public']) ? 'S' : 'N';
 
-    if (isset($data['flg_asist'])) {
-        $data['flg_asist'] = 'S';
-    } else {
-        $data['flg_asist'] = 'N';
-    }
+    $data['flg_asist'] = isset($data['flg_asist']) ? 'S' : 'N';
 
-    if (isset($data['flg_survey_course'])) {
-        $data['flg_survey_course'] = 'S';
-    } else {
-        $data['flg_survey_course'] = 'N';
-    }
+    $data['flg_survey_course'] = isset($data['flg_survey_course']) ? 'S' : 'N';
 
-    if (isset($data['flg_survey_evaluation'])) {
-        $data['flg_survey_evaluation'] = 'S';
-    } else {
-        $data['flg_survey_evaluation'] = 'N';
-    }
+    $data['flg_survey_evaluation'] = isset($data['flg_survey_evaluation']) ? 'S' : 'N';
 
-    if (isset($data['assist_user'])) {
-        $data['assist_user'] = 'S';
-    } else {
-        $data['assist_user'] = 'N';
-    }
+    $data['assist_user'] = isset($data['assist_user']) ? 'S' : 'N';
 
     return $data;
 }

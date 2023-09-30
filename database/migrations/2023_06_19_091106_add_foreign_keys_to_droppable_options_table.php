@@ -27,6 +27,7 @@ class AddForeignKeysToDroppableOptionsTable extends Migration
     {
         Schema::table('droppable_options', function (Blueprint $table) {
             $table->dropForeign(['dynamic_alternative_id']);
+            $table->dropColumn('dynamic_alternative_id');
         });
     }
 }

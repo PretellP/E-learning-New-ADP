@@ -29,6 +29,8 @@ class AddForeignKeysToUserCourseProgressTable extends Migration
         Schema::table('user_course_progress', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['section_chapter_id']);
+            $table->dropColumn('user_id');
+            $table->dropColumn('section_chapter_id');
         });
     }
 }

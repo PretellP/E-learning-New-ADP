@@ -14,13 +14,13 @@
     <div class="action-box">
         <div class="btn-action-container">
             <span class="edit-btn editCategory-btn"
-                data-send="{{route('admin.freecourses.getDataCategory', $category)}}"
-                data-url="{{route('admin.freecourses.categoryUpdate', $category)}}">
+                data-send="{{route('admin.freecourses.categories.edit', $category)}}"
+                data-url="{{route('admin.freecourses.categories.update', $category)}}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
             @if($category->courses_count == 0)
             <span class="delete-btn deleteCategory-btn"
-                data-url="{{route('admin.freecourses.deleteCategory', $category)}}">
+                data-url="{{route('admin.freecourses.categories.delete', $category)}}">
                 <i class="fa-solid fa-trash-can"></i>
             </span>
             @else
