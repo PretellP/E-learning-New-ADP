@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseSectionRequest;
 use Illuminate\Http\Request;
 use App\Models\{Course, CourseSection};
 use App\Services\{CourseSectionService, FreeCourseService};
 use Exception;
-
+use Laravel\Ui\Presets\React;
 
 class AdminCourseSectionsController extends Controller
 {
@@ -16,6 +17,40 @@ class AdminCourseSectionsController extends Controller
     public function __construct(CourseSectionService $service)
     {
         $this->courseSectionService = $service;
+    }
+
+    public function store(Request $request, Course $course)
+    {
+        parse_str($request['form'], $form);
+
+        $success = true;
+        $message = null;
+        $htmlCourse = null;
+        $htmlCourse = null;
+
+        try{
+            $this->courseSectionService->store($form, $course);
+            $message = config('parameters.stored_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if($success)
+        {
+            $course->loadFreeCourseRelationships();
+            $sectionActive = getActiveSection($request['id']);
+    
+            $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
+            $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
+        }
+      
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+            "htmlCourse" => $htmlCourse,
+            "htmlSection" => $htmlSection
+        ]);
     }
 
     public function edit(CourseSection $section)
@@ -31,55 +66,15 @@ class AdminCourseSectionsController extends Controller
         ]);
     }
 
-    public function store(Request $request, Course $course) // FALTA
-    {
-        parse_str($request['form'], $form);
-
-        $course->loadMax('courseSections', 'section_order'); 
-
-        $lastOrder = $course->course_sections_max_section_order == null ?
-                    0 : $course->course_sections_max_section_order;
-
-        $section = CourseSection::create([
-            "title" => $form['title'],
-            "section_order" => $lastOrder + 1,
-            "course_id" => $course->id
-        ]);
-
-        $course->loadFreeCourseRelationships();
-
-        $sectionActive = getActiveSection($request['id']);
-
-        $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
-
-        return response()->json([
-            "htmlCourse" => $htmlCourse,
-            "htmlSection" => $htmlSection
-        ]);
-    }
-
-    public function updateOrder(Request $request, CourseSection $section) // FALTA
+    public function updateOrder(Request $request, CourseSection $section)
     {
         $order = $request['value'];
 
-        if ($section->section_order != $order) {
-
-            CourseSection::where('course_id', $section->course_id)
-                ->where('section_order', $order)
-                ->update([
-                    "section_order" => $section->section_order
-                ]);
-
-            $section->update([
-                "section_order" => $order
-            ]);
-        }
+        $this->courseSectionService->updateOrder($order, $section);
 
         $course = $section->course->loadFreeCourseRelationships();
 
         $sectionActive = getActiveSection($request['id']);
-
         $html = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
 
         return response()->json([
@@ -87,22 +82,22 @@ class AdminCourseSectionsController extends Controller
         ]);
     }
 
-    public function update(Request $request, CourseSection $section) // FALTA
+    public function update(Request $request, CourseSection $section) 
     {
         parse_str($request['form'], $form);
 
-        if ($section->section_order != $form['order']) {
-            CourseSection::where('course_id', $section->course_id)
-                ->where('section_order', $form['order'])
-                ->update([
-                    "section_order" => $section->section_order
-                ]);
-        }
+        $success = true;
+        $message = null;
+        $sectionActive = null;
+        $htmlSection = null;
 
-        $section->update([
-            "title" => $form['title'],
-            "section_order" => $form['order'],
-        ]);
+        try{
+            $this->courseSectionService->update($form, $section);
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
         $course = $section->course->loadFreeCourseRelationships();
         
@@ -111,6 +106,8 @@ class AdminCourseSectionsController extends Controller
         $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "htmlSection" => $htmlSection,
             "active" => $sectionActive,
             "id" => $section->id,
@@ -121,21 +118,18 @@ class AdminCourseSectionsController extends Controller
     public function destroy(FreeCourseService $freeCourseService, Request $request, CourseSection $section) // FALTA
     {
         $course_id = $section->course_id;
-        $section->delete();
 
-        $sections = CourseSection::where('course_id', $course_id)
-                    ->orderBy('section_order', 'ASC')->get();
-
-        $order = 1;
-        foreach ($sections as $section) {
-            $section->update([
-                "section_order" => $order
-            ]);
-            $order++;
-        }
-
+        $success = true;
         $is_active = 0;
         $htmlChapter = '';
+
+        try{
+            $this->courseSectionService->destroy($section);
+            $message = config('parameters.deleted_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
         $course = $freeCourseService->withFreeCourseRelationshipsQuery()
                                             ->where('id', $course_id)
@@ -152,6 +146,8 @@ class AdminCourseSectionsController extends Controller
         }
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "htmlCourse" => $htmlCourse,
             "htmlSection" => $htmlSection,
             "is_active" => $is_active,

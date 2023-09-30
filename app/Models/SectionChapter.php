@@ -11,7 +11,13 @@ class SectionChapter extends Model
     use HasFactory;
     
     protected $table = 'section_chapters';
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'description',
+        'chapter_order',
+        'duration',
+        'section_id'
+    ];
 
     public function courseSection()
     {
@@ -24,4 +30,23 @@ class SectionChapter extends Model
                                     ->withPivot(['id', 'progress_time', 'last_seen', 'status'])->withTimestamps();
     }
     
+    public function file()
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load(['courseSection', 'file']);
+    }
+
+    public function loadVideo()
+    {
+        return $this->load(
+            [
+                'file' => fn ($query) =>
+                $query->where('file_type', 'videos')
+            ]
+        );
+    }
 }

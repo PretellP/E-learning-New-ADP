@@ -454,6 +454,11 @@ function verifyImage($file)
     return $url;
 }
 
+function verifyFile($file)
+{
+    return $file != null ? $file->file_url : null; 
+}
+
 function getTranslatedEventType($type)
 {
     if($type == 'present' || $type == 'P'){

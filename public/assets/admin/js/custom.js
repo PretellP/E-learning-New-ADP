@@ -2385,7 +2385,7 @@ $(function () {
 
         /* ----------- REGISTER -----------*/
 
-        var freeCourseImageRegister = $('input[type="file"][name="courseImageRegister"]');
+        var freeCourseImageRegister = $('#image-freecourse-register');
         freeCourseImageRegister.val('');
         freeCourseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
@@ -2432,17 +2432,17 @@ $(function () {
 
         var registerFreeCourseForm = $('#registerFreeCourseForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 255
                 },
                 subtitle: {
                     maxlength: 255
                 },
-                category: {
+                category_id: {
                     required: true,
                 },
-                courseImageRegister: {
+                image: {
                     required: true,
                 },
             },
@@ -2457,6 +2457,8 @@ $(function () {
 
                 loadSpinner.toggleClass('active')
 
+                form.find('.btn-save').attr('disabled', 'disabled')
+
                 $.ajax({
                     method: form.attr('method'),
                     url: form.attr('action'),
@@ -2466,35 +2468,46 @@ $(function () {
                     dataType: 'JSON',
                     success: function (data) {
 
-                        registerFreeCourseForm.resetForm()
+                        if (data.success) {
 
-                        if (data.show == true) {
+                            if (data.show == true) {
 
-                            window.location.href = data.route
+                                window.location.href = data.route
 
-                        } else {
+                            } else {
 
-                            if ($('#categories-list-container').length) {
-                                var listContainer = $('#categories-list-container')
-                                listContainer.html(data.html)
+                                if ($('#categories-list-container').length) {
+                                    var listContainer = $('#categories-list-container')
+                                    listContainer.html(data.html)
+                                }
                             }
 
                             $(img_holder).empty()
-
                             freeCoursesTable.draw()
-                            form.trigger('reset')
                             freeCourseImageRegister.val('')
-                            loadSpinner.toggleClass('active')
-                            modal.modal('hide')
+
                             Toast.fire({
                                 icon: 'success',
-                                text: '¡Registrado exitosamente!'
+                                text: data.message
+                            })
+
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
                             })
                         }
-
+                    },
+                    complete: function (data) {
+                        registerFreeCourseForm.resetForm()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                        modal.modal('hide')
                     },
                     error: function (data) {
                         console.log(data)
+                        ToastError.fire()
                     }
                 })
             }
@@ -2508,6 +2521,7 @@ $(function () {
             var select = modal.find('#registerfreeCourseSelect')
 
             loadSpinner.toggleClass('active')
+            button.attr('disabled', 'disabled')
             registerFreeCourseForm.resetForm()
             select.html('')
 
@@ -2525,7 +2539,8 @@ $(function () {
                 },
                 complete: function (data) {
                     loadSpinner.toggleClass('active')
-                    modal.modal('toggle')
+                    button.removeAttr('disabled')
+                    modal.modal('show')
                 },
                 error: function (data) {
                     console.log(data)
@@ -2745,7 +2760,7 @@ $(function () {
 
         /*--------- REGISTER -------*/
 
-        var freeCourseImageRegister = $('input[type="file"][name="courseImageRegister"]');
+        var freeCourseImageRegister = $('#image-course-register');
         freeCourseImageRegister.val('');
         freeCourseImageRegister.on("change", function () {
             var img_path = $(this)[0].value;
@@ -2791,16 +2806,19 @@ $(function () {
 
         var registerFreeCourseForm = $('#registerFreeCourseForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 255
                 },
                 subtitle: {
                     maxlength: 255
                 },
-                courseImageRegister: {
+                image: {
                     required: true,
                 },
+                category_id: {
+                    required: true
+                }
             },
             submitHandler: function (form, event) {
                 event.preventDefault()
@@ -2812,6 +2830,7 @@ $(function () {
                 var img_holder = form.find('.img-holder')
 
                 loadSpinner.toggleClass('active')
+                form.find('.btn_save').attr('disabled', 'disabled')
 
                 $.ajax({
                     method: form.attr('method'),
@@ -2824,29 +2843,43 @@ $(function () {
 
                         registerFreeCourseForm.resetForm()
 
-                        if (data.show == true) {
+                        if (data.success) {
 
-                            window.location.href = data.route
-                        }
-                        else {
-                            var boxCategory = $('#categorybox-show')
-                            boxCategory.html(data.html)
+                            if (data.show == true) {
+
+                                window.location.href = data.route
+                            }
+                            else {
+                                var boxCategory = $('#categorybox-show')
+                                boxCategory.html(data.html)
+                            }
 
                             $(img_holder).empty()
 
                             freeCoursesCatShowTable.draw()
                             form.trigger('reset')
                             freeCourseImageRegister.val('')
-                            loadSpinner.toggleClass('active')
-                            modal.modal('toggle')
+
                             Toast.fire({
                                 icon: 'success',
-                                text: '¡Registrado exitosamente!'
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
                             })
                         }
                     },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                    },
                     error: function (data) {
                         console.log(data)
+                        ToastError.fire()
                     }
                 })
             }
@@ -2871,7 +2904,7 @@ $(function () {
 
     if ($('#course-box-container').length) {
 
-        /* --------- EDIT --------------*/
+        /* ------------ EDIT --------------*/
 
         $('#edit-course-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-course');
@@ -2882,7 +2915,7 @@ $(function () {
             }
         });
 
-        var freeCourseImageEdit = $('input[type="file"][name="courseImageEdit"]');
+        var freeCourseImageEdit = $('#image-upload-freecourse-edit');
         freeCourseImageEdit.val('');
         freeCourseImageEdit.on("change", function () {
             $('#editFreeCourseForm').validate()
@@ -2919,13 +2952,16 @@ $(function () {
 
         var editFreeCourseForm = $('#editFreeCourseForm').validate({
             rules: {
-                name: {
+                description: {
                     required: true,
                     maxlength: 255
                 },
                 subtitle: {
                     maxlength: 255
                 },
+                category_id: {
+                    required: true
+                }
             },
             submitHandler: function (form, event) {
                 event.preventDefault()
@@ -2936,6 +2972,7 @@ $(function () {
                 var img_holder = form.find('.img-holder')
 
                 loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
 
                 $.ajax({
                     method: form.attr('method'),
@@ -2946,26 +2983,39 @@ $(function () {
                     dataType: 'JSON',
                     success: function (data) {
 
-                        editFreeCourseForm.resetForm()
+                        if (data.success) {
+                            editFreeCourseForm.resetForm()
 
-                        var courseBox = $('#course-box-container')
-                        var descriptionCont = $('#course-description-text-principal')
-                        courseBox.html(data.html)
-                        descriptionCont.html(data.description)
+                            var courseBox = $('#course-box-container')
+                            var descriptionCont = $('#course-description-text-principal')
+                            courseBox.html(data.html)
+                            descriptionCont.html(data.description)
 
-                        $(img_holder).empty()
+                            $(img_holder).empty()
 
-                        form.trigger('reset')
-                        freeCourseImageEdit.val('')
+                            form.trigger('reset')
+                            freeCourseImageEdit.val('')
+                            modal.modal('hide')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registro actualizado!'
-                        })
+                        form.find('.btn-save').removeAttr('disabled')
                     },
                     error: function (data) {
                         console.log(data)
+                        ToastError.fire()
                     }
                 })
             }
@@ -2985,7 +3035,7 @@ $(function () {
                 dataType: 'JSON',
                 success: function (data) {
 
-                    modal.find('input[name=name]').val(data.description);
+                    modal.find('input[name=description]').val(data.description);
                     modal.find('input[name=subtitle]').val(data.subtitle);
                     modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-course-edit" src="' + data.url_img + '"></img>');
                     modal.find('#image-upload-freecourse-edit').attr('data-value', '<img class="img-fluid course_img" id="image-course-edit" scr="' + data.url_img + '" >');
@@ -3006,7 +3056,7 @@ $(function () {
                     }
                 },
                 complete: function (data) {
-                    modal.modal('toggle')
+                    modal.modal('show')
                 },
                 error: function (data) {
                     console.log(data)
@@ -3033,13 +3083,24 @@ $(function () {
                         },
                         dataType: 'JSON',
                         success: function (result) {
-                            window.location.href = result.route
+
+                            if (result.success) {
+                                window.location.href = result.route
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
                         },
                         error: function (result) {
-                            Toast.fire({
-                                icon: 'error',
-                                title: '¡Ocurrió un error inesperado!',
-                            });
+                            console.log(result)
+                            ToastError.fire()
                         }
                     });
                 } else {
@@ -3107,6 +3168,9 @@ $(function () {
                     required: true,
                     maxlength: 100
                 },
+                course_id: {
+                    required: true
+                }
             },
             submitHandler: function (form, event) {
                 event.preventDefault()
@@ -3117,6 +3181,7 @@ $(function () {
                 var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
 
                 loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
 
                 $.ajax({
                     method: form.attr('method'),
@@ -3128,27 +3193,40 @@ $(function () {
                     dataType: 'JSON',
                     success: function (data) {
 
-                        registerSectionForm.resetForm()
+                        if (data.success) {
+                            registerSectionForm.resetForm()
 
-                        var boxCourse = $('#course-box-container')
-                        var boxSections = $('#sections-list-container')
-                        boxCourse.html(data.htmlCourse)
-                        boxSections.html(data.htmlSection)
+                            var boxCourse = $('#course-box-container')
+                            var boxSections = $('#sections-list-container')
+                            boxCourse.html(data.htmlCourse)
+                            boxSections.html(data.htmlSection)
 
-                        $('.order-section-select').select2({
-                            minimumResultsForSearch: -1
-                        })
+                            $('.order-section-select').select2({
+                                minimumResultsForSearch: -1
+                            })
 
-                        form.trigger('reset')
+                            form.trigger('reset')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        modal.modal('hide')
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registrado exitosamente!'
-                        })
+                        form.find('.btn-save').removeAttr('disabled')
                     },
                     error: function (data) {
                         console.log(data)
+                        ToastError.fire()
                     }
                 })
             }
@@ -3168,7 +3246,7 @@ $(function () {
                     required: true,
                     maxlength: 100
                 },
-                order: {
+                section_order: {
                     required: true
                 }
             },
@@ -3181,6 +3259,7 @@ $(function () {
                 var sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
 
                 loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
 
                 $.ajax({
                     method: form.attr('method'),
@@ -3192,31 +3271,45 @@ $(function () {
                     dataType: 'JSON',
                     success: function (data) {
 
-                        editSectionForm.resetForm()
+                        if (data.success) {
 
-                        var boxSections = $('#sections-list-container')
-                        boxSections.html(data.htmlSection)
+                            editSectionForm.resetForm()
 
-                        if (data.active == data.id) {
-                            var topTableInfo = $('#top-chapter-table-title-info')
-                            topTableInfo.html('<span class="text-bold"> de: </span> \
-                                                <span class="title-chapter-top-table">'+ data.title + '</span>')
+                            var boxSections = $('#sections-list-container')
+                            boxSections.html(data.htmlSection)
+
+                            if (data.active == data.id) {
+                                var topTableInfo = $('#top-chapter-table-title-info')
+                                topTableInfo.html('<span class="text-bold"> de: </span> \
+                                                    <span class="title-chapter-top-table">'+ data.title + '</span>')
+                            }
+
+                            $('.order-section-select').select2({
+                                minimumResultsForSearch: -1
+                            })
+
+                            form.trigger('reset')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
                         }
-
-                        $('.order-section-select').select2({
-                            minimumResultsForSearch: -1
-                        })
-
-                        form.trigger('reset')
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registro actualizado!'
-                        })
+                        form.find('.btn-save').removeAttr('disabled')
+                        modal.modal('hide')
                     },
                     error: function (data) {
                         console.log(data)
+                        ToastError.fire()
                     }
                 })
             }
@@ -3249,9 +3342,7 @@ $(function () {
                     })
 
                     select.val(data.order).change()
-                },
-                complete: function (data) {
-                    modal.modal('toggle')
+                    modal.modal('show')
                 },
                 error: function (data) {
                     console.log(data)
@@ -3281,35 +3372,40 @@ $(function () {
                         dataType: 'JSON',
                         success: function (data) {
 
-                            var courseBox = $('#course-box-container')
-                            var sectionBox = $('#sections-list-container')
+                            if (data.success) {
 
-                            courseBox.html(data.htmlCourse)
-                            sectionBox.html(data.htmlSection)
+                                var courseBox = $('#course-box-container')
+                                var sectionBox = $('#sections-list-container')
 
-                            if (data.is_active == 1) {
-                                var chapterBox = $('#chapters-list-container')
-                                var topTableInfo = $('#top-chapter-table-title-info')
-                                chapterBox.html(data.htmlChapter)
-                                topTableInfo.html('')
+                                courseBox.html(data.htmlCourse)
+                                sectionBox.html(data.htmlSection)
+
+                                if (data.is_active == 1) {
+                                    var chapterBox = $('#chapters-list-container')
+                                    var topTableInfo = $('#top-chapter-table-title-info')
+                                    chapterBox.html(data.htmlChapter)
+                                    topTableInfo.html('')
+                                }
+
+                                $('.order-section-select').select2({
+                                    minimumResultsForSearch: -1
+                                })
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message,
+                                })
                             }
-
-                            $('.order-section-select').select2({
-                                minimumResultsForSearch: -1
-                            })
-
-                            Toast.fire({
-                                icon: 'success',
-                                text: '¡Registro eliminado!',
-                            })
-
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message,
+                                })
+                            }
                         },
                         error: function (result) {
                             console.log(result)
-                            Toast.fire({
-                                icon: 'error',
-                                title: '¡Ocurrió un error inesperado!',
-                            });
+                            ToastError.fire()
                         }
                     });
                 } else {
@@ -3423,10 +3519,12 @@ $(function () {
             var button = $(this)
             var url = button.data('url')
             var modal = $('#registerChapterModal')
+            var form = $('#registerChapterForm')
+            var loadSpinner = form.find('.loadSpinner')
 
             if (!$('#input-chapter-video-container').hasClass('dz-clickable')) {
 
-                let chapterVideoInput = $("#input-chapter-video-container").dropzone({
+                var chapterVideoInput = $("#input-chapter-video-container").dropzone({
                     url: url,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -3489,11 +3587,9 @@ $(function () {
                     },
                     sending: function (file, xhr, formData) {
 
-                        let form = $('#registerChapterForm')
                         let title = form.find('input[name=title]').val()
                         let description = form.find('#description-text-area-register').val()
 
-                        let loadSpinner = form.find('.loadSpinner')
                         let sectionActive = $('#sections-list-container').find('.course-section-box.active').data('id')
 
                         formData.append('title', title)
@@ -3501,41 +3597,49 @@ $(function () {
                         formData.append('sectionActive', sectionActive)
 
                         loadSpinner.toggleClass('active')
-
+                        form.find('.btn-save').attr('disabled', 'disabled')
                     },
                     success: function (file, response) {
 
-                        let modal = $('#registerChapterModal')
-                        let form = $('#registerChapterForm')
-                        let loadSpinner = form.find('.loadSpinner')
-                        let urlTable = $('#section-box-' + response.id).data('table')
+                        if (response.success) {
+                            // let modal = $('#registerChapterModal')
+                            let urlTable = $('#section-box-' + response.id).data('table')
 
-                        this.removeAllFiles();
-                        registerChapterForm.resetForm()
-                        form.trigger('reset')
+                            this.removeAllFiles();
+                            registerChapterForm.resetForm()
+                            form.trigger('reset')
 
-                        var chaptersBox = $('#chapters-list-container')
-                        var sectionsBox = $('#sections-list-container')
-                        var courseBox = $('#course-box-container')
+                            var chaptersBox = $('#chapters-list-container')
+                            var sectionsBox = $('#sections-list-container')
+                            var courseBox = $('#course-box-container')
 
-                        chaptersBox.html(response.htmlChapter)
-                        sectionsBox.html(response.htmlSection)
-                        courseBox.html(response.htmlCourse)
+                            chaptersBox.html(response.htmlChapter)
+                            sectionsBox.html(response.htmlSection)
+                            courseBox.html(response.htmlCourse)
 
-                        $('.order-section-select').select2({
-                            minimumResultsForSearch: -1
-                        })
+                            $('.order-section-select').select2({
+                                minimumResultsForSearch: -1
+                            })
 
-                        var chaptersTableEle = $('#freeCourses-chapters-table');
-                        chapterTable(chaptersTableEle, DataTableEs, urlTable);
+                            var chaptersTableEle = $('#freeCourses-chapters-table');
+                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
 
+                            Toast.fire({
+                                icon: 'success',
+                                text: response.message,
+                            });
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    complete: function () {
+                        modal.modal('hide')
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registrado exitosamente!',
-                        });
+                        form.find('.btn-save').removeAttr('disabled')
                     },
                     error: function (file, response) {
                         console.log(response)
@@ -3573,6 +3677,7 @@ $(function () {
             var getDataUrl = button.data('send')
             var url = button.data('url')
             var form = $('#editChapterForm')
+            var loadSpinner = form.find('.loadSpinner')
 
             $('#editOrderSelectChapter').html('')
 
@@ -3633,10 +3738,9 @@ $(function () {
                                 }
                                 else {
                                     myDropzone.removeAllFiles();
-                                    var form = $('#editChapterForm')
-                                    let loadSpinner = form.find('.loadSpinner')
 
                                     loadSpinner.toggleClass('active')
+                                    form.find('.btn-save').attr('disabled', 'disabled')
 
                                     $.ajax({
                                         method: form.attr('method'),
@@ -3645,24 +3749,35 @@ $(function () {
                                         dataType: 'JSON',
                                         success: function (data) {
 
-                                            let urlTable = $('#section-box-' + data.id).data('table')
-                                            let chaptersBox = $('#chapters-list-container')
-                                            // let courseBox = $('#course-box-container')
-                                            chaptersBox.html(data.htmlChapter)
-                                            // courseBox.html(response.htmlCourse)
+                                            if (data.success) {
 
-                                            let chaptersTableEle = $('#freeCourses-chapters-table');
-                                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
+                                                let urlTable = $('#section-box-' + data.id).data('table')
+                                                let chaptersBox = $('#chapters-list-container')
 
-                                            editChapterForm.resetForm()
-                                            form.trigger('reset')
+                                                chaptersBox.html(data.htmlChapter)
 
+                                                let chaptersTableEle = $('#freeCourses-chapters-table');
+                                                chapterTable(chaptersTableEle, DataTableEs, urlTable);
+
+                                                editChapterForm.resetForm()
+                                                form.trigger('reset')
+
+                                                Toast.fire({
+                                                    icon: 'success',
+                                                    text: data.message
+                                                });
+                                            }
+                                            else {
+                                                Toast.fire({
+                                                    icon: 'error',
+                                                    text: data.message
+                                                })
+                                            }
+                                        },
+                                        complete: function (data) {
                                             loadSpinner.toggleClass('active')
-                                            $('#editChapterModal').modal('toggle')
-                                            Toast.fire({
-                                                icon: 'success',
-                                                text: '¡Registro actualizado!'
-                                            });
+                                            $('#editChapterModal').modal('hide')
+                                            form.find('.btn-save').removeAttr('disabled')
                                         },
                                         error: function (data) {
                                             console.log(data)
@@ -3675,48 +3790,56 @@ $(function () {
                     },
                     sending: function (file, xhr, formData) {
 
-                        let form = $('#editChapterForm')
                         let title = form.find('input[name=title]').val()
                         let description = form.find('#description-text-area-edit').val()
                         let order = form.find('#editOrderSelectChapter').val()
 
-                        let loadSpinner = form.find('.loadSpinner')
-
                         formData.append('title', title)
                         formData.append('description', description)
-                        formData.append('order', order)
+                        formData.append('chapter_order', order)
 
                         loadSpinner.toggleClass('active')
+                        form.find('.btn-save').attr('disabled', 'disabled')
                     },
                     success: function (file, response) {
                         this.removeAllFiles();
-                        let form = $('#editChapterForm')
-                        let urlTable = $('#section-box-' + response.id).data('table')
-                        let chaptersBox = $('#chapters-list-container')
-                        let courseBox = $('#course-box-container')
-                        let loadSpinner = form.find('.loadSpinner')
 
-                        courseBox.html(response.htmlCourse)
-                        chaptersBox.html(response.htmlChapter)
+                        if (response.success) {
 
-                        var chaptersTableEle = $('#freeCourses-chapters-table');
-                        chapterTable(chaptersTableEle, DataTableEs, urlTable);
+                            let urlTable = $('#section-box-' + response.id).data('table')
+                            let chaptersBox = $('#chapters-list-container')
+                            let courseBox = $('#course-box-container')
 
-                        editChapterForm.resetForm()
-                        form.trigger('reset')
+                            courseBox.html(response.htmlCourse)
+                            chaptersBox.html(response.htmlChapter)
+
+                            var chaptersTableEle = $('#freeCourses-chapters-table');
+                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
+
+                            editChapterForm.resetForm()
+                            form.trigger('reset')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: response.message
+                            });
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    complete: function () {
                         loadSpinner.toggleClass('active')
-                        $('#editChapterModal').modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registro actualizado!'
-                        });
+                        form.find('.btn-save').removeAttr('disabled')
+                        modal.modal('hide')
                     },
                     error: function (file, response) {
                         console.log(response)
                     }
-
                 })
-
             }
 
             $.ajax({
@@ -3743,7 +3866,7 @@ $(function () {
                     select.val(chapter.chapter_order).change()
                 },
                 complete: function (data) {
-                    modal.modal('toggle')
+                    modal.modal('show')
                 },
                 error: function (data) {
                     console.log(data)
@@ -3822,34 +3945,38 @@ $(function () {
                         dataType: 'JSON',
                         success: function (data) {
 
-                            var courseBox = $('#course-box-container')
-                            var sectionBox = $('#sections-list-container')
-                            var chaptersBox = $('#chapters-list-container')
+                            if (data.success) {
+                                var courseBox = $('#course-box-container')
+                                var sectionBox = $('#sections-list-container')
+                                var chaptersBox = $('#chapters-list-container')
 
-                            courseBox.html(data.htmlCourse)
-                            sectionBox.html(data.htmlSection)
-                            chaptersBox.html(data.htmlChapter)
+                                courseBox.html(data.htmlCourse)
+                                sectionBox.html(data.htmlSection)
+                                chaptersBox.html(data.htmlChapter)
 
-                            let urlTable = $('#section-box-' + data.id).data('table')
-                            var chaptersTableEle = $('#freeCourses-chapters-table');
-                            chapterTable(chaptersTableEle, DataTableEs, urlTable);
+                                let urlTable = $('#section-box-' + data.id).data('table')
+                                var chaptersTableEle = $('#freeCourses-chapters-table');
+                                chapterTable(chaptersTableEle, DataTableEs, urlTable);
 
-                            $('.order-section-select').select2({
-                                minimumResultsForSearch: -1
-                            })
+                                $('.order-section-select').select2({
+                                    minimumResultsForSearch: -1
+                                })
 
-                            Toast.fire({
-                                icon: 'success',
-                                text: '¡Registro eliminado!',
-                            })
-
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
                         },
                         error: function (result) {
                             console.log(result)
-                            Toast.fire({
-                                icon: 'error',
-                                title: '¡Ocurrió un error inesperado!',
-                            });
+                            ToastError.fire()
                         }
                     });
                 } else {
@@ -4916,9 +5043,13 @@ $(function () {
 
             if (questionType == 1) {
 
-                let row = $(this).closest('tr.alternative-row')
-                row.find('.delete-btn').removeClass('delete-alternative-btn').addClass('disabled')
-                row.siblings().find('.delete-btn').removeClass('disabled').addClass('delete-alternative-btn')
+                if ($('#questions-table').length) {
+
+                    let row = $(this).closest('tr.alternative-row')
+                    row.find('.delete-btn').removeClass('delete-alternative-btn').addClass('disabled')
+                    row.siblings().find('.delete-btn').removeClass('disabled').addClass('delete-alternative-btn')
+                }
+
 
             }
 
@@ -5711,7 +5842,7 @@ $(function () {
 
                         $('#dateinputEdit').data('daterangepicker').setStartDate(info.date);
                         $("#dateinputEdit").data('daterangepicker').setEndDate(info.date);
-                        
+
                     }
                 },
                 complete: function (data) {

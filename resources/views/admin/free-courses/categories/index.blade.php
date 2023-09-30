@@ -163,12 +163,13 @@
 
                 <input type="hidden" name="place" value="index">
                 <input type="hidden" name="fixedCategory" value="{{$category->id}}">
+                <input type="hidden" name="category_id" value="{{$category->id}}">
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label>Nombre *</label>
                             <div class="input-group">
-                                <input type="text" name="name" class="form-control dni"
+                                <input type="text" name="description" class="form-control dni"
                                         placeholder="Ingrese nombre del curso">
                             </div>
                         </div>
@@ -198,7 +199,7 @@
                             <div>
                                 <div id="image-preview" class="image-preview">
                                     <label for="image-upload" id="image-label">Subir Imagen</label>
-                                    <input type="file" name="courseImageRegister" id="image-upload-register">
+                                    <input type="file" name="image" id="image-course-register">
                                     <div class="img-holder">
 
                                     </div>
@@ -209,7 +210,7 @@
 
                     <div class="form-group">
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="courseStatusCheckbox" id="register-course-status-checkbox"
+                            <input type="checkbox" name="active" id="register-course-status-checkbox"
                                 checked class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-register-description-course" class="custom-switch-description">Activo</span>
@@ -219,7 +220,7 @@
                     <div class="form-group">
    
                         <label class="custom-switch mt-2">
-                            <input type="checkbox" name="courseRecomCheckbox" id="register-course-recom-checkbox"
+                            <input type="checkbox" name="flg_recom" id="register-course-recom-checkbox"
                                  class="custom-switch-input">
                             <span class="custom-switch-indicator"></span>
                             <span id="txt-register-description-course-recom" class="custom-switch-description"> Registrar como curso recomendado </span>

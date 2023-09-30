@@ -31,7 +31,8 @@ class Course extends Model
         'active',
         'course_type',
         'flg_public',
-        'flg_recom'
+        'flg_recom',
+        'category_id'
     ];
 
     public function folders()
@@ -81,7 +82,7 @@ class Course extends Model
 
     public function loadFreeCourseImage()
     {
-        return $this->loadMissing([
+        return $this->load([
             'file' => fn ($query2) =>
             $query2->where('file_type', 'imagenes')
                 ->where('category', 'cursoslibres')
@@ -90,7 +91,7 @@ class Course extends Model
 
     public function loadFreeCourseRelationships()
     {
-        return $this->loadMissing(
+        return $this->load(
             [
                 'courseCategory',
                 'courseSections' => fn ($query) =>
@@ -102,5 +103,13 @@ class Course extends Model
             ]
         )->loadCount(['courseSections', 'courseChapters'])
             ->loadSum('courseChapters', 'duration');
+    }
+
+    public function getSectionLastOrder()
+    {
+        $this->loadMax('courseSections', 'section_order'); 
+
+        return $this->course_sections_max_section_order == null ?
+                 0 : $this->course_sections_max_section_order;
     }
 }

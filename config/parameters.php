@@ -2,6 +2,12 @@
 
 return [
 
+    'stored_message' => '¡Registrado exitosamente!',
+    'updated_message' => '¡Registro actualizado!',
+    'deleted_message' => '¡Registro eliminado!',
+
+    'exception_message' => 'No es posible completar la solicitud',
+
     'roles' =>[
         'super_admin' => 'Super Administrador',
         'admin' => 'Administrador',

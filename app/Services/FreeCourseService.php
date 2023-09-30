@@ -27,17 +27,17 @@ class FreeCourseService
     public function attachFreeCourseRelationships($query)
     {
         return $query->with(
-                [
-                    'courseCategory',
-                    'courseSections' => fn ($query) =>
-                    $query->orderBy('section_order', 'ASC')
-                        ->withCount('sectionChapters'),
-                    'file' => fn ($query2) =>
-                    $query2->where('file_type', 'imagenes')
-                        ->where('category', 'cursoslibres')
-                ]
-                )->withCount(['courseSections', 'courseChapters'])
-                ->withSum('courseChapters', 'duration');
+            [
+                'courseCategory',
+                'courseSections' => fn ($query) =>
+                $query->orderBy('section_order', 'ASC')
+                    ->withCount('sectionChapters'),
+                'file' => fn ($query2) =>
+                $query2->where('file_type', 'imagenes')
+                    ->where('category', 'cursoslibres')
+            ]
+        )->withCount(['courseSections', 'courseChapters'])
+            ->withSum('courseChapters', 'duration');
     }
 
 
@@ -100,14 +100,14 @@ class FreeCourseService
                 : $section->sectionChapters
                 ->where('chapter_order', count($section->sectionChapters))
                 ->first();
-    
+
             if ($previousChapter != null) {
                 break;
             }
-    
+
             $i++;
         }
-    
+
         return $previousChapter;
     }
 
@@ -166,33 +166,98 @@ class FreeCourseService
     }
 
 
-
-
-
-  
-
-
-
-
-
-
-    // SHOW COURSE
-
-
-
-
-    public function updateCourse($request, Course $course)
+    public function store($request, $storage)
     {
-        // app(FileService::class)->
+        $data = normalizeInputStatus($request->validated());
+
+        $course = Course::create($data + [
+            "course_type" => 'FREE',
+            "date" => getCurrentDate(),
+            "hours" => 0,
+            "time_start" => '0:00:00',
+            "time_end" => '0:00:00'
+        ]);
+
+        if ($course) {
+            if ($request->hasFile('image')) {
+
+                $file_type = 'imagenes';
+                $category = 'cursoslibres';
+                $belongsTo = 'cursoslibres';
+                $relation = 'one_one';
+
+                $file = $request->file('image');
+
+                app(FileService::class)->store(
+                    $course,
+                    $file_type,
+                    $category,
+                    $file,
+                    $storage,
+                    $belongsTo,
+                    $relation
+                );
+            }
+
+            return $course;
+        }
+
+        throw new Exception(config('parameters.exception_message'));
     }
+
+
+    public function update($request, $storage, Course $course)
+    {
+        $data = normalizeInputStatus($request->validated());
+
+        $isUpdated = $course->update($data);
+
+        if ($isUpdated) {
+            if ($request->hasFile('image')) {
+                app(FileService::class)->destroy($course->file, $storage);
+
+                $file_type = 'imagenes';
+                $category = 'cursoslibres';
+                $file = $request->file('image');
+                $belongsTo = 'cursoslibres';
+                $relation = 'one_one';
+
+                app(FileService::class)->store(
+                    $course,
+                    $file_type,
+                    $category,
+                    $file,
+                    $storage,
+                    $belongsTo,
+                    $relation
+                );
+            }
+
+            return $isUpdated;
+        }
+
+        throw new Exception(config('parameters.exception_message'));
+    }
+
+    public function destroy($storage, Course $course)
+    {
+        if (app(FileService::class)->destroy($course->file, $storage)) {
+            $isDeleted = $course->delete();
+            if ($isDeleted) {
+                return $isDeleted;
+            }
+        };
+
+        throw new Exception(config('parameters.exception_message'));
+    }
+
 
 
     public function attachSectionRelationships($query)
     {
         return $query->with('sectionChapters')
-                    ->orderBy('section_order', 'ASC')
-                    ->withSum('sectionChapters', 'duration')
-                    ->withCount('sectionChapters');
+            ->orderBy('section_order', 'ASC')
+            ->withSum('sectionChapters', 'duration')
+            ->withCount('sectionChapters');
     }
-
 }

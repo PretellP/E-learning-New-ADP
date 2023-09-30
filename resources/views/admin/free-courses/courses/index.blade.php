@@ -12,6 +12,7 @@
 <div class="row content">
 
     <div class="main-container-page">
+
         <div class="card page-title-container">
             <div class="card-header">
                 <div class="total-width-container">
@@ -111,394 +112,397 @@
 
     </div>
 
-    @endsection
+@endsection
 
-    @section('modals')
+@section('modals')
 
-    {{-- FREE COURSE --}}
+{{-- FREE COURSE --}}
 
-    <div class="modal fade" id="editFreeCourseModal" tabindex="-1" aria-labelledby="editFreeCourseModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+<div class="modal fade" id="editFreeCourseModal" tabindex="-1" aria-labelledby="editFreeCourseModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editFreeCourseModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-pen-to-square"></i> &nbsp;
-                            Editar Curso libre
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFreeCourseModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-pen-to-square"></i> &nbsp;
+                        Editar Curso libre
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="{{route('admin.freeCourses.courses.update', $course)}}" id="editFreeCourseForm"
+                enctype="multipart/form-data" method="POST" data-validate="">
+                @csrf
+
+                <input type="hidden" name="place" value="index">
+                <input type="hidden" name="category_id" value="{{ $course->courseCategory->id }}">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Nombre *</label>
+                            <div class="input-group">
+                                <input type="text" name="description" class="form-control description"
+                                    placeholder="Ingrese nombre del curso">
+                            </div>
                         </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    </div>
 
-                <form action="{{route('admin.freeCourses.courses.update', $course)}}" id="editFreeCourseForm"
-                    enctype="multipart/form-data" method="POST" data-validate="">
-                    @csrf
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Subtítulo (opcional)</label>
+                            <input type="text" name="subtitle" class="form-control" placeholder="Ingrese subtítulo">
+                        </div>
+                    </div>
 
-                    <input type="hidden" name="place" value="index">
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Nombre *</label>
-                                <div class="input-group">
-                                    <input type="text" name="name" class="form-control description"
-                                        placeholder="Ingrese nombre del curso">
-                                </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label>Categoría *</label>
+                            <div class="input-disabled to-capitalize">
+                                {{mb_strtolower($course->courseCategory->description, 'UTF-8')}}
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Subtítulo (opcional)</label>
-                                <input type="text" name="subtitle" class="form-control" placeholder="Ingrese subtítulo">
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="form-row">
-                            <div class="form-group col-12">
-                                <label>Categoría *</label>
-                                <div class="input-disabled to-capitalize">
-                                    {{mb_strtolower($course->courseCategory->description, 'UTF-8')}}
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Imagen del curso * </label>
-                                <div>
-                                    <div id="image-preview" class="image-preview">
-                                        <label for="image-upload" id="image-label">Subir Imagen</label>
-                                        <input type="file" name="courseImageEdit" id="image-upload-freecourse-edit">
-                                        <div class="img-holder">
-                                        </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Imagen del curso * </label>
+                            <div>
+                                <div id="image-preview" class="image-preview">
+                                    <label for="image-upload" id="image-label">Subir Imagen</label>
+                                    <input type="file" name="image" id="image-upload-freecourse-edit">
+                                    <div class="img-holder">
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="courseStatusCheckbox" id="edit-course-status-checkbox"
-                                    checked class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-edit-description-course" class="custom-switch-description">Activo</span>
-                            </label>
-                        </div>
-
-                        <div class="form-group">
-
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="courseRecomCheckbox" id="edit-course-recom-checkbox"
-                                    class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-edit-description-course-recom" class="custom-switch-description">
-                                    Registrar como curso recomendado
-                                </span>
-                            </label>
-                        </div>
-
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary btn-save">
-                            Guardar
-                            <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                        </button>
+                    <div class="form-group">
+                        <label class="custom-switch mt-2">
+                            <input type="checkbox" name="active" id="edit-course-status-checkbox"
+                                checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span id="txt-edit-description-course" class="custom-switch-description">Activo</span>
+                        </label>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
+                    <div class="form-group">
 
-    {{-- SECTIONS --}}
+                        <label class="custom-switch mt-2">
+                            <input type="checkbox" name="flg_recom" id="edit-course-recom-checkbox"
+                                class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span id="txt-edit-description-course-recom" class="custom-switch-description">
+                                Registrar como curso recomendado
+                            </span>
+                        </label>
+                    </div>
 
-    <div class="modal fade" id="registerSectionModal" tabindex="-1" aria-labelledby="registerSectionModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+                </div>
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registerSectionModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-square-plus"></i> &nbsp;
-                            Añadir sección
-                        </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                     </button>
                 </div>
-
-                <form action="{{route('admin.freeCourses.sections.store', $course)}}" id="registerSectionForm"
-                    method="POST">
-                    @csrf
-
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Título *</label>
-                                <div class="input-group">
-                                    <input type="text" name="title" class="form-control title"
-                                        placeholder="Ingrese el título de la sección">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary btn-save">
-                            Guardar
-                            <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="editSectionModal" tabindex="-1" aria-labelledby="editSectionModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSectionModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-pen-to-square"></i> &nbsp;
-                            Editar sección
+{{-- SECTIONS --}}
+
+<div class="modal fade" id="registerSectionModal" tabindex="-1" aria-labelledby="registerSectionModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerSectionModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-square-plus"></i> &nbsp;
+                        Añadir sección
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="{{route('admin.freeCourses.sections.store', $course)}}" id="registerSectionForm"
+                method="POST">
+                @csrf
+
+                <input type="hidden" name="course_id" value="{{ $course->id }}">
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Título *</label>
+                            <div class="input-group">
+                                <input type="text" name="title" class="form-control title"
+                                    placeholder="Ingrese el título de la sección">
+                            </div>
                         </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                     </button>
                 </div>
-
-                <form action="" id="editSectionForm" method="POST">
-                    @csrf
-
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Título *</label>
-                                <div class="input-group">
-                                    <input type="text" name="title" class="form-control title"
-                                        placeholder="Ingrese el título de la sección">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="selectOrder">Orden *</label>
-                                <div class="input-group">
-                                    <select name="order" class="form-control select2" id="editOrderSelect">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary btn-save">
-                            Guardar
-                            <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
+<div class="modal fade" id="editSectionModal" tabindex="-1" aria-labelledby="editSectionModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
 
-    {{-- CHAPTERS --}}
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSectionModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-pen-to-square"></i> &nbsp;
+                        Editar sección
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-    <div class="modal fade" id="registerChapterModal" tabindex="-1" aria-labelledby="registerChapterModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <form action="" id="editSectionForm" method="POST">
+                @csrf
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registerSectionModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-square-plus"></i> &nbsp;
-                            Añadir capítulo
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Título *</label>
+                            <div class="input-group">
+                                <input type="text" name="title" class="form-control title"
+                                    placeholder="Ingrese el título de la sección">
+                            </div>
                         </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="selectOrder">Orden *</label>
+                            <div class="input-group">
+                                <select name="section_order" class="form-control select2" id="editOrderSelect">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                     </button>
                 </div>
-
-                <form action="" id="registerChapterForm" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Título *</label>
-                                <div class="input-group">
-                                    <input type="text" name="title" class="form-control title"
-                                        placeholder="Ingrese el título del capítulo">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Descripción * (Max: 500 caracteres)</label>
-                                <div class="input-group">
-                                    <textarea name="description" id="description-text-area-register"
-                                        class="form-control description"
-                                        placeholder="Ingrese la descripción del capítulo"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Video * (Max: 50MB)</label>
-                                <div class="input-group dropzone" id="input-chapter-video-container">
-                                    <div class="message-file-invalid">
-                                        <i class="fa-solid fa-circle-exclamation fa-bounce"></i> &nbsp;
-                                        Este campo es obligatorio
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" id="btn-chapter-register-submit" class="btn btn-primary btn-save">
-                            Guardar
-                            <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade" id="editChapterModal" tabindex="-1" aria-labelledby="editChapterModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+{{-- CHAPTERS --}}
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSectionModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-square-plus"></i> &nbsp;
-                            Editar capítulo
+<div class="modal fade" id="registerChapterModal" tabindex="-1" aria-labelledby="registerChapterModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerSectionModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-square-plus"></i> &nbsp;
+                        Añadir capítulo
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="" id="registerChapterForm" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Título *</label>
+                            <div class="input-group">
+                                <input type="text" name="title" class="form-control title"
+                                    placeholder="Ingrese el título del capítulo">
+                            </div>
                         </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Descripción * (Max: 500 caracteres)</label>
+                            <div class="input-group">
+                                <textarea name="description" id="description-text-area-register"
+                                    class="form-control description"
+                                    placeholder="Ingrese la descripción del capítulo"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Video * (Max: 50MB)</label>
+                            <div class="input-group dropzone" id="input-chapter-video-container">
+                                <div class="message-file-invalid">
+                                    <i class="fa-solid fa-circle-exclamation fa-bounce"></i> &nbsp;
+                                    Este campo es obligatorio
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="btn-chapter-register-submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                     </button>
                 </div>
-
-                <form action="" id="editChapterForm" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Título *</label>
-                                <div class="input-group">
-                                    <input type="text" name="title" class="form-control title"
-                                        placeholder="Ingrese el título del capítulo">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Descripción * (Max: 500 caracteres)</label>
-                                <div class="input-group">
-                                    <textarea name="description" id="description-text-area-edit"
-                                        class="form-control edit"
-                                        placeholder="Ingrese la descripción del capítulo"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="selectOrder">Orden *</label>
-                                <div class="input-group">
-                                    <select name="order" class="form-control select2" id="editOrderSelectChapter">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Reemplazar video (Max: 50MB) (opcional)</label>
-                                <div class="input-group dropzone" id="input-chapter-video-container-edit">
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" id="btn-chapter-update-submit" class="btn btn-primary btn-save">
-                            Guardar
-                            <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
-    {{---- PREVIEW VIDEO CHAPTER ---}}
 
-    <div class="modal fade" id="previewChapterModal" tabindex="-1" aria-labelledby="previewChapterModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
-            <div class="modal-content">
+<div class="modal fade" id="editChapterModal" tabindex="-1" aria-labelledby="editChapterModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registerSectionModalLabel">
-                        <div class="section-title mt-0">
-                            <i class="fa-solid fa-video"></i> &nbsp;
-                            <span class="title-preview-section"></span> -
-                            <span class="title-preview-chapter"></span>
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSectionModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-square-plus"></i> &nbsp;
+                        Editar capítulo
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="" id="editChapterForm" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Título *</label>
+                            <div class="input-group">
+                                <input type="text" name="title" class="form-control title"
+                                    placeholder="Ingrese el título del capítulo">
+                            </div>
                         </div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Descripción * (Max: 500 caracteres)</label>
+                            <div class="input-group">
+                                <textarea name="description" id="description-text-area-edit"
+                                    class="form-control edit"
+                                    placeholder="Ingrese la descripción del capítulo"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="selectOrder">Orden *</label>
+                            <div class="input-group">
+                                <select name="chapter_order" class="form-control select2" id="editOrderSelectChapter">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Reemplazar video (Max: 50MB) (opcional)</label>
+                            <div class="input-group dropzone" id="input-chapter-video-container-edit">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="btn-chapter-update-submit" class="btn btn-primary btn-save">
+                        Guardar
+                        <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                     </button>
                 </div>
-
-                <div class="modal-body" id="video-chapter-container">
-
-                </div>
-
-            </div>
+            </form>
         </div>
     </div>
+</div>
+
+{{---- PREVIEW VIDEO CHAPTER ---}}
+
+<div class="modal fade" id="previewChapterModal" tabindex="-1" aria-labelledby="previewChapterModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerSectionModalLabel">
+                    <div class="section-title mt-0">
+                        <i class="fa-solid fa-video"></i> &nbsp;
+                        <span class="title-preview-section"></span> -
+                        <span class="title-preview-chapter"></span>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="video-chapter-container">
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 
-    @endsection
+@endsection
 
-    @section('extra-script')
+@section('extra-script')
 
-    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+<script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
-    @endsection
+@endsection

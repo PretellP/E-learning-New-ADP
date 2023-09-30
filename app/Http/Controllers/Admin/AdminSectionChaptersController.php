@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\{CourseSection, SectionChapter};
 use App\Services\{FreeCourseService, SectionChapterService};
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Owenoj\LaravelGetId3\GetId3;
@@ -17,7 +18,7 @@ class AdminSectionChaptersController extends Controller
     {
         $this->sectionChapterService = $service;
     }
-    
+
     public function getDataTable(Request $request, CourseSection $section)
     {
         if ($request->ajax()) {
@@ -39,7 +40,7 @@ class AdminSectionChaptersController extends Controller
 
     public function getVideoData(SectionChapter $chapter)
     {
-        $url_video = asset('storage/' . $chapter->url_video);
+        $url_video = verifyFile($chapter->file);
 
         return response()->json([
             "url_video" => $url_video,
@@ -48,43 +49,38 @@ class AdminSectionChaptersController extends Controller
         ]);
     }
 
-    public function store(FreeCourseService $freeCourseService, Request $request, CourseSection $section) // FALTA
+    public function store(FreeCourseService $freeCourseService, Request $request, CourseSection $section)
     {
-        $section->loadMax('sectionChapters', 'chapter_order');
+        $success = true;
+        $htmlCourse = null;
+        $htmlSection = null;
+        $htmlChapter = null;
 
-        $videoDur = new GetId3($request->file('file'));
-        $duration = round($videoDur->getPlaytimeSeconds() / 60);
+        $storage = env('FILESYSTEM_DRIVER');
 
-        $path = 'videos/freecourses/' . $section->course_id . '/' . $section->id . '/';
-        $video = $request->file('file');
-        $uuid = $video->hashName();
-        $storeUrl = $path . $uuid;
+        try {
+            $this->sectionChapterService->store($request, $section, $storage);
+            $message = config('parameters.stored_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
-        $lastOrder = $section->section_chapters_max_chapter_order == null ? 0 :
-                                $section->section_chapters_max_chapter_order;
+        if ($success) {
+            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+                ->where('id', $section->course_id)
+                ->first();
 
-        Storage::putFileAs($path, $video, $uuid);
+            $sectionActive = getActiveSection($request['sectionActive']);
 
-        SectionChapter::create([
-            "title" => $request['title'],
-            "description" => $request['description'],
-            "chapter_order" => $lastOrder + 1,
-            "url_video" => $storeUrl,
-            "duration" => $duration,
-            "section_id" => $section->id
-        ]);
-
-        $course = $freeCourseService->withFreeCourseRelationshipsQuery()
-                                            ->where('id', $section->course_id)
-                                            ->first();
-            
-        $sectionActive = getActiveSection($request['sectionActive']);
-
-        $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
-        $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
+            $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
+            $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
+            $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
+        }
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "htmlCourse" => $htmlCourse,
             "htmlSection" => $htmlSection,
             "htmlChapter" => $htmlChapter,
@@ -104,97 +100,81 @@ class AdminSectionChaptersController extends Controller
         ]);
     }
 
-    public function update(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter) // FALTA
+    public function update(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter)
     {
-        $order = $request['order'];
-        $url_video = $chapter->url_video;
-        $duration = $chapter->duration;
+        $chapter->loadRelationships();
 
-        $section = $chapter->courseSection;
+        $success = true;
+        $storage = env('FILESYSTEM_DRIVER');
 
-        if ($order != $chapter->chapter_order) {
-            SectionChapter::where('section_id', $chapter->section_id)
-                ->where('chapter_order', $order)
-                ->update([
-                    "chapter_order" => $chapter->chapter_order
-                ]);
+        try {
+            $this->sectionChapterService->update($request, $chapter, $storage);
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
         }
 
-        if ($request->has('file')) {
+        if ($success) {
+            $section = $chapter->courseSection;
 
-            if ($url_video != null && Storage::exists($url_video)) {
-                Storage::delete($url_video);
-            }
+            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+                ->where('id', $section->course_id)
+                ->first();
 
-            $videoDur = new GetId3($request->file('file'));
-            $duration = round($videoDur->getPlaytimeSeconds() / 60);
-
-            $path = 'videos/freecourses/' . $section->course_id . '/' . $section->id . '/';
-            $video = $request->file('file');
-            $uuid = $video->hashName();
-            Storage::putFileAs($path, $video, $uuid);
-            $url_video = $path . $uuid;
+            $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
+            $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
         }
-
-        $chapter->update([
-            "title" => $request['title'],
-            "description" => $request['description'],
-            "chapter_order" => $order,
-            "url_video" => $url_video,
-            "duration" => $duration
-        ]);
-
-        $course = $freeCourseService->withFreeCourseRelationshipsQuery()
-                                            ->where('id', $section->course_id)
-                                            ->first();
-
-        $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "htmlChapter" => $htmlChapter,
             "htmlCourse" => $htmlCourse,
             "id" => $section->id
         ]);
     }
 
-    public function destroy(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter) // FALTA
+
+    public function destroy(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter)
     {
+        $chapter->loadRelationships();
+
         $section = $chapter->courseSection;
+        $success = true;
+        $htmlCourse = null;
+        $htmlSection = null;
+        $htmlChapter = null;
 
-        $chapter->progressUsers()->detach();
-        $video_path =  $chapter->url_video;
-        Storage::delete($video_path);
+        $storage = env('FILESYSTEM_DRIVER');
 
-        $chapter->delete();
-
-        $chapters = SectionChapter::where('section_id', $section->id)
-                    ->orderBy('chapter_order', 'ASC')->get();
-
-        $order = 1;
-        foreach ($chapters as $remanentChapter) {
-            $remanentChapter->update([
-                "chapter_order" => $order
-            ]);
-            $order++;
+        try {
+            $this->sectionChapterService->destroy($chapter, $storage);
+            $message = config('parameters.deleted_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
         }
 
-        $course = $freeCourseService->withFreeCourseRelationshipsQuery()
-                                            ->where('id', $section->course_id)
-                                            ->first();
+        if ($success) {
+            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+                ->where('id', $section->course_id)
+                ->first();
 
-        $sectionActive = getActiveSection($request['id']);
+            $sectionActive = getActiveSection($request['id']);
 
-        $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
-        $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
+            $htmlCourse = view('admin.free-courses.partials.course-box', compact('course'))->render();
+            $htmlSection = view('admin.free-courses.partials.sections-list', compact('course', 'sectionActive'))->render();
+            $htmlChapter = view('admin.free-courses.partials.chapters-list', compact('section'))->render();
+        }
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "htmlCourse" => $htmlCourse,
             "htmlSection" => $htmlSection,
             "htmlChapter" => $htmlChapter,
             "id" => $section->id
         ]);
     }
-
 }

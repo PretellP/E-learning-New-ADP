@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FreeCourseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Owenoj\LaravelGetId3\GetId3;
 
-use App\Models\{CourseCategory, Course, SectionChapter};
+use App\Models\{CourseCategory, Course};
 use App\Services\{CourseCategoryService, FreeCourseService};
 use Exception;
 
@@ -36,69 +36,50 @@ class AdminFreeCoursesController extends Controller
     public function getCategoriesRegisterCourse()
     {
         return response()->json([
-            "categories" => CourseCategory::all()
+            "categories" => CourseCategory::get(['id', 'description'])
         ]);
     }
 
 
-    public function store(Request $request)   // FALTA
+    public function store(FreeCourseRequest $request)  
     {
-        $status = $request['courseStatusCheckbox'] == 'on' ? 'S' : 'N';
-        $recom = $request['courseRecomCheckbox'] == 'on' ? 1 : 0;
+        $success = true;
+        $message = null;
+        $html = null;
+        $route = null;
+        $show = false;
 
-        $path = 'img/freecourses/';
-        $file = $request->file('courseImageRegister');
-        $uuid = $file->hashName();
-        $storeUrl = $path . $uuid;
+        $category_id = $request['category_id'];
+        $storage = env('FILESYSTEM_DRIVER');
 
-
-        if ($request->has('fixedCategory')) {
-            $category = $request['fixedCategory'];
-        } else {
-            $category = $request['category'];
-        }
-
-        $course = Course::create([
-            "course_type" => 'FREE',
-            "category_id" => $category,
-            "description" => $request['name'],
-            "subtitle" => $request['subtitle'],
-            "date" => getCurrentDate(),
-            "hours" => 0,
-            "time_start" => '0:00:00',
-            "time_end" => '0:00:00',
-            "url_img" => $storeUrl,
-            "active" => $status,
-            "flg_recom" => $recom,
-            'flg_public' => 'N'
-        ]);
-
-        if ($course) {
-            Storage::putFileAs($path, $file, $uuid);
+        try {
+            $course = $this->freeCourseService->store($request, $storage);
+            $message = config('parameters.stored_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
         }
 
         if ($request['verifybtn'] == 'show') {
             $route = route('admin.freeCourses.courses.index', $course);
-
-            return response()->json([
-                "show" => true,
-                "route" => $route
-            ]);
+            $show = true;
         } else {
             if ($request->has('fixedCategory')) {
-                $category = CourseCategory::where('id', $category)->with('courses')->first();
+                $category = CourseCategory::where('id', $category_id)->with('courses')->first();
                 $html = view('admin.free-courses.partials.category-box', compact('category'))->render();
             } else {
                 $categories = CourseCategory::with('courses')->get();
                 $html = view('admin.free-courses.partials.categories-list', compact('categories'))->render();
             }
-
-            return response()->json([
-                "show" => false,
-                "success" => true,
-                "html" => $html
-            ]);
         }
+
+        return response()->json([
+            "show" => $show,
+            "success" => $success,
+            "message" => $message,
+            "html" => $html,
+            "route" => $route,
+        ]);
     }
 
     public function show(Course $course)
@@ -128,58 +109,61 @@ class AdminFreeCoursesController extends Controller
         ]);
     }
 
-    public function update(Request $request, Course $course)  // FALTA
+    public function update(FreeCourseRequest $request, Course $course) 
     {
-        $status = $request['courseStatusCheckbox'] == 'on' ? 'S' : 'N';
-        $recom = $request['courseRecomCheckbox'] == 'on' ? 1 : 0;
+        $course->loadFreeCourseImage();
 
-        $course->loadFreeCourseRelationships();
+        $success = true;
+        $message = null;
+        $html = null;
+        $description = null;
 
-        $this->freeCourseService->updateCourse($request, $course); // FALTA
+        $storage = env('FILESYSTEM_DRIVER');
 
-        if ($request->hasFile('courseImageEdit')) {
-            $path = 'img/freecourses/';
-            $file_path = $course->url_img;
-            if ($course->url_img != null && Storage::exists($file_path)) {
-                Storage::delete($file_path);
-            }
-            $file = $request->file('courseImageEdit');
-            $uuid = $file->hashName();
-            $store_url = $path . $uuid;
-
-            Storage::putFileAs($path, $file, $uuid);
-            $url_img = $store_url;
-        } else {
-            $url_img = $course->url_img;
+        try{
+            $this->freeCourseService->update($request, $storage, $course); 
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
         }
 
-        $course->update([
-            "description" => $request['name'],
-            "subtitle" => $request['subtitle'],
-            "url_img" => $url_img,
-            "active" => $status,
-            "flg_recom" => $recom
-        ]);
-
-        $html = view('admin.free-courses.partials.course-box', compact('course'))->render();
-        $description = mb_strtolower($course->description, 'UTF-8');
+        if($success){
+            $course->loadFreeCourseRelationships();
+            $html = view('admin.free-courses.partials.course-box', compact('course'))->render();
+            $description = mb_strtolower($course->description, 'UTF-8');
+        }
 
         return response()->json([
-            "success" => true,
+            "success" => $success,
+            "message" => $message,
             "description" => $description,
             "html" => $html
         ]);
     }
 
-    public function destroy(Course $course) // FALTA
+    public function destroy(Course $course) 
     {
-        $img_path = $course->url_img;
-        Storage::delete($img_path);
-        $course->delete();
+        $course->loadFreeCourseRelationships();
+
+        $success = true;
+        $message = null;
+
+        $storage = env('FILESYSTEM_DRIVER');
+
+        try{
+            $this->freeCourseService->destroy($storage, $course);
+            $message = config('parameters.deleted_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
         $category = $course->courseCategory;
 
         return response()->json([
+            "success" => $success,
+            "message" => $message,
             "route" => route('admin.freeCourses.categories.index', $category)
         ]);
     }

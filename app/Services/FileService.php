@@ -28,7 +28,7 @@ class FileService
             return $model->files()->save($stored_file);
         }
 
-        throw new Exception('No es posible completar la solicitud');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function destroy($file = null, $storage)

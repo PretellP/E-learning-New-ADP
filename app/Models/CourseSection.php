@@ -11,7 +11,11 @@ class CourseSection extends Model
     use HasFactory;
 
     protected $table = 'course_sections';
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'section_order',
+        'course_id'
+    ];
 
     public function course()
     {
@@ -23,4 +27,11 @@ class CourseSection extends Model
         return $this -> hasMany(SectionChapter::class, 'section_id', 'id');
     }
 
+    public function getChapterLastOrder()
+    {
+        $this->loadMax('sectionChapters', 'chapter_order');
+
+        return $this->section_chapters_max_chapter_order == null ? 0 :
+                $this->section_chapters_max_chapter_order;
+    }
 }

@@ -166,7 +166,7 @@ class CourseService
             return $courseModel;
         }
 
-        throw new Exception('Ocurrio un error al realizar el registro');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function update($request, $storage, Course $course)
