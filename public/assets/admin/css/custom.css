@@ -112,7 +112,19 @@ input.no-label-error~label.error {
     pointer-events: none !important;
 }
 
+.gap-1 {
+    gap: 1em;
+}
 
+.custom-switch-input.disabled~.custom-switch-indicator {
+    background: rgb(202, 202, 202) !important;
+    border-color: var(--light-gray) !important;
+    cursor: not-allowed;
+}
+
+.custom-switch-input.disabled~.custom-switch-indicator::before {
+    background: var(--light-gray) !important;
+}
 
 
 /* ------------- TOLTIP ------------*/
@@ -156,11 +168,11 @@ input.no-label-error~label.error {
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color:  transparent #555 transparent transparent;
+    border-color: transparent #555 transparent transparent;
 }
 
 
-.tooltip:hover .tooltiptext {    
+.tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
 }
@@ -214,12 +226,25 @@ span.status {
     padding: 0.5em;
     border-radius: .7em;
     font-size: .9em;
+    line-height: 1em;
     background-color: #ce2929c9;
 }
 
 table.dataTable span.status.active,
-span.status.active {
+span.status.active,
+table.dataTable span.status.finished,
+span.status.finished {
     background-color: #3cb838c7 !important;
+}
+
+table.dataTable span.status.pending,
+span.status.pending {
+    background-color: #f79400 !important;
+}
+
+table.dataTable span.status.in_progress,
+span.status.in_progress {
+    background-color: #f3b200 !important;
 }
 
 .dataTable {
@@ -475,7 +500,7 @@ textarea.form-control {
     margin-right: 0 !important;
 }
 
-.related-dropdown-container:not(.table-container)>div:hover {
+.related-dropdown-container:not(.table-container)>div:not(.action-btn-dropdown-container):hover {
     background-color: rgba(245, 245, 245, 0.63);
 }
 
@@ -492,10 +517,24 @@ textarea.form-control {
     justify-content: space-between;
 }
 
+.modal-xl {
+    max-width: 1140px;
+}
 
+.modal .modal-body .subtitle {
+    font-weight: 700;
+}
 
+.custom-radio .custom-control-input:checked~.custom-control-label::before,
+.custom-control-input:checked~.custom-control-label::before
+{
+    background-color: var(--first-color) !important;
+}
 
-
+.custom-control-label::after
+{
+    cursor: pointer;
+}
 
 /* ---------- BOXES VIEW -----------*/
 
@@ -514,10 +553,10 @@ textarea.form-control {
 .info-element-box {
     display: flex;
     gap: 10px;
-    /* width: fit-content; */
+    width: fit-content;
     border-radius: 3px;
     overflow: hidden;
-    height: 140px;
+    min-height: 140px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.103);
     transition: all .1s;
 }
@@ -576,9 +615,10 @@ textarea.form-control {
 }
 
 .info-element-general-container>div:not(.action-box) {
-    padding: 10px 15px;
+    padding: 10px 30px;
     position: relative;
     display: flex;
+    max-width: 400px;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -594,10 +634,11 @@ textarea.form-control {
     transform: translateY(-50%);
 }
 
-.info-element-general-container>div>div:nth-child(2) {
+.info-element-general-container>div>div:not(:first-child) {
     border-top: 1px solid rgb(219, 219, 219);
     padding-bottom: 5px;
-    min-height: 50% !important;
+    max-height: 50%;
+    height: 100% !important;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -611,6 +652,7 @@ textarea.form-control {
 .info-element-general-container .info-name-element-container {
     text-align: center;
     padding: 10px 30px !important;
+    min-width: 220px;
 }
 
 .info-element-general-container .extra-info-container {
@@ -638,16 +680,14 @@ textarea.form-control {
     background-color: var(--first-color) !important;
 }
 
-.little-text-width
-{
+.little-text-width {
     width: 130px;
     display: inline-block;
 }
 
 #dropdown-questions-create input,
-#dropdown-questions-create .select2-container .select2-selection--multiple, 
-#dropdown-questions-create .select2-container .select2-selection--single
-{
+#dropdown-questions-create .select2-container .select2-selection--multiple,
+#dropdown-questions-create .select2-container .select2-selection--single {
     border-color: rgba(88, 88, 88, 0.363);
 }
 
@@ -1339,19 +1379,16 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     display: inline-block !important;
 }
 
-.relation-icon-column
-{
+.relation-icon-column {
     width: 1000px;
     max-width: 500px;
 }
 
-.input-matching-column-width
-{
+.input-matching-column-width {
     min-width: 400px;
 }
 
-.matching-relation-column
-{
+.matching-relation-column {
     display: block;
     background-color: rgb(224, 224, 224);
     height: 6px;
@@ -1360,8 +1397,7 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 }
 
 .matching-relation-column::after,
-.matching-relation-column::before
-{
+.matching-relation-column::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -1372,43 +1408,36 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     background-color: rgb(224, 224, 224);
 }
 
-.matching-relation-column::after
-{
+.matching-relation-column::after {
     left: -5px;
 }
 
-.matching-relation-column::before
-{
+.matching-relation-column::before {
     right: -5px;
 }
 
-.input-alternative-image
-{
+.input-alternative-image {
     position: absolute;
     left: 0;
     width: 0;
     visibility: hidden;
 }
 
-.input-matching-column.with-image
-{
+.input-matching-column.with-image {
     padding-top: 20px !important;
 }
 
-.image-icon-alternative 
-{
+.image-icon-alternative {
     margin-left: 10px;
     display: flex;
     align-items: center;
 }
 
-.image-icon-alternative label
-{
+.image-icon-alternative label {
     cursor: pointer;
 }
 
-.img-alternative-holder
-{
+.img-alternative-holder {
     display: none;
     height: 140px;
     width: 400px;
@@ -1421,20 +1450,17 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     overflow: hidden;
 }
 
-.img-alternative-holder.show
-{
+.img-alternative-holder.show {
     display: block;
 }
 
-.img-alternative-holder img 
-{
+.img-alternative-holder img {
     display: block;
     height: 100%;
     margin: auto;
 }
 
-.delete-image-alternative
-{
+.delete-image-alternative {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -1443,6 +1469,41 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     color: white;
     cursor: pointer;
     border-radius: 10px 0 0 0;
+}
+
+
+
+
+
+
+
+/* ------------ EVENTS STYLES ----------*/
+
+.info-element-box.event-box
+{
+    width: 100%;
+    max-width: 1500px;
+}
+
+.info-element-box.event-box
+.info-element-general-container
+{
+    width: 100%;
+}
+
+.info-element-box.event-box
+.info-element-general-container>div:not(.action-box)
+{
+    max-width: none;
+    width: 100%;
+}
+
+.info-element-box.event-box
+.info-element-general-container
+.action-box
+{
+    width: 100%;
+    max-width: fit-content;
 }
 
 

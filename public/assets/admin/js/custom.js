@@ -953,7 +953,10 @@ $(function () {
                 { data: 'company.description', name: 'company.description', orderable: false },
                 { data: 'status-btn', name: 'status-btn', orderable: false, searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
-            ]
+            ],
+            // order: [
+            //     [1, 'asc']
+            // ]
         });
 
 
@@ -5049,10 +5052,7 @@ $(function () {
                     row.find('.delete-btn').removeClass('delete-alternative-btn').addClass('disabled')
                     row.siblings().find('.delete-btn').removeClass('disabled').addClass('delete-alternative-btn')
                 }
-
-
             }
-
         })
 
 
@@ -5509,6 +5509,7 @@ $(function () {
             dateInput.val(moment().format('YYYY-MM-DD'))
 
             loadSpinner.toggleClass('active')
+            button.attr('disabled', 'disabled')
 
             $.ajax({
                 type: 'GET',
@@ -5573,6 +5574,7 @@ $(function () {
                 },
                 complete: function (data) {
                     loadSpinner.toggleClass('active')
+                    button.removeAttr('disabled')
                     modal.modal('show')
                 },
                 error: function (data) {
@@ -5747,9 +5749,7 @@ $(function () {
                 success: function (data) {
 
                     let all = data.all
-                    let selected = data.selected
-
-                    let info = data.info
+                    let event = data.event
 
                     if (all != null) {
 
@@ -5757,7 +5757,7 @@ $(function () {
                         $.each(all.types, function (key, values) {
                             typeSelect.append('<option value="' + key + '">' + values + '</option>')
                         })
-                        typeSelect.val(selected.type).change()
+                        typeSelect.val(event.type).change()
 
                         instructorSelect.append('<option></option>')
                         $.each(all.instructors, function (key, values) {
@@ -5765,7 +5765,7 @@ $(function () {
                                 values.name + ' ' + values.paternal +
                                 '</option>')
                         })
-                        instructorSelect.val(selected.instructor).change()
+                        instructorSelect.val(event.user_id).change()
 
                         responsableSelect.append('<option></option>')
                         $.each(all.responsables, function (key, values) {
@@ -5773,7 +5773,7 @@ $(function () {
                                 values.name + ' ' + values.paternal +
                                 '</option>')
                         })
-                        responsableSelect.val(selected.responsable).change()
+                        responsableSelect.val(event.responsable_id).change()
 
                         roomSelect.append('<option></option>')
                         $.each(all.rooms, function (key, values) {
@@ -5781,7 +5781,7 @@ $(function () {
                                 values.description +
                                 '</option>')
                         })
-                        roomSelect.val(selected.room).change()
+                        roomSelect.val(event.room_id).change()
 
                         ownerCompanySelect.append('<option></option>')
                         $.each(all.ownerCompanies, function (key, values) {
@@ -5789,7 +5789,7 @@ $(function () {
                                 values.name +
                                 '</option>')
                         })
-                        ownerCompanySelect.val(selected.ownerCompany).change()
+                        ownerCompanySelect.val(event.owner_companies_id).change()
 
                         examSelect.append('<option></option>')
                         $.each(all.exams, function (key, values) {
@@ -5797,7 +5797,7 @@ $(function () {
                                 values.title +
                                 '</option>')
                         })
-                        examSelect.val(selected.exam).change()
+                        examSelect.val(event.exam_id).change()
 
                         testExamSelect.append('<option></option>')
                         $.each(all.examsTest, function (key, values) {
@@ -5805,7 +5805,7 @@ $(function () {
                                 values.title +
                                 '</option>')
                         })
-                        testExamSelect.val(selected.testExam).change()
+                        testExamSelect.val(event.test_exam_id).change()
 
                         elearningSelect.append('<option></option>')
                         $.each(all.eLearnings, function (key, values) {
@@ -5813,37 +5813,33 @@ $(function () {
                                 values.title +
                                 '</option>')
                         })
-                        elearningSelect.val(selected.eLearning).change()
+                        elearningSelect.val(event.elearning_id).change()
                     }
 
-                    if (info != null) {
-
-                        if (info.active == 'S') {
-                            activeChk.prop('checked', true);
-                            $('#txt-edit-status').html('Activo');
-                        } else {
-                            activeChk.prop('checked', false);
-                            $('#txt-edit-status').html('Inactivo');
-                        }
-
-                        if (info.flg_test == 'S') {
-                            flgTestChk.prop('checked', true);
-                        } else {
-                            flgTestChk.prop('checked', false);
-                        }
-
-                        if (info.flg_assit == 'S') {
-                            flgAssist.prop('checked', true);
-                        } else {
-                            flgAssist.prop('checked', false);
-                        }
-
-                        form.find('input[name=description]').val(info.description)
-
-                        $('#dateinputEdit').data('daterangepicker').setStartDate(info.date);
-                        $("#dateinputEdit").data('daterangepicker').setEndDate(info.date);
-
+                    if (event.active == 'S') {
+                        activeChk.prop('checked', true);
+                        $('#txt-edit-status').html('Activo');
+                    } else {
+                        activeChk.prop('checked', false);
+                        $('#txt-edit-status').html('Inactivo');
                     }
+
+                    if (event.flg_test_exam == 'S') {
+                        flgTestChk.prop('checked', true);
+                    } else {
+                        flgTestChk.prop('checked', false);
+                    }
+
+                    if (event.flg_asist == 'S') {
+                        flgAssist.prop('checked', true);
+                    } else {
+                        flgAssist.prop('checked', false);
+                    }
+
+                    form.find('input[name=description]').val(event.description)
+
+                    $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
+                    $("#dateinputEdit").data('daterangepicker').setEndDate(event.date);
                 },
                 complete: function (data) {
                     modal.modal('show')
@@ -5852,9 +5848,7 @@ $(function () {
                     console.log(data)
                 }
             })
-
         })
-
 
         /* ------------- ELIMINAR ----------------*/
 
@@ -5898,6 +5892,591 @@ $(function () {
         })
 
     }
+
+
+
+    // ------------- EVENT SHOW ----------------
+
+    if ($('#certifications-table').length) {
+
+        /* ----- CERTIFICATIONS TABLE ------*/
+
+        var certificationsTableEle = $('#certifications-table');
+        var getDataUrl = certificationsTableEle.data('url');
+        var certificationsTable = certificationsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'user.dni', name: 'user.dni' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'user.company.description', name: 'user.company.description' },
+                { data: 'score', name: 'score' },
+                { data: 'status', name: 'status' },
+                { data: 'enabled', name: 'enabled', orderable: false },
+                { data: 'assit', name: 'assit', orderable: false, searchable: false, className: 'text-center' },
+                { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
+            ],
+            // dom: 'rtip'
+        });
+
+        // ------------ UPDATE ASSIST -------------
+
+
+        $('.main-content').on('change', 'input[type=checkbox].flg_assist_user_checkbox', function () {
+            var button = $(this)
+            var value = button.prop('checked')
+            var url = button.data('url')
+
+            button.attr('disabled', 'disabled').addClass('disabled')
+
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: {
+                    assist_user: value
+                },
+                dataType: 'JSON',
+                success: function (data) {
+
+                    if (data.success) {
+                        certificationsTable.draw()
+                    }
+                    else {
+                        Toast.fire({
+                            icon: 'error',
+                            text: data.message
+                        })
+                    }
+                },
+                complete: function (data) {
+
+                    button.removeAttr('disabled', 'disabled').removeClass('disabled')
+                },
+                error: function (data) {
+                    console.log(data)
+                    ToastError.fire()
+                }
+            })
+
+        })
+
+        /* --------------- EDITAR ------------------*/
+
+        if ($('#editEventForm').length) {
+
+            $('#editTypeSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un tipo de evento'
+            })
+
+            $('#editInstructorSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un instructor'
+            })
+
+            $('#editResponsableSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un responsable'
+            })
+
+            $('#editRoomSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un sala'
+            })
+
+            $('#editOwnerCompanySelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona una empresa titular'
+            })
+
+            $('#editExamSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un examen'
+            })
+
+            $('#editTestExamSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un examen de prueba'
+            })
+
+            $('#editElearningSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un e-learning'
+            })
+
+
+            $('#edit-status-checkbox').change(function () {
+                var txtDesc = $('#txt-edit-status');
+                if (this.checked) {
+                    txtDesc.html('Activo');
+                } else {
+                    txtDesc.html('Inactivo')
+                }
+            });
+
+            var editEventForm = $('#editEventForm').validate({
+                rules: {
+                    description: {
+                        required: true,
+                        maxlength: 255
+                    },
+                    type: {
+                        required: true,
+                    },
+                    date: {
+                        required: true
+                    },
+                    user_id: {
+                        required: true
+                    },
+                    responsable_id: {
+                        required: true
+                    },
+                    room_id: {
+                        required: true
+                    },
+                    exam_id: {
+                        required: true
+                    }
+                },
+                submitHandler: function (form, event) {
+                    event.preventDefault()
+
+                    var form = $(form)
+                    var loadSpinner = form.find('.loadSpinner')
+                    var modal = $('#editEventModal')
+                    var eventBoxContainer = $('#event-box-container')
+
+                    loadSpinner.toggleClass('active')
+                    form.find('.btn-save').attr('disabled', 'disabled')
+
+                    $.ajax({
+                        method: form.attr('method'),
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+
+                                eventBoxContainer.html(data.html)
+                                $('#event-description-text-principal').html(data.title)
+                                certificationsTable.draw()
+                                editEventForm.resetForm()
+                                form.trigger('reset');
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        complete: function (data) {
+
+                            form.find('.btn-save').removeAttr('disabled')
+                            loadSpinner.toggleClass('active')
+                            modal.modal('hide')
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+            })
+
+            $('.main-content').on('click', '.editEvent-btn', function () {
+                var getDataUrl = $(this).data('send')
+                var url = $(this).data('url')
+                var modal = $('#editEventModal');
+                var form = modal.find('#editEventForm')
+
+                var typeSelect = form.find('#editTypeSelect')
+                var instructorSelect = form.find('#editInstructorSelect')
+                var responsableSelect = form.find('#editResponsableSelect')
+                var roomSelect = form.find('#editRoomSelect')
+                var ownerCompanySelect = form.find('#editOwnerCompanySelect')
+                var examSelect = form.find('#editExamSelect')
+                var testExamSelect = form.find('#editTestExamSelect')
+                var elearningSelect = form.find('#editElearningSelect')
+
+                var activeChk = form.find('#edit-status-checkbox')
+                var flgTestChk = form.find('#edit-flg-test-checkbox')
+                var flgAssist = form.find('#edit-flg-assist-checkbox')
+
+                typeSelect.empty()
+                instructorSelect.empty()
+                responsableSelect.empty()
+                roomSelect.empty()
+                ownerCompanySelect.empty()
+                examSelect.empty()
+                testExamSelect.empty()
+                elearningSelect.empty()
+
+                form.attr('action', url)
+
+                $.ajax({
+                    type: 'GET',
+                    url: getDataUrl,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        let all = data.all
+                        let event = data.event
+
+                        if (all != null) {
+
+                            typeSelect.append('<option></option>')
+                            $.each(all.types, function (key, values) {
+                                typeSelect.append('<option value="' + key + '">' + values + '</option>')
+                            })
+                            typeSelect.val(event.type).change()
+
+                            instructorSelect.append('<option></option>')
+                            $.each(all.instructors, function (key, values) {
+                                instructorSelect.append('<option value="' + values.id + '">' +
+                                    values.name + ' ' + values.paternal +
+                                    '</option>')
+                            })
+                            instructorSelect.val(event.user_id).change()
+
+                            responsableSelect.append('<option></option>')
+                            $.each(all.responsables, function (key, values) {
+                                responsableSelect.append('<option value="' + values.id + '">' +
+                                    values.name + ' ' + values.paternal +
+                                    '</option>')
+                            })
+                            responsableSelect.val(event.responsable_id).change()
+
+                            roomSelect.append('<option></option>')
+                            $.each(all.rooms, function (key, values) {
+                                roomSelect.append('<option value="' + values.id + '">' +
+                                    values.description +
+                                    '</option>')
+                            })
+                            roomSelect.val(event.room_id).change()
+
+                            ownerCompanySelect.append('<option></option>')
+                            $.each(all.ownerCompanies, function (key, values) {
+                                ownerCompanySelect.append('<option value="' + values.id + '">' +
+                                    values.name +
+                                    '</option>')
+                            })
+                            ownerCompanySelect.val(event.owner_companies_id).change()
+
+                            examSelect.append('<option></option>')
+                            $.each(all.exams, function (key, values) {
+                                examSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            examSelect.val(event.exam_id).change()
+
+                            testExamSelect.append('<option></option>')
+                            $.each(all.examsTest, function (key, values) {
+                                testExamSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            testExamSelect.val(event.test_exam_id).change()
+
+                            elearningSelect.append('<option></option>')
+                            $.each(all.eLearnings, function (key, values) {
+                                elearningSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            elearningSelect.val(event.elearning_id).change()
+                        }
+
+                        if (event.active == 'S') {
+                            activeChk.prop('checked', true);
+                            $('#txt-edit-status').html('Activo');
+                        } else {
+                            activeChk.prop('checked', false);
+                            $('#txt-edit-status').html('Inactivo');
+                        }
+
+                        if (event.flg_test_exam == 'S') {
+                            flgTestChk.prop('checked', true);
+                        } else {
+                            flgTestChk.prop('checked', false);
+                        }
+
+                        if (event.flg_asist == 'S') {
+                            flgAssist.prop('checked', true);
+                        } else {
+                            flgAssist.prop('checked', false);
+                        }
+
+                        form.find('input[name=description]').val(event.description)
+
+                        $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
+                        $("#dateinputEdit").data('daterangepicker').setEndDate(event.date);
+                    },
+                    complete: function (data) {
+                        modal.modal('show')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                })
+            })
+        }
+
+        /* ---------------- ELIMINAR EVENTO -----------------*/
+
+        $('.main-content').on('click', '.deleteEvent-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        data: {
+                            place: 'show'
+                        },
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+
+                                window.location.href = result.route
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                            console.log(result)
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+
+        // ---------------- REGISTRAR PARTICIPANTES ---------------
+
+        const buttonDisabled = '<button class="btn btn-primary btn-save not-user-allowed" disabled> \
+                                    Registrar participantes \
+                                    <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i> \
+                                </button>'
+
+        const buttonEnabled = '<button type="submit" class="btn btn-primary btn-save"> \
+                                    Registrar participantes \
+                                    <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i> \
+                                </button>'
+
+        var participantsTable;
+
+        $('.main-content').on('click', '#btn-register-participant-modal', function () {
+            var modal = $('#registerParticipantsModal')
+
+            if (!$('#users-participants-table_wrapper').length) {
+
+                var usersParticipantsTableEle = $('#users-participants-table');
+                var getDataUrl = usersParticipantsTableEle.data('url');
+
+                participantsTable = usersParticipantsTableEle.DataTable({
+                    language: DataTableEs,
+                    serverSide: true,
+                    processing: true,
+                    ajax: getDataUrl,
+                    columns: [
+                        { data: 'choose', name: 'choose', orderable: false, searchable: false },
+                        { data: 'id', name: 'id' },
+                        { data: 'dni', name: 'dni' },
+                        { data: 'name', name: 'name' },
+                        { data: 'position', name: 'position' },
+                        { data: 'company.description', name: 'company.description', orderable: false, searchable: false },
+                    ],
+                    order: [
+                        [1, 'asc']
+                    ]
+                    // dom: 'rtip'
+                });
+            }
+            else {
+                participantsTable.draw()
+            }
+
+            modal.modal('show')
+        })
+
+        $('#users-participants-table').on('draw.dt', function () {
+            $('#btn-store-participant-container').html(buttonDisabled)
+        });
+
+        $('html').on('click', '.checkbox-user-label', function () {
+            let input = $('#' + $(this).attr('for'))
+            let buttonContainer = $('#btn-store-participant-container')
+            let count = 0
+
+            if (input.is(':checked')) { count-- } else { count++ }
+            count += $('.checkbox-user-input:checked').length
+
+            if (count > 0) {
+                buttonContainer.html(buttonEnabled)
+            }
+            else {
+                buttonContainer.html(buttonDisabled)
+            }
+        })
+
+        $('#register-participants-form').on('submit', function (e) {
+            e.preventDefault()
+
+            var form = $(this)
+
+            Swal.fire({
+                title: 'Registrar participantes',
+                text: "Confirme antes de continuar",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: form.attr('method'),
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+
+                                if (data.status == 'exceeded') {
+                                    Toast.fire({
+                                        icon: 'warning',
+                                        text: data.note
+                                    })
+                                }
+                                else {
+                                    var dataStatus = data.status
+
+                                    participantsTable.draw()
+                                    certificationsTable.draw()
+                                    $('#btn-store-participant-container').html(buttonDisabled)
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: data.message
+                                    }).then((result) => {
+                                        if (result.dismiss === Swal.DismissReason.timer) {
+                                            if (dataStatus == 'limitreached') {
+                                                Toast.fire({
+                                                    icon: 'warning',
+                                                    text: data.note
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+
+        })
+
+
+
+        // ----------------- ELIMINAR PARTICIPANTES ----------------
+
+        $('.main-content').on('click', '.deleteCertification-btn', function (){
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                certificationsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                            console.log(result)
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+
+        })
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

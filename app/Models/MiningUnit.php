@@ -15,6 +15,12 @@ class MiningUnit extends Model
 
     public function users()
     {
-        return $this -> belongsToMany(User::class, 'mining_units_users', 'mining_unit_id', 'user_id');
+        return $this->belongsToMany(User::class, 'mining_units_users', 'mining_unit_id', 'user_id');
+    }
+
+    public function certifications()
+    {
+        return $this->belongsToMany(Certification::class, 'certifications_mining_units', 'mining_unit_id', 'certification_id')
+                    ->withTimestamps();
     }
 }

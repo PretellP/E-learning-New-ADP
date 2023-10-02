@@ -69,19 +69,11 @@ class AdminCompaniesController extends Controller
 
     public function EditvalidateRuc(Request $request)
     {
-        $valid = 'false';
         $id = $request['id'];
         $company = Company::where('ruc', $request['ruc'])->first();
 
-        if($company == null)
-        {
-            $valid = 'true';
-        }
-        elseif($company->id == $id){
-            $valid = 'true';
-        }
-
-        return $valid;
+        return  $company == null ||
+                $company->id == $id ? 'true' : 'false';
     }
 
     public function update(Request $request, Company $company)

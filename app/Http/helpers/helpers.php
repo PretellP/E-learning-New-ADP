@@ -459,18 +459,6 @@ function verifyFile($file)
     return $file != null ? $file->file_url : null; 
 }
 
-function getTranslatedEventType($type)
-{
-    if($type == 'present' || $type == 'P'){
-        $translated = 'Presencial';
-    }
-    else {
-        $translated = 'Virtual';
-    }
-    
-    return $translated;
-}
-
 
 
 function normalizeInputStatus($data)
@@ -497,8 +485,27 @@ function normalizeInputStatus($data)
 }
 
 
+function verifyEventType($type)
+{
+    switch ($type) {
+        case 'present':
+            $type = 'present';
+            break;
+        case 'P' :
+            $type = 'present';
+            break;
+        case 'virtual':
+            $type = 'virtual';
+            break;
+        case 'V' :
+            $type = 'virtual';
+            break;
+        default:
+            $type = '';
+    }
 
-
+    return $type;
+}
 
 
 

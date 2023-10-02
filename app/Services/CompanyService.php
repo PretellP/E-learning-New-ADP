@@ -12,9 +12,10 @@ class CompanyService
         $allCompanies = DataTables::of(Company::query()
                                     ->withCount('users'))
                                     ->addColumn('status-btn', function($company){
-                                        $status = $company->active == 'S' ? 'active' : 'inactive';
-                                        $txtBtn = $status == 'active' ? 'Activo' : 'Inactivo';
-                                        $statusBtn = '<span class="status '.$status.'">'.$txtBtn.'</span>';
+                                        $status = $company->active;
+                                        $statusBtn = '<span class="status '.getStatusClass($status).'">'.
+                                                        getStatusText($status)
+                                                    .'</span>';
 
                                         return $statusBtn;
                                     })

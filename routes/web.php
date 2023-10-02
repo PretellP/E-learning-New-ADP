@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\{
     AdminCourseController,
     FolderController,
     AdminAnnouncementsController,
+    AdminCertificationsController,
     AdminCompaniesController,
     AdminCourseCategoriesController,
     AdminCourseSectionsController,
@@ -263,12 +264,22 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
             Route::controller(AdminEventsController::class)->group(function () {
 
                 Route::get('/', 'index')->name('admin.events.index');
+                Route::get('/ver/{event}', 'show')->name('admin.events.show');
                 Route::get('/crear/obtener-data', 'create')->name('admin.events.create');
                 Route::get('/editar/{event}/obtener-data', 'edit')->name('admin.events.edit');
+                Route::get('/obtener-usuarios/{event}', 'getUsersTable')->name('admin.events.getUsersTable');
                 Route::post('/registrar', 'store')->name('admin.events.store');
                 Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
                 Route::delete('/eliminar/{event}', 'destroy')->name('admin.events.destroy');
             });
+
+            Route::controller(AdminCertificationsController::class)->group(function () {
+
+                Route::post('/registrar-participantes/{event}', 'store')->name('admin.events.certifications.store');
+                Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
+                Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
+               
+            });             
         });
 
 

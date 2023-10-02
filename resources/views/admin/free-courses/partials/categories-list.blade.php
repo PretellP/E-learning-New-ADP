@@ -1,4 +1,12 @@
+<div class="action-btn-dropdown-container show top-container-inner-box">
+    <button class="btn btn-primary" id="btn-register-category-modal" data-toggle="modal"
+        data-target="#RegisterCategoryModal">
+        <i class="fa-solid fa-plus"></i> &nbsp; Registrar
+    </button>
+</div>
+
 @foreach ($categories as $category)
+
 <div class="category-box">
     <div class="img-cat-container">
         <img class="cat-img" src="{{verifyImage($category->file)}}">

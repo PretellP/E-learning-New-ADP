@@ -69,8 +69,6 @@ class dynamicAlternativeService
 
     private function getIsCorrectValue($request, $index, $question_type_id)
     {
-        $isCorrect = false;
-
         if (
             $question_type_id == 1 ||             // TIPO RESPUESTA ÚNICA
             $question_type_id == 3                // TIPO VERDADERO O FALSO
@@ -84,7 +82,7 @@ class dynamicAlternativeService
         ) {
             $isCorrect = 1;
         } else {
-            return false;
+            $isCorrect = 0;
         }
 
         return $isCorrect;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use App\Models\{Elearning, Event, Exam, OwnerCompany, Room, User};
-use App\Services\{EventService};
+use App\Services\{CertificationService, EventService};
 use Exception;
 use Illuminate\Http\Request;
 
@@ -72,27 +72,18 @@ class AdminEventsController extends Controller
 
     public function edit(Event $event)
     {
-        $event->loadRelationships();
+        $event->loadRelationships()->loadParticipantsCount();
 
         $allExams = Exam::get(['id', 'title', 'exam_type']);
 
         $types = $this->eventService->getTypes();
         $instructors = User::getInstructorsQuery()->get(['id', 'name', 'paternal']);
         $responsables = User::getResponsablesQuery()->get(['id', 'name', 'paternal']);
-        $rooms = Room::get(['id', 'description']);
+        $rooms = Room::where('capacity', '>=', $event->participants_count)->get(['id', 'description', 'capacity']);
         $ownerCompanies = OwnerCompany::get(['id', 'name']);
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
         $eLearnings = Elearning::get(['id', 'title']);
-
-        $selectedType = $event->type;
-        $selectedInstructor = $event->user != null ? $event->user->id : null;
-        $selectedResponsable = $event->responsable != null ? $event->responsable->id : null;
-        $selectedRoom = $event->room != null ? $event->room->id : null;
-        $selectedOwnerCompany = $event->ownerCompany != null ? $event->ownerCompany->id : null;
-        $selectedExam = $event->exam != null ? $event->exam->id : null;
-        $selectedTestExam = $event->testExam != null ? $event->testExam->id : null;
-        $selectedElearning = $event->eLearning != null ? $event->eLearning->id :null;
 
         return response()->json([
             "all" => [
@@ -105,59 +96,78 @@ class AdminEventsController extends Controller
                 "examsTest" => $examsTest,
                 "eLearnings" => $eLearnings
             ],  
-            "info" => [
-                "description" => $event->description,
-                "date" => $event->date,
-                "active" => $event->active,
-                "flg_test" => $event->flg_test_exam,
-                "flg_assit" => $event->flg_asist
-            ],
-            "selected" => [
-                "type" => $selectedType,
-                "instructor" => $selectedInstructor,
-                "responsable" => $selectedResponsable,
-                "room" => $selectedRoom,
-                "ownerCompany" => $selectedOwnerCompany,
-                "exam" => $selectedExam,
-                "testExam" => $selectedTestExam,
-                "eLearning" => $selectedElearning,
-            ]
+            "event" => $event
         ]);
     }
 
     public function update(EventRequest $request, Event $event)
     {
         $success = true;
-        $message = null;
+        $html = null;
 
         try{
             $this->eventService->update($request, $event);
+            $message = config('parameters.updated_message');
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
         }
 
+        if($request->has('place') && $request['place'] == 'show'){
+            $event->loadRelationships();
+            $html = view('admin.events.partials._box_event', compact('event'))->render();
+        }
+
         return response()->json([
             "success" => $success,
-            "message" => $message
+            "message" => $message,
+            "html" => $html,
+            "title" => mb_strtolower($event->description, 'UTF-8')
         ]);
     }
 
-    public function destroy(Event $event)
+    public function destroy(Request $request, Event $event)
     {
         $success = true;
-        $message = null;
+        $route = null;
 
         try{
             $this->eventService->destroy($event);
+            $message = config('parameters.deleted_message');
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
         }
 
+        if($request->has('place') && $request['place'] == 'show'){
+            $route = route('admin.events.index');
+        }
+
         return response()->json([
             "success" => $success,
-            "message" => $message
+            "message" => $message,
+            "route" => $route
         ]);
+    }
+
+    // ----------- SHOW ------------
+
+    public function show(Request $request, Event $event)
+    {
+
+        if ($request->ajax()) {
+            return app(CertificationService::class)->getParticipantsTable($event);
+        }
+
+        $event->loadRelationships();
+
+        return view('admin.events.show', compact(
+            'event'
+        ));
+    }
+
+    public function getUsersTable(Request $request, Event $event)
+    {
+        return $this->eventService->getUsersTable($request, $event);
     }
 }

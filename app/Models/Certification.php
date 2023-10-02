@@ -11,7 +11,25 @@ class Certification extends Model
     use HasFactory;
 
     protected $table = 'certifications';
-    protected $guarded = [];
+    protected $fillable = [
+        'assist_user',
+        'recovered_at',
+        'status',
+        'user_id',
+        'event_id',
+        'company_id',
+        'position',
+        'evaluation_type',
+        'evaluation_time',
+        'test_certification_id',
+        'start_time',
+        'end_time',
+        'total_time',
+        'score',
+        'score_fin',
+        'area',
+        'observation'
+    ];
 
     public function event()
     {
@@ -26,6 +44,40 @@ class Certification extends Model
     public function evaluations()
     {       
         return $this -> hasMany(Evaluation::class, 'certification_id', 'id');
+    }
+
+    public function testCertification()
+    {
+        return $this -> belongsTo(self::class, 'test_certification_id', 'id');
+    }
+
+    public function miningUnits()
+    {
+        return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units','certification_id','mining_unit_id')->withTimestamps();
+    }
+
+    public function getIsEnableEvaluationAttribute()
+    {
+        $messages = [];
+        $now = getCurrentDate();
+
+        if($this->user->active != 'S') array_push($messages, "No está activo.");
+        // if($this->user->signature != 'S') array_push($messages, "No tiene firma.");
+        if($this->assist_user != 'S') array_push($messages, "No tiene asistencia.");
+        if($this->event->date != $now) array_push($messages, "Fuera de fecha.");
+        if($this->status == 'finished') array_push($messages, "Finalizó evaluación.");
+
+        return count($messages) > 0 ? $messages : ["Habilitado"];
+    }
+
+    public function getValidAssistCheckedAttribute()
+    {
+        return $this->assist_user == 'S' ? 'checked' : '';
+    }
+
+    public function getEventAssistStatusAttribute()
+    {
+        return $this->event->flg_asist != 'S' ? 'disabled' : '';
     }
 
 }

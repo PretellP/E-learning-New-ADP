@@ -28,6 +28,7 @@ return [
     'event_types' =>[
         'virtual' => 'Virtual',
         'present' => 'Presencial',
+            '' => '-'
     ],
     
 ];

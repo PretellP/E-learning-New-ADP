@@ -24,7 +24,6 @@ class AdminCourseSectionsController extends Controller
         parse_str($request['form'], $form);
 
         $success = true;
-        $message = null;
         $htmlCourse = null;
         $htmlCourse = null;
 
@@ -87,7 +86,6 @@ class AdminCourseSectionsController extends Controller
         parse_str($request['form'], $form);
 
         $success = true;
-        $message = null;
         $sectionActive = null;
         $htmlSection = null;
 
@@ -115,7 +113,7 @@ class AdminCourseSectionsController extends Controller
         ]);
     }
 
-    public function destroy(FreeCourseService $freeCourseService, Request $request, CourseSection $section) // FALTA
+    public function destroy(Request $request, CourseSection $section)
     {
         $course_id = $section->course_id;
 
@@ -131,7 +129,7 @@ class AdminCourseSectionsController extends Controller
             $message = $e->getMessage();
         }
 
-        $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+        $course = app(FreeCourseService::class)->withFreeCourseRelationshipsQuery()
                                             ->where('id', $course_id)
                                             ->first();
 

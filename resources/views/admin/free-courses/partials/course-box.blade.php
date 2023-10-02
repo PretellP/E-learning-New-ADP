@@ -20,7 +20,7 @@
                 {{$course->subtitle}} 
             </span>
         </div>
-        <div class="counts-cont">
+        <div class="counts-cont text-no-wrap">
             <div class="sections-cont">
                 <span class="little-text little-text-width">Secciones: </span>
                 <span class="text-bold">

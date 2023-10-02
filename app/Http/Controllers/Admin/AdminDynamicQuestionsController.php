@@ -66,7 +66,6 @@ class AdminDynamicQuestionsController extends Controller
     public function store(Request $request, Exam $exam)
     {
         $success = true;
-        $message = null;
         $html = null;
         $htmlQuestion = null;
 
@@ -78,7 +77,7 @@ class AdminDynamicQuestionsController extends Controller
             $exam->loadRelationships();
             $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
             $htmlQuestion = $this->dynamicQuestionService->getQuestionTypeView(null, $question->question_type_id);
-
+            $message = config('parameters.stored_message');
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -99,7 +98,6 @@ class AdminDynamicQuestionsController extends Controller
         $question->loadRelationships();
 
         $success = true;
-        $message = null;
         $html = null;
 
         $storage = env('FILESYSTEM_DRIVER');
@@ -109,6 +107,7 @@ class AdminDynamicQuestionsController extends Controller
             
             $question->loadRelationships();
             $html = $this->dynamicQuestionService->getQuestionTypeView($question, $question->question_type_id);
+            $message = config('parameters.updated_message');
         }   
         catch (Exception $e) {
             $success = false;
@@ -129,7 +128,6 @@ class AdminDynamicQuestionsController extends Controller
         $exam = $question->exam;
         
         $success = true;
-        $message = null;
         $route = null;
         $html = null;
 
@@ -140,6 +138,7 @@ class AdminDynamicQuestionsController extends Controller
 
             $exam->loadRelationships();
             $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
+            $message = config('parameters.deleted_message');
         }
         catch (Exception $e) {
             $success = false;

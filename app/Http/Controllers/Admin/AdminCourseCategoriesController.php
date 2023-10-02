@@ -19,10 +19,10 @@ class AdminCourseCategoriesController extends Controller
         $this->courseCategoryService = $service;
     }
 
-    public function index(FreeCourseService $freeCourseService, Request $request, CourseCategory $category)
+    public function index(Request $request, CourseCategory $category)
     {
         if ($request->ajax()) {
-            return $freeCourseService->getCoursesDataTable($category->id);
+            return app(FreeCourseService::class)->getCoursesDataTable($category->id);
         }
 
         $category->loadImage();

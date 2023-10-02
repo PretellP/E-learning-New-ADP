@@ -66,7 +66,7 @@ class ExamService
             return $exam;
         }
 
-        throw new Exception('No es posible completar el registro');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function update($request, Exam $exam)
@@ -79,7 +79,7 @@ class ExamService
             return true;
         }
 
-        throw new Exception('No es posible completar la solicitud');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function destroy(Exam $exam)
@@ -90,6 +90,6 @@ class ExamService
             return true;
         }
 
-        throw new Exception('No es posible completar la solicitud');
+        throw new Exception(config('parameters.exception_message'));
     }
 }

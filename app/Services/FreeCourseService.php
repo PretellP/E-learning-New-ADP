@@ -146,18 +146,13 @@ class FreeCourseService
                 return getFreeCourseTime($course->course_chapters_sum_duration);
             })
             ->editColumn('active', function ($course) {
-                $status = $course->active == 'S' ? 'active' : 'inactive';
-                $txtBtn = $status == 'active' ? 'Activo' : 'Inactivo';
-                $statusBtn = '<span class="status ' . $status . '">' . $txtBtn . '</span>';
-
-                return $statusBtn;
+                $status = $course->active;
+                return '<span class="status ' . getStatusClass($status) . '">' .
+                            getStatusText($status) .
+                        '</span>';
             })
             ->addcolumn('recom', function ($course) {
-                $recomBtn = $course->flg_recom == 1 ?
-                    '<i class="fa-solid fa-star flg-recom-btn active"></i>' :
-                    '<i class="fa-regular fa-star flg-recom-btn"></i>';
-
-                return $recomBtn;
+                return getStatusRecomended($course->flg_recom);
             })
             ->rawColumns(['description', 'course_category.description', 'active', 'recom'])
             ->make(true);
@@ -244,14 +239,12 @@ class FreeCourseService
         if (app(FileService::class)->destroy($course->file, $storage)) {
             $isDeleted = $course->delete();
             if ($isDeleted) {
-                return $isDeleted;
+                return true;
             }
         };
 
         throw new Exception(config('parameters.exception_message'));
     }
-
-
 
     public function attachSectionRelationships($query)
     {

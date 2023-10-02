@@ -8,6 +8,8 @@ use App\Models\{Exam, Certification, User, Room};
 
 class Event extends Model
 {
+    use \Znck\Eloquent\Traits\BelongsToThrough;
+
     use HasFactory;
 
     protected $table = 'events';
@@ -38,6 +40,11 @@ class Event extends Model
         return $this->belongsTo(Exam::class, 'exam_id', 'id');
     }
 
+    public function course()
+    {
+        return $this->belongsToThrough(Course::class, Exam::class);
+    }
+
     public function testExam()
     {
         return $this->belongsTo(Exam::class, 'test_exam_id', 'id');
@@ -46,6 +53,12 @@ class Event extends Model
     public function certifications()
     {
         return $this->hasMany(Certification::class, 'event_id', 'id');
+    }
+
+    public function participants()
+    {
+        return $this->belongsToMany(User::class, Certification::class, 'event_id', 'user_id')
+                    ->withPivot(['evaluation_type'])->withTimestamps();
     }
 
     public function user()
@@ -78,12 +91,39 @@ class Event extends Model
         return $this->belongsTo(OwnerCompany::class, 'owner_companies_id', 'id');
     }
 
+    public function loadCertificationsRelationships()
+    {
+        return $this->load([
+            'certifications' => fn ($query) =>
+                $query->with('user.company')
+                        ->withCount('evaluations'),
+            'room'
+        ]);
+    }
+
+    public function loadParticipantsRelationships()
+    {
+        return $this->load([
+            'participants' => function ($query) {
+                $query->where('certifications.evaluation_type', 'certification');
+            }
+        ]);
+    }
+
+    public function loadParticipantsCount()
+    {
+        return $this->loadCount(['participants' => function ($query) {
+            $query->where('certifications.evaluation_type', 'certification');
+        }]);
+    }
+
     public function loadRelationships()
     {
         return $this->load([
             'user',
             'responsable',
             'exam',
+            'course',
             'testExam',
             'ownerCompany',
             'room',

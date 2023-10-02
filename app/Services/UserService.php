@@ -58,6 +58,4 @@ class UserService
 
         return $allUsers;
     }
-
-    
 }

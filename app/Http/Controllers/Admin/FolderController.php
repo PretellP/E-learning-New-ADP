@@ -94,7 +94,7 @@ class FolderController extends Controller
         if ($stored) {
             return redirect()->route('admin.courses.folder.view', $folder)->with('flash_message', 'added');
         } else {
-            abort(500, 'No se pudo completar la solicitud');
+            abort(500, 'No es posible completar la solicitud');
         }
     }
 

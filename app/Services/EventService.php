@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Event};
+use App\Models\{Event, User};
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,10 +20,10 @@ class EventService
 
         $allEvents = DataTables::of($query)
             ->editColumn('description', function ($event) {
-                return '<a href="">' . $event->description . '</a>';
+                return '<a href="' . route('admin.events.show', $event) . '">' . $event->description . '</a>';
             })
             ->editColumn('type', function ($event) {
-                return getTranslatedEventType($event->type);
+                return config('parameters.event_types')[verifyEventType($event->type)];
             })
             ->editColumn('user.name', function ($event) {
                 $user = $event->user;
@@ -44,8 +44,8 @@ class EventService
             })
             ->addColumn('action', function ($event) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $event->id . '" data-url="'. route('admin.events.update', $event) .'" 
-                                        data-send="'. route('admin.events.edit', $event) .'"
+                    $event->id . '" data-url="' . route('admin.events.update', $event) . '" 
+                                        data-send="' . route('admin.events.edit', $event) . '"
                                         data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                         editEvent-btn"><i class="fa-solid fa-pen-to-square"></i></button>';
                 if (
@@ -54,7 +54,7 @@ class EventService
                 ) {
                     $btn .= '<a href="javascript:void(0)" data-id="' .
                         $event->id . '" data-original-title="delete"
-                                            data-url="'. route('admin.events.destroy', $event) .'" class="ms-3 edit btn btn-danger btn-sm
+                                            data-url="' . route('admin.events.destroy', $event) . '" class="ms-3 edit btn btn-danger btn-sm
                                             deleteEvent-btn"><i class="fa-solid fa-trash-can"></i></a>';
                 }
 
@@ -76,7 +76,7 @@ class EventService
         $data = normalizeInputStatus($request->validated());
         $event = Event::create($data);
 
-        if($event){
+        if ($event) {
             return $event;
         }
 
@@ -89,7 +89,7 @@ class EventService
 
         $isUpdated = $event->update($data);
 
-        if($isUpdated){
+        if ($isUpdated) {
             return true;
         }
 
@@ -100,10 +100,41 @@ class EventService
     {
         $isDeleted = $event->delete();
 
-        if($isDeleted){
+        if ($isDeleted) {
             return true;
         }
 
         throw new Exception('No es posible completar la solicitud');
     }
+
+    public function getUsersTable(Request $request, Event $event)
+    {
+        $participants = $event->participants()->wherePivot('evaluation_type', 'certification')->get()
+                            ->pluck('id')->toArray();
+
+        $users = User::where('role', 'participants')
+                    ->whereNotIn('users.id', $participants)
+                    ->with('company');
+
+        $allUsers = DataTables::of($users)
+            ->addColumn('choose', function ($user) {
+                $checkbox = '<div class="custom-checkbox custom-control">
+                    <input type="checkbox" name="users-selected[]" 
+                     class="custom-control-input checkbox-user-input" id="checkbox-' . $user->id . '" value="' . $user->id . '">
+                    <label for="checkbox-' . $user->id . '" class="custom-control-label checkbox-user-label">&nbsp;</label>
+                </div>';
+                return $checkbox;
+            })
+            ->editColumn('company.description', function ($user) {
+                return $user->company != null ? $user->company->description : '-';
+            })
+            ->editColumn('user.name', function ($user) {
+                return $user->full_name;
+            })
+            ->rawColumns(['choose'])
+            ->make(true);
+
+        return $allUsers;
+    }
+
 }

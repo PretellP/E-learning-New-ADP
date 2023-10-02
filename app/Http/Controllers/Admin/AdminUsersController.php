@@ -80,18 +80,12 @@ class AdminUsersController extends Controller
     
     public function editValidateDni(Request $request)
     {
-        $valid = 'false';
         $id = $request['id'];
         $user = User::where('dni', $request['dni'])->first();
 
-        if($user == null){
-            $valid = 'true';
-        }
-        elseif($user->id == $id){
-            $valid = 'true';
-        }
-
-        return $valid;
+        return $user == null ||
+                $user->id == $id ?
+                'true' : 'false';
     }
 
     public function edit(User $user)

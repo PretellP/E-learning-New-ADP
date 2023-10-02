@@ -78,11 +78,12 @@ class AdminExamsController extends Controller
     public function update(ExamRequest $request, Exam $exam)
     {
         $success = true;
-        $message = '';
-        $data_show = '';
+        $data_show = null;
+        $html = null;
 
         try {
             $this->examService->update($request, $exam);
+            $message = config('parameters.updated_message');
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -106,11 +107,11 @@ class AdminExamsController extends Controller
     public function destroy(Request $request, Exam $exam)
     {
         $success = true;
-        $message = '';
-        $route = '';
+        $route = null;
 
         try {
             $this->examService->destroy($exam);
+            $message = config('parameters.deleted_message');
         } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();

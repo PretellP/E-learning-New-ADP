@@ -33,13 +33,6 @@
                     </div>
 
 
-                    <div class="mt-4 action-btn-dropdown-container outside show top-container-inner-box">
-                        <button class="btn btn-primary" id="btn-register-category-modal" data-toggle="modal"
-                            data-target="#RegisterCategoryModal">
-                            <i class="fa-solid fa-plus"></i> &nbsp; Registrar
-                        </button>
-                    </div>
-
                     <div id="categories-list-container"
                         class="categories-list-container related-dropdown-container little-left show">
 
@@ -50,6 +43,7 @@
 
                 <div class="principal-inner-container right">
                     <div class="inner-title-container">
+
                         <div class="btn-dropdown-container vertical show">
                             <h5 class="title-header-show"> Lista de Cursos </h5>
                             <div>

@@ -20,13 +20,13 @@ class AdminFreeCoursesController extends Controller
         $this->freeCourseService = $service;
     }
 
-    public function index(CourseCategoryService $courseCategoryService, Request $request)
+    public function index(Request $request)
     {
         if ($request->ajax()) {
             return $this->freeCourseService->getCoursesDataTable();
         }
 
-        $categories = $courseCategoryService->withCategoryRelationshipsQuery()->get();
+        $categories = app(CourseCategoryService::class)->withCategoryRelationshipsQuery()->get();
 
         return view('admin.free-courses.index', [
             'categories' => $categories

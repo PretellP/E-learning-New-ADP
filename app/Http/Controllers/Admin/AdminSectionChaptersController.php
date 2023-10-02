@@ -49,7 +49,7 @@ class AdminSectionChaptersController extends Controller
         ]);
     }
 
-    public function store(FreeCourseService $freeCourseService, Request $request, CourseSection $section)
+    public function store(Request $request, CourseSection $section)
     {
         $success = true;
         $htmlCourse = null;
@@ -67,7 +67,7 @@ class AdminSectionChaptersController extends Controller
         }
 
         if ($success) {
-            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+            $course = app(FreeCourseService::class)->withFreeCourseRelationshipsQuery()
                 ->where('id', $section->course_id)
                 ->first();
 
@@ -100,7 +100,7 @@ class AdminSectionChaptersController extends Controller
         ]);
     }
 
-    public function update(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter)
+    public function update(Request $request, SectionChapter $chapter)
     {
         $chapter->loadRelationships();
 
@@ -118,7 +118,7 @@ class AdminSectionChaptersController extends Controller
         if ($success) {
             $section = $chapter->courseSection;
 
-            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+            $course = app(FreeCourseService::class)->withFreeCourseRelationshipsQuery()
                 ->where('id', $section->course_id)
                 ->first();
 
@@ -136,7 +136,7 @@ class AdminSectionChaptersController extends Controller
     }
 
 
-    public function destroy(FreeCourseService $freeCourseService, Request $request, SectionChapter $chapter)
+    public function destroy(Request $request, SectionChapter $chapter)
     {
         $chapter->loadRelationships();
 
@@ -157,7 +157,7 @@ class AdminSectionChaptersController extends Controller
         }
 
         if ($success) {
-            $course = $freeCourseService->withFreeCourseRelationshipsQuery()
+            $course = app(FreeCourseService::class)->withFreeCourseRelationshipsQuery()
                 ->where('id', $section->course_id)
                 ->first();
 
