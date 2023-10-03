@@ -34,6 +34,8 @@
 	<!-- Template CSS -->
 	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
+
+	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
 	
 	@yield('extra-head')
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Certification, Event};
+use App\Models\{Certification, Company, Event};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
@@ -68,6 +68,23 @@ class AdminCertificationsController extends Controller
         return response()->json([
             "success" => $success,
             "message" => $message
+        ]);
+    }
+
+    public function show(Certification $certification)
+    {
+        $certification->loadRelationships();
+
+        $user = $certification->user;
+        $user['name'] = $user->full_name;
+        $event = $certification->event;
+        $certification['status_txt'] = config('parameters.certification_status')[$certification->status];
+
+        return response()->json([
+            "title" => $certification->id,
+            "participant" => $user,
+            "event" => $event,
+            "certification" => $certification,
         ]);
     }
 }

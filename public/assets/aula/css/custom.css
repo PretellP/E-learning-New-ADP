@@ -2023,6 +2023,22 @@ fieldset .box-quiz-body .box-answers
     height: 150px;
 }
 
+/* .draggable.without_image
+{
+    text-align: center;
+}
+
+.draggable.without_image img
+{
+    display: none;
+}
+
+.draggable.without_image span 
+{
+    width: 100%;
+    height: 100%;
+} */
+
 #droppable-section
 {
     display: flex;
@@ -2062,6 +2078,13 @@ fieldset .box-quiz-body .box-answers
     pointer-events: none;
     height: 150px;
 }
+
+
+.droppable.without_image img
+{
+    display: none;
+}
+
 
 #droppable-section .droppable-option .droppable input
 {
@@ -2527,6 +2550,25 @@ button i
 .global-container.free-courses
 {
     padding-right: 0 !important;
+}
+
+.navbar-bg.free-course-view,
+.main-navbar.free-course-view
+{
+    height: 80px;
+}
+
+.main-navbar.free-course-view
+.banner-navbar,
+.main-navbar.free-course-view 
+.company-info-welcome
+{
+    display: none;
+}
+
+.main-navbar.free-course-view ~ .main-content
+{
+    padding-top: 87px !important;
 }
 
 /* -------- videoJS STYLES ---------*/

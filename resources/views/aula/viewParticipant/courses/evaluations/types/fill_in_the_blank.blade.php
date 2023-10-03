@@ -18,7 +18,7 @@
         </div>
 
         <div class="box-quiz-head">
-            <h2 class="fs-title title-fill"> {{$question->statement}}  </h2> 
+            <h2 class="fs-title title-fill"> {{$question->clean_statement}}  </h2> 
 
             <input type="hidden" name="question" value="{{$question->id}}">
         </div>
@@ -39,7 +39,8 @@
                 <div class="hs_firstname field hs-form-field answers-colors box-fill">
 
                     <input id="{{$alternative->id}}" class="input-txt" name="alternative[]" autocomplete="off" placeholder="Escribe tu respuesta"
-                            required type="text" value="{{old('alternative[]', (explode(',', $evaluation->selected_alternatives))[$i])}}">
+                            required type="text"
+                            value="{{ $evaluation->selected_alternatives != null ? explode(',', $evaluation->selected_alternatives)[$i] : '' }}">
 
                 </div>
 

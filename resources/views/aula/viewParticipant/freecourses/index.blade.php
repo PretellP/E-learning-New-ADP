@@ -62,7 +62,7 @@
                 <div class="card-body">
 
                     <div class="start-button-container freecourses">
-                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $pendingCourse])}}#chapter-title-head"> 
+                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $pendingCourse])}}"> 
                             @csrf 
                             <button type="submit">
                                 Continuar &nbsp;
@@ -141,7 +141,7 @@
                 <div class="card-body">
 
                     <div class="start-button-container freecourses">
-                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $finishedCourse])}}#chapter-title-head"> 
+                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $finishedCourse])}}"> 
                             @csrf 
                             <button type="submit">
                                 Ingresar &nbsp;
@@ -207,7 +207,7 @@
 
         <div class="courses-cards-container">
 
-            @foreach ($recomendedCourses as $recomendedCourse)
+            @forelse ($recomendedCourses as $recomendedCourse)
 
             <div class="card course-card">
                 <div class="course-img-container">
@@ -219,7 +219,7 @@
                 <div class="card-body">
 
                     <div class="start-button-container freecourses">
-                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $recomendedCourse])}}#chapter-title-head"> 
+                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $recomendedCourse])}}"> 
                             @csrf 
                             <button type="submit">
                                 Ingresar &nbsp;
@@ -255,7 +255,11 @@
 
             </div>
 
-            @endforeach
+            @empty
+
+            <h4 class="text-center empty-records-message"> No hay cursos recomendados aún </h4>
+
+            @endforelse
 
         </div>
 

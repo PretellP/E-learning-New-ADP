@@ -10,7 +10,7 @@ use App\Models\{
     CourseCategory,
     SectionChapter
 };
-use App\Services\FreeCourseService;
+use App\Services\{CourseCategoryService, FreeCourseService};
 
 class AulaFreeCourseController extends Controller
 {
@@ -24,7 +24,7 @@ class AulaFreeCourseController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $categories = $this->freeCourseService->withCategoryRelationshipsQuery()
+        $categories = app(CourseCategoryService::class)->withCategoryRelationshipsQuery()
                                             ->where('status', 'S')
                                             ->select('id', 'description')
                                             ->get();
@@ -137,7 +137,6 @@ class AulaFreeCourseController extends Controller
                     'section_chapters.section_id',
                     'section_chapters.title',
                     'section_chapters.description',
-                    'section_chapters.url_video',
                     'section_chapters.chapter_order'
                 )
                 ->get();
@@ -148,8 +147,10 @@ class AulaFreeCourseController extends Controller
 
             $current_chapter = $allProgress->where('id', $current_chapter->id)->first();
 
+           
             if ($current_chapter != null) {
                 $current_time = $current_chapter->pivot->progress_time;
+                $current_chapter->loadVideo();
             } else {
                 abort(404);
             }

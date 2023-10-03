@@ -9,11 +9,6 @@ use App\Models\{
     Event,
     Course,
     DroppableOption,
-    User,
-    Company,
-    MiningUnits,
-    OwnerCompany,
-    // Document,
     CourseSection,
     File as ModelsFile,
     SectionChapter,
@@ -135,7 +130,7 @@ function getDroppableOptionsFromQuestion($question)
 
 function getAlternativeFromId($id)
 {
-    return DynamicAlternative::findOrFail($id);
+    return DynamicAlternative::with('file')->findOrFail($id);
 }
 
 function getDroppableOptionFromId($id)
@@ -256,7 +251,9 @@ function getFreeCourseTime($duration)
 function getCompletedChapters($chapters)
 {
     $completedChapters = $chapters->sum(function ($chapter) {
-        return $chapter->progressUsers->first()->pivot->status == 'F' ? 1 : 0;
+        if($chapter->progressUsers->first()){
+            return $chapter->progressUsers->first()->pivot->status == 'F' ? 1 : 0;
+        }
     });
 
     return $completedChapters;
@@ -349,6 +346,9 @@ function validateSurveys()
 
 function getStatementsFromUserSurvey(UserSurvey $userSurvey)
 {
+   
+    $userSurvey->survey->load('surveyGroups');
+
     $statements = $userSurvey->survey->with([
         'surveyGroups' => fn ($query) => $query
             ->select('id', 'survey_id')

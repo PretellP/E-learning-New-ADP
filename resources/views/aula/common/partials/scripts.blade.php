@@ -20,6 +20,10 @@
 
 <script src="{{asset('assets/common/modules/chart.min.js')}}"></script>
 
+<!-- DRAG AND DROP -->
+
+<script src="{{asset('assets/common/js/draganddrop.js')}}"></script>
+
 
 <script src="{{asset('assets/common/modules/summernote/summernote-bs4.js')}}"></script>
 <script src="{{asset('assets/common/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>

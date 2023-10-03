@@ -56,6 +56,13 @@ class Certification extends Model
         return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units','certification_id','mining_unit_id')->withTimestamps();
     }
 
+    public function loadRelationships()
+    {
+        return $this -> load(['user' => fn ($query) =>
+                                $query->with(['miningUnits', 'company'])
+                            , 'event.exam.course']);
+    }
+
     public function getIsEnableEvaluationAttribute()
     {
         $messages = [];

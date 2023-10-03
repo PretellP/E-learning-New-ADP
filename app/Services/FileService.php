@@ -43,14 +43,26 @@ class FileService
         return false;
     }
 
-    private function makeDirectory($model, $file_type, $category, $belongsTo)
+    public function makeDirectory($model, $file_type, $category, $belongsTo)
     {
         $directory = $file_type . '/' . $category;
         if ($belongsTo == 'folder') {
-            $directory .= '/' . $model->folder_path;
+            $directory = $model->folder_path;
         }
 
         return $directory;
+    }
+
+    public function destroyDirectory($directory, $storage)
+    {
+        return Storage::disk($storage)->deleteDirectory($directory);
+    }
+
+    public function storeDirectory($directory, $storage)
+    {
+        $stored = Storage::disk($storage)->makeDirectory($directory);
+
+        return $stored;
     }
 
     private function getFileName($directory, $file, $storage)

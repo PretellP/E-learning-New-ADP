@@ -72,4 +72,6 @@
 
 @include('admin.events.partials._modal_store_participant')
 
+@include('admin.events.partials._modal_show_certification')
+
 @endsection

@@ -52,8 +52,7 @@ class CertificationService
             })
             ->addColumn('action', function ($certification) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $certification->id . '" data-url="" 
-                                        data-send=""
+                    $certification->id . '" data-send="'. route('admin.events.certifications.show', $certification) .'"
                                         data-original-title="edit" class="me-3 edit btn btn-info btn-sm
                                         showCertification-btn"><i class="fa-solid fa-eye"></i></button>';
                 if (

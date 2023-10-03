@@ -60,4 +60,9 @@ class DynamicQuestion extends Model
                     $query->with(['file', 'droppableOption'])
             ]);
     }
+
+    public function getCleanStatementAttribute()
+    {
+        return str_replace('[ ___________ ]', ' ___________ ', $this->statement);
+    }
 }

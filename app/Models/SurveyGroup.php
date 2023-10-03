@@ -9,7 +9,7 @@ use App\Models\{Survey, SurveyStatement};
 class SurveyGroup extends Model
 {
     use HasFactory;
-    protected $table = 'survey_groups';
+    protected $table = 'groups';
     protected $guarded = [];
 
     public function survey()

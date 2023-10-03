@@ -28,10 +28,11 @@
 
                         @php
                             $alternative = getAlternativeFromId($alt_id);
+                            $image_url = verifyFile($alternative->file);
                         @endphp
     
-                        <div class="draggable" draggable="true" id='{{$alt_id}}'>
-                            <img draggable="false" src="{{asset($alternative->url_img)}}" alt="">
+                        <div class="draggable {{ $image_url == null ? 'without_image' : '' }}" draggable="true" id='{{$alt_id}}'>
+                            <img draggable="false" src="{{ $image_url }}" alt="">
                             <span>
                                 {{$alternative->description}}
                             </span>

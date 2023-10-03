@@ -36,13 +36,15 @@ class AulaSurveysController extends Controller
 
     public function start(UserSurvey $userSurvey)
     {
+        $userSurvey->load('survey');
         $answers = $userSurvey->surveyAnswers;
+       
         $num_question = 1;
 
         if($answers->isEmpty())
         {
             $statements = getStatementsFromUserSurvey($userSurvey);
-
+            
             $userSurvey->update([
                 'start_time' => Carbon::now('America/Lima')
             ]);

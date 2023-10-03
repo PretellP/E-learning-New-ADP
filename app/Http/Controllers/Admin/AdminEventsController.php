@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
-use App\Models\{Elearning, Event, Exam, OwnerCompany, Room, User};
+use App\Models\{Company, Course, Elearning, Event, Exam, OwnerCompany, Room, User};
 use App\Services\{CertificationService, EventService};
 use Exception;
 use Illuminate\Http\Request;
@@ -24,7 +24,12 @@ class AdminEventsController extends Controller
             return $this->eventService->getDataTable($request);
         }
 
-        return view('admin.events.index');
+        return view('admin.events.index', [
+            "courses" => Course::where('course_type', 'REGULAR')
+                        ->get(['id', 'description', 'course_type']),
+            "instructors" => User::getInstructorsQuery()->get(['id', 'name', 'paternal']),
+            "responsables" => User::getResponsablesQuery()->get(['id', 'name', 'paternal'])
+        ]);
     }
 
     public function create() 
@@ -84,6 +89,8 @@ class AdminEventsController extends Controller
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
         $eLearnings = Elearning::get(['id', 'title']);
+
+        $event['type'] = verifyEventType($event->type);
 
         return response()->json([
             "all" => [
@@ -154,15 +161,16 @@ class AdminEventsController extends Controller
 
     public function show(Request $request, Event $event)
     {
-
         if ($request->ajax()) {
             return app(CertificationService::class)->getParticipantsTable($event);
         }
 
         $event->loadRelationships();
+        $companies = Company::get(['id','description']);
 
         return view('admin.events.show', compact(
-            'event'
+            'event',
+            'companies'
         ));
     }
 

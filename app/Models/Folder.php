@@ -37,4 +37,9 @@ class Folder extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
+
+    public function loadFiles()
+    {
+        return $this->load('files');
+    }
 }

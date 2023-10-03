@@ -19,7 +19,7 @@
         </div>
 
         <div class="course-progress-container mb-6">
-            @foreach ($courses as $course)
+            @forelse ($courses as $course)
 
             @php
             $certifications = getProgressCertificationsFromCourse($course)
@@ -101,7 +101,12 @@
                         <canvas class="canva-progress" id="progress-chart-{{$course->id}}"></canvas>
                 </div>
             </div>
-            @endforeach
+
+            @empty
+
+            <h4 class="text-center empty-records-message"> Aún no tienes cursos registrados </h4>
+
+            @endforelse
 
         </div>
 
@@ -111,7 +116,7 @@
         </div>
 
         <div class="course-progress-container mb-6">
-            @foreach ($freeCourses as $freeCourse)
+            @forelse ($freeCourses as $freeCourse)
             @php
                 $totalChapters = $freeCourse->course_chapters_count;
                 $completedChapters = getCompletedChapters($freeCourse->courseChapters);
@@ -175,7 +180,12 @@
                 </div>
                 
             </div>
-            @endforeach
+
+            @empty
+
+            <h4 class="text-center empty-records-message"> Aún no tienes cursos registrados </h4>
+
+            @endforelse
 
 
 

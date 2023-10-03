@@ -954,9 +954,9 @@ $(function () {
                 { data: 'status-btn', name: 'status-btn', orderable: false, searchable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
-            // order: [
-            //     [1, 'asc']
-            // ]
+            order: [
+                [0, 'desc']
+            ]
         });
 
 
@@ -5325,6 +5325,45 @@ $(function () {
     if ($('#events-table').length) {
 
 
+        if ($('#date-range-input-event').length) {
+
+            $('#date-range-input-event').val('Todos los registros');
+
+            $('.daterange-cus').daterangepicker({
+                locale: { format: 'YYYY-MM-DD' },
+                drops: 'down',
+                opens: 'right'
+            });
+
+            $('#daterange-btn-events').daterangepicker({
+                ranges: {
+                    'Todo': [moment('1970-01-01'), moment('3000-01-01')],
+                    'Hoy': [moment(), moment().add(1, 'days')],
+                    'Ayer': [moment().subtract(1, 'days'), moment()],
+                    'Últimos 7 días': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+                    'Últimos 30 días': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+                    'Este mes': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+                    'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+                },
+                startDate: moment('1970-01-01'),
+                endDate: moment('3000-01-01'),
+            }, function (start, end) {
+                if (start.format('YYYY-MM-DD') == '1970-01-01') {
+                    $('#date-range-input-event').val('Todos los registros');
+                } else {
+                    $('#date-range-input-event').val('Del: ' + start.format('YYYY-MM-DD') + ' hasta el: ' + end.format('YYYY-MM-DD'))
+                }
+
+                eventsTable.draw()
+            });
+        }
+
+        /* ---------- FILTER SELECT ----------*/
+
+        $('.main-content').on('change', '.select-filter-event', function(){
+            eventsTable.draw()
+        })
+
         /* ----- EVENTS TABLE ------*/
 
         var eventsTableEle = $('#events-table');
@@ -5333,7 +5372,16 @@ $(function () {
             language: DataTableEs,
             serverSide: true,
             processing: true,
-            ajax: getDataUrl,
+            ajax: {
+                'url': getDataUrl,
+                "data": function (data) {
+                    data.from_date = $('#daterange-btn-events').data('daterangepicker').startDate.format('YYYY-MM-DD')
+                    data.end_date = $('#daterange-btn-events').data('daterangepicker').endDate.format('YYYY-MM-DD')
+                    data.search_course = $('#search_from_course_select').val();
+                    data.search_instructor = $('#search_from_instructor_select').val();
+                    data.search_responsable = $('#search_from_responsable_select').val();
+                }
+            },
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'description', name: 'description' },
@@ -5355,234 +5403,237 @@ $(function () {
 
         // --------------- REGISTRAR -----------------
 
-        $('#registerTypeSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un tipo de evento'
-        })
+        if ($('#registerEventForm').length) {
 
-        $('#registerInstructorSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un instructor'
-        })
+            $('#registerTypeSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un tipo de evento'
+            })
 
-        $('#registerResponsableSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un responsable'
-        })
+            $('#registerInstructorSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un instructor'
+            })
 
-        $('#registerRoomSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un sala'
-        })
+            $('#registerResponsableSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un responsable'
+            })
 
-        $('#registerOwnerCompanySelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona una empresa titular'
-        })
+            $('#registerRoomSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un sala'
+            })
 
-        $('#registerExamSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un examen'
-        })
+            $('#registerOwnerCompanySelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona una empresa titular'
+            })
 
-        $('#registerTestExamSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un examen de prueba'
-        })
+            $('#registerExamSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un examen'
+            })
 
-        $('#registerElearningSelect').select2({
-            dropdownParent: $("#registerEventModal"),
-            placeholder: 'Selecciona un e-learning'
-        })
+            $('#registerTestExamSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un examen de prueba'
+            })
+
+            $('#registerElearningSelect').select2({
+                dropdownParent: $("#registerEventModal"),
+                placeholder: 'Selecciona un e-learning'
+            })
 
 
-        $('#register-status-checkbox').change(function () {
-            var txtDesc = $('#txt-register-status');
-            if (this.checked) {
-                txtDesc.html('Activo');
-            } else {
-                txtDesc.html('Inactivo')
-            }
-        });
-
-        var registerEventForm = $('#registerEventForm').validate({
-            rules: {
-                description: {
-                    required: true,
-                    maxlength: 255
-                },
-                type: {
-                    required: true,
-                },
-                date: {
-                    required: true
-                },
-                user_id: {
-                    required: true
-                },
-                responsable_id: {
-                    required: true
-                },
-                room_id: {
-                    required: true
-                },
-                exam_id: {
-                    required: true
+            $('#register-status-checkbox').change(function () {
+                var txtDesc = $('#txt-register-status');
+                if (this.checked) {
+                    txtDesc.html('Activo');
+                } else {
+                    txtDesc.html('Inactivo')
                 }
-            },
-            submitHandler: function (form, event) {
-                event.preventDefault()
+            });
 
-                var form = $(form)
-                var loadSpinner = form.find('.loadSpinner')
+            var registerEventForm = $('#registerEventForm').validate({
+                rules: {
+                    description: {
+                        required: true,
+                        maxlength: 255
+                    },
+                    type: {
+                        required: true,
+                    },
+                    date: {
+                        required: true
+                    },
+                    user_id: {
+                        required: true
+                    },
+                    responsable_id: {
+                        required: true
+                    },
+                    room_id: {
+                        required: true
+                    },
+                    exam_id: {
+                        required: true
+                    }
+                },
+                submitHandler: function (form, event) {
+                    event.preventDefault()
+
+                    var form = $(form)
+                    var loadSpinner = form.find('.loadSpinner')
+                    var modal = $('#registerEventModal')
+
+                    loadSpinner.toggleClass('active')
+                    form.find('.btn-save').attr('disabled', 'disabled')
+
+                    $.ajax({
+                        method: form.attr('method'),
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+
+                                eventsTable.draw()
+                                registerEventForm.resetForm()
+                                form.trigger('reset');
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registrado exitosamente!'
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        complete: function (data) {
+
+                            form.find('.btn-save').removeAttr('disabled')
+                            loadSpinner.toggleClass('active')
+                            modal.modal('hide')
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+            })
+
+            $('.main-content').on('click', '#btn-register-event-modal', function () {
+                var button = $(this)
+                var url = button.data('url')
                 var modal = $('#registerEventModal')
+                var loadSpinner = button.find('.loadSpinner')
+                var form = modal.find('#registerEventForm')
+
+                var typeSelect = form.find('#registerTypeSelect')
+                var instructorSelect = form.find('#registerInstructorSelect')
+                var responsableSelect = form.find('#registerResponsableSelect')
+                var roomSelect = form.find('#registerRoomSelect')
+                var ownerCompanySelect = form.find('#registerOwnerCompanySelect')
+                var examSelect = form.find('#registerExamSelect')
+                var testExamSelect = form.find('#registerTestExamSelect')
+                var elearningSelect = form.find('#registerElearningSelect')
+
+                var dateInput = form.find('input[name=date]')
+
+                typeSelect.empty()
+                instructorSelect.empty()
+                responsableSelect.empty()
+                roomSelect.empty()
+                ownerCompanySelect.empty()
+                examSelect.empty()
+                testExamSelect.empty()
+                elearningSelect.empty()
+
+                dateInput.val(moment().format('YYYY-MM-DD'))
 
                 loadSpinner.toggleClass('active')
-                form.find('.btn-save').attr('disabled', 'disabled')
+                button.attr('disabled', 'disabled')
 
                 $.ajax({
-                    method: form.attr('method'),
-                    url: form.attr('action'),
-                    data: form.serialize(),
+                    type: 'GET',
+                    url: url,
                     dataType: 'JSON',
                     success: function (data) {
 
-                        if (data.success) {
+                        typeSelect.append('<option></option>')
+                        $.each(data.types, function (key, values) {
+                            typeSelect.append('<option value="' + key + '">' + values + '</option>')
+                        })
 
-                            eventsTable.draw()
-                            registerEventForm.resetForm()
-                            form.trigger('reset');
+                        instructorSelect.append('<option></option>')
+                        $.each(data.instructors, function (key, values) {
+                            instructorSelect.append('<option value="' + values.id + '">' +
+                                values.name + ' ' + values.paternal +
+                                '</option>')
+                        })
 
-                            Toast.fire({
-                                icon: 'success',
-                                text: '¡Registrado exitosamente!'
-                            })
-                        }
-                        else {
-                            Toast.fire({
-                                icon: 'error',
-                                text: data.message
-                            })
-                        }
+                        responsableSelect.append('<option></option>')
+                        $.each(data.responsables, function (key, values) {
+                            responsableSelect.append('<option value="' + values.id + '">' +
+                                values.name + ' ' + values.paternal +
+                                '</option>')
+                        })
+
+                        roomSelect.append('<option></option>')
+                        $.each(data.rooms, function (key, values) {
+                            roomSelect.append('<option value="' + values.id + '">' +
+                                values.description +
+                                '</option>')
+                        })
+
+                        ownerCompanySelect.append('<option></option>')
+                        $.each(data.ownerCompanies, function (key, values) {
+                            ownerCompanySelect.append('<option value="' + values.id + '">' +
+                                values.name +
+                                '</option>')
+                        })
+
+                        examSelect.append('<option></option>')
+                        $.each(data.exams, function (key, values) {
+                            examSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+
+                        testExamSelect.append('<option></option>')
+                        $.each(data.examsTest, function (key, values) {
+                            testExamSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+
+                        elearningSelect.append('<option></option>')
+                        $.each(data.eLearnings, function (key, values) {
+                            elearningSelect.append('<option value="' + values.id + '">' +
+                                values.title +
+                                '</option>')
+                        })
+
                     },
                     complete: function (data) {
-
-                        form.find('.btn-save').removeAttr('disabled')
                         loadSpinner.toggleClass('active')
-                        modal.modal('hide')
+                        button.removeAttr('disabled')
+                        modal.modal('show')
                     },
                     error: function (data) {
                         console.log(data)
-                        ToastError.fire()
                     }
                 })
-            }
-        })
-
-        $('.main-content').on('click', '#btn-register-event-modal', function () {
-            var button = $(this)
-            var url = button.data('url')
-            var modal = $('#registerEventModal')
-            var loadSpinner = button.find('.loadSpinner')
-            var form = modal.find('#registerEventForm')
-
-            var typeSelect = form.find('#registerTypeSelect')
-            var instructorSelect = form.find('#registerInstructorSelect')
-            var responsableSelect = form.find('#registerResponsableSelect')
-            var roomSelect = form.find('#registerRoomSelect')
-            var ownerCompanySelect = form.find('#registerOwnerCompanySelect')
-            var examSelect = form.find('#registerExamSelect')
-            var testExamSelect = form.find('#registerTestExamSelect')
-            var elearningSelect = form.find('#registerElearningSelect')
-
-            var dateInput = form.find('input[name=date]')
-
-            typeSelect.empty()
-            instructorSelect.empty()
-            responsableSelect.empty()
-            roomSelect.empty()
-            ownerCompanySelect.empty()
-            examSelect.empty()
-            testExamSelect.empty()
-            elearningSelect.empty()
-
-            dateInput.val(moment().format('YYYY-MM-DD'))
-
-            loadSpinner.toggleClass('active')
-            button.attr('disabled', 'disabled')
-
-            $.ajax({
-                type: 'GET',
-                url: url,
-                dataType: 'JSON',
-                success: function (data) {
-
-                    typeSelect.append('<option></option>')
-                    $.each(data.types, function (key, values) {
-                        typeSelect.append('<option value="' + key + '">' + values + '</option>')
-                    })
-
-                    instructorSelect.append('<option></option>')
-                    $.each(data.instructors, function (key, values) {
-                        instructorSelect.append('<option value="' + values.id + '">' +
-                            values.name + ' ' + values.paternal +
-                            '</option>')
-                    })
-
-                    responsableSelect.append('<option></option>')
-                    $.each(data.responsables, function (key, values) {
-                        responsableSelect.append('<option value="' + values.id + '">' +
-                            values.name + ' ' + values.paternal +
-                            '</option>')
-                    })
-
-                    roomSelect.append('<option></option>')
-                    $.each(data.rooms, function (key, values) {
-                        roomSelect.append('<option value="' + values.id + '">' +
-                            values.description +
-                            '</option>')
-                    })
-
-                    ownerCompanySelect.append('<option></option>')
-                    $.each(data.ownerCompanies, function (key, values) {
-                        ownerCompanySelect.append('<option value="' + values.id + '">' +
-                            values.name +
-                            '</option>')
-                    })
-
-                    examSelect.append('<option></option>')
-                    $.each(data.exams, function (key, values) {
-                        examSelect.append('<option value="' + values.id + '">' +
-                            values.title +
-                            '</option>')
-                    })
-
-                    testExamSelect.append('<option></option>')
-                    $.each(data.examsTest, function (key, values) {
-                        testExamSelect.append('<option value="' + values.id + '">' +
-                            values.title +
-                            '</option>')
-                    })
-
-                    elearningSelect.append('<option></option>')
-                    $.each(data.eLearnings, function (key, values) {
-                        elearningSelect.append('<option value="' + values.id + '">' +
-                            values.title +
-                            '</option>')
-                    })
-
-                },
-                complete: function (data) {
-                    loadSpinner.toggleClass('active')
-                    button.removeAttr('disabled')
-                    modal.modal('show')
-                },
-                error: function (data) {
-                    console.log(data)
-                }
             })
-        })
 
+        }
 
         /* -------------- EDITAR ---------------*/
 
@@ -6292,6 +6343,10 @@ $(function () {
 
         var participantsTable;
 
+        $('html').on('change', '#search_from_company_select', function (){
+            participantsTable.draw()
+        })
+
         $('.main-content').on('click', '#btn-register-participant-modal', function () {
             var modal = $('#registerParticipantsModal')
 
@@ -6304,9 +6359,14 @@ $(function () {
                     language: DataTableEs,
                     serverSide: true,
                     processing: true,
-                    ajax: getDataUrl,
+                    ajax: {
+                        "url": getDataUrl,
+                        "data": function (data) {
+                            data.search_company = $('#search_from_company_select').val()
+                        }
+                    },
                     columns: [
-                        { data: 'choose', name: 'choose', orderable: false, searchable: false },
+                        { data: 'choose', name: 'choose', orderable: false, searchable: false, className: 'text-center' },
                         { data: 'id', name: 'id' },
                         { data: 'dni', name: 'dni' },
                         { data: 'name', name: 'name' },
@@ -6325,6 +6385,7 @@ $(function () {
 
             modal.modal('show')
         })
+
 
         $('#users-participants-table').on('draw.dt', function () {
             $('#btn-store-participant-container').html(buttonDisabled)
@@ -6423,7 +6484,7 @@ $(function () {
 
         // ----------------- ELIMINAR PARTICIPANTES ----------------
 
-        $('.main-content').on('click', '.deleteCertification-btn', function (){
+        $('.main-content').on('click', '.deleteCertification-btn', function () {
             var url = $(this).data('url')
 
             SwalDelete.fire().then(function (e) {
@@ -6463,8 +6524,91 @@ $(function () {
 
         })
 
-    }
 
+        // -------------- VER CERTIFICADO ------------------------
+
+        const statuslabelActive = '<span class="status active">Activo</span>';
+
+        const statuslabelInactive = '<span class="status">Inactivo</span>';
+
+
+        $('.main-content').on('click', '.showCertification-btn', function () {
+            var url = $(this).data('send')
+            var modal = $('#showCertificationModal')
+            var titlebox = modal.find('#txt-context-element')
+            var bodyParticipant = modal.find('#participant-info-table tbody')
+            var bodyEvent = modal.find('#event-info-table tbody')
+            var bodyCertification = modal.find('#certification-info-table tbody')
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    titlebox.html(data.title)
+
+                    let participant = data.participant
+                    let partStatus = (participant.active == 'S') ? statuslabelActive : statuslabelInactive
+
+                    let miningUnits = '<ul>'
+                    $.each(participant.mining_units, function (key, value) {
+                        miningUnits += '<li>' + value.description + '</li>'
+                    })
+                    miningUnits += '</ul>'
+
+                    bodyParticipant.html('<tr> \
+                                            <td>' + participant.id + '</td>\
+                                            <td>' + participant.dni + '</td>\
+                                            <td>' + participant.name + '</td>\
+                                            <td class="p-0">' + miningUnits + '</td>\
+                                            <td>' + participant.email + '</td>\
+                                            <td>' + participant.company['description'] + '</td>\
+                                            <td>' + participant.position + '</td>\
+                                            <td>' + partStatus + '</td>\
+                                        </tr>')
+
+                    let event = data.event
+                    let eventStatus = (event.active == 'S') ? statuslabelActive : statuslabelInactive
+                    let examStatus = (event.exam['active'] == 'S') ? statuslabelActive : statuslabelInactive
+
+                    bodyEvent.html('<tr> \
+                                        <td>' + event.id + '</td>\
+                                        <td>' + event.description + '</td>\
+                                        <td>' + event.date + '</td>\
+                                        <td>' + eventStatus + '</td>\
+                                        <td>' + event.exam['title'] + '</td>\
+                                        <td>' + examStatus + '</td>\
+                                        <td>' + event.exam['course'].description + '</td>\
+                                    </tr>')
+
+                    let certification = data.certification
+                    let assistUser = (certification.assist_user == 'S') ? 'Sí' : 'No'
+
+                    bodyCertification.html('<tr> \
+                                                <td>' + (certification.start_time ?? '-') + '</td>\
+                                                <td>' + (certification.end_time ?? '-') + '</td>\
+                                                <td>' + (certification.total_time ?? '-') + '</td>\
+                                                <td>' + (certification.score ?? '-') + '</td>\
+                                                <td>\
+                                                    <span class="status ' + certification.status + '"> \
+                                                        ' + certification.status_txt + ' \
+                                                    </span> \
+                                                </td>\
+                                                <td>' + assistUser + '</td>\
+                                            </tr>')
+                },
+                complete: function () {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+
+        })
+
+    }
 
 
 

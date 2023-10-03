@@ -275,10 +275,11 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
             Route::controller(AdminCertificationsController::class)->group(function () {
 
+                Route::get('/ver-certificado/{certification}', 'show')->name('admin.events.certifications.show');
                 Route::post('/registrar-participantes/{event}', 'store')->name('admin.events.certifications.store');
                 Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
-               
+
             });             
         });
 

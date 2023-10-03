@@ -32,7 +32,7 @@
                 <div class="card-body">
 
                     <div class="start-button-container freecourses">
-                        <form method="POST" action="{{route('aula.freecourse.start', $course)}}#chapter-title-head">
+                        <form method="POST" action="{{route('aula.freecourse.start', $course)}}">
                             @csrf
                             <button type="submit">
                                 Ingresar &nbsp;
@@ -71,7 +71,7 @@
 
             @empty
 
-            <h2 class="text-center w-100"> Aún no hay cursos en esta categoría </h2>
+            <h4 class="text-center empty-records-message"> Aún no hay cursos en esta categoría </h4>
 
             @endforelse
 

@@ -22,6 +22,10 @@
 	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
 
+	<!-- DRAG AND DROP -->
+
+	<link rel="stylesheet" href="{{asset('assets/common/css/draganddrop.css')}}">
+
 
 	@yield('extra-head')
 

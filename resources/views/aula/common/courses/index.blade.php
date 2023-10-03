@@ -80,7 +80,7 @@
 
             @empty
 
-            <h1> No hay Cursos que mostrar aún </h1>
+            <h4 class="text-center empty-records-message"> No hay Cursos que mostrar aún </h4>
 
             @endforelse
         </div>

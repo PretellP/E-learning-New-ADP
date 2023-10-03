@@ -24,6 +24,10 @@ button:focus {
     max-width: 1140px;
 }
 
+.modal-xxl {
+    max-width: 1340px;
+}
+
 .input-disabled {
     padding: 10px;
     background-color: rgb(233, 233, 233);
@@ -126,6 +130,44 @@ input.no-label-error~label.error {
     background: var(--light-gray) !important;
 }
 
+.group-filter-buttons-section
+{
+    display: flex;
+    gap: 1.5em;
+}
+
+/* --------- DATE RANGE STYLES -------*/
+
+.date-range-container
+{
+    width: 400px;
+}
+
+.ranges li:hover, .ranges li.active
+{
+    background-color: #08c !important;
+}
+
+.select-group {
+    min-width: 350px;
+}
+
+.modal-header
+{
+    background-color: var(--first-color);
+    color: white;
+    padding-bottom: 20px;
+}
+
+.modal-header h5 .title-header-show
+{
+    color: white !important;
+}
+
+button.close
+{
+    color: white !important;
+}
 
 /* ------------- TOLTIP ------------*/
 
@@ -542,6 +584,7 @@ textarea.form-control {
 .title-header-show {
     color: var(--first-color);
     margin: 0;
+    font-size: 21px;
 }
 
 .subtitle-header-show {

@@ -113,7 +113,7 @@
 
                         @elseif ($status == 'finished')
 
-                        @if ($certification->score < 10) <div class="variable-info" style="color: rgb(189, 20, 20)">
+                        @if ($certification->score < 11) <div class="variable-info" style="color: rgb(189, 20, 20)">
                             Desaprobado &nbsp;
                             <i class="fa-regular fa-circle-xmark"></i>
                     </div>

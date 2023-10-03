@@ -18,6 +18,24 @@ class EventService
         ])
             ->withCount(['certifications', 'userSurveys']);
 
+        if ($request->filled('from_date') && $request->filled('end_date')) {
+            $query = $query->whereBetween('date', [$request->from_date, $request->end_date]);
+        }
+
+        if ($request->filled('search_course')) {
+            $query = $query->whereHas('exam.course', function ($query) use ($request) {
+                $query->where('id', $request['search_course']);
+            });
+        }
+
+        if ($request->filled('search_instructor')) {
+            $query = $query->where('user_id', $request['search_instructor']);
+        }
+
+        if ($request->filled('search_responsable')) {
+            $query = $query->where('responsable_id', $request['search_responsable']);
+        }
+
         $allEvents = DataTables::of($query)
             ->editColumn('description', function ($event) {
                 return '<a href="' . route('admin.events.show', $event) . '">' . $event->description . '</a>';
@@ -110,11 +128,15 @@ class EventService
     public function getUsersTable(Request $request, Event $event)
     {
         $participants = $event->participants()->wherePivot('evaluation_type', 'certification')->get()
-                            ->pluck('id')->toArray();
+            ->pluck('id')->toArray();
 
         $users = User::where('role', 'participants')
-                    ->whereNotIn('users.id', $participants)
-                    ->with('company');
+            ->whereNotIn('users.id', $participants)
+            ->with('company');
+
+        if ($request->filled('search_company')) {
+            $users = $users->where('company_id', $request['search_company']);
+        }       
 
         $allUsers = DataTables::of($users)
             ->addColumn('choose', function ($user) {
@@ -136,5 +158,4 @@ class EventService
 
         return $allUsers;
     }
-
 }

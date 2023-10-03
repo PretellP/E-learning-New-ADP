@@ -2,6 +2,8 @@
 
 @section('main-content-extra-class', 'fixed-padding')
 
+@section('navbarClass', 'free-course-view')
+
 @section('content')
 
 <div class="content global-container free-courses" id="chapter-title-head">
@@ -29,7 +31,7 @@
                 }'>
                     {{-- <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"> --}}
                     
-                    <source src="{{asset('storage/'.$current_chapter->url_video)}}">
+                    <source src="{{ verifyFile($current_chapter->file) }}">
 
                 </video>
 
@@ -53,7 +55,7 @@
                         <i class="fa-solid fa-angles-right fa-flip-horizontal"></i>
                     </a>
                     <form method="POST" 
-                        action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $previous_chapter, $course])}}#chapter-title-head"" id="previous-chapter-video-form">
+                        action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $previous_chapter, $course])}}" id="previous-chapter-video-form">
                         @method('PATCH')
                         @csrf
                     </form>
@@ -75,7 +77,7 @@
                             </div>
                         </div> 
                     </a>
-                    <form method="POST" action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $next_chapter, $course])}}#chapter-title-head"" id="next-chapter-video-form">
+                    <form method="POST" action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $next_chapter, $course])}}" id="next-chapter-video-form">
                         @method('PATCH')
                         @csrf
                     </form>
@@ -155,7 +157,7 @@
 
                             @if($chapter->id != $current_chapter->id)
                             <form method="POST"
-                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter, $course])}}#chapter-title-head">
+                                action="{{route('aula.freecourse.update', [$current_chapter, 'new_chapter' => $chapter, $course])}}">
                                 @method('PATCH')
                                 @csrf
                                 @else

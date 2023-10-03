@@ -20,8 +20,9 @@ class FolderController extends Controller
 
     public function store(FolderRequest $request, Course $course)
     {
+        $storage = env('FILESYSTEM_DRIVER');
         try {
-            $this->folderService->store($request->validated(), $course->id);
+            $this->folderService->store($request->validated(), $course->id, $storage);
         } catch (Exception $e) {
             abort(500, $e->getMessage());
         }
@@ -53,12 +54,15 @@ class FolderController extends Controller
 
     public function storeSubfolder(FolderRequest $request, Folder $folder)
     {
+        $storage = env('FILESYSTEM_DRIVER');
+
         $this->folderService->storeSubfolder(
             $request->validated(),
             $folder->id_course,
             $folder->id,
             $folder->level,
             $folder->folder_path,
+            $storage
         );
 
         return redirect()->route('admin.courses.folder.view', $folder)
@@ -67,9 +71,14 @@ class FolderController extends Controller
 
     public function destroy(Folder $folder)
     {
+        $folder->loadFiles();
+        
+        $storage = env('FILESYSTEM_DRIVER');
+
         $isDeleted = $this->folderService->destroy(
             $folder->folder_path,
-            $folder->id,
+            $folder,
+            $storage
         );
 
         if ($folder->level != 1) {

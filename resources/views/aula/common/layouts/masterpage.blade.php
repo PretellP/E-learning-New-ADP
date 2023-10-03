@@ -7,7 +7,7 @@
     <div id="app">
 
         <div class="main-wrapper main-wrapper-1">
-            <div class="navbar-bg"></div>
+            <div class="navbar-bg @yield('navbarClass')"></div>
 
             @include('aula.common.partials.navbar')
             @include('aula.common.partials.sidebar')

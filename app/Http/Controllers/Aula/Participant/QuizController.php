@@ -38,12 +38,15 @@ class QuizController extends Controller
         $isFinished = $certification->status == 'finished' ? true : false;
 
         if (!isset($evaluations[$num_question-1]) || ($num_question > $selected_answers+1) || $isFinished){
-            return back();
+            abort(401, 'Acción no autorizada');
         }
 
         $question = DynamicQuestion::findOrFail($evaluations[$num_question-1] -> question_id);
+
         $exam = $question->exam;
+
         $event_date = $certification->event->date;
+
         $its_time_out = getItsTimeOut(getTimeDifference($certification, $exam));
 
         if (!$its_time_out && getCurrentDate() == $event_date && $certification->assist_user == 'S')
@@ -51,9 +54,12 @@ class QuizController extends Controller
             if ($question->question_type_id == 5)
             {
                 $str_options = $evaluations[$num_question-1] -> correct_alternatives;
+
                 $alts_and_options_array = explode(":", $str_options);
+
                 $alts_ids = explode(",", $alts_and_options_array[0]);
                 $options_ids = explode(",", $alts_and_options_array[1]);
+
 
                 return view('aula.viewParticipant.courses.evaluations.quiz', [
                     'exam' => $exam,
@@ -200,10 +206,16 @@ class QuizController extends Controller
                 if ($question->question_type_id == 4)
                 {
                     $correct_alt_array = $correct_alternatives->pluck('description')->toArray();
+
                     foreach($select_alternatives as $i => $txt_input)
                     {
                         $strClean = strtoupper(trim($txt_input));
-                        if($strClean == $correct_alt_array[$i])
+
+                        $alternatives_clean = array_map( function ($x) {
+                            return trim(strtoupper($x));
+                        }, explode(',', $correct_alt_array[$i]));
+
+                        if(in_array($strClean, $alternatives_clean))
                         {
                             $points += $question->points / count($correct_alt_array);
                         }

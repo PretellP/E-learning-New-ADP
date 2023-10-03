@@ -10,7 +10,7 @@ $(function() {
     $(window).scroll(function() {    
         var scroll_height = $(window).scrollTop();
 
-        if(scroll_height >= 275){
+        if(scroll_height >= 150){
             lateralMenu.addClass('fixed')
             videContainer.addClass('fixed')
         }else{
@@ -19,8 +19,6 @@ $(function() {
         }
     })
 
-
-    
 
     /* ------- MODALS GET DATA ------------*/
 
