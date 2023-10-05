@@ -59,9 +59,12 @@ class QuizController extends Controller
 
                 $alts_ids = explode(",", $alts_and_options_array[0]);
 
+
                 $options_ids = explode(",", $alts_and_options_array[1]);
 
+
                 $alternatives = DynamicAlternative::whereIn('id', $alts_ids)->with('file')->get(['id', 'description']);
+
                 $droppables = DroppableOption::whereIn('id', $options_ids)->get(['id', 'description']);
 
                 return view('aula.viewParticipant.courses.evaluations.quiz', [
@@ -95,6 +98,7 @@ class QuizController extends Controller
     {
         if (($certification->evaluations)->isEmpty())
         {
+           
             $questions = getQuestionsFromExam(getExamFromCertification($certification));
 
             $time = time();

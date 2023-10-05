@@ -19,7 +19,7 @@
 
         <div class="box-quiz-head matching-container">
 
-            <input type="hidden" name="question" value="{{$question->id}}">
+            <input type="hidden" name="question" value="{{ $question->id }}">
 
             <div class="options-container">
 
@@ -27,9 +27,13 @@
 
                     @php
                         $selected_options_array = explode(",", $evaluation->selected_alternatives);
-                        $only_selected = array_map( function ($v) {
-                            return explode(':', $v)[1];
-                        }, $selected_options_array);
+                        $only_selected = array();
+
+                        if ($selected_options_array[0]) {
+                            $only_selected = array_map( function ($v) {
+                                return explode(':', $v)[1];
+                            }, $selected_options_array);
+                        }   
 
                     @endphp
 
