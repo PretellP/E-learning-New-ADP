@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{DynamicAlternative, DynamicQuestion};
+use App\Models\{DynamicAlternative};
 use App\Services\{dynamicAlternativeService};
 use Exception;
-use Illuminate\Http\Request;
 
 class AdminDynamicAlternativeController extends Controller
 {

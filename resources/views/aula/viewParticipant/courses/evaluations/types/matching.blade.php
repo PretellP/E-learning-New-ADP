@@ -22,17 +22,26 @@
             <input type="hidden" name="question" value="{{$question->id}}">
 
             <div class="options-container">
+
                 <section id="draggable-section">
+
+                    @php
+                        $selected_options_array = explode(",", $evaluation->selected_alternatives);
+                        $only_selected = array_map( function ($v) {
+                            return explode(':', $v)[1];
+                        }, $selected_options_array);
+
+                    @endphp
 
                     @foreach($alts_ids as $alt_id)
 
                         @php
-                            $alternative = getAlternativeFromId($alt_id);
+                            $alternative = $alternatives->where('id', $alt_id)->first();
                             $image_url = verifyFile($alternative->file);
                         @endphp
     
-                        <div class="draggable {{ $image_url == null ? 'without_image' : '' }}" draggable="true" id='{{$alt_id}}'>
-                            <img draggable="false" src="{{ $image_url }}" alt="">
+                        <div class="drag {{ $image_url == null ? 'without_image' : '' }}@if(in_array($alt_id, $only_selected)) dragged dropped @endif" id='{{$alt_id}}'>
+                            <img src="{{ $image_url }}" alt="">
                             <span>
                                 {{$alternative->description}}
                             </span>
@@ -44,15 +53,11 @@
     
                 <section id="droppable-section">
 
-                    @php
-                        $selected_options_array = explode(",", $evaluation->selected_alternatives);
-                    @endphp
-    
                     @foreach($options_ids as $option_id)
 
                     @php
                         $trigger_selected = false;
-                        $droppable_option = getDroppableOptionFromId($option_id);
+                        $droppable_option = $droppables->where('id', $option_id)->first();
                         foreach($selected_options_array as $selected_option)
                         {
                             $opt_and_alt_array = explode(":", $selected_option);
@@ -61,15 +66,25 @@
                                 $trigger_selected = true;
                                 break;
                             } 
-                        } 
+                        }
+                        if($trigger_selected){
+                            $alternative = $alternatives->where('id', $opt_and_alt_array[1])->first();
+                        }
+                    
                     @endphp
 
                     <div class="droppable-option">
-                        <div class="droppable" draggable="false" id="option-{{$option_id}}">
+                        <div class="drop @if($trigger_selected) dropped @endif" draggable="false" id="option-{{$option_id}}">
                             <img draggable="false" src="" alt="">
                             <span></span>
                             <input type="hidden" class="droppable_input" required name="option-{{$option_id}}" 
                             value="@if($trigger_selected){{$opt_and_alt_array[1]}}@endif">
+                            @if($trigger_selected)
+                            <div class="drag drag-drop" id="{{ $opt_and_alt_array[1] }}" style="top: 0px; left: 0px; position:relative;">
+                                <img src="{{ verifyFile($alternative->file) }}">
+                                <span> {{ $alternative->description }} </span>
+                            </div>  
+                            @endif
                         </div>
                         <span>
                             {{$droppable_option->description}}

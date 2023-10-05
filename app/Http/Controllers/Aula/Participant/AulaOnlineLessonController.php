@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Aula\Participant;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
-use Carbon\Carbon;
 
 use App\Models\{Course, Event};
 

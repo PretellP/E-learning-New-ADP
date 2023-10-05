@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FreeCourseRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 use App\Models\{CourseCategory, Course};
 use App\Services\{CourseCategoryService, FreeCourseService};

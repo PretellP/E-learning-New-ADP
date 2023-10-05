@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Models\{Course};
-use App\Services\CourseService;
+use App\Services\{CourseService};
 use Exception;
 
 class AdminCourseController extends Controller

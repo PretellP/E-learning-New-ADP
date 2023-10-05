@@ -54,7 +54,6 @@ class AdminUsersController extends Controller
         $status = $request['userStatusCheckbox'] == 'on' ? 'S' : 'N';
 
         $user = User::create([
-            "url_img" => "storage/img/user_avatar/default.png",
             "dni" => $request['dni'],
             "name" => $request['name'],
             "paternal" => $request['paternal'],

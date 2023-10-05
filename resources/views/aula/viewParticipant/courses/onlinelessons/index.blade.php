@@ -26,13 +26,13 @@
     <div class="card-body body-global-container card z-index-2 principal-container">
         <div class="course-container online-lessons">
 
-            <div class="mt-5 message-lesson-container">
+            <div class="message-lesson-container">
                 <div class="message-title">
                     Salas Asignadas
                 </div>
                 <div class="message-content">
                     <i class="fa-solid fa-triangle-exclamation"></i> &nbsp;
-                    Estimado usuario, si no visualiza el curso deseado, asegúrese de tener sala asignada.
+                    Estimado usuario, si no visualiza el curso deseado, asegúrese de tener una sala asignada.
                 </div>
             </div>
            
@@ -72,11 +72,10 @@
                         {{$event->description}}
                     </div>
                     <div class="row-data">
-                        {{$event->type}}
+                        {{ config('parameters.event_types')[verifyEventType($event->type)] }}
                     </div>
                     <div class="row-data">
-                        {{$instructor->name}}
-                        {{$instructor->paternal}}
+                        {{$instructor->full_name}}
                     </div>
                     <div class="row-data">
                         {{$event->date}}

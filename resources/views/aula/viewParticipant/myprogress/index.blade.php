@@ -65,7 +65,7 @@
                 <div class="progress-bar-line-box course-progress-evaluations">
                     <div class="info-progress-txt info-evaluations">
                         @php
-                        $pe_count = $certifications->where('status', 'pending')->count();
+                        $pe_count = $certifications->whereIn('status', ['pending', 'in_progress'])->count();
                         @endphp
                         Tienes <span> {{$pe_count}} </span>
                         @if ($pe_count == 1)
@@ -78,7 +78,7 @@
                         @foreach ($certifications->sortBy('id') as $evaluation)
                         @if ($evaluation->status == 'finished')
                         <div class="progress-bar finished"></div>
-                        @elseif($evaluation->status == 'pending')
+                        @elseif(in_array($evaluation->status, ['pending', 'in_progress']))
                         <div class="progress-bar pending"></div>
                         @endif
                         @endforeach
@@ -101,6 +101,8 @@
                         <canvas class="canva-progress" id="progress-chart-{{$course->id}}"></canvas>
                 </div>
             </div>
+
+            <hr>
 
             @empty
 

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CourseSectionRequest;
 use Illuminate\Http\Request;
 use App\Models\{Course, CourseSection};
 use App\Services\{CourseSectionService, FreeCourseService};
 use Exception;
-use Laravel\Ui\Presets\React;
 
 class AdminCourseSectionsController extends Controller
 {

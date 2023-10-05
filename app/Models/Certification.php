@@ -84,7 +84,8 @@ class Certification extends Model
 
     public function getEventAssistStatusAttribute()
     {
-        return $this->event->flg_asist != 'S' ? 'disabled' : '';
+        return $this->event->flg_asist != 'S' || 
+                $this->status == 'finished' ? 'disabled' : '';
     }
 
 }

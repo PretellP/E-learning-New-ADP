@@ -7,8 +7,6 @@ use App\Models\{CourseSection, SectionChapter};
 use App\Services\{FreeCourseService, SectionChapterService};
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Owenoj\LaravelGetId3\GetId3;
 
 class AdminSectionChaptersController extends Controller
 {

@@ -4,9 +4,20 @@
 
 <!-- General JS Scripts -->
 
-{{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> --}}
+{{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> --}}
 
 <script src="{{asset('assets/common/modules/jquery.min.js')}}"></script>
+
+<!----   Jquery UI ---->
+
+<script src="{{ asset('assets/common/js/jquery-ui.min.js') }}"></script>
+
+<!----   Jquery UI TOUCH PUNCH ---->
+
+<script src="{{ asset('assets/common/js/jquery.ui.touch-punch.min.js') }}"></script>
+
+
 <script src="{{asset('assets/common/modules/popper.js')}}"></script>
 <script src="{{asset('assets/common/modules/tooltip.js')}}"></script>
 <script src="{{asset('assets/common/modules/bootstrap/js/bootstrap.min.js')}}"></script>
@@ -20,9 +31,7 @@
 
 <script src="{{asset('assets/common/modules/chart.min.js')}}"></script>
 
-<!-- DRAG AND DROP -->
 
-<script src="{{asset('assets/common/js/draganddrop.js')}}"></script>
 
 
 <script src="{{asset('assets/common/modules/summernote/summernote-bs4.js')}}"></script>
@@ -41,5 +50,3 @@
 <script src="{{asset('assets/aula/js/custom.js')}}"></script>
 
 @yield('extra-script')
-
-

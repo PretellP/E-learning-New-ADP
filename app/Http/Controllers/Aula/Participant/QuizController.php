@@ -58,8 +58,11 @@ class QuizController extends Controller
                 $alts_and_options_array = explode(":", $str_options);
 
                 $alts_ids = explode(",", $alts_and_options_array[0]);
+
                 $options_ids = explode(",", $alts_and_options_array[1]);
 
+                $alternatives = DynamicAlternative::whereIn('id', $alts_ids)->with('file')->get(['id', 'description']);
+                $droppables = DroppableOption::whereIn('id', $options_ids)->get(['id', 'description']);
 
                 return view('aula.viewParticipant.courses.evaluations.quiz', [
                     'exam' => $exam,
@@ -68,7 +71,9 @@ class QuizController extends Controller
                     'evaluations' => $evaluations,
                     'certification' => $certification,
                     'alts_ids' => $alts_ids,
-                    'options_ids' => $options_ids
+                    'options_ids' => $options_ids,
+                    'alternatives' => $alternatives,
+                    'droppables' => $droppables
                 ]);
             }
 

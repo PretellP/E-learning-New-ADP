@@ -203,6 +203,8 @@ $(function() {
 
       $("body").addClass("sidebar-gone");
       $("body").removeClass("layout-2 layout-3 sidebar-mini sidebar-show");
+
+
       $("body").off('click').on('click', function(e) {
         if($(e.target).hasClass('sidebar-show') || $(e.target).hasClass('search-show')) {
           $("body").removeClass("sidebar-show");
@@ -274,8 +276,12 @@ $(function() {
       }
     }
   }
+
+  
   toggleLayout();
   $(window).resize(toggleLayout);
+
+  
 
   $("[data-toggle='search']").click(function() {
     var body = $("body");

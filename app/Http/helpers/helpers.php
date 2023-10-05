@@ -101,7 +101,7 @@ function getCertificationsFromCourse(Course $course)
         ->with('evaluations:id,certification_id,points')
         ->with([
             'event' => fn ($query) => $query
-                ->select('id', 'exam_id', 'date', 'description', 'user_id')
+                ->select('id', 'exam_id', 'type', 'date', 'description', 'user_id')
                 ->with('user:id,name,paternal,maternal')
                 ->with([
                     'exam' => fn ($query2) => $query2
@@ -421,6 +421,9 @@ function verifyUserAvatar($url)
     return $url == null ? 'img/user_avatar/default.png' : $url;
 }
 
+
+
+
 function verifyImage($file)
 {
     $url = asset('storage/img/common/no-image.png');
@@ -453,6 +456,8 @@ function verifyImage($file)
 
     return $url;
 }
+
+
 
 function verifyFile($file)
 {

@@ -9,8 +9,9 @@ $(function() {
 
     $(window).scroll(function() {    
         var scroll_height = $(window).scrollTop();
+        var windows_width = $(window).width();
 
-        if(scroll_height >= 150){
+        if(scroll_height >= 150 && windows_width >= 1200){
             lateralMenu.addClass('fixed')
             videContainer.addClass('fixed')
         }else{
@@ -231,6 +232,128 @@ $(function() {
     })
 
 
+
+
+
+// Drop and Drag QUIZ
+
+
+    const draggable_options = {
+        addClasses: true,
+        revert: 'invalid',
+        revertDuration: 200,
+        helper: 'clone',
+        start: function (event, ui) {
+            $(this).addClass('dragged')
+        },
+        stop: function (event, ui) {
+            if(!$(this).hasClass('dropped')){
+                $(this).removeClass('dragged')
+            }
+        }
+    }
+
+    $('#draggable-section').droppable({
+        accept: '.drag-drop'
+    })
+
+    // $( ".drag" ).draggable(draggable_options);
+
+    $('.drag-drop').draggable({
+        revert: 'invalid',
+        revertDuration: 200,
+    })
+
+
+    $( ".drag:not(.dragged.dropped, .drag-drop)" ).draggable(draggable_options);
+
+
+    $( ".drop" ).droppable({
+        accept: ".drag",
+        over: function(event, ui){
+            $(this).addClass('droppable-hover')
+        },
+        out: function(event, ui){
+            $(this).removeClass('droppable-hover')
+        }
+    });
+    
+
+    $( ".drop" ).on( "drop", function( event, ui ) {
+        var drag = ui.draggable
+        let id = drag.attr('id')
+        var currentValue = $(this).find('input').val()
+
+        if($(this).find('.drag-drop').length){
+
+            let currentDrop = $(this).find('.drag-drop')
+            let currentId = currentDrop.attr('id')
+
+            if(drag.hasClass('drag-drop')){
+                let parent = drag.closest('.drop')
+
+                currentDrop.appendTo(parent)
+                parent.find('input').val(currentValue)
+            } 
+            else {
+                let cont_box = $('#draggable-section')
+                let related_drag = cont_box.find('.drag#'+currentId)
+                related_drag.removeClass('dropped dragged')
+                related_drag.draggable(draggable_options)
+                currentDrop.remove()
+            }
+        }
+
+        $(this).removeClass('droppable-hover').find('input').val(id)
+
+        var clone = drag.clone()
+
+        clone.removeClass('dragged')
+        clone.addClass('drag-drop').appendTo($(this))
+        clone.css({
+            top: 0,
+            left: 0,
+        })
+
+        $(this).addClass('dropped without-img')
+
+        clone.draggable({
+            revert: 'invalid',
+            revertDuration: 200,
+        })
+
+
+        if (drag.hasClass('drag-drop')) {
+            let parent = drag.closest('.drop')
+            parent.find('input').val(currentValue)
+            if(parent.attr('id') != $(this).attr('id')){
+                parent.removeClass('dropped')
+            }
+            drag.remove()
+        }
+        else{
+            drag.addClass('dropped')
+            drag.draggable('option', 'revert', true)
+            drag.draggable('option', 'revertDuration', 0)
+            drag.draggable('destroy')    
+        }
+
+    });
+
+    $("#draggable-section").on('drop', function (event, ui){
+        var drag = ui.draggable
+        var parent = drag.closest('.drop')
+        parent.find('input').val('')
+        parent.removeClass('dropped')
+
+        var related_drag = $(this).find('.drag#'+drag.attr('id'))
+        related_drag.removeClass('dropped dragged')
+        related_drag.draggable(draggable_options)
+
+        drag.remove()
+        console.log('si funka')
+    })
+
 });
 
 
@@ -240,141 +363,141 @@ $(function() {
 // Drop and Drag QUIZ
 
 
-const draggableElements = document.querySelectorAll(".draggable");
-const droppableElements = document.querySelectorAll(".droppable");
+// const draggableElements = document.querySelectorAll(".draggable");
+// const droppableElements = document.querySelectorAll(".droppable");
 
-window.addEventListener("load", function() {
-    droppableElements.forEach(e =>{
-        const input_value_slc = e.querySelector("input").value;
+// window.addEventListener("load", function() {
+//     droppableElements.forEach(e =>{
+//         const input_value_slc = e.querySelector("input").value;
 
-        if(input_value_slc != "")
-        {
-            const draggable_select = document.getElementById(input_value_slc);
-            const draggableImgUrl = draggable_select.querySelector("img").src;
-            const draggableSelectBgColor = (getComputedStyle(draggable_select)).backgroundColor;
+//         if(input_value_slc != "")
+//         {
+//             const draggable_select = document.getElementById(input_value_slc);
+//             const draggableImgUrl = draggable_select.querySelector("img").src;
+//             const draggableSelectBgColor = (getComputedStyle(draggable_select)).backgroundColor;
 
-            draggable_select.classList.add("dragged");
-            draggable_select.setAttribute("draggable", "false");
-            e.querySelector("img").src = draggableImgUrl;
-            e.setAttribute("draggable", "true");
-            e.querySelector("span").textContent = draggable_select.querySelector("span").textContent;
-            e.style.backgroundColor = draggableSelectBgColor;
-            e.classList.add("dropped");
-        }
+//             draggable_select.classList.add("dragged");
+//             draggable_select.setAttribute("draggable", "false");
+//             e.querySelector("img").src = draggableImgUrl;
+//             e.setAttribute("draggable", "true");
+//             e.querySelector("span").textContent = draggable_select.querySelector("span").textContent;
+//             e.style.backgroundColor = draggableSelectBgColor;
+//             e.classList.add("dropped");
+//         }
         
-    });
-});
+//     });
+// });
 
-draggableElements.forEach(elem => {
-    elem.addEventListener("dragstart", dragStart);
-});
+// draggableElements.forEach(elem => {
+//     elem.addEventListener("dragstart", dragStart);
+// });
 
-droppableElements.forEach(elem => {
-    elem.addEventListener("dragstart", droppableDragStart);
-    elem.addEventListener("dragenter", dragEnter);
-    elem.addEventListener("dragleave", dragLeave);
-    elem.addEventListener("dragover", dragOver);
-    elem.addEventListener("drop", drop);
-});
+// droppableElements.forEach(elem => {
+//     elem.addEventListener("dragstart", droppableDragStart);
+//     elem.addEventListener("dragenter", dragEnter);
+//     elem.addEventListener("dragleave", dragLeave);
+//     elem.addEventListener("dragover", dragOver);
+//     elem.addEventListener("drop", drop);
+// });
 
-function dragStart(event){
-    event.dataTransfer.clearData();
-    event.dataTransfer.setData("id", event.target.getAttribute('id'));
-}
+// function dragStart(event){
+//     event.dataTransfer.clearData();
+//     event.dataTransfer.setData("id", event.target.getAttribute('id'));
+// }
 
-function droppableDragStart(event){
-    event.dataTransfer.clearData();
-    const droppableInput = event.target.querySelector("input");
-    const inputValue = droppableInput.value;
-    const dpDgElementValue = event.target.getAttribute("id");
-    event.dataTransfer.setData("id", inputValue);
-    event.dataTransfer.setData("text", dpDgElementValue);
-}
+// function droppableDragStart(event){
+//     event.dataTransfer.clearData();
+//     const droppableInput = event.target.querySelector("input");
+//     const inputValue = droppableInput.value;
+//     const dpDgElementValue = event.target.getAttribute("id");
+//     event.dataTransfer.setData("id", inputValue);
+//     event.dataTransfer.setData("text", dpDgElementValue);
+// }
 
-function dragEnter(event){
-    event.target.classList.add("droppable-hover");
+// function dragEnter(event){
+//     event.target.classList.add("droppable-hover");
 
-}
+// }
 
-function dragLeave(event){
-    event.target.classList.remove("droppable-hover");
-}
+// function dragLeave(event){
+//     event.target.classList.remove("droppable-hover");
+// }
 
-function dragOver(event){
+// function dragOver(event){
 
-    event.preventDefault();
-}
+//     event.preventDefault();
+// }
 
-function drop(event){
+// function drop(event){
 
-    let draggableElementdata; 
-    let draggableElement; 
+//     let draggableElementdata; 
+//     let draggableElement; 
 
-    draggableElementdata = event.dataTransfer.getData("id");
+//     draggableElementdata = event.dataTransfer.getData("id");
 
-    if(draggableElementdata != "")
-    {
-        if(!(event.dataTransfer.getData("text") == ''))
-        {
-            const dpDgElementData = event.dataTransfer.getData("text");
-            draggableElement = document.getElementById(dpDgElementData);
-        }
-        else
-        {
-            draggableElement =  document.getElementById(draggableElementdata);
-        }
+//     if(draggableElementdata != "")
+//     {
+//         if(!(event.dataTransfer.getData("text") == ''))
+//         {
+//             const dpDgElementData = event.dataTransfer.getData("text");
+//             draggableElement = document.getElementById(dpDgElementData);
+//         }
+//         else
+//         {
+//             draggableElement =  document.getElementById(draggableElementdata);
+//         }
 
 
-        if(!(event.target.classList.contains("dropped")) || !(draggableElement.classList.contains("draggable")))
-        {
-            event.preventDefault();
-            event.target.setAttribute("draggable", "true");
+//         if(!(event.target.classList.contains("dropped")) || !(draggableElement.classList.contains("draggable")))
+//         {
+//             event.preventDefault();
+//             event.target.setAttribute("draggable", "true");
 
-            const droppableInputElement = event.target.querySelector("input");
-            const droppableImgElement = event.target.querySelector("img");
-            const droppableImgUrl = droppableImgElement.src;
-            const draggableElementBgColor = (getComputedStyle(draggableElement)).backgroundColor;
-            const draggableSpanTextContext = draggableElement.querySelector("span").textContent;
-            const draggableImgElement = draggableElement.querySelector("img");
-            const draggableImgUrl = draggableImgElement.src;
+//             const droppableInputElement = event.target.querySelector("input");
+//             const droppableImgElement = event.target.querySelector("img");
+//             const droppableImgUrl = droppableImgElement.src;
+//             const draggableElementBgColor = (getComputedStyle(draggableElement)).backgroundColor;
+//             const draggableSpanTextContext = draggableElement.querySelector("span").textContent;
+//             const draggableImgElement = draggableElement.querySelector("img");
+//             const draggableImgUrl = draggableImgElement.src;
 
-            if(draggableElement.classList.contains("droppable"))
-            {
-                const droppableBgColor = (getComputedStyle(event.target)).backgroundColor;
+//             if(draggableElement.classList.contains("droppable"))
+//             {
+//                 const droppableBgColor = (getComputedStyle(event.target)).backgroundColor;
                 
-                draggableElement.style.backgroundColor = droppableBgColor;
+//                 draggableElement.style.backgroundColor = droppableBgColor;
 
-                if(!(event.target.classList.contains("dropped")))
-                {
-                    draggableElement.classList.remove("dropped");
-                }
-                if(droppableInputElement.value == "")
-                {
-                    draggableElement.setAttribute("draggable", "false");
-                }
+//                 if(!(event.target.classList.contains("dropped")))
+//                 {
+//                     draggableElement.classList.remove("dropped");
+//                 }
+//                 if(droppableInputElement.value == "")
+//                 {
+//                     draggableElement.setAttribute("draggable", "false");
+//                 }
 
-                draggableImgElement.src = droppableImgUrl;
-                draggableElement.querySelector("input").value = droppableInputElement.value;
-                draggableElement.querySelector("span").textContent = event.target.querySelector("span").textContent;
-            }
-            else
-            {
-                draggableElement.classList.add("dragged");
-                draggableElement.setAttribute("draggable", "false");
-            }
+//                 draggableImgElement.src = droppableImgUrl;
+//                 draggableElement.querySelector("input").value = droppableInputElement.value;
+//                 draggableElement.querySelector("span").textContent = event.target.querySelector("span").textContent;
+//             }
+//             else
+//             {
+//                 draggableElement.classList.add("dragged");
+//                 draggableElement.setAttribute("draggable", "false");
+//             }
 
-            droppableInputElement.value = draggableElementdata;
-            droppableImgElement.src = draggableImgUrl;
+//             droppableInputElement.value = draggableElementdata;
+//             droppableImgElement.src = draggableImgUrl;
 
-            event.target.classList.add("dropped");
-            event.target.style.backgroundColor = draggableElementBgColor;
+//             event.target.classList.add("dropped");
+//             event.target.style.backgroundColor = draggableElementBgColor;
 
-            event.target.querySelector("span").textContent = draggableSpanTextContext;
-        }
-    }
+//             event.target.querySelector("span").textContent = draggableSpanTextContext;
+//         }
+//     }
     
     
 
-    event.target.classList.remove("droppable-hover");
+//     event.target.classList.remove("droppable-hover");
 
-}
+// }

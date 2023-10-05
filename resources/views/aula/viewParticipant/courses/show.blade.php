@@ -21,7 +21,7 @@
     <div class="card-body body-global-container card z-index-2 principal-container">
 
             
-        <div class="row mt-6 navigation-boxes-container">
+        <div class="row navigation-boxes-container">
 
             <a href="{{route('aula.course.folder.index', $course)}}" class="link-box-navigation-course">
                 <div class="navigation-box content card">

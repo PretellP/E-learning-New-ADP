@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Certification, Company, Event};
+use App\Models\{Certification, Event};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;

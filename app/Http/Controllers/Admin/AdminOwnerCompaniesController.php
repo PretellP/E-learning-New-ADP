@@ -54,9 +54,7 @@ class AdminOwnerCompaniesController extends Controller
         $id = $request['id'];
         $company = OwnerCompany::where('name', $request['name'])->first();
 
-        if ($company == null) {
-            $valid = 'true';
-        } elseif ($company->id == $id) {
+        if ($company == null || $company->id == $id) {
             $valid = 'true';
         }
 
