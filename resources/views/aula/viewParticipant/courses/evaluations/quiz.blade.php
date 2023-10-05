@@ -33,12 +33,30 @@
 
             <input type="hidden" name="examId" value="{{$exam->id}}">
 
-            <ul id="progressbar">
+            <ul id="progressbar" class="width-progress" style="--progressWidth: {{count($evaluations)}}">
 
                 @foreach($evaluations as $key => $eval)
 
-                <li class="{{$key <= $num_question ? 'active' : ''}}" style="width: calc(100%/{{count($evaluations)}}">
+                @if($selected_answers >= $key)
+
+                <a href="{{route('aula.course.quiz.show', [$certification, "num_question"=>$key+1])}}">
+                    <li class="{{$key <= $num_question ? 'active' : ''}} progress-btn" 
+                        style="--progressWidth: {{ count($evaluations) }}">
+                      
+                    </li>
+                </a>
+
+                @else
+
+                <li class="{{$key <= $num_question ? 'active' : ''}} progress-btn" 
+                    style="--progressWidth: {{ count($evaluations) }}">
+              
                 </li>
+
+                @endif
+
+
+               
 
                 @endforeach
 

@@ -3638,10 +3638,11 @@ $(function () {
                                 text: response.message,
                             });
                         }
-                    },
-                    complete: function () {
+
                         modal.modal('hide')
                         loadSpinner.toggleClass('active')
+                    },
+                    complete: function () {
                         form.find('.btn-save').removeAttr('disabled')
                     },
                     error: function (file, response) {
@@ -3833,11 +3834,13 @@ $(function () {
                                 text: response.message
                             });
                         }
+
+                        modal.modal('hide')
+                        loadSpinner.toggleClass('active')
+
                     },
                     complete: function () {
-                        loadSpinner.toggleClass('active')
                         form.find('.btn-save').removeAttr('disabled')
-                        modal.modal('hide')
                     },
                     error: function (file, response) {
                         console.log(response)

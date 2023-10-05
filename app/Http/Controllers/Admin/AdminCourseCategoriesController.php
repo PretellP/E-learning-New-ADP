@@ -87,7 +87,7 @@ class AdminCourseCategoriesController extends Controller
                 'description' => mb_strtolower($category->description, 'UTF-8')
             ]);
         } else {
-            $categories = CourseCategory::with(['courses', 'file'])->get();
+            $categories = $this->courseCategoryService->withCategoryRelationshipsQuery()->get();
             $html = view('admin.free-courses.partials.categories-list', compact('categories'))->render();
 
             return response()->json([
@@ -113,7 +113,7 @@ class AdminCourseCategoriesController extends Controller
                 "route" => route('admin.freeCourses.index')
             ]);
         } else {
-            $categories = CourseCategory::with(['courses', 'file'])->get();
+            $categories = $this->courseCategoryService->withCategoryRelationshipsQuery()->get();
             $html = view('admin.free-courses.partials.categories-list', compact('categories'))->render();
 
             return response()->json([

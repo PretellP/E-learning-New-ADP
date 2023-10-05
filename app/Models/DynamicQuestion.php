@@ -65,4 +65,6 @@ class DynamicQuestion extends Model
     {
         return str_replace('[ ___________ ]', ' ___________ ', $this->statement);
     }
+
+ 
 }

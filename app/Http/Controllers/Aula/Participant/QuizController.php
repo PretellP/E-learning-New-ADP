@@ -59,9 +59,7 @@ class QuizController extends Controller
 
                 $alts_ids = explode(",", $alts_and_options_array[0]);
 
-
                 $options_ids = explode(",", $alts_and_options_array[1]);
-
 
                 $alternatives = DynamicAlternative::whereIn('id', $alts_ids)->with('file')->get(['id', 'description']);
 
@@ -76,7 +74,8 @@ class QuizController extends Controller
                     'alts_ids' => $alts_ids,
                     'options_ids' => $options_ids,
                     'alternatives' => $alternatives,
-                    'droppables' => $droppables
+                    'droppables' => $droppables,
+                    'selected_answers' => $selected_answers
                 ]);
             }
 
@@ -85,7 +84,8 @@ class QuizController extends Controller
                 'num_question' => $num_question-1,
                 'question' => $question,
                 'evaluations' => $evaluations,
-                'certification' => $certification
+                'certification' => $certification,
+                'selected_answers' => $selected_answers
             ]);
             
         }else{
@@ -98,7 +98,6 @@ class QuizController extends Controller
     {
         if (($certification->evaluations)->isEmpty())
         {
-           
             $questions = getQuestionsFromExam(getExamFromCertification($certification));
 
             $time = time();
