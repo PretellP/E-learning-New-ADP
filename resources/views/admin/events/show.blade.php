@@ -74,4 +74,6 @@
 
 @include('admin.events.partials._modal_show_certification')
 
+@include('admin.events.partials._modal_edit_certification')
+
 @endsection

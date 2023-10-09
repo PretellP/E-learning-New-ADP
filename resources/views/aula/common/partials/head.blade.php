@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
 
+
 	<!----   Jquery UI ---->
 
 	<link rel="stylesheet" href="{{asset('assets/common/css/jquery-ui.min.css')}}">

@@ -98,7 +98,7 @@ class EventService
             return $event;
         }
 
-        throw new Exception('No es posible completar la solicitud');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function update($request, Event $event)

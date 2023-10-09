@@ -23,6 +23,8 @@ class Event extends Model
         'flg_survey_course',
         'flg_survey_evaluation',
         'exam_id',
+        'min_score',
+        'questions_qty',
         'test_exam_id',
         'elearning_id',
         'user_id',
@@ -117,12 +119,18 @@ class Event extends Model
         }]);
     }
 
+    public function loadCounts()
+    {
+        return $this -> loadCount(['certifications', 'userSurveys']);
+    }
+
     public function loadRelationships()
     {
         return $this->load([
             'user',
             'responsable',
-            'exam',
+            'exam'=> fn($q) => $q->withCount('questions')
+                                ->withAvg('questions', 'points'),
             'course',
             'testExam',
             'ownerCompany',

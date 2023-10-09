@@ -50,6 +50,11 @@ $(function() {
         modal.find('.evaluation-start-form').attr('action', url)
     })
 
+    $('.evaluation-start-form').on('submit', function () {
+        var button = $(this).find('#btn-start-evaluation')
+        button.attr('disabled', 'disabled')
+    })
+
 
 
 
@@ -360,7 +365,7 @@ $(function() {
 
 
 
-// Drop and Drag QUIZ
+// Drop and Drag QUIZ - OLD
 
 
 // const draggableElements = document.querySelectorAll(".draggable");

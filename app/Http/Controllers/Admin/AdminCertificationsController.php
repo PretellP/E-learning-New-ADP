@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Certification, Event};
+use App\Models\{Certification, Company, Event, MiningUnit};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
@@ -29,11 +29,15 @@ class AdminCertificationsController extends Controller
             $message = $e->getMessage();    
         }
 
+        $event->loadCounts();
+        $html = view('admin.events.partials._box_event', compact('event'))->render();
+
         return response()->json([
             "success" => $info['success'],
             "status" => $info['status'],
             "note" => $info['note'],
-            "message" => $message
+            "message" => $message,
+            "html" => $html
         ]);
     }
 
@@ -53,9 +57,50 @@ class AdminCertificationsController extends Controller
         ]);
     }
 
+    public function edit(Certification $certification) 
+    {
+        $certification->loadRelationships();
+
+        return response()->json([
+            "all" => [
+                "miningUnits" => MiningUnit::get(['id', 'description']),
+                "companies" => Company::get(['id', 'description'])
+            ],
+            "selected" => [
+                "miningUnits" => $certification->miningUnits->pluck('id'),
+                'company' => $certification->company,
+                'participant' => $certification->user->full_name_complete
+            ],
+            "flg_assist_status" => $certification->event_assist_status,
+            "certification" => $certification
+        ]);
+    }
+
+    public function update(Request $request, Certification $certification) 
+    {   
+        $message = null;
+
+        try {
+            $success = $this->certificationService->update($request, $certification);
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if($success){
+            $message = config('parameters.updated_message');
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message
+        ]);
+    }
+
     public function destroy(Certification $certification)
     {
         $certification->load('testCertification');
+        $html = null;
 
         try{
             $success = $this->certificationService->destroy($certification);
@@ -65,9 +110,15 @@ class AdminCertificationsController extends Controller
             $message = $e->getMessage();    
         }
 
+        if ($success) {
+            $event = $certification->event->loadCounts();
+            $html = view('admin.events.partials._box_event', compact('event'))->render();
+        }
+
         return response()->json([
             "success" => $success,
-            "message" => $message
+            "message" => $message,
+            "html" => $html
         ]);
     }
 

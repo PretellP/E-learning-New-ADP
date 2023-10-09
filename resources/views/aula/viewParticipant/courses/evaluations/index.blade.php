@@ -28,6 +28,7 @@
             @foreach($certifications as $certification)
 
             @php
+            
             updateIfNotFinished($certification);
             $ownerCompany = $certification->event->exam->ownerCompany;
             $event = $certification->event;
@@ -35,6 +36,7 @@
             $availableStart = getCurrentDate() == $event->date && 
                                 $certification->status == 'pending' && 
                                 $certification->assist_user == 'S' ? true : false;
+
             @endphp
 
             <div class="card evaluation-card">
@@ -63,6 +65,7 @@
                             <span class="subtitle-text">
                                 Estado
                             </span>
+
                             <span class="content-text">
                                 @if($status == 'finished')
                                 Finalizado
@@ -113,7 +116,7 @@
 
                         @elseif ($status == 'finished')
 
-                        @if ($certification->score < 11) <div class="variable-info" style="color: rgb(189, 20, 20)">
+                        @if ($certification->score < $event->min_score) <div class="variable-info" style="color: rgb(189, 20, 20)">
                             Desaprobado &nbsp;
                             <i class="fa-regular fa-circle-xmark"></i>
                     </div>
@@ -203,7 +206,7 @@
                 <form method="POST" class="evaluation-start-form">
                     @csrf
                     <button type="button" class="btn btn-close" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-send">Comenzar Examen</button>
+                    <button type="submit" id="btn-start-evaluation" class="btn btn-send">Comenzar Examen</button>
 
                 </form>
 

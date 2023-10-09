@@ -26,34 +26,51 @@ class AdminEventsController extends Controller
 
         return view('admin.events.index', [
             "courses" => Course::where('course_type', 'REGULAR')
-                        ->get(['id', 'description', 'course_type']),
+                ->get(['id', 'description', 'course_type']),
             "instructors" => User::getInstructorsQuery()->get(['id', 'name', 'paternal']),
             "responsables" => User::getResponsablesQuery()->get(['id', 'name', 'paternal'])
         ]);
     }
 
-    public function create() 
+    public function create()
     {
-        $allExams = Exam::get(['id', 'title', 'exam_type']);
+        $allExams = Exam::withCount('questions')->having('questions_count', '>=', 2)
+                        ->get(['id', 'title', 'exam_type'])
+                    ;
 
-        $types = $this->eventService->getTypes();
-        $instructors = User::getInstructorsQuery()->get(['id', 'name', 'paternal']);
-        $responsables = User::getResponsablesQuery()->get(['id', 'name', 'paternal']);
-        $rooms = Room::get(['id', 'description']);
-        $ownerCompanies = OwnerCompany::get(['id', 'name']);
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
-        $eLearnings = Elearning::get(['id', 'title']);
 
         return response()->json([
-            "types" => $types, 
-            "instructors" => $instructors, 
-            "responsables" => $responsables, 
-            "rooms" => $rooms, 
-            "ownerCompanies" => $ownerCompanies, 
-            "exams" => $exams, 
-            "examsTest" => $examsTest, 
-            "eLearnings" => $eLearnings,
+            "types" => $this->eventService->getTypes(),
+            "instructors" => User::getInstructorsQuery()->get(['id', 'name', 'paternal']),
+            "responsables" => User::getResponsablesQuery()->get(['id', 'name', 'paternal']),
+            "rooms" => Room::get(['id', 'description']),
+            "ownerCompanies" => OwnerCompany::get(['id', 'name']),
+            "exams" => $exams,
+            "examsTest" => $examsTest,
+            "eLearnings" => Elearning::get(['id', 'title']),
+        ]);
+    }
+
+    public function validateQuestionsScore(Request $request)
+    {
+        $maxScore = null;
+
+        $exam = Exam::where('id', $request['value'])
+                ->withCount('questions')
+                ->withAvg('questions', 'points')->first(); 
+
+        $avg = $exam != null ? $exam->questions_avg_points : 0;
+
+        if($request->has('qty') && $request['qty'] != '') {
+            $maxScore = round($avg * $request['qty']);
+        }
+
+        return response()->json([
+            'qty' => $exam != null ? $exam->questions_count : 0,
+            'avg' => $avg,
+            'maxScore' => $maxScore
         ]);
     }
 
@@ -62,9 +79,9 @@ class AdminEventsController extends Controller
         $success = true;
         $message = null;
 
-        try{
+        try {
             $this->eventService->store($request);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $success = false;
             $message = $e->getMessage();
         }
@@ -79,30 +96,25 @@ class AdminEventsController extends Controller
     {
         $event->loadRelationships()->loadParticipantsCount();
 
-        $allExams = Exam::get(['id', 'title', 'exam_type']);
+        $allExams = Exam::withCount('questions')->having('questions_count', '>=', 2)
+                        ->get(['id', 'title', 'exam_type']);
 
-        $types = $this->eventService->getTypes();
-        $instructors = User::getInstructorsQuery()->get(['id', 'name', 'paternal']);
-        $responsables = User::getResponsablesQuery()->get(['id', 'name', 'paternal']);
-        $rooms = Room::where('capacity', '>=', $event->participants_count)->get(['id', 'description', 'capacity']);
-        $ownerCompanies = OwnerCompany::get(['id', 'name']);
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
-        $eLearnings = Elearning::get(['id', 'title']);
 
         $event['type'] = verifyEventType($event->type);
 
         return response()->json([
             "all" => [
-                "types" => $types,
-                "instructors" => $instructors,
-                "responsables" => $responsables,
-                "rooms" => $rooms,
-                "ownerCompanies" => $ownerCompanies,
+                "types" => $this->eventService->getTypes(),
+                "instructors" => User::getInstructorsQuery()->get(['id', 'name', 'paternal']),
+                "responsables" => User::getResponsablesQuery()->get(['id', 'name', 'paternal']),
+                "rooms" => Room::where('capacity', '>=', $event->participants_count)->get(['id', 'description', 'capacity']),
+                "ownerCompanies" => OwnerCompany::get(['id', 'name']),
                 "exams" => $exams,
                 "examsTest" => $examsTest,
-                "eLearnings" => $eLearnings
-            ],  
+                "eLearnings" => Elearning::get(['id', 'title'])
+            ],
             "event" => $event
         ]);
     }
@@ -112,7 +124,7 @@ class AdminEventsController extends Controller
         $success = true;
         $html = null;
 
-        try{
+        try {
             $this->eventService->update($request, $event);
             $message = config('parameters.updated_message');
         } catch (Exception $e) {
@@ -120,7 +132,7 @@ class AdminEventsController extends Controller
             $message = $e->getMessage();
         }
 
-        if($request->has('place') && $request['place'] == 'show'){
+        if ($request->has('place') && $request['place'] == 'show') {
             $event->loadRelationships();
             $html = view('admin.events.partials._box_event', compact('event'))->render();
         }
@@ -138,7 +150,7 @@ class AdminEventsController extends Controller
         $success = true;
         $route = null;
 
-        try{
+        try {
             $this->eventService->destroy($event);
             $message = config('parameters.deleted_message');
         } catch (Exception $e) {
@@ -146,7 +158,7 @@ class AdminEventsController extends Controller
             $message = $e->getMessage();
         }
 
-        if($request->has('place') && $request['place'] == 'show'){
+        if ($request->has('place') && $request['place'] == 'show') {
             $route = route('admin.events.index');
         }
 
@@ -166,7 +178,7 @@ class AdminEventsController extends Controller
         }
 
         $event->loadRelationships();
-        $companies = Company::get(['id','description']);
+        $companies = Company::get(['id', 'description']);
 
         return view('admin.events.show', compact(
             'event',

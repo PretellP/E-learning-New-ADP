@@ -80,7 +80,7 @@
                         <tr>
                             <th>Hora de inicio de evaluación</th>
                             <th>Hora de fin de evaluación</th>
-                            <th>Tiempo total de evaluación</th>
+                            <th>Tiempo total de evaluación (min.)</th>
                             <th>Nota</th>
                             <th>Estado de la evaluación</th>
                             <th>Asistencia</th>

@@ -22,7 +22,7 @@
             @forelse ($courses as $course)
 
             @php
-            $certifications = getProgressCertificationsFromCourse($course)
+            $certifications = getProgressCertificationsFromCourse($course);
             @endphp
 
             <div class="course-box">
@@ -85,8 +85,14 @@
                     </div>
                 </div>
                 <div id='chart-{{$course->id}}' class="course-progress-results"
-                    data-approved='{{$certifications->where('status', 'finished' )->where('score', '>=', 10)->count()}}'
-                    data-suspended='{{$certifications->where('status', 'finished')->where('score', '<', 10)->count()}}'>
+                    data-approved='{{ $certifications->where('status', 'finished' )->filter( function ($certification, $key) use ($course) {
+                        $event = getEventFromCourseAndCertification($course, $certification);
+                        return $certification->score >= $event->min_score;
+                    })->count() }}'
+                    data-suspended='{{$certifications->where('status', 'finished')->filter( function ($certification, $key) use ($course) {
+                        $event = getEventFromCourseAndCertification($course, $certification);
+                        return $certification->score < $event->min_score;
+                    })->count() }}'>
                         <div class="progress-evaluation-title">Resultados</div>
                         <span class="progress-evaluation-subtitle">
                             @php

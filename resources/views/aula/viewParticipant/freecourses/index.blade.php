@@ -39,6 +39,81 @@
 
         </div>
 
+
+         {{--- CURSOS RECOMENTADOS  ---}}
+
+
+         <div class="card page-title-container sub-content">
+            <div class="card-header">
+                <div class="total-width-container">
+                    <h4>   <i class="fa-solid fa-star" style="color: rgb(255, 199, 15)"></i> 
+                        &nbsp; RECOMENDADOS
+                    </h4>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <div class="courses-cards-container">
+
+            @forelse ($recomendedCourses as $recomendedCourse)
+
+            <div class="card course-card">
+                <div class="course-img-container">
+                    <img class="card-img-top course-img" src="{{verifyImage($recomendedCourse->file)}}"
+                        alt="{{$recomendedCourse->description}}">
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="start-button-container freecourses">
+                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $recomendedCourse])}}"> 
+                            @csrf 
+                            <button type="submit">
+                                Ingresar &nbsp;
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="course-title-box">
+                        {{$recomendedCourse->description}}
+                    </div>
+
+                    <div class="course-info-box">
+                        <div class="category-box">
+                            <div>
+                                (Categoría)
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-table-cells-large"></i> 
+                                {{$recomendedCourse->courseCategory->description}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-info-box">
+                        <div class="hours-box">
+                            <i class="fa-regular fa-clock"></i>
+                            Duración: {{getFreeCourseTime($recomendedCourse->course_chapters_sum_duration)}}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            @empty
+
+            <h4 class="text-center empty-records-message"> No hay cursos recomendados aún </h4>
+
+            @endforelse
+
+        </div>
+
+
         {{--- SIGUIENDO  ---}}
 
         <div class="card page-title-container sub-content">
@@ -192,76 +267,7 @@
 
 
 
-        {{--- CURSOS RECOMENTADOS  ---}}
-
-
-        <div class="card page-title-container sub-content">
-            <div class="card-header">
-                <div class="total-width-container">
-                    <h4>   <i class="fa-solid fa-star"></i> &nbsp; RECOMENDADOS</h4>
-                </div>
-            </div>
-        </div>
-        
-
-
-        <div class="courses-cards-container">
-
-            @forelse ($recomendedCourses as $recomendedCourse)
-
-            <div class="card course-card">
-                <div class="course-img-container">
-                    <img class="card-img-top course-img" src="{{verifyImage($recomendedCourse->file)}}"
-                        alt="{{$recomendedCourse->description}}">
-                </div>
-
-
-                <div class="card-body">
-
-                    <div class="start-button-container freecourses">
-                        <form method="POST" action="{{route('aula.freecourse.start', ["course" => $recomendedCourse])}}"> 
-                            @csrf 
-                            <button type="submit">
-                                Ingresar &nbsp;
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="course-title-box">
-                        {{$recomendedCourse->description}}
-                    </div>
-
-                    <div class="course-info-box">
-                        <div class="category-box">
-                            <div>
-                                (Categoría)
-                            </div>
-                            <div>
-                                <i class="fa-solid fa-table-cells-large"></i> 
-                                {{$recomendedCourse->courseCategory->description}}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="course-info-box">
-                        <div class="hours-box">
-                            <i class="fa-regular fa-clock"></i>
-                            Duración: {{getFreeCourseTime($recomendedCourse->course_chapters_sum_duration)}}
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            @empty
-
-            <h4 class="text-center empty-records-message"> No hay cursos recomendados aún </h4>
-
-            @endforelse
-
-        </div>
+       
 
 
 

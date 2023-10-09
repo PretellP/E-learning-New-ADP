@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Models\{
-    DynamicQuestion,
     DynamicAlternative,
     Certification,
     Event,
@@ -65,7 +64,29 @@ function getCorrectAltFromQuestion($question)
 
 function getScoreFromCertification($certification)
 {
-    $score = $certification->evaluations->sum('points');
+    $certification->load(['evaluations' => function ($q) use ($certification) {
+        $q->where('evaluation_time', $certification->evaluation_time)
+            ->with('question');
+    }]);
+
+    $event = $certification->event;
+    $exam = $event->exam;
+    $points = $certification->evaluations->sum('points');
+    $avg = $exam->questions_avg_points;
+
+    $max_score = round($avg * $certification->evaluations->count());
+
+    $correct_answers = 0;
+
+    foreach($certification->evaluations as $evaluation){
+        if($evaluation->points == $evaluation->question->points){
+            $correct_answers++;
+        }
+    } 
+    
+    $score = ($points > $max_score ||
+            $correct_answers == $certification->evaluations->count()) ?
+            $max_score : $points;
 
     return $score;
 }
@@ -101,12 +122,14 @@ function getCertificationsFromCourse(Course $course)
         ->with('evaluations:id,certification_id,points')
         ->with([
             'event' => fn ($query) => $query
-                ->select('id', 'exam_id', 'type', 'date', 'description', 'user_id')
+                ->select('id', 'exam_id', 'type', 'date', 'description', 'user_id', 'min_score', 'questions_qty')
                 ->with('user:id,name,paternal,maternal')
                 ->with([
                     'exam' => fn ($query2) => $query2
                         ->select('id', 'course_id', 'owner_company_id', 'exam_time')
                         ->with('ownerCompany:id,name')
+                        ->withCount('questions')
+                        ->withAvg('questions', 'points')
                 ])
         ])
         ->get()
@@ -228,6 +251,15 @@ function getProgressCertificationsFromCourse($course)
     })->flatten(2)->where('user_id', $user->id);
 
     return $certifications;
+}
+
+function getEventFromCourseAndCertification($course, $certification)
+{
+    $event = $course->exams->map(function ($exam) {
+        return $exam->events;
+    })->flatten()->where('id', $certification->event_id)->first();
+
+    return $event;
 }
 
 function getOwnerCompanyFromCertification(Certification $certification)
@@ -386,12 +418,14 @@ function getTimeforHummans($time)
 
 function getStatusClass($status)
 {
-    return $status == 'S' ? 'active' : '';
+    return ($status === 'S' ||
+            $status === 1)  ? 'active' : '';
 }
 
 function getStatusText($status)
 {
-    return $status == 'S' ? 'Activo' : 'Inactivo';
+    return ($status === 'S' ||
+            $status === 1)  ? 'Activo' : 'Inactivo';
 }
 
 function getStatusRecomended($status)

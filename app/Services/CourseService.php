@@ -82,8 +82,6 @@ class CourseService
                 ->where('active', 'S')
                 ->get();
 
-                // dd($courses->first());
-
         } else if ($user->role == 'participants') {
 
             $courses = Course::whereHas('exams.events.certifications', function ($query) use ($user) {
@@ -97,7 +95,7 @@ class CourseService
                         })
                         ->with([
                             'events' => fn ($query4) =>
-                            $query4->select('id', 'user_id', 'exam_id')
+                            $query4->select('id', 'user_id', 'exam_id', 'min_score', 'questions_qty')
                                 ->whereHas('certifications', function ($query5) use ($user) {
                                     $query5->where('user_id', $user->id);
                                 })

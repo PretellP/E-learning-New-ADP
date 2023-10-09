@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Certification, Event, User};
+use App\Models\{Certification, Event, Exam, User};
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -41,10 +41,10 @@ class CertificationService
             })
             ->addColumn('assit', function ($certification) {
                 $assit_btn = '<label class="custom-switch">
-                                <input type="checkbox" name="flg_asist" '. $certification->event_assist_status .'
-                                    class="custom-switch-input flg_assist_user_checkbox '. $certification->event_assist_status .'"
-                                    '. $certification->valid_assist_checked .'
-                                    data-url="'. route('admin.events.certification.updateAssist', $certification) .'">
+                                <input type="checkbox" name="flg_asist" ' . $certification->event_assist_status . '
+                                    class="custom-switch-input flg_assist_user_checkbox ' . $certification->event_assist_status . '"
+                                    ' . $certification->valid_assist_checked . '
+                                    data-url="' . route('admin.events.certification.updateAssist', $certification) . '">
                                 <span class="custom-switch-indicator"></span>
                             </label>';
 
@@ -52,9 +52,15 @@ class CertificationService
             })
             ->addColumn('action', function ($certification) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $certification->id . '" data-send="'. route('admin.events.certifications.show', $certification) .'"
+                    $certification->id . '" data-send="' . route('admin.events.certifications.show', $certification) . '"
                                         data-original-title="edit" class="me-3 edit btn btn-info btn-sm
                                         showCertification-btn"><i class="fa-solid fa-eye"></i></button>';
+
+                $btn .= '<button data-toggle="modal" data-id="' .
+                    $certification->id . '" data-url="' . route('admin.events.certifications.update', $certification) . '" 
+                        data-send="' . route('admin.events.certifications.edit', $certification) . '"
+                        data-original-title="edit" class="edit btn btn-warning btn-sm
+                        editCertification-btn"><i class="fa-solid fa-pen-to-square"></i></button>';
                 if (
                     $certification->evaluations_count == 0
                 ) {
@@ -72,7 +78,6 @@ class CertificationService
         return $allCertifications;
     }
 
-  
     public function store($request, Event $event)
     {
         /** @var self $status */
@@ -84,27 +89,26 @@ class CertificationService
 
         $users = $this->getFilteredUsers($request['users-selected'], $event);
 
-        foreach($users as $i => $user){
-        
+        foreach ($users as $i => $user) {
+
             $event->loadParticipantsCount();
             $miningUnitsIds = $user->miningUnits->pluck('id');
 
-            if($event->room->capacity > $event->participants_count){
+            if ($event->room->capacity > $event->participants_count) {
 
                 $certification = $event->certifications()
-                                        ->create($this->getCertificationArrayData($user, 'N', 'certification'));
+                    ->create($this->getCertificationArrayData($user, 'N', 'certification'));
                 $certification->miningUnits()->sync($miningUnitsIds);
 
                 $testCertification = $event->certifications()
-                                        ->create($this->getCertificationArrayData($user, 'S', 'test'));
+                    ->create($this->getCertificationArrayData($user, 'S', 'test'));
                 $testCertification->miningUnits()->sync($miningUnitsIds);
 
                 $certification->testCertification()->associate($testCertification);
                 $certification->save();
-                
+
                 $status = 'finished';
-            }
-            else{
+            } else {
                 $note = 'Se ha excedido la capacidad de la sala';
                 $status = $i == 0 ? 'exceeded' : 'limitreached';
                 break;
@@ -121,12 +125,25 @@ class CertificationService
         return $certification->update($request->all());
     }
 
+    public function update($request, Certification $certification)
+    {   
+        $data = new Request(normalizeInputStatus($request->all()));
+
+        $isUpdated = $certification->update($data->except('status'));
+
+        if($isUpdated){
+            $certification->miningUnits()->sync($request['mining_unit_id']);
+        }
+
+        return $isUpdated;
+    }
+
     private function getFilteredUsers($ids, Event $event)
     {
         $filteredIds = array_diff($ids, $event->participants->pluck('id')->toArray());
 
         return User::whereIn('id', $filteredIds)->with(['company:id', 'miningUnits:id'])
-                                                ->has('company')->get();
+            ->has('company')->get();
     }
 
     private function getCertificationArrayData(User $user, string $assist, string $type)
@@ -146,7 +163,7 @@ class CertificationService
     {
         $certification->miningUnits()->detach();
 
-        if($certification->testCertification != null){
+        if ($certification->testCertification != null) {
             $this->destroy($certification->testCertification);
         }
 

@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Aula\Participant;
 
 use App\Models\{
-    Event, 
-    Exam, 
+    Exam,
     DynamicQuestion,
     DynamicAlternative,
-    DroppableOption, 
+    DroppableOption,
     Certification,
-    Evaluation};
+    Evaluation
+};
 
-use Illuminate\Http\Request;
-use Auth;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 
@@ -27,7 +25,6 @@ class QuizController extends Controller
      */
     public function index()
     {
-        
     }
 
     public function show(Certification $certification, $num_question)
@@ -37,11 +34,11 @@ class QuizController extends Controller
         $selected_answers = getSelectedAnswers($certification);
         $isFinished = $certification->status == 'finished' ? true : false;
 
-        if (!isset($evaluations[$num_question-1]) || ($num_question > $selected_answers+1) || $isFinished){
+        if (!isset($evaluations[$num_question - 1]) || ($num_question > $selected_answers + 1) || $isFinished) {
             abort(401, 'Acción no autorizada');
         }
 
-        $question = DynamicQuestion::findOrFail($evaluations[$num_question-1] -> question_id);
+        $question = DynamicQuestion::findOrFail($evaluations[$num_question - 1]->question_id);
 
         $exam = $question->exam;
 
@@ -49,11 +46,11 @@ class QuizController extends Controller
 
         $its_time_out = getItsTimeOut(getTimeDifference($certification, $exam));
 
-        if (!$its_time_out && getCurrentDate() == $event_date && $certification->assist_user == 'S')
-        {
-            if ($question->question_type_id == 5)
-            {
-                $str_options = $evaluations[$num_question-1] -> correct_alternatives;
+        if (!$its_time_out && getCurrentDate() == $event_date && $certification->assist_user == 'S') {
+
+            if ($question->question_type_id == 5) {
+
+                $str_options = $evaluations[$num_question - 1]->correct_alternatives;
 
                 $alts_and_options_array = explode(":", $str_options);
 
@@ -67,7 +64,7 @@ class QuizController extends Controller
 
                 return view('aula.viewParticipant.courses.evaluations.quiz', [
                     'exam' => $exam,
-                    'num_question' => $num_question-1,
+                    'num_question' => $num_question - 1,
                     'question' => $question,
                     'evaluations' => $evaluations,
                     'certification' => $certification,
@@ -81,14 +78,13 @@ class QuizController extends Controller
 
             return view('aula.viewParticipant.courses.evaluations.quiz', [
                 'exam' => $exam,
-                'num_question' => $num_question-1,
+                'num_question' => $num_question - 1,
                 'question' => $question,
                 'evaluations' => $evaluations,
                 'certification' => $certification,
                 'selected_answers' => $selected_answers
             ]);
-            
-        }else{
+        } else {
             $course = $exam->course;
             return redirect()->route('aula.course.evaluation.index', $course);
         }
@@ -96,84 +92,94 @@ class QuizController extends Controller
 
     public function start(Certification $certification)
     {
-        if (($certification->evaluations)->isEmpty())
-        {
-            $questions = getQuestionsFromExam(getExamFromCertification($certification));
+        $certification->loadRelationships();
+        $event = $certification->event;
+        $exam = $event->exam;
 
-            $time = time();
+        if ($certification->evaluation_time == null) {
 
-            foreach ($questions as $key => $question)
-            {
-                $correct_alternatives = (getCorrectAltFromQuestion($question))->shuffle();
+            $event_date = $event->date;
 
-                $alt_ids = "";
+            if ($event->questions_qty <= $exam->questions_count &&
+                getCurrentDate() == $event_date &&
+                $certification->assist_user == 'S'
+            ) {
 
-                foreach ($correct_alternatives as $i => $alternative)
-                {
-                    if ($i > 0)
-                    {
-                        $alt_ids.= ",";
-                    }
+                $questions = $exam->questions()->inRandomOrder()->take($event->questions_qty)->get();
 
-                    $alt_ids.= $alternative->id;
-                }
+                $time = time();
 
-                if($question->question_type_id == 5)
-                {
-                    $alt_ids.= ":";
+                foreach ($questions as $key => $question) {
+                    $correct_alternatives = (getCorrectAltFromQuestion($question))->shuffle();
 
-                    $droppable_options = (getDroppableOptionsFromQuestion($question))->shuffle();
+                    $alt_ids = "";
 
-                    foreach($droppable_options as $j => $droppable_option)
-                    {
-                        if($j > 0)
-                        {
-                            $alt_ids = $alt_ids.",";
+                    foreach ($correct_alternatives as $i => $alternative) {
+                        if ($i > 0) {
+                            $alt_ids .= ",";
                         }
-                        $alt_ids = $alt_ids.$droppable_option->id;
+
+                        $alt_ids .= $alternative->id;
                     }
+
+                    if ($question->question_type_id == 5) {
+                        $alt_ids .= ":";
+
+                        $droppable_options = (getDroppableOptionsFromQuestion($question))->shuffle();
+
+                        foreach ($droppable_options as $j => $droppable_option) {
+                            if ($j > 0) {
+                                $alt_ids = $alt_ids . ",";
+                            }
+                            $alt_ids = $alt_ids . $droppable_option->id;
+                        }
+                    }
+
+                    Evaluation::create([
+                        'evaluation_time' => $time,
+                        'statement' => $question->statement,
+                        'correct_alternatives' => $alt_ids,
+                        'points' => 0,
+                        'question_order' => $key + 1,
+                        'question_id' => $question->id,
+                        'certification_id' => $certification->id
+                    ]);
                 }
 
-                Evaluation::create([
-                    'evaluation_time' => $time,
-                    'statement' => $question->statement,
-                    'correct_alternatives' => $alt_ids,
-                    'points' => 0,
-                    'question_order' => $key+1,
-                    'question_id'=> $question->id,
-                    'certification_id' => $certification->id
-                ]);
-                   
+                if ($certification->status == 'pending') {
+                    $certification->update([
+                        'status' => 'in_progress',
+                        'evaluation_time' => $time,
+                        'start_time' => Carbon::now('America/Lima')
+                    ]);
+                }
             }
+            else {
+                return redirect()->route('aula.course.evaluation.index', ["course" => $event->course]);
+            }
+        } 
 
-            if ($certification->status == 'pending')
-            {
-                $certification->update([
-                    'status' => 'in_progress',
-                    'evaluation_time' => $time,
-                    'start_time' => Carbon::now('America/Lima')
-                ]);
-            }
+        if($certification->evaluation_time != null){
+            $num_question = getSelectedAnswers($certification);
+
+            return redirect()->route('aula.course.quiz.show', [
+                'certification' => $certification,
+                'num_question' => $num_question + 1
+            ]);
         }
 
-        $num_question = getSelectedAnswers($certification);
-
-        return redirect()->route('aula.course.quiz.show', [
-            'certification' => $certification,
-            'num_question' => $num_question+1
-        ]);
-     }
+        abort(401);
+    }
 
 
-     public function update(Certification $certification, Exam $exam, $num_question, $key, $evaluation)
-     {
+    public function update(Certification $certification, Exam $exam, $num_question, $key, $evaluation)
+    {
         $evaluation = Evaluation::findOrFail($evaluation);
         $diff_time = getTimeDifference($evaluation, $exam);
         $its_time_out = getItsTimeOut($diff_time);
         $event_date = $certification->event->date;
 
-        if (!$its_time_out && getCurrentDate() == $event_date)
-        {
+        if (!$its_time_out && getCurrentDate() == $event_date) {
             $question = DynamicQuestion::where('id', $evaluation->question_id)->first();
             $correct_alternatives = getCorrectAltFromQuestion($question);
 
@@ -181,101 +187,85 @@ class QuizController extends Controller
             $points = 0;
             $incorrect_points = 0;
 
-            if($question->question_type_id == 5)
-            {
+            if ($question->question_type_id == 5) {
                 $droppable_options_ids = explode(",", (explode(":", $evaluation->correct_alternatives))[1]);
 
-                foreach($droppable_options_ids as $i => $droppable_option_id)
-                {
+                foreach ($droppable_options_ids as $i => $droppable_option_id) {
                     $droppable_option = DroppableOption::findOrFail($droppable_option_id);
 
-                    $input_value = request('option-'.$droppable_option_id);
+                    $input_value = request('option-' . $droppable_option_id);
 
-                    if ($i > 0 && $send_alt != "" && $input_value != "")
-                    {
-                        $send_alt = $send_alt.",";
+                    if ($i > 0 && $send_alt != "" && $input_value != "") {
+                        $send_alt = $send_alt . ",";
                     }
 
-                    if ($droppable_option->dynamic_alternative_id == $input_value)
-                    {
+                    if ($droppable_option->dynamic_alternative_id == $input_value) {
                         $points += ($question->points / count($correct_alternatives));
                     }
 
-                    if($input_value != "")
-                    {
-                        $send_alt = $send_alt.$droppable_option_id.":".$input_value;
+                    if ($input_value != "") {
+                        $send_alt = $send_alt . $droppable_option_id . ":" . $input_value;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $select_alternatives = request('alternative');
-                
-                if ($question->question_type_id == 4)
-                {
+
+                if ($question->question_type_id == 4) {
                     $correct_alt_array = $correct_alternatives->pluck('description')->toArray();
 
-                    foreach($select_alternatives as $i => $txt_input)
-                    {
+                    foreach ($select_alternatives as $i => $txt_input) {
                         $strClean = strtoupper(trim($txt_input));
 
-                        $alternatives_clean = array_map( function ($x) {
+                        $alternatives_clean = array_map(function ($x) {
                             return trim(strtoupper($x));
                         }, explode(',', $correct_alt_array[$i]));
 
-                        if(in_array($strClean, $alternatives_clean))
-                        {
+                        if (in_array($strClean, $alternatives_clean)) {
                             $points += $question->points / count($correct_alt_array);
                         }
-                        if($i > 0)
-                        {
-                            $send_alt = $send_alt.",";
+                        if ($i > 0) {
+                            $send_alt = $send_alt . ",";
                         }
-                        $send_alt = $send_alt.$strClean;
+                        $send_alt = $send_alt . $strClean;
                     }
-                }
-                else
-                {
+                } else {
                     $correct_alt_array = $correct_alternatives->pluck('id')->toArray();
-                    foreach($select_alternatives as $i => $alternative_id)
-                    {
-                        if(in_array($alternative_id , $correct_alt_array))
-                        {
+                    foreach ($select_alternatives as $i => $alternative_id) {
+                        if (in_array($alternative_id, $correct_alt_array)) {
                             $points += ($question->points / count($correct_alt_array));
-                        }else{
+                        } else {
                             $incorrect_points += ($question->points / count($correct_alt_array));
                         }
 
-                        if ($i > 0)
-                        {
-                            $send_alt = $send_alt.",";
+                        if ($i > 0) {
+                            $send_alt = $send_alt . ",";
                         }
-                        $send_alt = $send_alt.$alternative_id;
+                        $send_alt = $send_alt . $alternative_id;
                     }
                 }
             }
 
-            $points = $points - $incorrect_points;
-            if($points < 0) {$points = 0;}
+            $points = ($points - $incorrect_points) < 0 ? 0 : $points - $incorrect_points;
 
             $evaluation->update([
                 'selected_alternatives' => $send_alt,
                 'points' => $points
             ]);
 
-            if ($num_question < $key)
-            {
+            if ($num_question < $key) {
                 return redirect()->route('aula.course.quiz.show', [
                     'certification' => $certification,
-                    'num_question' => $num_question+1
+                    'num_question' => $num_question + 1
                 ]);
             }
         }
 
+        $certification->loadRelationships();
+
         $total_time = $exam->exam_time - (round($diff_time / 60));
         $score = getScoreFromCertification($certification);
 
-        if ($total_time > $exam->exam_time){
+        if ($total_time > $exam->exam_time) {
             $total_time = $exam->exam_time;
         }
 
@@ -289,6 +279,5 @@ class QuizController extends Controller
         $course = $exam->course;
 
         return redirect()->route('aula.course.evaluation.index', $course);
-        
-     }
+    }
 }

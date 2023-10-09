@@ -33,34 +33,47 @@ class Certification extends Model
 
     public function event()
     {
-        return $this -> belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'event_id', 'id');
     }
 
     public function user()
     {
-        return $this -> belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function evaluations()
-    {       
-        return $this -> hasMany(Evaluation::class, 'certification_id', 'id');
+    {
+        return $this->hasMany(Evaluation::class, 'certification_id', 'id');
     }
 
     public function testCertification()
     {
-        return $this -> belongsTo(self::class, 'test_certification_id', 'id');
+        return $this->belongsTo(self::class, 'test_certification_id', 'id');
     }
 
     public function miningUnits()
     {
-        return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units','certification_id','mining_unit_id')->withTimestamps();
+        return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units', 'certification_id', 'mining_unit_id')->withTimestamps();
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
     public function loadRelationships()
     {
-        return $this -> load(['user' => fn ($query) =>
-                                $query->with(['miningUnits', 'company'])
-                            , 'event.exam.course']);
+        return $this->load([
+            'user' => fn ($query) =>
+                    $query->with(['miningUnits', 'company']),
+            'event' => fn ($q) =>
+                $q->with(['exam' => fn($q2) =>
+                            $q2->withCount('questions')
+                                ->withAvg('questions', 'points')
+                        , 'course']), 
+            'miningUnits',
+            'company'
+        ]);
     }
 
     public function getIsEnableEvaluationAttribute()
@@ -68,11 +81,11 @@ class Certification extends Model
         $messages = [];
         $now = getCurrentDate();
 
-        if($this->user->active != 'S') array_push($messages, "No está activo.");
+        if ($this->user->active != 'S') array_push($messages, "No está activo.");
         // if($this->user->signature != 'S') array_push($messages, "No tiene firma.");
-        if($this->assist_user != 'S') array_push($messages, "No tiene asistencia.");
-        if($this->event->date != $now) array_push($messages, "Fuera de fecha.");
-        if($this->status == 'finished') array_push($messages, "Finalizó evaluación.");
+        if ($this->assist_user != 'S') array_push($messages, "No tiene asistencia.");
+        if ($this->event->date != $now) array_push($messages, "Fuera de fecha.");
+        if ($this->status == 'finished') array_push($messages, "Finalizó evaluación.");
 
         return count($messages) > 0 ? $messages : ["Habilitado"];
     }
@@ -84,8 +97,7 @@ class Certification extends Model
 
     public function getEventAssistStatusAttribute()
     {
-        return $this->event->flg_asist != 'S' || 
-                $this->status == 'finished' ? 'disabled' : '';
+        return $this->event->flg_asist != 'S' ||
+            $this->status == 'finished' ? 'disabled' : '';
     }
-
 }

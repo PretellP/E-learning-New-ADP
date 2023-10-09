@@ -147,6 +147,27 @@
             </div>
         </div>
 
+        <div class="pt-1">
+            <div class="d-flex">
+                <div class="col-6 p-0">
+                    <span class="little-text">
+                        N° de enunciados: 
+                    </span>
+                    <span>
+                        {{ $event->questions_qty }}
+                    </span>
+                </div>
+                <div class="col-6 p-0 text-right">
+                    <span class="little-text">
+                        Puntuación mínima: 
+                    </span>
+                    <span>  
+                        {{ $event->min_score }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <div class="pt-2">
             <div class="d-flex justify-content-between align-items-center gap-1">
                 <span class="little-text text-bold">

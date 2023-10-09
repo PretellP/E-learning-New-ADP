@@ -15,7 +15,11 @@ class Company extends Model
 
     public function users()
     {
-        return $this -> HasMany(User::class, 'company_id', 'id');
+        return $this->HasMany(User::class, 'company_id', 'id');
     }
-    
+
+    public function certifications()
+    {
+        return $this->hasMany(Certification::class, 'company_id', 'id');
+    }
 }

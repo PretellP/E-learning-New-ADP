@@ -33,6 +33,8 @@ class EventRequest extends FormRequest
             'flg_survey_course' => ['nullable'],
             'flg_survey_evaluation' => ['nullable'],
             'exam_id' => ['required'],
+            'questions_qty' => ['required', 'integer', 'min:2'],
+            'min_score' => ['required', 'integer'],
             'test_exam_id' => ['nullable'],
             'elearning_id' => ['nullable'],
             'user_id' => ['required'],

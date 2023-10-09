@@ -23,8 +23,9 @@ class AulaEvaluationController extends Controller
 
     public function getAjaxCertification(Certification $certification)
     {
-        $exam = getExamFromCertification($certification);
-        $n_questions = count(getQuestionsFromExam($exam));
+        $event = $certification->event->load('exam');
+        $exam = $event->exam;
+        $n_questions = $event->questions_qty;
 
         return response()->json([
             'total_time' => $exam->exam_time,

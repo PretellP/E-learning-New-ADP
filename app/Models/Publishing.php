@@ -11,7 +11,15 @@ class Publishing extends Model
     use HasFactory;
 
     protected $table = 'publishings';
-    protected $guarded = [];
+    protected $fillable = [
+        'type',
+        'publishing_order',
+        'title',
+        'content',
+        'publication_time',
+        'status',
+        'user_id'
+    ];
 
     public function user()
     {
@@ -21,5 +29,10 @@ class Publishing extends Model
     public function file()
     {
         return $this -> morphOne(File::class, 'fileable');
+    }
+
+    public function loadImage()
+    {
+        return $this->load(['file' => fn($q) => $q->where('file_type', 'imagenes')]);
     }
 }

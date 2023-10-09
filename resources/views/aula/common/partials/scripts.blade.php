@@ -32,9 +32,9 @@
 <script src="{{asset('assets/common/modules/chart.min.js')}}"></script>
 
 
-
-
 <script src="{{asset('assets/common/modules/summernote/summernote-bs4.js')}}"></script>
+<script src="{{asset('assets/common/modules/summernote/lang/summernote-es-ES.js')}}"></script>
+
 <script src="{{asset('assets/common/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
 
 
@@ -44,9 +44,9 @@
 {{-- <script src="{{asset('assets/aula/js/page/index.js')}}"></script> --}}
 
 <!-- Template JS File -->
+
+
 <script src="{{asset('assets/common/js/scripts.js')}}"></script>
-
-
 <script src="{{asset('assets/aula/js/custom.js')}}"></script>
 
 @yield('extra-script')

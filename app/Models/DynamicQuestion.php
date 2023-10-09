@@ -44,6 +44,11 @@ class DynamicQuestion extends Model
         return $this->hasManyThrough(DroppableOption::class, DynamicAlternative::class, 'dynamic_question_id', 'dynamic_alternative_id');
     }
 
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'question_id', 'id');
+    }
+
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');

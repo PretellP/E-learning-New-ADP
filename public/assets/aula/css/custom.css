@@ -532,6 +532,13 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
     object-fit: cover;
 }
 
+.publishings-owlcarousel a {
+    display: block;
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+}
+
 .owl-carousel .owl-stage-outer {
     border-radius: 30px;
     box-shadow: 0px 3px 18px rgba(0, 0, 0, 0.11);
@@ -584,9 +591,9 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
 .publishings>.card-body.publishing-boxes-container .tight-publishing-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px 4vw;
     position: relative;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .tight-publishing-container::after,
@@ -615,7 +622,8 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
 .publishings>.card-body.publishing-boxes-container .publishing-box {
     max-width: 520px;
     position: relative;
-    height: 700px;
+    height: auto;
+    max-height: 700px;
 }
 
 .publishing-box .card-body {
@@ -624,7 +632,8 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    justify-content: space-between;
+    gap: 1em;
+    justify-content: flex-start;
 }
 
 .publishing-box .card-body .box-content-info-user {
@@ -688,12 +697,17 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
     font-size: 1.2em;
 }
 
+.box-content-info-user .publishing-text-content p {
+    margin: 0 !important;
+    line-height: 1.2;
+}
+
 .publishing-box .card-body .box-publishing-img {
     overflow: scroll;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    height: 400px;
+    /* height: 400px; */
     min-height: 400px;
 }
 
@@ -2631,7 +2645,7 @@ fieldset .box-quiz-body .box-answers {
 /* ------- MY PROGRESS STYLES --------*/
 
 .body-global-container.progress-container {
-    max-width: 1350px;
+    max-width: 1400px;
     margin: auto;
 }
 
@@ -2715,7 +2729,6 @@ div.course-progress-innerbox {
     line-height: 1.1em;
     font-weight: 700;
     text-align: center;
-    padding: .7em .7em .2em .7em;
     height: 100%;
 }
 
@@ -2808,7 +2821,7 @@ div.course-progress-innerbox {
     left: 27%;
     transform: translateX(-50%);
     text-align: center;
-    width: 25%;
+    width: 20%;
     height: calc(100% - 22px);
     font-size: .8em;
     font-weight: 600;
@@ -3919,8 +3932,16 @@ button.btn-survey-submit:hover,
         gap: 1em;
     }
 
+    .course-progress-container .course-box> div.course-progress-innerbox,
+    .course-progress-container .course-box>div  {
+        max-width: 325px;
+        font-size: 11px !important;
+    }
 
 
+    .course-progress-results .progress-evaluation-subtitle {
+        left: 29%;
+    }
 
 
 

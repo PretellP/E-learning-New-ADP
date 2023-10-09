@@ -136,6 +136,20 @@ input.no-label-error~label.error {
     gap: 1.5em;
 }
 
+.modal-multiple-columns > div:first-child {
+    padding-right: 10px;
+}
+
+.modal-multiple-columns > div:not(:first-child) {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 1px solid rgb(235, 235, 235);
+}
+
+.modal-multiple-columns > div:last-child {
+    padding-right: 0;
+}
+
 /* --------- DATE RANGE STYLES -------*/
 
 .date-range-container
@@ -443,7 +457,12 @@ label.error {
     width: 100%;
     height: 100%;
     display: flex;
+    align-items: center;
     justify-content: center;
+}
+
+.img-holder img {
+    height: fit-content !important;
 }
 
 .img-holder .course_img {
@@ -513,7 +532,7 @@ textarea.form-control {
     transition: all .1s;
 }
 
-.btn-dropdown-container.show i {
+.btn-dropdown-container.show i:not(.not-rotate) {
     transform: rotateZ(180deg);
 }
 
@@ -1547,6 +1566,115 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 {
     width: 100%;
     max-width: fit-content;
+}
+
+
+
+
+
+
+
+
+/* ------------- ANNOUNCEMENTS -------------*/
+
+.image-preview.banner-container-image 
+{
+    height: 320px !important;
+}
+
+.image-preview.banner-container-image input,
+.image-preview.card-container-image input
+{
+    height: 100%;
+    width: 100%;
+}
+
+.banner-container
+{
+    align-items: center;
+    justify-content: space-between;
+    gap: 1vw;
+    padding: 20px 20px;
+}
+
+.banner-container
+.order-indicator-container 
+{
+    min-width: 50px;
+    height: 50px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    color: rgb(105, 105, 105);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+}
+
+.banner-container
+.btn-action-container
+{
+    display: flex;
+    gap: 1vw;
+    font-size: 1.2em;
+    padding-right: 1.5vw;
+}
+
+.banner-container
+.btn-action-container span
+{
+    padding: 30px calc(1.1vw + 5px);
+}
+
+.banner-container
+.image-content-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.image-content-container
+.image-container
+{
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.171);
+}
+
+.image-content-container
+.image-container img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-container
+.status-icon-indicator
+{
+    font-size: 1.4em;
+}
+
+.status-icon-indicator.active
+{
+    color: rgb(0, 184, 0);
+}
+
+
+.card-container-image
+{
+    height: 350px !important;
+}
+
+.note-editable.card-block p
+{
+    margin: 0 !important;
+    line-height: 1.2;
 }
 
 

@@ -19,4 +19,9 @@ class Evaluation extends Model
         return $this -> belongsTo(Certification::class, 'certification_id', 'id');
     }
 
+    public function question()
+    {
+        return $this->belongsTo(DynamicQuestion::class, 'question_id', 'id');
+    }
+
 }

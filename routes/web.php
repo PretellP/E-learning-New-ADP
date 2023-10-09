@@ -217,7 +217,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                     Route::get('/obtener-capítulos/{section}', 'getDataTable')->name('admin.freeCourses.chapters.getDataTable');
                     Route::get('/editar/{chapter}', 'edit')->name('admin.freeCourses.chapters.edit');
                     Route::get('/obtener-video/{chapter}', 'getVideoData')->name('admin.freeCourses.chapters.getVideoData');
-                    Route::post('/sección/{section}/registrar-capítlo', 'store')->name('admin.freeCourses.chapters.store');
+                    Route::post('/sección/{section}/registrar-capítulo', 'store')->name('admin.freeCourses.chapters.store');
                     Route::post('/actualizar/{chapter}', 'update')->name('admin.freeCourses.chapters.update');
                     Route::post('/capítulos/eliminar/{chapter}', 'destroy')->name('admin.freeCourses.chapters.delete');
                 });
@@ -256,7 +256,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         });
 
 
-
         // --------------- EVENTS ------------------------
 
         Route::group(['prefix' => 'eventos'], function () {
@@ -266,7 +265,8 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::get('/', 'index')->name('admin.events.index');
                 Route::get('/ver/{event}', 'show')->name('admin.events.show');
                 Route::get('/crear/obtener-data', 'create')->name('admin.events.create');
-                Route::get('/editar/{event}/obtener-data', 'edit')->name('admin.events.edit');
+                Route::get('/validar-enunciados-puntuación/', 'validateQuestionsScore')->name('admin.events.validateQuestionsScore');
+                Route::get('/editar-evento/{event}/obtener-data', 'edit')->name('admin.events.edit');
                 Route::get('/obtener-usuarios/{event}', 'getUsersTable')->name('admin.events.getUsersTable');
                 Route::post('/registrar', 'store')->name('admin.events.store');
                 Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
@@ -276,8 +276,10 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
             Route::controller(AdminCertificationsController::class)->group(function () {
 
                 Route::get('/ver-certificado/{certification}', 'show')->name('admin.events.certifications.show');
+                Route::get('/editar-certificado/{certification}', 'edit')->name('admin.events.certifications.edit');
                 Route::post('/registrar-participantes/{event}', 'store')->name('admin.events.certifications.store');
                 Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
+                Route::post('/actualizar-certificado/{certification}', 'update')->name('admin.events.certifications.update');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
 
             });             
@@ -286,7 +288,23 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
         // --------------- ANNOUNCEMENTS ----------------
 
-        Route::get('/anuncios', [AdminAnnouncementsController::class, 'index'])->name('admin.announcements.index');
+        Route::group(['prefix' => 'anuncios'], function () {
+
+            Route::controller(AdminAnnouncementsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.announcements.index');
+                Route::get('/editar-banner/{banner}', 'editBanner')->name('admin.announcements.banner.edit');
+                Route::post('/registrar-banner', 'storeBanner')->name('admin.announcements.banner.store');
+                Route::post('/actualizar-banner/{banner}', 'updateBanner')->name('admin.announcements.banner.update');
+                Route::delete('/banner/eliminar/{banner}', 'destroyBanner')->name('admin.announcements.banner.delete');
+
+                Route::get('/editar-publicación/{card}', 'editCard')->name('admin.announcements.card.edit');
+                Route::post('/registrar-publicación', 'storeCard')->name('admin.announcements.card.store');
+                Route::post('/actualizar-publicación/{card}', 'updateCard')->name('admin.announcements.card.update');
+                Route::delete('/publicación/eliminar/{card}', 'destroyCard')->name('admin.announcements.card.delete');
+            });
+        });
+       
     });
 
 

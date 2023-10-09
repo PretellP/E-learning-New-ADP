@@ -4023,6 +4023,9 @@ $(function () {
                 { data: 'active', name: 'active' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
+            order: [
+                [0, 'desc']
+            ]
             // dom: 'rtip'
         });
 
@@ -5095,53 +5098,52 @@ $(function () {
         // -------------- CARGAR IMAGEN ----------------
 
         $('.main-content').on('change', 'input[type=file].input-alternative-image', function () {
+
             var img_path = $(this).val();
+            var row = $(this).closest('.alternative-row')
+            var column = row.find('.input-matching-column')
+            var img_holder = row.find('.img-alternative-holder')
 
-            if (img_path != '') {
-                var row = $(this).closest('.alternative-row')
-                var column = row.find('.input-matching-column')
-                var img_holder = row.find('.img-alternative-holder')
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
 
-                var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
 
-                if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader()
 
-                    if (typeof (FileReader) != 'undefined') {
-                        img_holder.empty()
-                        var reader = new FileReader()
-
-                        reader.onload = function (e) {
-                            $('<img/>', { 'src': e.target.result, 'class': 'img-fluid alternative_img' }).
-                                appendTo(img_holder);
-                        }
-
-                        img_holder.append('<span class="delete-image-alternative"> \
-                                            <i class="fa-regular fa-circle-xmark fa-lg"></i> \
-                                        </span>')
-
-                        reader.readAsDataURL($(this)[0].files[0])
-
-                        column.addClass('with-image')
-                        column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-arrows-rotate"></i>')
-
-                        img_holder.addClass('show')
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid alternative_img' }).
+                            appendTo(img_holder);
                     }
-                    else {
-                        img_holder.html('Este navegador no soporta Lector de Archivos');
-                    }
+
+                    img_holder.append('<span class="delete-image-alternative"> \
+                                        <i class="fa-regular fa-circle-xmark fa-lg"></i> \
+                                    </span>')
+
+                    reader.readAsDataURL($(this)[0].files[0])
+
+                    column.addClass('with-image')
+                    column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-arrows-rotate"></i>')
+
+                    img_holder.addClass('show')
                 }
                 else {
-                    column.removeClass('with-image')
-                    column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
-                    img_holder.removeClass('show').empty()
-                    $(this).val('')
-
-                    Toast.fire({
-                        icon: 'warning',
-                        title: '¡Selecciona una imagen!'
-                    });
+                    img_holder.html('Este navegador no soporta Lector de Archivos');
                 }
             }
+            else {
+                column.removeClass('with-image')
+                column.find('.image-icon-alternative .inner-icon-context').html('<i class="fa-solid fa-plus fa-xs"></i>')
+                img_holder.removeClass('show').empty()
+                $(this).val('')
+
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+
 
         })
 
@@ -5324,6 +5326,14 @@ $(function () {
 
     // ------------- EVENTS  INDEX------------------
 
+    function infoQtyText(qty) {
+        return '( ! ) Este examen tiene <b>' + qty + '</b> enunciados'
+    }
+
+    function infoScoreText(score) {
+        return '( ! ) La puntuación máxima es ' + score
+    }
+
 
     if ($('#events-table').length) {
 
@@ -5363,7 +5373,7 @@ $(function () {
 
         /* ---------- FILTER SELECT ----------*/
 
-        $('.main-content').on('change', '.select-filter-event', function(){
+        $('.main-content').on('change', '.select-filter-event', function () {
             eventsTable.draw()
         })
 
@@ -5402,7 +5412,6 @@ $(function () {
             ]
             // dom: 'rtip'
         });
-
 
         // --------------- REGISTRAR -----------------
 
@@ -5481,6 +5490,15 @@ $(function () {
                     },
                     exam_id: {
                         required: true
+                    },
+                    questions_qty: {
+                        required: true,
+                        step: 1,
+                        min: 2
+                    },
+                    min_score: {
+                        required: true,
+                        step: 1
                     }
                 },
                 submitHandler: function (form, event) {
@@ -5549,6 +5567,9 @@ $(function () {
                 var elearningSelect = form.find('#registerElearningSelect')
 
                 var dateInput = form.find('input[name=date]')
+
+                registerEventForm.resetForm()
+                form.trigger('reset')
 
                 typeSelect.empty()
                 instructorSelect.empty()
@@ -5624,6 +5645,11 @@ $(function () {
                                 '</option>')
                         })
 
+                        form.find('input[name=questions_qty]').val('').attr('disabled', 'disabled').addClass('input-disabled')
+                        form.find('input[name=min_score]').val('').attr('disabled', 'disabled').addClass('input-disabled')
+                        form.find('#info-qty-questions').html('')
+                        form.find('#info-min-score').html('')
+
                     },
                     complete: function (data) {
                         loadSpinner.toggleClass('active')
@@ -5636,273 +5662,531 @@ $(function () {
                 })
             })
 
-        }
+            $('html').on('change', '#registerExamSelect', function () {
+                var form = $('#registerEventForm')
+                var qttyInput = form.find('input[name=questions_qty]')
+                var minScoreInput = form.find('input[name=min_score]')
+                var url = $(this).data('url')
 
-        /* -------------- EDITAR ---------------*/
+                let infoQtyBox = form.find('#info-qty-questions')
+                let infoScoreBox = form.find('#info-min-score')
+                infoQtyBox.empty()
+                infoScoreBox.empty()
 
-
-        $('#editTypeSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un tipo de evento'
-        })
-
-        $('#editInstructorSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un instructor'
-        })
-
-        $('#editResponsableSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un responsable'
-        })
-
-        $('#editRoomSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un sala'
-        })
-
-        $('#editOwnerCompanySelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona una empresa titular'
-        })
-
-        $('#editExamSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un examen'
-        })
-
-        $('#editTestExamSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un examen de prueba'
-        })
-
-        $('#editElearningSelect').select2({
-            dropdownParent: $("#editEventModal"),
-            placeholder: 'Selecciona un e-learning'
-        })
-
-
-        $('#edit-status-checkbox').change(function () {
-            var txtDesc = $('#txt-edit-status');
-            if (this.checked) {
-                txtDesc.html('Activo');
-            } else {
-                txtDesc.html('Inactivo')
-            }
-        });
-
-        var editEventForm = $('#editEventForm').validate({
-            rules: {
-                description: {
-                    required: true,
-                    maxlength: 255
-                },
-                type: {
-                    required: true,
-                },
-                date: {
-                    required: true
-                },
-                user_id: {
-                    required: true
-                },
-                responsable_id: {
-                    required: true
-                },
-                room_id: {
-                    required: true
-                },
-                exam_id: {
-                    required: true
-                }
-            },
-            submitHandler: function (form, event) {
-                event.preventDefault()
-
-                var form = $(form)
-                var loadSpinner = form.find('.loadSpinner')
-                var modal = $('#editEventModal')
-
-                loadSpinner.toggleClass('active')
-                form.find('.btn-save').attr('disabled', 'disabled')
+                qttyInput.val('')
+                qttyInput.attr('disabled', 'disabled').addClass('input-disabled')
+                minScoreInput.val('')
+                minScoreInput.attr('disabled', 'disabled').addClass('input-disabled')
 
                 $.ajax({
-                    method: form.attr('method'),
-                    url: form.attr('action'),
-                    data: form.serialize(),
+                    type: 'GET',
+                    url: url,
+                    data: {
+                        type: 'qtyQuestions',
+                        value: $(this).val()
+                    },
                     dataType: 'JSON',
                     success: function (data) {
 
-                        if (data.success) {
+                        let qty = (data.qty > 10) ? 10 : data.qty
 
-                            eventsTable.draw()
-                            editEventForm.resetForm()
-                            form.trigger('reset');
+                        infoQtyBox.html(infoQtyText(data.qty))
+                        qttyInput.removeAttr('disabled').removeClass('input-disabled')
 
-                            Toast.fire({
-                                icon: 'success',
-                                text: '¡Registro actualizado!'
-                            })
-                        }
-                        else {
-                            Toast.fire({
-                                icon: 'error',
-                                text: data.message
-                            })
-                        }
-                    },
-                    complete: function (data) {
+                        form.validate()
+                        qttyInput.rules('add', { max: data.qty })
+                        qttyInput.val(qty)
 
-                        form.find('.btn-save').removeAttr('disabled')
-                        loadSpinner.toggleClass('active')
-                        modal.modal('hide')
+                        let avg = data.avg
+                        let maxScore = Math.round(avg * qty)
+                        let minScore = Math.round(maxScore * 0.7)
+
+                        infoScoreBox.html(infoScoreText(maxScore))
+                        minScoreInput.removeAttr('disabled').removeClass('input-disabled')
+                        minScoreInput.rules('add', { max: maxScore })
+                        minScoreInput.val(minScore)
+
                     },
                     error: function (data) {
                         console.log(data)
                         ToastError.fire()
                     }
                 })
-            }
-        })
 
+            })
 
-        $('.main-content').on('click', '.editEvent-btn', function () {
-            var getDataUrl = $(this).data('send')
-            var url = $(this).data('url')
-            var modal = $('#editEventModal');
-            var form = modal.find('#editEventForm')
+            $('html').on('keyup', '#input-qty-questions', function () {
+                var form = $('#registerEventForm')
+                var input = $(this)
+                var examSelect = form.find('#registerExamSelect')
+                var inputScore = form.find('input[name=min_score]')
+                var infoScoreBox = form.find('#info-min-score')
+                var value = input.val()
+                var url = input.data('url')
 
-            var typeSelect = form.find('#editTypeSelect')
-            var instructorSelect = form.find('#editInstructorSelect')
-            var responsableSelect = form.find('#editResponsableSelect')
-            var roomSelect = form.find('#editRoomSelect')
-            var ownerCompanySelect = form.find('#editOwnerCompanySelect')
-            var examSelect = form.find('#editExamSelect')
-            var testExamSelect = form.find('#editTestExamSelect')
-            var elearningSelect = form.find('#editElearningSelect')
+                if (value) {
 
-            var activeChk = form.find('#edit-status-checkbox')
-            var flgTestChk = form.find('#edit-flg-test-checkbox')
-            var flgAssist = form.find('#edit-flg-assist-checkbox')
+                    input.attr('disabled', 'disabled')
 
-            typeSelect.empty()
-            instructorSelect.empty()
-            responsableSelect.empty()
-            roomSelect.empty()
-            ownerCompanySelect.empty()
-            examSelect.empty()
-            testExamSelect.empty()
-            elearningSelect.empty()
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: {
+                            type: 'qtyQuestions',
+                            value: examSelect.val(),
+                            qty: value
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
 
-            form.attr('action', url)
+                            if (value <= data.qty && value >= 2) {
 
-            $.ajax({
-                type: 'GET',
-                url: getDataUrl,
-                dataType: 'JSON',
-                success: function (data) {
+                                infoScoreBox.html(infoScoreText(data.maxScore))
+                                inputScore.removeAttr('disabled').removeClass('input-disabled')
 
-                    let all = data.all
-                    let event = data.event
+                                let minScore = Math.round(data.maxScore * 0.7)
 
-                    if (all != null) {
-
-                        typeSelect.append('<option></option>')
-                        $.each(all.types, function (key, values) {
-                            typeSelect.append('<option value="' + key + '">' + values + '</option>')
-                        })
-                        typeSelect.val(event.type).change()
-
-                        instructorSelect.append('<option></option>')
-                        $.each(all.instructors, function (key, values) {
-                            instructorSelect.append('<option value="' + values.id + '">' +
-                                values.name + ' ' + values.paternal +
-                                '</option>')
-                        })
-                        instructorSelect.val(event.user_id).change()
-
-                        responsableSelect.append('<option></option>')
-                        $.each(all.responsables, function (key, values) {
-                            responsableSelect.append('<option value="' + values.id + '">' +
-                                values.name + ' ' + values.paternal +
-                                '</option>')
-                        })
-                        responsableSelect.val(event.responsable_id).change()
-
-                        roomSelect.append('<option></option>')
-                        $.each(all.rooms, function (key, values) {
-                            roomSelect.append('<option value="' + values.id + '">' +
-                                values.description +
-                                '</option>')
-                        })
-                        roomSelect.val(event.room_id).change()
-
-                        ownerCompanySelect.append('<option></option>')
-                        $.each(all.ownerCompanies, function (key, values) {
-                            ownerCompanySelect.append('<option value="' + values.id + '">' +
-                                values.name +
-                                '</option>')
-                        })
-                        ownerCompanySelect.val(event.owner_companies_id).change()
-
-                        examSelect.append('<option></option>')
-                        $.each(all.exams, function (key, values) {
-                            examSelect.append('<option value="' + values.id + '">' +
-                                values.title +
-                                '</option>')
-                        })
-                        examSelect.val(event.exam_id).change()
-
-                        testExamSelect.append('<option></option>')
-                        $.each(all.examsTest, function (key, values) {
-                            testExamSelect.append('<option value="' + values.id + '">' +
-                                values.title +
-                                '</option>')
-                        })
-                        testExamSelect.val(event.test_exam_id).change()
-
-                        elearningSelect.append('<option></option>')
-                        $.each(all.eLearnings, function (key, values) {
-                            elearningSelect.append('<option value="' + values.id + '">' +
-                                values.title +
-                                '</option>')
-                        })
-                        elearningSelect.val(event.elearning_id).change()
-                    }
-
-                    if (event.active == 'S') {
-                        activeChk.prop('checked', true);
-                        $('#txt-edit-status').html('Activo');
-                    } else {
-                        activeChk.prop('checked', false);
-                        $('#txt-edit-status').html('Inactivo');
-                    }
-
-                    if (event.flg_test_exam == 'S') {
-                        flgTestChk.prop('checked', true);
-                    } else {
-                        flgTestChk.prop('checked', false);
-                    }
-
-                    if (event.flg_asist == 'S') {
-                        flgAssist.prop('checked', true);
-                    } else {
-                        flgAssist.prop('checked', false);
-                    }
-
-                    form.find('input[name=description]').val(event.description)
-
-                    $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
-                    $("#dateinputEdit").data('daterangepicker').setEndDate(event.date);
-                },
-                complete: function (data) {
-                    modal.modal('show')
-                },
-                error: function (data) {
-                    console.log(data)
+                                form.validate()
+                                inputScore.rules('add', { max: data.maxScore })
+                                inputScore.val(minScore)
+                            }
+                            else {
+                                inputScore.val('')
+                                infoScoreBox.empty()
+                                inputScore.attr('disabled', 'disabled').addClass('input-disabled')
+                            }
+                        },
+                        complete: function (data) {
+                            input.removeAttr('disabled')
+                            input.focus()
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+                else {
+                    inputScore.val('')
+                    infoScoreBox.empty()
+                    inputScore.attr('disabled', 'disabled').addClass('input-disabled')
                 }
             })
-        })
+        }
+
+        /* -------------- EDITAR ---------------*/
+
+        if ($('#editEventForm').length) {
+
+            $('#editTypeSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un tipo de evento'
+            })
+
+            $('#editInstructorSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un instructor'
+            })
+
+            $('#editResponsableSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un responsable'
+            })
+
+            $('#editRoomSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un sala'
+            })
+
+            $('#editOwnerCompanySelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona una empresa titular'
+            })
+
+            $('#editExamSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un examen'
+            })
+
+            $('#editTestExamSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un examen de prueba'
+            })
+
+            $('#editElearningSelect').select2({
+                dropdownParent: $("#editEventModal"),
+                placeholder: 'Selecciona un e-learning'
+            })
+
+
+            $('#edit-status-checkbox').change(function () {
+                var txtDesc = $('#txt-edit-status');
+                if (this.checked) {
+                    txtDesc.html('Activo');
+                } else {
+                    txtDesc.html('Inactivo')
+                }
+            });
+
+            var editEventForm = $('#editEventForm').validate({
+                rules: {
+                    description: {
+                        required: true,
+                        maxlength: 255
+                    },
+                    type: {
+                        required: true,
+                    },
+                    date: {
+                        required: true
+                    },
+                    user_id: {
+                        required: true
+                    },
+                    responsable_id: {
+                        required: true
+                    },
+                    room_id: {
+                        required: true
+                    },
+                    exam_id: {
+                        required: true
+                    },
+                    questions_qty: {
+                        required: true,
+                        step: 1,
+                        min: 2
+                    },
+                    min_score: {
+                        required: true,
+                        step: 1
+                    }
+                },
+                submitHandler: function (form, event) {
+                    event.preventDefault()
+
+                    var form = $(form)
+                    var loadSpinner = form.find('.loadSpinner')
+                    var modal = $('#editEventModal')
+
+                    loadSpinner.toggleClass('active')
+                    form.find('.btn-save').attr('disabled', 'disabled')
+
+                    $.ajax({
+                        method: form.attr('method'),
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+
+                                eventsTable.draw()
+                                editEventForm.resetForm()
+                                form.trigger('reset');
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: '¡Registro actualizado!'
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        complete: function (data) {
+
+                            form.find('.btn-save').removeAttr('disabled')
+                            loadSpinner.toggleClass('active')
+                            modal.modal('hide')
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+            })
+
+            $('.main-content').on('click', '.editEvent-btn', function () {
+                var getDataUrl = $(this).data('send')
+                var url = $(this).data('url')
+                var modal = $('#editEventModal');
+                var form = modal.find('#editEventForm')
+
+                var typeSelect = form.find('#editTypeSelect')
+                var instructorSelect = form.find('#editInstructorSelect')
+                var responsableSelect = form.find('#editResponsableSelect')
+                var roomSelect = form.find('#editRoomSelect')
+                var ownerCompanySelect = form.find('#editOwnerCompanySelect')
+                var examSelect = form.find('#editExamSelect')
+                var testExamSelect = form.find('#editTestExamSelect')
+                var elearningSelect = form.find('#editElearningSelect')
+
+                var activeChk = form.find('#edit-status-checkbox')
+                var flgTestChk = form.find('#edit-flg-test-checkbox')
+                var flgAssist = form.find('#edit-flg-assist-checkbox')
+
+                editEventForm.resetForm()
+                form.trigger('reset')
+
+                typeSelect.empty()
+                instructorSelect.empty()
+                responsableSelect.empty()
+                roomSelect.empty()
+                ownerCompanySelect.empty()
+                examSelect.empty()
+                testExamSelect.empty()
+                elearningSelect.empty()
+
+                form.attr('action', url)
+
+                $.ajax({
+                    type: 'GET',
+                    url: getDataUrl,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        let all = data.all
+                        let event = data.event
+
+                        if (all != null) {
+
+                            typeSelect.append('<option></option>')
+                            $.each(all.types, function (key, values) {
+                                typeSelect.append('<option value="' + key + '">' + values + '</option>')
+                            })
+                            typeSelect.val(event.type).change()
+
+                            instructorSelect.append('<option></option>')
+                            $.each(all.instructors, function (key, values) {
+                                instructorSelect.append('<option value="' + values.id + '">' +
+                                    values.name + ' ' + values.paternal +
+                                    '</option>')
+                            })
+                            instructorSelect.val(event.user_id).change()
+
+                            responsableSelect.append('<option></option>')
+                            $.each(all.responsables, function (key, values) {
+                                responsableSelect.append('<option value="' + values.id + '">' +
+                                    values.name + ' ' + values.paternal +
+                                    '</option>')
+                            })
+                            responsableSelect.val(event.responsable_id).change()
+
+                            roomSelect.append('<option></option>')
+                            $.each(all.rooms, function (key, values) {
+                                roomSelect.append('<option value="' + values.id + '">' +
+                                    values.description +
+                                    '</option>')
+                            })
+                            roomSelect.val(event.room_id).change()
+
+                            ownerCompanySelect.append('<option></option>')
+                            $.each(all.ownerCompanies, function (key, values) {
+                                ownerCompanySelect.append('<option value="' + values.id + '">' +
+                                    values.name +
+                                    '</option>')
+                            })
+                            ownerCompanySelect.val(event.owner_companies_id).change()
+
+                            examSelect.append('<option></option>')
+                            $.each(all.exams, function (key, values) {
+                                examSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            examSelect.val(event.exam_id).change()
+
+                            testExamSelect.append('<option></option>')
+                            $.each(all.examsTest, function (key, values) {
+                                testExamSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            testExamSelect.val(event.test_exam_id).change()
+
+                            elearningSelect.append('<option></option>')
+                            $.each(all.eLearnings, function (key, values) {
+                                elearningSelect.append('<option value="' + values.id + '">' +
+                                    values.title +
+                                    '</option>')
+                            })
+                            elearningSelect.val(event.elearning_id).change()
+                        }
+
+                        if (event.active == 'S') {
+                            activeChk.prop('checked', true);
+                            $('#txt-edit-status').html('Activo');
+                        } else {
+                            activeChk.prop('checked', false);
+                            $('#txt-edit-status').html('Inactivo');
+                        }
+
+                        if (event.flg_test_exam == 'S') {
+                            flgTestChk.prop('checked', true);
+                        } else {
+                            flgTestChk.prop('checked', false);
+                        }
+
+                        if (event.flg_asist == 'S') {
+                            flgAssist.prop('checked', true);
+                        } else {
+                            flgAssist.prop('checked', false);
+                        }
+
+                        form.find('input[name=description]').val(event.description)
+
+                        $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
+                        $("#dateinputEdit").data('daterangepicker').setEndDate(event.date);
+
+                        let inputQuestionQty = form.find('input[name=questions_qty]')
+                        let inputMinScore = form.find('input[name=min_score]')
+
+                        inputQuestionQty.val(event.questions_qty)
+                        inputMinScore.val(event.min_score)
+
+                        let questQty = event['exam'].questions_count
+                        let maxScore = Math.round(event.questions_qty * event['exam'].questions_avg_points)
+
+                        form.find('#info-qty-questions').html(infoQtyText(questQty))
+                        form.find('#info-min-score').html(infoScoreText(maxScore))
+
+                        form.validate()
+                        inputQuestionQty.rules('add', { max: questQty })
+                        inputMinScore.rules('add', { max: maxScore })
+
+                    },
+                    complete: function (data) {
+                        modal.modal('show')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                })
+            })
+
+            $('html').on('change', '#editExamSelect', function () {
+
+                var modal = $('#editEventModal')
+
+                if (modal.hasClass('show')) {
+
+                    var form = $('#editEventForm')
+                    var qttyInput = form.find('input[name=questions_qty]')
+                    var minScoreInput = form.find('input[name=min_score]')
+                    var url = $(this).data('url')
+
+                    let infoQtyBox = form.find('#info-qty-questions')
+                    let infoScoreBox = form.find('#info-min-score')
+                    infoQtyBox.empty()
+                    infoScoreBox.empty()
+
+                    qttyInput.val('')
+                    qttyInput.attr('disabled', 'disabled').addClass('input-disabled')
+                    minScoreInput.val('')
+                    minScoreInput.attr('disabled', 'disabled').addClass('input-disabled')
+
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: {
+                            type: 'qtyQuestions',
+                            value: $(this).val()
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            let qty = (data.qty > 10) ? 10 : data.qty
+
+                            infoQtyBox.html(infoQtyText(data.qty))
+                            qttyInput.removeAttr('disabled').removeClass('input-disabled')
+
+                            form.validate()
+                            qttyInput.rules('add', { max: data.qty })
+                            qttyInput.val(qty)
+
+                            let avg = data.avg
+                            let maxScore = Math.round(avg * qty)
+                            let minScore = Math.round(maxScore * 0.7)
+
+                            infoScoreBox.html(infoScoreText(maxScore))
+                            minScoreInput.removeAttr('disabled').removeClass('input-disabled')
+                            minScoreInput.rules('add', { max: maxScore })
+                            minScoreInput.val(minScore)
+
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+
+            })
+
+            $('html').on('keyup', '#input-qty-questions-edit', function () {
+                var form = $('#editEventForm')
+                var input = $(this)
+                var examSelect = form.find('#editExamSelect')
+                var inputScore = form.find('input[name=min_score]')
+                var infoScoreBox = form.find('#info-min-score')
+                var value = input.val()
+                var url = input.data('url')
+
+                if (value) {
+
+                    input.attr('disabled', 'disabled')
+
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: {
+                            type: 'qtyQuestions',
+                            value: examSelect.val(),
+                            qty: value
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (value <= data.qty && value >= 2) {
+
+                                infoScoreBox.html(infoScoreText(data.maxScore))
+                                inputScore.removeAttr('disabled').removeClass('input-disabled')
+
+                                let minScore = Math.round(data.maxScore * 0.7)
+
+                                form.validate()
+                                inputScore.rules('add', { max: data.maxScore })
+                                inputScore.val(minScore)
+                            }
+                            else {
+                                inputScore.val('')
+                                infoScoreBox.empty()
+                                inputScore.attr('disabled', 'disabled').addClass('input-disabled')
+                            }
+                        },
+                        complete: function (data) {
+                            input.removeAttr('disabled')
+                            input.focus()
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+                else {
+                    inputScore.val('')
+                    infoScoreBox.empty()
+                    inputScore.attr('disabled', 'disabled').addClass('input-disabled')
+                }
+            })
+        }
+
 
         /* ------------- ELIMINAR ----------------*/
 
@@ -5975,6 +6259,7 @@ $(function () {
             ],
             // dom: 'rtip'
         });
+
 
         // ------------ UPDATE ASSIST -------------
 
@@ -6094,6 +6379,15 @@ $(function () {
                     },
                     exam_id: {
                         required: true
+                    },
+                    questions_qty: {
+                        required: true,
+                        step: 1,
+                        min: 2
+                    },
+                    min_score: {
+                        required: true,
+                        step: 1
                     }
                 },
                 submitHandler: function (form, event) {
@@ -6147,6 +6441,7 @@ $(function () {
                     })
                 }
             })
+
 
             $('.main-content').on('click', '.editEvent-btn', function () {
                 var getDataUrl = $(this).data('send')
@@ -6276,6 +6571,23 @@ $(function () {
 
                         $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
                         $("#dateinputEdit").data('daterangepicker').setEndDate(event.date);
+
+                        let inputQuestionQty = form.find('input[name=questions_qty]')
+                        let inputMinScore = form.find('input[name=min_score]')
+
+                        inputQuestionQty.val(event.questions_qty)
+                        inputMinScore.val(event.min_score)
+
+                        let questQty = event['exam'].questions_count
+                        let maxScore = Math.round(event.questions_qty * event['exam'].questions_avg_points)
+
+                        form.find('#info-qty-questions').html(infoQtyText(questQty))
+                        form.find('#info-min-score').html(infoScoreText(maxScore))
+
+                        form.validate()
+                        inputQuestionQty.rules('add', { max: questQty })
+                        inputMinScore.rules('add', { max: maxScore })
+
                     },
                     complete: function (data) {
                         modal.modal('show')
@@ -6284,6 +6596,123 @@ $(function () {
                         console.log(data)
                     }
                 })
+            })
+
+            $('html').on('change', '#editExamSelect', function () {
+
+                var modal = $('#editEventModal')
+
+                if (modal.hasClass('show')) {
+
+                    var form = $('#editEventForm')
+                    var qttyInput = form.find('input[name=questions_qty]')
+                    var minScoreInput = form.find('input[name=min_score]')
+                    var url = $(this).data('url')
+
+                    let infoQtyBox = form.find('#info-qty-questions')
+                    let infoScoreBox = form.find('#info-min-score')
+                    infoQtyBox.empty()
+                    infoScoreBox.empty()
+
+                    qttyInput.val('')
+                    qttyInput.attr('disabled', 'disabled').addClass('input-disabled')
+                    minScoreInput.val('')
+                    minScoreInput.attr('disabled', 'disabled').addClass('input-disabled')
+
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: {
+                            type: 'qtyQuestions',
+                            value: $(this).val()
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            let qty = (data.qty > 10) ? 10 : data.qty
+
+                            infoQtyBox.html(infoQtyText(data.qty))
+                            qttyInput.removeAttr('disabled').removeClass('input-disabled')
+
+                            form.validate()
+                            qttyInput.rules('add', { max: data.qty })
+                            qttyInput.val(qty)
+
+                            let avg = data.avg
+                            let maxScore = Math.round(avg * qty)
+                            let minScore = Math.round(maxScore * 0.7)
+
+                            infoScoreBox.html(infoScoreText(maxScore))
+                            minScoreInput.removeAttr('disabled').removeClass('input-disabled')
+                            minScoreInput.rules('add', { max: maxScore })
+                            minScoreInput.val(minScore)
+
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+
+            })
+
+            $('html').on('keyup', '#input-qty-questions-edit', function () {
+                var form = $('#editEventForm')
+                var input = $(this)
+                var examSelect = form.find('#editExamSelect')
+                var inputScore = form.find('input[name=min_score]')
+                var infoScoreBox = form.find('#info-min-score')
+                var value = input.val()
+                var url = input.data('url')
+
+                if (value) {
+
+                    input.attr('disabled', 'disabled')
+
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: {
+                            type: 'qtyQuestions',
+                            value: examSelect.val(),
+                            qty: value
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (value <= data.qty && value >= 2) {
+
+                                infoScoreBox.html(infoScoreText(data.maxScore))
+                                inputScore.removeAttr('disabled').removeClass('input-disabled')
+
+                                let minScore = Math.round(data.maxScore * 0.7)
+
+                                form.validate()
+                                inputScore.rules('add', { max: data.maxScore })
+                                inputScore.val(minScore)
+                            }
+                            else {
+                                inputScore.val('')
+                                infoScoreBox.empty()
+                                inputScore.attr('disabled', 'disabled').addClass('input-disabled')
+                            }
+                        },
+                        complete: function (data) {
+                            input.removeAttr('disabled')
+                            input.focus()
+                        },
+                        error: function (data) {
+                            console.log(data)
+                            ToastError.fire()
+                        }
+                    })
+                }
+                else {
+                    inputScore.val('')
+                    infoScoreBox.empty()
+                    inputScore.attr('disabled', 'disabled').addClass('input-disabled')
+                }
             })
         }
 
@@ -6346,7 +6775,7 @@ $(function () {
 
         var participantsTable;
 
-        $('html').on('change', '#search_from_company_select', function (){
+        $('html').on('change', '#search_from_company_select', function () {
             participantsTable.draw()
         })
 
@@ -6388,7 +6817,6 @@ $(function () {
 
             modal.modal('show')
         })
-
 
         $('#users-participants-table').on('draw.dt', function () {
             $('#btn-store-participant-container').html(buttonDisabled)
@@ -6446,6 +6874,7 @@ $(function () {
                                     participantsTable.draw()
                                     certificationsTable.draw()
                                     $('#btn-store-participant-container').html(buttonDisabled)
+                                    $('#event-box-container').html(data.html)
 
                                     Toast.fire({
                                         icon: 'success',
@@ -6484,7 +6913,6 @@ $(function () {
         })
 
 
-
         // ----------------- ELIMINAR PARTICIPANTES ----------------
 
         $('.main-content').on('click', '.deleteCertification-btn', function () {
@@ -6500,6 +6928,7 @@ $(function () {
                             if (result.success === true) {
 
                                 certificationsTable.draw()
+                                $('#event-box-container').html(result.html)
 
                                 Toast.fire({
                                     icon: 'success',
@@ -6567,7 +6996,7 @@ $(function () {
                                             <td class="p-0">' + miningUnits + '</td>\
                                             <td>' + participant.email + '</td>\
                                             <td>' + participant.company['description'] + '</td>\
-                                            <td>' + participant.position + '</td>\
+                                            <td>' + (participant.position ?? '-') + '</td>\
                                             <td>' + partStatus + '</td>\
                                         </tr>')
 
@@ -6582,7 +7011,7 @@ $(function () {
                                         <td>' + eventStatus + '</td>\
                                         <td>' + event.exam['title'] + '</td>\
                                         <td>' + examStatus + '</td>\
-                                        <td>' + event.exam['course'].description + '</td>\
+                                        <td>' + event['course'].description + '</td>\
                                     </tr>')
 
                     let certification = data.certification
@@ -6611,7 +7040,914 @@ $(function () {
 
         })
 
+
+        // ------------- EDITAR CERTIFICADO --------------------
+
+        $('#editCertMiningUnitSelect').select2({
+            dropdownParent: $("#editCertificationModal"),
+            placeholder: 'Selecciona una o más unidades mineras',
+            closeOnSelect: false
+        })
+
+        $('#editCertCompanySelect').select2({
+            dropdownParent: $("#editCertificationModal"),
+            placeholder: 'Selecciona una empresa'
+        })
+
+
+        var editCertificationForm = $('#editCertificationForm').validate({
+            rules: {
+                "mining_unit_id[]": {
+                    required: true,
+                },
+                company_id: {
+                    required: true,
+                },
+                area: {
+                    maxlength: 100,
+                },
+                observation: {
+                    maxlength: 500,
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editCertificationModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            certificationsTable.draw()
+                            editCertificationForm.resetForm()
+                            form.trigger('reset');
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+
+        $('.main-content').on('click', '.editCertification-btn', function () {
+            var modal = $('#editCertificationModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editCertificationForm')
+
+            let miningUnitsSelect = form.find('#editCertMiningUnitSelect')
+            let companySelect = form.find('#editCertCompanySelect')
+            let checkbox = form.find('#edit-assist-checkbox')
+
+            miningUnitsSelect.empty()
+            companySelect.empty()
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let all = data.all
+                    let selected = data.selected
+                    let certification = data.certification
+
+                    form.find('#participant-name').html(selected.participant)
+
+                    miningUnitsSelect.append('<option></option>')
+                    $.each(all.miningUnits, function (key, value) {
+                        miningUnitsSelect.append('<option value="' + value.id + '">' + value.description + '</option>')
+                    })
+                    miningUnitsSelect.val(selected.miningUnits).change()
+
+                    companySelect.append('<option></option>')
+                    $.each(all.companies, function (key, value) {
+                        companySelect.append('<option value="' + value.id + '">' + value.description + '</option>')
+                    })
+                    companySelect.val(selected['company'].id).change()
+
+                    form.find('input[name=area]').val(certification.area)
+                    form.find('input[name=observation]').val(certification.observation)
+
+                    let checkbox_stat = (certification.assist_user == 'S') ? true : false;
+                    checkbox.prop('checked', checkbox_stat);
+
+                    if (data.flg_assist_status == 'disabled') {
+                        checkbox.attr('readonly', 'readonly').addClass('disabled')
+                        checkbox.closest('label').addClass('not-user-allowed')
+                    } else {
+                        checkbox.removeAttr('readonly').removeClass('disabled')
+                        checkbox.closest('label').removeClass('not-user-allowed')
+                    }
+
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+
+        })
+
     }
+
+
+
+
+
+
+
+    // --------------- ANNOUNCEMENTS ----------------
+
+    if ($('#banners-list-container').length) {
+
+        // -------------- REGISTER ----------------
+
+        $('#register-banner-status-checkbox').change(function () {
+            var txtDesc = $('#txt-register-status-banner');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var banerImageRegister = $('#input-banner-image-register');
+        banerImageRegister.val('');
+        banerImageRegister.on("change", function () {
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#registerBannerForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).empty();
+                banerImageRegister.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+        })
+
+        var registerBannerForm = $('#registerBannerForm').validate({
+            rules: {
+                content: {
+                    maxlength: 1000,
+                    url: true
+                },
+                image: {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#registerBannerModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            var bannersContainer = $('#banners-list-container')
+                            bannersContainer.html(data.html)
+                            banerImageRegister.val('')
+                            registerBannerForm.resetForm()
+
+                            $(img_holder).empty()
+
+                            modal.modal('toggle')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        // ------------- EDITAR -----------
+
+        $('#editOrderSelect').select2({
+            dropdownParent: '#editBannerForm',
+            minimumResultsForSearch: -1,
+        })
+
+        $('#edit-banner-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-status-banner');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editBannerForm = $('#editBannerForm').validate({
+            rules: {
+                content: {
+                    maxlength: 5000,
+                    url: true
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editBannerModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            let bannersBox = $('#banners-list-container')
+
+                            bannersBox.html(data.html)
+                            editBannerForm.resetForm()
+
+                            modal.modal('hide')
+
+                            $(img_holder).empty()
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        var inputBannerEdit = $('#input-banner-image-edit');
+        inputBannerEdit.on("change", function () {
+            $('#editBannerForm').validate()
+            $('#input-banner-image-edit').rules('add', { required: true })
+
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#editBannerForm').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).html(currentImagePath);
+                inputBannerEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+
+        })
+
+        $('.main-content').on('click', '.edit-banner-btn', function () {
+            var modal = $('#editBannerModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editBannerForm')
+
+            let orderSelect = form.find('#editOrderSelect')
+
+            form.validate()
+            $('#input-banner-image-edit').rules('remove', 'required')
+
+            editBannerForm.resetForm()
+            orderSelect.empty()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let banner = data.banner
+
+                    form.find('.banner-url-content-container').html(banner.content)
+
+                    let raw_content = form.find('.banner-url-content-container > a')
+
+                    form.find('input[name=content]').val(raw_content.attr('href'))
+
+                    modal.find('.img-holder').html('<img class="img-fluid banner_img" id="image-banner-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#input-banner-image-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid banner_img"></img>');
+                    modal.find('#input-banner-image-edit').val('');
+
+
+                    $.each(data.orders, function (key, value) {
+                        orderSelect.append('<option value"' + value.publishing_order + '">' + value.publishing_order + '</option>')
+                    })
+                    orderSelect.val(banner.publishing_order).change()
+
+                    if (raw_content.attr('target') == '_BLANK') {
+                        form.find('#checkbox-blank-indicator-edit').prop('checked', true)
+                    } else {
+                        form.find('#checkbox-blank-indicator-edit').prop('checked', false)
+                    }
+
+                    if (banner.status == 1) {
+                        modal.find('#edit-banner-status-checkbox').prop('checked', true);
+                        $('#txt-edit-status-banner').html('Activo');
+                    } else {
+                        modal.find('#edit-banner-status-checkbox').prop('checked', false);
+                        $('#txt-edit-status-banner').html('Inactivo');
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('toggle')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+
+        // -------- ELIMINAR --------------
+
+        $('.main-content').on('click', '.delete-banner-btn', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                var bannersContainer = $('#banners-list-container')
+                                bannersContainer.html(result.html)
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                            console.log(result)
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+
+        })
+    }
+
+
+    // ------------ PUBLISHINGS ---------------
+
+    if ($('#publishings-table').length) {
+
+
+
+        /* --------- PUBLISHINGS TABLE ----------*/
+
+        var publishingsTableEle = $('#publishings-table');
+        var getDataUrl = publishingsTableEle.data('url');
+        var publishingsTable = publishingsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'title', name: 'title' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'publication_time', name: 'publication_time' },
+                { data: 'status', name: 'status' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+            // dom: 'rtip'
+        });
+
+        function getSummernoteConfig(summernoteElement, cardForm) {
+            return {
+                dialogsInBody: true,
+                minHeight: 160,
+                disableDragAndDrop: true,
+                dialogsFade: true,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['insert', ['link']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']]
+                ],
+                lang: 'es-ES',
+                lineHeights: [
+                    '1.2', '1.4', '1.6', '1.8', '2.0', '3.0'
+                ],
+                callbacks: {
+                    onChange: function (contents, $editable) {
+                        summernoteElement.val(summernoteElement.summernote('isEmpty') ? "" : contents);
+                        cardForm.element(summernoteElement);
+                    }
+                }
+            }
+        }
+
+        // ------------ REGISTER --------------
+
+        var cardImageRegister = $('#input-card-image-register');
+        cardImageRegister.val('');
+
+        cardImageRegister.on("change", function () {
+            var img_path = $(this)[0].value;
+
+            var img_holder = $(this).closest('#registerCardForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid card_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).empty();
+                cardImageRegister.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+
+        })
+
+        var summernoteElement = $('#card-content-register')
+
+        var cardRegisterForm = $('#registerCardForm');
+        var cardForm = cardRegisterForm.validate({
+            rules: {
+                content: {
+                    maxlength: 6000,
+                    required: true
+                },
+                title: {
+                    required: true,
+                    maxlength: 100,
+                },
+                image: {
+                    required: true
+                }
+            },
+            errorElement: "label",
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            ignore: ':hidden:not(.summernote-card-editor),.note-editable.card-block',
+            errorPlacement: function (error, element) {
+                error.addClass("error");
+                if (element.prop("type") === "checkbox") {
+                    error.insertAfter(element.siblings("label"));
+                } else if (element.hasClass("summernote")) {
+                    error.insertAfter(element.siblings(".note-editor"));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#registerCardModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            summernoteElement.summernote('reset');
+
+                            publishingsTable.draw()
+                            cardForm.resetForm()
+                            form.trigger('reset')
+
+                            modal.modal('hide')
+
+                            $(img_holder).empty()
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        });
+
+        $('#registerCardModal').on('show.bs.modal', function () {
+            summernoteElement.summernote(getSummernoteConfig(summernoteElement, cardForm));
+            $(this).find('textarea[name=content]').empty()
+        })
+
+        $('#registerCardModal').on('hidden.bs.modal', function () {
+            summernoteElement.summernote('destroy')
+            $(this).find('textarea[name=content]').empty()
+        })
+
+
+
+        // -------------- EDITAR ------------------
+
+
+
+        var summernoteEditElement = $('#card-content-edit')
+
+        var cardImageEdit = $('#input-card-image-edit');
+        cardImageEdit.val('');
+
+        cardImageEdit.on("change", function () {
+            var img_path = $(this)[0].value;
+
+            var img_holder = $(this).closest('#editCardForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            $('#editCardForm').validate()
+            $('#input-card-image-edit').rules('add', { required: true })
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid card_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).empty();
+                cardImageEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+
+        })
+
+        var cardEditForm = $('#editCardForm');
+        var cardEditForm = cardEditForm.validate({
+            rules: {
+                content: {
+                    maxlength: 6000,
+                    required: true
+                },
+                title: {
+                    required: true,
+                    maxlength: 100,
+                },
+            },
+            errorElement: "label",
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            ignore: ':hidden:not(.summernote-card-editor),.note-editable.card-block',
+            errorPlacement: function (error, element) {
+                error.addClass("error");
+                if (element.prop("type") === "checkbox") {
+                    error.insertAfter(element.siblings("label"));
+                } else if (element.hasClass("summernote")) {
+                    error.insertAfter(element.siblings(".note-editor"));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editCardModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            summernoteEditElement.summernote('reset');
+
+                            publishingsTable.draw()
+                            cardEditForm.resetForm()
+                            form.trigger('reset')
+
+                            $(img_holder).empty()
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        modal.modal('hide')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        });
+
+
+        $('.main-content').on('click', '.editCard', function () {
+            var url = $(this).data('url')
+            var getDataUrl = $(this).data('send')
+            var modal = $('#editCardModal')
+            var form = modal.find('#editCardForm')
+
+            form.attr('action', url)
+
+            form.validate()
+            $('#input-card-image-edit').rules('remove', 'required')
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let card = data.card
+
+                    modal.find('.img-holder').html('<img class="img-fluid card_img" id="image-card-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#input-card-image-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid card_img"></img>');
+                    modal.find('#input-card-image-edit').val('');
+
+                    form.find('input[name=title]').val(card.title)
+
+                    form.find('textarea[name=content]').val(card.content)
+
+
+                    if (card.status == 1) {
+                        modal.find('#edit-card-status-checkbox').prop('checked', true);
+                    } else {
+                        modal.find('#edit-card-status-checkbox').prop('checked', false);
+                    }
+
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                    let dataCard = data.responseJSON
+                    
+                    modal.find('.note-editable').html(dataCard['card'].content)
+                },
+                error: function (data) {
+                    console.log(data)
+                    ToastError.fire()
+                }
+            })
+        })
+
+        $('#editCardModal').on('show.bs.modal', function () {
+            summernoteEditElement.summernote(getSummernoteConfig(summernoteEditElement, cardEditForm));
+        })
+
+        $('#editCardModal').on('hidden.bs.modal', function () {
+            summernoteEditElement.summernote('destroy')
+        })
+
+
+        // -------------- ELIMINAR ------------------
+
+        $('.main-content').on('click', '.deleteCard', function () {
+            var url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                publishingsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                            console.log(result)
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+
+        })
+
+    }
+
+
+
 
 
 
@@ -6657,6 +7993,8 @@ $(function () {
         required: '<i class="fa-solid fa-circle-exclamation"></i> &nbsp; Este campo es obligatorio',
         email: 'Ingrese un email válido',
         number: 'Por favor, ingresa un número válido',
+        url: 'Por favor, ingresa una URL válida',
+        max: jQuery.validator.format('Por favor, ingrese un valor menor o igual a {0}'),
         min: jQuery.validator.format('Por favor, ingrese un valor mayor o igual a {0}'),
         step: jQuery.validator.format("Ingrese un número múltiplo de {0}"),
         maxlength: jQuery.validator.format("Ingrese menos de {0} caracteres.")
