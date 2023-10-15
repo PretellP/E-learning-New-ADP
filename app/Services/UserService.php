@@ -3,7 +3,11 @@
 namespace App\Services;
 
 use App\Models\{User};
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class UserService
 {
@@ -20,7 +24,7 @@ class UserService
                         return $user->full_name;
                     })
                     ->editColumn('role', function($user){
-                        return config('parameters')['roles'][$user->role];
+                        return config('parameters.roles')[$user->role] ?? '-';
                     })
                     ->editColumn('company.description', function($user){
                         $company = $user->company == null ? '' : $user->company->description;
@@ -57,5 +61,37 @@ class UserService
                     ->make(true);
 
         return $allUsers;
+    }
+
+    public function selfRegister(Request $request)
+    {
+        $data = $request->validated();
+
+        $password = $this->generatePassword();
+
+        $user = User::create($data + [
+            "signature" => "N",
+            "active" => "S",
+            "profile_survey" => 'N',
+            "role" => 'participants',
+            "password" => Hash::make($password)
+        ]);
+
+        if($user)
+        {
+            if($user->miningUnits()->sync($request['mining_units_ids'])){
+
+                app(EmailService::class)->sendUserCredentialsMail($user, $password);
+
+                return $user;
+            };
+        }
+
+        throw new Exception(config('parameters.exception_message'));
+    }
+
+    public function generatePassword()
+    {
+        return Str::random(8);
     }
 }

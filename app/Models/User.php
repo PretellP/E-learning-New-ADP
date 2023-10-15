@@ -96,6 +96,11 @@ class User extends Authenticatable
         return $this -> hasMany(UserSurvey::class, 'user_id', 'id');
     }
 
+    public function file()
+    {
+        return $this->morhOne(File::class, 'fileable');
+    }
+
     static function getInstructorsQuery()
     {
         return User::whereIn('role', ['instructor']);
@@ -106,7 +111,15 @@ class User extends Authenticatable
         return User::where('company_id', 10);
     }
 
+    public function avatar()
+    {
+        return $this->file()->where('category', 'avatars')->first();
+    }
 
+    public function signature()
+    {
+        return $this->file()->where('category', 'firmas')->first();
+    }
 
 
     

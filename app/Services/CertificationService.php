@@ -78,6 +78,21 @@ class CertificationService
         return $allCertifications;
     }
 
+    public function selfStore($user, Event $event)
+    {
+        $event->loadParticipantsRelationships();
+
+        $event->loadParticipantsCount();
+        $miningUnitsIds = $user->miningUnits->pluck('id');
+
+        if ($event->room->capacity > $event->participants_count) {
+            $this->storeAll($event, $user, $miningUnitsIds);
+            return true;
+        }
+
+        return false;
+    }
+
     public function store($request, Event $event)
     {
         /** @var self $status */
@@ -96,18 +111,9 @@ class CertificationService
 
             if ($event->room->capacity > $event->participants_count) {
 
-                $certification = $event->certifications()
-                    ->create($this->getCertificationArrayData($user, 'N', 'certification'));
-                $certification->miningUnits()->sync($miningUnitsIds);
-
-                $testCertification = $event->certifications()
-                    ->create($this->getCertificationArrayData($user, 'S', 'test'));
-                $testCertification->miningUnits()->sync($miningUnitsIds);
-
-                $certification->testCertification()->associate($testCertification);
-                $certification->save();
-
+                $this->storeAll($event, $user, $miningUnitsIds);
                 $status = 'finished';
+                
             } else {
                 $note = 'Se ha excedido la capacidad de la sala';
                 $status = $i == 0 ? 'exceeded' : 'limitreached';
@@ -118,6 +124,8 @@ class CertificationService
         return array("success" => true, "status" => $status, "note" => $note);
     }
 
+
+
     public function updateAssist($request, Certification $certification)
     {
         $request['assist_user'] = $request['assist_user'] == 'true' ? 'S' : 'N';
@@ -126,16 +134,29 @@ class CertificationService
     }
 
     public function update($request, Certification $certification)
-    {   
+    {
         $data = new Request(normalizeInputStatus($request->all()));
 
         $isUpdated = $certification->update($data->except('status'));
 
-        if($isUpdated){
+        if ($isUpdated) {
             $certification->miningUnits()->sync($request['mining_unit_id']);
         }
 
         return $isUpdated;
+    }
+
+    public function destroy(Certification $certification)
+    {
+        $certification->miningUnits()->detach();
+
+        if ($certification->testCertification != null) {
+            $this->destroy($certification->testCertification);
+        }
+
+        return $certification->delete();
+
+        throw new Exception(config('parameters.exception_message'));
     }
 
     private function getFilteredUsers($ids, Event $event)
@@ -159,16 +180,17 @@ class CertificationService
         ];
     }
 
-    public function destroy(Certification $certification)
+    private function storeAll(Event $event, User $user, $miningUnitsIds)
     {
-        $certification->miningUnits()->detach();
+        $certification = $event->certifications()
+            ->create($this->getCertificationArrayData($user, 'N', 'certification'));
+        $certification->miningUnits()->sync($miningUnitsIds);
 
-        if ($certification->testCertification != null) {
-            $this->destroy($certification->testCertification);
-        }
+        $testCertification = $event->certifications()
+            ->create($this->getCertificationArrayData($user, 'S', 'test'));
+        $testCertification->miningUnits()->sync($miningUnitsIds);
 
-        return $certification->delete();
-
-        throw new Exception(config('parameters.exception_message'));
+        $certification->testCertification()->associate($testCertification);
+        $certification->save();
     }
 }

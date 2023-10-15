@@ -89,7 +89,7 @@ class AdminUsersController extends Controller
 
     public function edit(User $user)
     {
-        $role = config('parameters')['roles'][$user->role];
+        $role = config('parameters.roles')[$user->role] ?? '-';
 
         return response([
             "user" => $user,

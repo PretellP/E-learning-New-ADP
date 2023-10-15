@@ -38,15 +38,49 @@ use App\Http\Controllers\Aula\Participant\{
 use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
 };
+
+use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController};
+use App\Http\Controllers\Auth\{LoginController, RegisterController};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return redirect()->route('login');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home.index');
+    Route::get('/obtener-contenido-de-registro', 'getRegisterModalContent')->name('home.getRegisterModalContent');
 });
 
-Auth::routes(['register' => false]);
+
+Route::controller(LoginController::class)->group(function () {
+
+    Route::get('/login/{location?}/{redirect?}', 'showLoginForm')->name('login');
+    Route::post('/login/validate-attempt', 'validateAttempt')->name('login.validateAttempt');
+    Route::post('/login/{redirect?}', 'login');
+});
+
+
+
+
+Route::controller(RegisterController::class)->group(function () {
+
+    Route::get('/registro/validate-dni', 'validateDni')->name('register.validateDni');
+    Route::get('/registro/{location?}/{redirect?}', 'showRegistrationForm')->name('register.show');
+    Route::post('/registrar-usuario/{location?}/{redirect?}', 'register')->name('home.user.register');
+});
+
+Route::controller(HomeCourseController::class)->group(function () {
+
+    Route::get('/cursos', 'index')->name('home.courses.index');
+    Route::get('/cursos/{course}', 'show')->name('home.courses.show');
+});
+
+
+Route::controller(HomeCertificationController::class)->group(function () {
+
+    Route::post('/incribir-evento/{event}', 'UserCertificationSelfRegister')->name('home.certifications.userSelfRegister');
+});
+
+Auth::routes(['register' => false, 'login' => false]);
 
 
 Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
@@ -281,8 +315,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
                 Route::post('/actualizar-certificado/{certification}', 'update')->name('admin.events.certifications.update');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
-
-            });             
+            });
         });
 
 
@@ -304,7 +337,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::delete('/publicación/eliminar/{card}', 'destroyCard')->name('admin.announcements.card.delete');
             });
         });
-       
     });
 
 

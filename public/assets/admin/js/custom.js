@@ -2070,6 +2070,7 @@ $(function () {
 
     /* ---- FREECOURSES INDEX  -----*/
 
+
     if ($('#freeCourses-table').length) {
 
         /* ----- FREECOURSES TABLE ------*/
@@ -2553,7 +2554,9 @@ $(function () {
 
     }
 
+
     /*---  CATEGORY SHOW  ------*/
+
 
     if ($('#freecourse-category-show-table').length) {
 
@@ -2904,6 +2907,7 @@ $(function () {
     }
 
     // -------- FREE COURSE SHOW ---------
+
 
     if ($('#course-box-container').length) {
 
@@ -4001,7 +4005,8 @@ $(function () {
 
 
 
-    // -------- EXAMS  INDEX-----------------
+    // ------------ EXAMS  INDEX -----------------
+
 
     if ($('#exams-table').length) {
 
@@ -4328,7 +4333,9 @@ $(function () {
 
     }
 
-    // -------- EXAM SHOW ---------------
+
+    // ------------- EXAM SHOW -------------------
+
 
     if ($('#questions-table').length) {
 
@@ -4711,8 +4718,7 @@ $(function () {
 
 
 
-    // ---------- QUESTIONS GENERAL ----------
-
+    // ---------- QUESTIONS GENERAL --------------
 
     if ($('#question-type-container').length) {
 
@@ -6233,7 +6239,8 @@ $(function () {
 
 
 
-    // ------------- EVENT SHOW ----------------
+    // ------------- EVENT SHOW -------------------
+
 
     if ($('#certifications-table').length) {
 
@@ -7529,8 +7536,6 @@ $(function () {
     // ------------ PUBLISHINGS ---------------
 
     if ($('#publishings-table').length) {
-
-
 
         /* --------- PUBLISHINGS TABLE ----------*/
 

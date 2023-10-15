@@ -26,6 +26,7 @@ class RedirectIfAuthenticated
                 switch(Auth::user()->role)
                 {
                     case 'participants':
+                    case 'instructor':
                         $verifiedRoute = route('aula.index');
                         break;
                     default:

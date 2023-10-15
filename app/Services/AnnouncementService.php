@@ -146,8 +146,8 @@ class AnnouncementService
             ->editColumn('status', function ($card) {
                 $status = $card->status;
                 return '<span class="status ' . getStatusClass($status) . '">' .
-                    getStatusText($status) .
-                    '</span>';
+                            getStatusText($status) .
+                        '</span>';
             })
             ->editColumn('created_at', function ($card) {
                 return $card->created_at;

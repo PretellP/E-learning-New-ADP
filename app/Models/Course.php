@@ -45,6 +45,11 @@ class Course extends Model
         return $this->hasMany(Exam::class, 'course_id', 'id');
     }
 
+    public function events()
+    {
+        return $this->hasManyThrough(Event::class, Exam::class, 'course_id', 'exam_id');
+    }
+
     public function courseCategory()
     {
         return $this->belongsTo(CourseCategory::class, 'category_id', 'id');

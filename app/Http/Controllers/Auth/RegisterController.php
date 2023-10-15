@@ -3,71 +3,78 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Http\Requests\UserSelfRequest;
+use App\Models\{Company, MiningUnit};
+use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Services\UserService;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
+    private $userService;
 
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/login';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __construct(UserService $service)
     {
-        $this->middleware('guest');
+        $this->userService = $service;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function showRegistrationForm(Request $request, $redirect = NULL)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        $miningUnits = MiningUnit::get(['id', 'description']);
+        $companies = Company::where('active', 'S')->get(['id', 'description']);
+
+        return view('auth.register', compact(
+            'miningUnits',
+            'companies',
+            'redirect'
+        ));
+    }
+
+    public function validateDni(Request $request)
+    {
+        $valid = User::where('dni', $request['dni'])->first() == null ? "true" : "false";
+
+        return $valid;
+    }
+
+    public function register(UserSelfRequest $request, $location = NULL, $redirect = NULL)
+    {
+        $html = NULL;
+        $success = false;
+        $message = config('parameters.exception_message');
+
+        $data = $request->validated();
+
+        $email = $data['email'];
+
+        try {
+            $this->userService->selfRegister($request);
+            $success = true;
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        if ($success) {
+
+            if ($request['location'] == 'modal') {
+                $html = view('home.common.partials.boxes._register_success_message', compact(
+                    'email'
+                ))->render();
+            } else {
+                $html = view('auth.partials.boxes._register_success_message', compact(
+                    'email'
+                ))->render();
+            }
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+            "html" => $html
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
 }

@@ -1,6 +1,5 @@
 /*----------------------   CUSTOM STYLES     ---------------------------*/
-:root
-{
+:root {
   --first-color: rgb(83, 175, 190);
   --second-color: rgb(254, 92, 54);
   --third-color: rgb(254, 180, 73);
@@ -9,55 +8,60 @@
   --squares-size: 520px;
 }
 
-*{
+* {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-a
-{
+a {
   text-decoration: none !important;
 }
 
 .ms-5 {
-  margin-left: 3rem !important; }
+  margin-left: 3rem !important;
+}
 
 .ms-6 {
-  margin-left: 4rem !important; }
+  margin-left: 4rem !important;
+}
 
 .ms-7 {
-  margin-left: 6rem !important; }
+  margin-left: 6rem !important;
+}
 
 .ms-8 {
-  margin-left: 8rem !important; }
+  margin-left: 8rem !important;
+}
 
 .ms-9 {
-  margin-left: 10rem !important; }
+  margin-left: 10rem !important;
+}
 
 .ms-10 {
-  margin-left: 12rem !important; }
+  margin-left: 12rem !important;
+}
 
 .ms-11 {
-  margin-left: 14rem !important; }
+  margin-left: 14rem !important;
+}
 
 .ms-12 {
-  margin-left: 16rem !important; }
+  margin-left: 16rem !important;
+}
 
 .card {
 
   border: none !important;
 }
 
-.main-login
-{
+.main-login {
   background: url(../img/login-bg.jpg) no-repeat fixed center center;
   background-size: cover;
   position: relative;
 }
 
-.main-login .bg-filter
-{
+.main-login .bg-filter {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -75,27 +79,25 @@ a
   gap: calc(3vw);
 }
 
-.page-header .container 
-{
-  z-index: 1; 
+.page-header .container {
+  z-index: 1;
 }
 
+.inner-container-login {
+  gap: 3vw;
+}
 
 .left-container,
-.right-container
-{
+.right-container {
   z-index: 1;
   background-color: rgba(255, 255, 255, 0.808);
 }
 
-.left-container
-{
+.left-container {
   display: none;
 }
 
-.left-container
-.left-img-login
-{
+.left-container .left-img-login {
   width: 100%;
   height: 100%;
   background-color: white;
@@ -122,13 +124,12 @@ a
   font-size: 3.5vw;
 } */
 
-.right-container
-{
+.right-container {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   width: var(--squares-size) !important;
-  height: var(--squares-size) !important;
+  height: auto !important;
   margin: 0 !important;
   padding: 20px !important;
   box-shadow: -10px 0px 40px rgba(0, 0, 0, 0.2);
@@ -137,19 +138,16 @@ a
   position: relative;
 }
 
-.right-container
-.alert-danger
-{
+.right-container .alert-danger {
   position: absolute;
   top: 0;
   transform: translateY(-120%);
 }
 
 
-.right-container
-.right-form-container
-{
-  width: 100%; height: 100%;
+.right-container .right-form-container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -158,16 +156,13 @@ a
   padding: 4% 8%;
 }
 
-.right-container
-.right-form-container > div
-{
+.right-container .right-form-container>div {
   width: 100%;
   height: 100%;
   white-space: nowrap;
 }
 
-.cont-txt-login
-{
+.cont-txt-login {
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -175,32 +170,25 @@ a
 
 }
 
-.cont-txt-login > img
-{
+.cont-txt-login>img {
   width: calc(var(--squares-size)*0.07);
 }
 
-.cont-txt-login
-.txt-login-title
-{
+.cont-txt-login .txt-login-title {
   height: 1.2em;
   font-size: 1.4em;
   font-weight: 900;
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 
-.cont-txt-login
-.txt-login-subtitle
-{
+.cont-txt-login .txt-login-subtitle {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 0.8em;
   font-weight: 400;
   transform: scaleY(0.93);
 }
 
-.right-form-container
-.aula-title
-{
+.right-form-container .aula-title {
   display: flex;
   width: 80% !important;
   align-items: center;
@@ -213,24 +201,17 @@ a
   border-bottom: 2px solid rgb(228, 228, 228);
 }
 
-.right-form-container
-.card-body > form
-{
+.right-form-container:not(.register) .card-body>form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.right-form-container
-.card-body
-.input-box
-{
+.right-form-container:not(.register) .card-body .input-box {
   width: 100%;
 }
 
-.right-form-container
-.card-body input
-{
+.right-form-container .card-body input {
   background-color: rgb(238, 238, 238) !important;
   padding: 1.1em !important;
   font-weight: 400;
@@ -238,38 +219,27 @@ a
   border: none;
 }
 
-.right-form-container
-.card-body input ~ .invalid-feedback
-{
+.right-form-container .card-body input~.invalid-feedback {
   color: rgb(221, 3, 3);
 }
 
-.right-form-container
-.card-body input:focus
-{
+.right-form-container .card-body input:focus {
   box-shadow: inset 0 0 0 2px var(--second-color);
 }
 
-.right-form-container
-.card-body input::placeholder
-{
+.right-form-container .card-body input::placeholder {
   color: rgb(146, 146, 146);
 }
 
-.right-form-container
-.card-body
-.btn-login-submit
-{
-  width: 60%;
+.right-form-container .card-body .btn-login-submit {
+  min-width: 60%;
 }
 
-.card
-{
+.card {
   box-shadow: none;
 }
 
-.login-form button[type='submit']
-{
+.login-form button[type='submit'] {
   background-color: var(--second-color);
   color: white;
   padding: 10px;
@@ -279,41 +249,34 @@ a
   transition: none;
 }
 
-.login-form button[type='submit']:active
-{
+.login-form button[type='submit']:active {
   background-color: var(--third-color);
   color: white;
 }
 
-.login-form button[type='submit']:hover
-{
+.login-form button[type='submit']:hover {
   background-color: var(--third-color);
 }
 
-.right-container .form-container .card div > h4:nth-child(2)
-{
+.right-container .form-container .card div>h4:nth-child(2) {
   font-weight: 300;
   font-size: 20px;
 }
 
-.right-container .card .card-body
-{
+.right-container .card .card-body {
   padding: 0 !important;
 }
 
-.right-container .form-container .card-header
-{
+.right-container .form-container .card-header {
   background-color: transparent;
   border: none !important;
 }
 
-.right-container .form-container .card-header .row
-{
+.right-container .form-container .card-header .row {
   justify-content: space-evenly;
 }
 
-.right-container .form-container .card-header a.btn
-{
+.right-container .form-container .card-header a.btn {
   margin: 0;
   background-color: black;
   border-radius: 50%;
@@ -324,11 +287,147 @@ a
   align-items: center;
 }
 
+
+label.error {
+  order: 2;
+  width: 100%;
+  margin: 0.5em 0 -1.2em 0.5em;
+  color: rgb(197, 0, 0);
+}
+
+input.no-label-error~label.error {
+  display: none !important;
+}
+
+.links-bottom-container-login {
+  gap: 0.6em;
+}
+
+/*---------- REGISTER ---------*/
+
+/* ---------- SELECT 2 ---------*/
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice,
+.select2-container--default .select2-results__option[aria-selected=true],
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: var(--first-color);
+  color: #fff;
+}
+
+.select2 {
+  width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: white;
+}
+
+.select2-container .select2-selection--multiple .select2-selection__rendered {
+  white-space: break-spaces;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  outline: none;
+}
+
+.select2-container--default .select2-selection--multiple {
+  padding: 11px 10px 16px;
+}
+
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+  background-color: rgb(238, 238, 238);
+}
+
+
+.btn-save:disabled {
+  filter: saturate(0.7);
+}
+
+.right-container.register {
+  width: 700px !important;
+  height: auto !important;
+  transition: all 1s;
+}
+
+.right-container form#register-form .loadSpinner {
+  opacity: 0;
+  transition: all .1s;
+}
+
+.right-container form#register-form .loadSpinner.active {
+  opacity: 1;
+}
+
+.register-principal-form-container {
+  width: 100%;
+}
+
+.register-principal-form-container .input-box {
+  min-width: 250px;
+}
+
+.select2-container .select2-selection--single {
+  height: auto;
+  padding: 10px;
+}
+
+.right-form-container.register .login-form button[type='submit'] {
+  width: auto;
+}
+
+.message-form {
+  gap: 1em;
+}
+
+.message-form span {
+  color: rgb(122, 122, 122);
+  white-space: normal;
+  font-size: 0.9em;
+}
+
+
+
+/* -------------- SUCCESS MESSAGE ---------------*/
+
+.register-success-message-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-success-message-container .icon-success-container i {
+  color: rgba(0, 158, 0, 0.836);
+  font-size: 4.2em;
+}
+
+.register-success-message-container .btn-login-submit {
+  background-color: var(--second-color);
+  color: white;
+  padding: 10px;
+  font-size: 1em;
+  font-family: 'Roboto-condensed', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  transition: none;
+  min-width: 35% !important;
+}
+
+.register-success-message-container .btn-login-submit:active,
+.register-success-message-container .btn-login-submit:hover {
+  background-color: var(--third-color) !important;
+  color: white !important;
+}
+
 @media (min-width: 992px) {
 
   .left-container {
     background-size: cover;
-    height: var(--squares-size);
+    height: auto;
     width: var(--squares-size);
     display: block;
     position: relative;
@@ -342,15 +441,16 @@ a
 
 @media (min-width: 576px) {
 
-  .right-container
-  {
+  .right-container {
     padding: 40px !important;
   }
 
-  .right-container
-  .right-form-container
-  {
+  .right-container .right-form-container {
     padding: 5% 17%;
+  }
+
+  .right-container .right-form-container.register {
+    padding: 4% 8%;
   }
 
 }

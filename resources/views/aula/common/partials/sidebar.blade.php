@@ -15,6 +15,13 @@
 
         <ul class="sidebar-menu">
 
+            <li>
+                <a href="{{route('home.index')}}" class="nav-link">
+                    <i class="fa-solid fa-caret-left"></i>
+                    <span>Volver a la página principal</span>
+                </a>
+            </li>
+
             <li class="{{setActive('aula.index')}}">
                 <a href="{{route('aula.index')}}" class="nav-link">
                     <i class="fa-solid fa-house"></i>

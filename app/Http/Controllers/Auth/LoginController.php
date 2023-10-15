@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\Auth\{AuthService};
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Exception;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -31,8 +34,10 @@ class LoginController extends Controller
      */
     protected $redirectTo;
 
-    public function redirectTo()
+    public function redirectTo(Request $request)
     {
+        $redirect_route = $this->getRedirectRoute($request);
+
         switch(Auth::user()->role)
         {
             case 'admin':
@@ -45,13 +50,55 @@ class LoginController extends Controller
                 break;
             case 'participants':
             case 'instructor':
-                $this->redirectTo = route('aula.index');
+                $this->redirectTo = $redirect_route;
                 return $this->redirectTo;
                 break;
             default:
                 $this->redirectTo = '/login';
                 return $this->redirectTo;
         }
+    }
+
+    public function validateAttempt(AuthService $authService, Request $request)
+    {
+        parse_str($request['form'], $form);
+        $formRequest = new Request($form);
+
+        $message = NULL;
+
+        try {
+            $success = $authService->validateAttempt($formRequest);
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+        ]);
+    }
+
+    public function getRedirectRoute(Request $request)
+    {
+        if ($request->has('redirect_location')) {
+            switch ($request['redirect_location'])
+            {
+                case 'classroom':
+                    $redirect_route = route('aula.index');
+                    break;
+                case 'home' :
+                    $redirect_route = route('home.principal');
+                    break;
+                default: 
+                    $redirect_route = route('home.principal');
+            }
+        }
+        else {
+            $redirect_route = route('home.index');
+        }
+
+        return $redirect_route;
     }
 
     public function username()

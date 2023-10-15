@@ -199,6 +199,8 @@ function updateIfNotFinished($certification): void
 }
 
 
+/*------------ E LEARNING ------------*/
+
 function getInstructorsBasedOnUserAndCourse($course)
 {
     $user = Auth::user();
@@ -218,10 +220,6 @@ function getInstructorsBasedOnUserAndCourse($course)
     return $instructors;
 }
 
-function getDiffForHumansFromTimestamp($timestamp)
-{
-    return Carbon::parse($timestamp)->diffForHumans();
-}
 
 function getNStudentsFromCourse($course)
 {
@@ -239,6 +237,14 @@ function getNStudentsFromCourse($course)
 
     return $nstudents;
 }
+
+
+function getDiffForHumansFromTimestamp($timestamp)
+{
+    return Carbon::parse($timestamp)->diffForHumans();
+}
+
+
 
 function getProgressCertificationsFromCourse($course)
 {
@@ -378,7 +384,6 @@ function validateSurveys()
 
 function getStatementsFromUserSurvey(UserSurvey $userSurvey)
 {
-   
     $userSurvey->survey->load('surveyGroups');
 
     $statements = $userSurvey->survey->with([
@@ -454,9 +459,6 @@ function verifyUserAvatar($url)
 {
     return $url == null ? 'img/user_avatar/default.png' : $url;
 }
-
-
-
 
 function verifyImage($file)
 {
@@ -547,9 +549,36 @@ function verifyEventType($type)
 }
 
 
+/* ----------- HOME PAGE ------------*/
 
 
+function getInstructorsFromCourseHome($course)
+{
+    $instructors = $course->events->map(function ($event) {
+        return $event->user;
+    })->unique();
 
+    return $instructors;
+}
+
+
+function getAllCapacity($course)
+{
+    $capacity = $course->events->sum(function ($event){
+        return $event->room->capacity;
+    });
+
+    return $capacity;
+}
+
+function getCountAllParticipants($course)
+{
+    $participant = $course->events->sum(function ($event){
+        return $event->participants_count;
+    });
+
+    return $participant;
+}
 
 
 

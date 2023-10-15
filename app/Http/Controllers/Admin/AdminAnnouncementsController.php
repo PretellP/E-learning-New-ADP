@@ -135,7 +135,6 @@ class AdminAnnouncementsController extends Controller
 
     public function storeCard(Request $request)
     {
-
         $storage = env('FILESYSTEM_DRIVER');
 
         try {
