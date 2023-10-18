@@ -451,6 +451,17 @@ label.error {
 .image-preview input,
 #callback-preview input {
     font-size: inherit !important;
+    width: 100%;
+    height: 100%;
+}
+
+
+.square-img-input-container
+.image-preview, #callback-preview
+{
+    width: 250px !important;
+    height: 250px !important;
+    margin: auto;
 }
 
 .img-holder {
@@ -461,8 +472,17 @@ label.error {
     justify-content: center;
 }
 
+
 .img-holder img {
     height: fit-content !important;
+}
+
+
+.img-holder.img-cover img
+{
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover;
 }
 
 .img-holder .course_img {

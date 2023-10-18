@@ -2,6 +2,48 @@
 
 $(function() {
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    const ToastError = Swal.mixin({
+        icon: 'error',
+        text: '¡Ocurrió un error inesperado!',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    const SwalDelete = Swal.mixin({
+        title: '¿Estás seguro?',
+        text: "¡Esta acción no podrá ser revertida!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '¡Sí!',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+    })
+
     /*---- NAVBAR SCROLL ----*/
 
     var videContainer = $(".video-container")
@@ -55,6 +97,260 @@ $(function() {
         button.attr('disabled', 'disabled')
     })
 
+
+
+    /*--------- PROFLE USER AVATAR -----------*/
+
+
+    if ($('#user_avatar_edit_modal').length) {
+
+        var avatarEditModal = $('#user_avatar_edit_modal').iziModal({
+            overlayColor: 'rgba(0, 0, 0, 0.6)',
+            theme: 'light',
+            headerColor: '#53afbe',
+            closeButton: true,
+            iconText: '<i class="fa-solid fa-pen-to-square"></i>',
+            padding: 25,
+            width: 400,
+        })  
+
+        var userAvatarForm = $('#edit-user-avatar-form').validate({
+            rules: {
+                image: {
+                    required: true
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#user_avatar_edit_modal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            let avatarContainer = $('#profile-avatar-container')
+                            let sidebarImageContainer = $('#sidebar-avatar-img')
+    
+                            avatarContainer.html(data.htmlAvatar)
+                            sidebarImageContainer.html(data.htmlSidebarAvatar)
+    
+                            $(img_holder).empty()
+    
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        } 
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        avatarEditModal.iziModal('close')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('html').on("change", '#input-user-avatar-edit', function () {
+
+            var inputAvatarEdit = $(this)
+
+            $('#edit-user-avatar-form').validate()
+            $('#input-user-avatar-edit').rules('add', { required: true })
+    
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#edit-user-avatar-form').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+    
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid avatar_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).html(currentImagePath);
+                inputAvatarEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+        })
+
+        $('html').on('click', '.edit-avatar-btn', function () {
+
+            $('#edit-user-avatar-form').validate()
+            $('#input-user-avatar-edit').rules('remove', 'required')
+
+            var form = avatarEditModal.find('#edit-user-avatar-form')
+
+            $.ajax({
+                type: 'GET',
+                url: $(this).data('url'),
+                dataType: 'JSON',
+                success: function (data) {
+
+                    avatarEditModal.find('.img-holder').html('<img class="img-fluid avatar_img" id="image-user-avatar-edit" src="' + data.url_img + '"></img>');
+                    avatarEditModal.find('#input-user-avatar-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid avatar_img"');
+                    avatarEditModal.find('#input-user-avatar-edit').val('');
+
+                },
+                complete: function (data) {
+                    avatarEditModal.iziModal('open')
+                },
+                error: function (data) {
+                    ToastError.fire()
+                }
+            })
+        })
+
+    }
+
+    /* --------- EDIT PASSWORD -------*/
+
+    $('html').on('click', '.btn-unlock-edit', function () {
+        var form = $(this).closest('form')
+        let icon = $(this).find('i')
+
+        if (icon.hasClass('active')) {
+            icon.removeClass('active')
+            form.find('input').attr('disabled', 'disabled')
+            form.find('button').attr('disabled', 'disabled')
+        }
+        else {
+            icon.addClass('active')
+
+            form.find('input').removeAttr('disabled')
+            form.find('button').removeAttr('disabled')
+
+        }
+    })
+
+    const iconView = '<i class="fa-solid fa-eye"></i>'
+    const iconHide = '<i class="fa-solid fa-eye-slash"></i>'
+
+
+    /* --------- CHANGE VIEW PASSWORD ----------*/
+
+    $('html').on('click', '.change-view-password', function () {
+
+        var iconCont = $(this).find('.input-group-text')
+        var input = $(this).siblings('input')
+
+        if (!input.attr('disabled')) {
+            
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text')
+                iconCont.html(iconHide)
+            }
+            else {
+                input.attr('type', 'password')
+                iconCont.html(iconView)
+            }
+        }
+
+
+    })
+
+    if ($('#user_password_update_form').length) {
+
+        var updatePasswordForm = $('#user_password_update_form').validate({
+            rules: {
+                old_password: {
+                    required: true,
+                    maxlength: 100
+                },
+                new_password: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+    
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+                form.find('.error-credentials-message').addClass('hide')
+    
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+    
+                        if (data.success) {
+    
+                            let formContainer = $('#user_password_update_form')
+                            formContainer.html(data.htmlForm)
+    
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        } 
+                        else {
+                            form.find('.error-credentials-message').removeClass('hide')
+                            form.find('.btn-save').removeAttr('disabled')
+                        }
+                    },
+                    complete: function (data) {
+                        loadSpinner.toggleClass('active')
+                        updatePasswordForm.resetForm()
+                        form.trigger('reset')
+
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+    }
+
+   
+   
+ 
+
+
+  
 
 
 
@@ -358,6 +654,22 @@ $(function() {
         drag.remove()
         console.log('si funka')
     })
+
+
+
+
+
+    
+    jQuery.extend(jQuery.validator.messages, {
+        required: '<i class="fa-solid fa-circle-exclamation"></i> &nbsp; Este campo es obligatorio',
+        email: 'Ingrese un email válido',
+        number: 'Por favor, ingresa un número válido',
+        url: 'Por favor, ingresa una URL válida',
+        max: jQuery.validator.format('Por favor, ingrese un valor menor o igual a {0}'),
+        min: jQuery.validator.format('Por favor, ingrese un valor mayor o igual a {0}'),
+        step: jQuery.validator.format("Ingrese un número múltiplo de {0}"),
+        maxlength: jQuery.validator.format("Ingrese menos de {0} caracteres.")
+    });
 
 });
 

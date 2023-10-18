@@ -31,8 +31,8 @@
 
             <li class="dropdown profile-dropdown {{setActive('aula.profile.*')}}" >
                 <a href="#" class="nav-link has-dropdown">
-                    <div class="img-avatar-box">
-                        <img src="{{asset('storage/'.verifyUserAvatar(Auth::user()->url_img))}}" alt="">
+                    <div class="img-avatar-box" id="sidebar-avatar-img">
+                       @include('aula.common.partials.boxes._sidebar_profile_image')
                     </div>
                     <span>
                         <div class="name">

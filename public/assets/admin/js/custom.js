@@ -323,7 +323,6 @@ $(function () {
             dropdownContainer.toggle('slide')
         }
 
-
         button.toggleClass('show')
     })
 
@@ -972,6 +971,42 @@ $(function () {
 
         /* ------------ REGISTRAR -------------*/
 
+        var inputUserImageStore = $('#input-user-image-store');
+        inputUserImageStore.on("change", function () {
+
+            if ($(this).val()) {
+                // $('#registerUserForm').validate()
+                // $('#image-upload-category-edit').rules('add', { required: true })
+    
+                var img_path = $(this)[0].value;
+                var img_holder = $(this).closest('#registerUserForm').find('.img-holder');
+                var currentImagePath = $(this).data('value');
+                var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+    
+                if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                    if (typeof (FileReader) != 'undefined') {
+                        img_holder.empty()
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('<img/>', { 'src': e.target.result, 'class': 'img-fluid avatar_img' }).
+                                appendTo(img_holder);
+                        }
+                        img_holder.show();
+                        reader.readAsDataURL($(this)[0].files[0]);
+                    } else {
+                        $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                    }
+                } else {
+                    $(img_holder).html(currentImagePath);
+                    inputUserImageStore.val('')
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '¡Selecciona una imagen!',
+                    });
+                }
+            }
+        })
+
         var registerUserForm = $('#registerUserForm').validate({
             rules: {
                 dni: {
@@ -1008,7 +1043,7 @@ $(function () {
                 password: {
                     required: true
                 },
-                phone: {
+                telephone: {
                     maxlength: 20
                 },
                 role: {
@@ -1017,7 +1052,7 @@ $(function () {
                 cip: {
                     maxlength: 10
                 },
-                company: {
+                company_id: {
                     required: true
                 },
                 "id_mining_units[]": {
@@ -1039,29 +1074,47 @@ $(function () {
                 var modal = $('#RegisterUserModal')
 
                 loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
 
                 $.ajax({
                     method: form.attr('method'),
                     url: form.attr('action'),
-                    data: form.serialize(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     dataType: 'JSON',
                     success: function (data) {
-                        registerUserForm.resetForm()
-                        usersTable.draw()
-                        form.trigger('reset')
+
+                        if (data.success){
+
+                            registerUserForm.resetForm()
+                            usersTable.draw()
+
+                            form.trigger('reset')
+                            modal.modal('hide')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                       
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registrado exitosamente!'
-                        })
                     },
                     error: function (data) {
                         console.log(data)
-                        Toast.fire({
-                            icon: 'error',
-                            text: '¡Ocurrió un error inesperado!'
-                        })
+                        ToastError.fire()
                     }
                 })
             }
@@ -1100,7 +1153,7 @@ $(function () {
         })
 
 
-        /* -------------- EDITAR  ---------------*/
+        /* ---------------- EDITAR  ----------------- */
 
         $('#edit-user-status-checkbox').change(function () {
             var txtDesc = $('#txt-edit-description-user');
@@ -1147,7 +1200,7 @@ $(function () {
                     maxlength: 255,
                     email: true
                 },
-                phone: {
+                telephone: {
                     maxlength: 20
                 },
                 role: {
@@ -1156,7 +1209,7 @@ $(function () {
                 cip: {
                     maxlength: 10
                 },
-                company: {
+                company_id: {
                     required: true
                 },
                 "id_mining_units[]": {
@@ -1177,22 +1230,42 @@ $(function () {
                 var loadSpinner = form.find('.loadSpinner')
                 var modal = $('#EditUserModal')
 
+                var formData = new FormData(form[0])
+
                 loadSpinner.toggleClass('active')
+
+                form.find('.btn-save').attr('disabled', 'disabled')
 
                 $.ajax({
                     method: form.attr('method'),
                     url: form.attr('action'),
-                    data: form.serialize(),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     dataType: 'JSON',
                     success: function (data) {
-                        usersTable.draw()
-                        form.trigger('reset')
+
+                        if (data.success) {
+
+                            usersTable.draw()
+                            form.trigger('reset')
+                            modal.modal('hide')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
                         loadSpinner.toggleClass('active')
-                        modal.modal('toggle')
-                        Toast.fire({
-                            icon: 'success',
-                            text: '¡Registro actualizado!'
-                        })
+                        form.find('.btn-save').removeAttr('disabled')
                     },
                     error: function (data) {
                         console.log(data)
@@ -1201,6 +1274,39 @@ $(function () {
             }
         })
 
+        var inputUserImageEdit = $('#input-user-image-edit');
+        inputUserImageEdit.on("change", function () {
+
+            if ($(this).val()) {
+    
+                var img_path = $(this)[0].value;
+                var img_holder = $(this).closest('#editUserForm').find('.img-holder');
+                var currentImagePath = $(this).data('value');
+                var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+    
+                if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                    if (typeof (FileReader) != 'undefined') {
+                        img_holder.empty()
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('<img/>', { 'src': e.target.result, 'class': 'img-fluid avatar_img' }).
+                                appendTo(img_holder);
+                        }
+                        img_holder.show();
+                        reader.readAsDataURL($(this)[0].files[0]);
+                    } else {
+                        $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                    }
+                } else {
+                    $(img_holder).html(currentImagePath);
+                    inputUserImageEdit.val('')
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '¡Selecciona una imagen!',
+                    });
+                }
+            }
+        })
 
         $('.main-content').on('click', '.editUser', function () {
             var modal = $('#EditUserModal')
@@ -1232,7 +1338,7 @@ $(function () {
                     modal.find('input[name=paternal]').val(user.paternal);
                     modal.find('input[name=maternal]').val(user.maternal);
                     modal.find('input[name=email]').val(user.email);
-                    modal.find('input[name=phone]').val(user.telephone);
+                    modal.find('input[name=telephone]').val(user.telephone);
                     modal.find('input[name=cip]').val(user.cip);
                     modal.find('input[name=position]').val(user.position);
 
@@ -1250,6 +1356,10 @@ $(function () {
                     })
 
                     selectMiningUnits.val(data.miningUnitsSelect).change()
+
+                    modal.find('.img-holder').html('<img class="img-fluid avatar_img" id="image-avatar-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#input-user-image-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid avatar_img"></img>');
+                    modal.find('#input-user-image-edit').val('');
 
                     if (user.active == 'S') {
                         modal.find('#edit-user-status-checkbox').prop('checked', true);

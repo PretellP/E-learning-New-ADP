@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\{User, Company, MiningUnit};
 use App\Services\UserService;
+use Exception;
 
 class AdminUsersController extends Controller
 {
@@ -49,31 +51,22 @@ class AdminUsersController extends Controller
         return $valid;
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $status = $request['userStatusCheckbox'] == 'on' ? 'S' : 'N';
+        $storage = env('FILESYSTEM_DRIVER');
 
-        $user = User::create([
-            "dni" => $request['dni'],
-            "name" => $request['name'],
-            "paternal" => $request['paternal'],
-            "maternal" => $request['maternal'],
-            "email" => $request['email'],
-            "password" => Hash::make($request['password']),
-            "telephone" => $request['phone'],
-            "role" => $request['role'],
-            "cip" => $request['cip'],
-            "signature" => "N",
-            "active" => $status,
-            "company_id" => $request['company'],
-            "position"  => $request['position'],
-            "profile_survey" => 'N'
-        ]);
-
-        $user->miningUnits()->sync($request['id_mining_units']);
+        try {
+            $this->userService->store($request, $storage);
+            $success = true;
+            $message = config('parameters.stored_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
         return response()->json([
-            "success" => "stored successfully"
+            "success" => $success,
+            "message" => $message
         ]);
     }  
     
@@ -89,6 +82,8 @@ class AdminUsersController extends Controller
 
     public function edit(User $user)
     {
+        $user->loadAvatar();
+
         $role = config('parameters.roles')[$user->role] ?? '-';
 
         return response([
@@ -97,33 +92,25 @@ class AdminUsersController extends Controller
             "companies" => Company::get(['id','description']),
             "miningUnits" => MiningUnit::get(['id', 'description']),
             "miningUnitsSelect" => $user->miningUnits->pluck('id')->toArray(),
+            "url_img" => verifyUserAvatar($user->file),
         ]);
     }
 
     public function update(Request $request, User $user)
     {
-        $password = $request['password'] == '' ? $user->password : Hash::make($request['password']);
-        $status = $request['userStatusCheckbox'] == 'on' ? 'S' : 'N';
+        $storage = env('FILESYSTEM_DRIVER');
 
-        $user->update([
-            "dni" => $request['dni'],
-            "name" => $request['name'],
-            "paternal" => $request['paternal'],
-            "maternal" => $request['maternal'],
-            "email" => $request['email'],
-            "password" => $password,
-            "telephone" => $request['phone'],
-            "role" => $request['role'],
-            "cip" => $request['cip'],
-            "active" => $status,
-            "company_id" => $request['company'],
-            "position" => $request['position'],
-        ]);
-
-        $user->miningUnits()->sync($request['id_mining_units']);
+        try {
+            $success = $this->userService->update($request, $user, $storage);
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
 
         return response()->json([
-            "success" => "updated successfully"
+            "success" => $success,
+            "message" => $message
         ]);
     }
 

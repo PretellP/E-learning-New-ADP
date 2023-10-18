@@ -1,5 +1,5 @@
 :root {
-    --first-color: rgb(83, 175, 190);
+    --first-color: rgb(85, 176, 190);
     --first-color-opacity: 83, 175, 190;
     --second-color: rgb(254, 92, 54);
     --second-color-opacity: 254, 92, 54;
@@ -20,6 +20,53 @@ html:focus-within {
 
 button:focus {
     outline: none !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+button:disabled
+{
+    opacity: 0.85;
+    cursor: not-allowed;
+}
+
+
+.btn-primary
+{
+    background-color: var(--first-color);
+    border-color: var(--first-color);
+}
+
+.btn-primary.disabled, .btn-primary:disabled
+{
+    background-color: var(--first-color) !important;
+    opacity: .85;
+    box-shadow: none !important;
+    border-color: var(--first-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:focus:active
+{
+    background-color: var(--first-color) !important;
+    opacity: .85;
+}
+
+.btn-unlock-edit
+{
+    cursor: pointer;
+}
+
+.btn-unlock-edit:hover i {
+    color: var(--second-color) !important;
+}
+
+.btn-unlock-edit i.active
+{
+    color: var(--second-color) !important;
 }
 
 /* -------- GENERAL ----------*/
@@ -47,6 +94,111 @@ hr {
     width: 100%;
     border: 1px solid rgb(231, 231, 231);
 }
+
+.loadSpinner
+{
+    display: none;
+}
+
+.loadSpinner.active
+{
+    display: inline-block;
+}
+
+.iziModal footer
+{
+    display: flex;
+    gap: 5px;
+}
+
+.iziModal footer button
+{
+    background-color: rgba(0, 0, 0, 0.205);
+    color: white;
+    border: none;
+    padding: 0.8em;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    gap: 1em;
+    transition: all .1s;
+    justify-content: center;
+    align-items: center;
+}
+
+.iziModal footer button:hover
+{
+    opacity: 0.85;
+}
+
+.iziModal footer button.submit
+{
+    background-color: var(--first-color);
+}
+
+
+/* ------- LABEL ERROR ---------*/
+
+label.error {
+    order: 2;
+    width: 100%;
+    margin: 0.5em 0 -1.2em 0.5em;
+    color: rgb(197, 0, 0);
+}
+
+input.no-label-error~label.error {
+    display: none !important;
+}
+
+input.error,
+input.error:focus {
+    border: 0;
+    outline: 1px solid rgba(182, 0, 0, 0.671);
+}
+
+.error-credentials-message {
+    padding: 20px;
+    background-color: rgba(255, 0, 0, 0.342);
+    border-radius: 5px;
+    margin-bottom: 1.2em;
+    color: rgb(61, 61, 61);
+}
+
+
+/* ----------- IMAGES INPUT -----------*/
+
+.image-preview,
+#callback-preview {
+    width: auto !important;
+    height: 200px !important;
+}
+
+.image-preview input,
+#callback-preview input {
+    font-size: inherit !important;
+}
+
+.img-holder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-holder img {
+    height: fit-content !important;
+}
+
+
+.image-preview input, 
+#callback-preview input
+{
+    height: 100%;
+    width: 100%;
+}
+
+
 
 /* --------- MAIN CONTENT -------*/
 
@@ -281,17 +433,21 @@ body.sidebar-mini .main-sidebar .sidebar-brand-sm {
 /* -------- SIDEBAR  ------- */
 
 .img-avatar-box {
-    max-width: 37px;
+    max-width: 27px;
+    min-width: 27px;
+    height: 27px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 1em;
+    margin-right: 0.7em;
     border-radius: 50%;
     overflow: hidden;
 }
 
 .img-avatar-box>img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 
@@ -344,15 +500,19 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
 }
 
 .user-profile-presentation-cont .img-profile-page-box {
-    width: 25%;
+    width: 100%;
+    height: 100%;
     margin: auto;
     border-radius: 50%;
     overflow: hidden;
     border: 4px solid var(--first-color);
+    position: relative;
 }
 
 .img-profile-page-box img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .user-profile-presentation-cont .user-info-profile-page-box {
@@ -370,9 +530,9 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
 }
 
 
-.data-profile-container {
+/* .data-profile-container {
     background-color: var(--light-gray);
-}
+} */
 
 .data-profile-container .profile-row {
     display: flex;
@@ -380,6 +540,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
     text-align: left;
     font-size: 1.1em;
     align-items: center;
+    background-color: var(--light-gray);
 }
 
 .data-profile-container .profile-row>div {
@@ -395,7 +556,88 @@ body.sidebar-mini .main-sidebar .sidebar-menu>li>a>i {
 }
 
 
+/*------  user avatar EDIT ------*/
 
+.outside-container-image-avatar
+{
+    position: relative;
+    width: 125px;
+    height: 125px;
+    margin: auto;
+}
+
+.edit-avatar-btn
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.568);
+    backdrop-filter: blur(10px);
+    width: 35px;
+    text-align: center;
+    font-size: 1.6em;
+    color: var(--first-color);
+    border-radius: 25%;
+    cursor: pointer;
+}
+
+.edit-avatar-btn label 
+{
+    cursor: pointer;
+}
+
+#user_avatar_edit_modal
+.iziModal-header-title
+{
+    color: white;
+}
+
+#user_avatar_edit_modal.iziModal 
+.iziModal-header.iziModal-noSubtitle .iziModal-header-icon
+{
+    font-size: 17px;
+    color: white;
+}
+
+#user_avatar_edit_modal .image-preview, 
+#user_avatar_edit_modal #callback-preview
+{
+    border-radius: 50%;
+    width: 250px !important;
+    height: 250px !important;
+    margin: auto;
+}
+
+#user_avatar_edit_modal .img-holder img
+{
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+}
+
+#user_avatar_edit_modal 
+#image-preview label.error
+{
+    text-align: center;
+    width: 130px;
+    margin: 20px auto !important;
+    height: fit-content;
+    line-height: 2.2em;
+}
+
+
+/* ------------ UPDATE PASSWORD --------*/
+
+input:disabled ~ .input-group-prepend
+.input-group-text
+{
+    background-color: var(--light-gray);
+}
+
+.change-view-password
+{
+    cursor: pointer;
+}
 
 
 

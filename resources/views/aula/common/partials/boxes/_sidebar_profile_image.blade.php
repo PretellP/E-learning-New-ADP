@@ -1,0 +1,1 @@
+<img src="{{ verifyUserAvatar(Auth::user()->avatar()) }}" alt="">

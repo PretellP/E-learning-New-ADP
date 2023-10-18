@@ -59,8 +59,6 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 
-
-
 Route::controller(RegisterController::class)->group(function () {
 
     Route::get('/registro/validate-dni', 'validateDni')->name('register.validateDni');
@@ -345,8 +343,19 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
     Route::group(['middleware' => 'aula', 'prefix' => 'aula'], function () {
 
         Route::get('/inicio', [AulaHomeController::class, 'index'])->name('aula.index');
-        Route::get('/perfil', [AulaProfileController::class, 'index'])->name('aula.profile.index');
 
+        Route::controller(AulaProfileController::class)->group(function () {
+
+            Route::group(['prefix' => 'perfil'], function () {
+
+                Route::get('/', 'index')->name('aula.profile.index');
+                Route::get('/editar-avatar/{user}', 'editUserAvatar')->name('aula.userAvatar.edit');
+                Route::post('/actualizar-avatar/{user}', 'updateUserAvatar')->name('aula.profile.updateUserAvatar');
+                Route::post('/actualizar-contraseña/{user}', 'updatePassword')->name('aula.profile.updatePassword');
+            });
+        });
+
+       
         Route::get('/e-learning', [AulaCourseController::class, 'index'])->name('aula.course.index');
 
         Route::group(['middleware' => 'check.role:participants'], function () {

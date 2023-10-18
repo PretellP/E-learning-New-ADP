@@ -98,7 +98,7 @@ class User extends Authenticatable
 
     public function file()
     {
-        return $this->morhOne(File::class, 'fileable');
+        return $this->morphOne(File::class, 'fileable');
     }
 
     static function getInstructorsQuery()
@@ -119,6 +119,13 @@ class User extends Authenticatable
     public function signature()
     {
         return $this->file()->where('category', 'firmas')->first();
+    }
+
+    public function loadAvatar()
+    {
+        return $this->load(['file' => fn($q) => 
+            $q->where('category', 'avatars')
+        ]);
     }
 
 

@@ -105,7 +105,23 @@
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: var(--primary);
+    color: var(--second-color);
+}
+
+.navbar-nav .user-avatar-container
+{
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.navbar-nav .user-avatar-container img
+{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 @media (max-width: 991.98px) {
@@ -238,8 +254,8 @@
 
 .header-carousel .owl-nav .owl-prev:hover,
 .header-carousel .owl-nav .owl-next:hover {
-    background: var(--primary);
-    border-color: var(--primary);
+    background: var(--first-color);
+    border-color: var(--first-color);
 }
 
 .page-header {
@@ -272,7 +288,7 @@
     height: 2px;
     top: 4px;
     left: -40px;
-    background: var(--primary);
+    background: var(--first-color);
     z-index: -1;
 }
 
@@ -283,7 +299,7 @@
     height: 2px;
     bottom: 5px;
     left: -60px;
-    background: var(--primary);
+    background: var(--first-color);
     z-index: -1;
 }
 
@@ -306,7 +322,7 @@
 
 .service-item:hover {
     margin-top: -10px;
-    background: var(--primary);
+    background: var(--first-color);
 }
 
 .service-item * {
@@ -386,7 +402,7 @@
 }
 
 .testimonial-carousel .owl-item.center .testimonial-text {
-    background: var(--primary) !important;
+    background: var(--first-color) !important;
 }
 
 .testimonial-carousel .owl-item.center .testimonial-text * {
@@ -738,4 +754,15 @@ input.no-label-error~label.error {
 
 .loadSpinner.active {
     display: inline-block;
+}
+
+
+.text-primary
+{
+    color: var(--first-color) !important;
+}
+
+.text-secondary
+{
+    color: var(--second-color) !important;
 }

@@ -24,7 +24,16 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "dni" => ['required', 'max:11', 'unique:users'],
+            "name" => ['required'],
+            "paternal" => ['required'],
+            "maternal" => ['required'],
+            "email" => ['required'],
+            "password" => ['required'],
+            "company_id" => ['required'],
+            "id_mining_units" => ['required'],
+            "role" => ['required'],
+            "active" => ['nullable']
         ];
     }
 }

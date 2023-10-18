@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {

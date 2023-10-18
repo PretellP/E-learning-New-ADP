@@ -455,9 +455,16 @@ function getActiveSection($active)
     return $active != null ? $active : '';
 }
 
-function verifyUserAvatar($url)
+function verifyUserAvatar($file)
 {
-    return $url == null ? 'img/user_avatar/default.png' : $url;
+    $url = asset('storage/img/user_avatar/default.png');
+    
+    if ($file) {
+        $url = $file->file_url == null ? $url
+        : $file->file_url;
+    }
+
+    return $url;
 }
 
 function verifyImage($file)

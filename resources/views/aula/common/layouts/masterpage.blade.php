@@ -10,7 +10,10 @@
             <div class="navbar-bg @yield('navbarClass')"></div>
 
             @include('aula.common.partials.navbar')
+
             @include('aula.common.partials.sidebar')
+
+
 
             <div class="main-content @yield('main-content-extra-class')">
 
@@ -20,12 +23,16 @@
 
                 </section>
 
+               
+
             </div>
 
             @include('aula.common.partials.footer')
 
         </div>
     </div>
+
+ 
 
     @include('aula.common.partials.scripts')
 
