@@ -29,6 +29,17 @@
     z-index: 99;
 }
 
+.empty-records-message {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(179, 179, 179);
+    font-weight: 400;
+    font-style: italic;
+}
+
 
 /*** Spinner ***/
 #spinner {
@@ -429,6 +440,32 @@
 .testimonial-carousel .owl-dot.active {
     background: var(--primary);
     border-color: var(--primary);
+}
+
+
+.testimonial-carousel .owl-item
+{
+    width: 300px !important;
+}
+
+.testimonial-carousel
+.img-carousel-container
+{
+    height: 300px !important;
+}
+
+img.img-cover
+{
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover;
+}
+
+
+.testimonial-carousel 
+.image-user-container
+{
+    height: 300px;
 }
 
 

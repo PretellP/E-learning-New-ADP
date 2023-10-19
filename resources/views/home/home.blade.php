@@ -179,10 +179,14 @@
             <h6 class="section-title bg-white text-center text-primary px-3">Cursos Libres</h6>
             <h1 class="mb-5">Categorías</h1>
         </div>
+
         <div class="row g-3">
-            <div class="col-lg-7 col-md-6">
+
+            <div class="col-lg-6 col-md-12">
+
                 <div class="row g-3">
-                    <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
+
+                    {{-- <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
                         <a class="position-relative d-block overflow-hidden" href="">
                             <img class="img-fluid" src="{{asset('assets/home/img/cat-1.jpg')}}" alt="">
                             <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
@@ -191,8 +195,9 @@
                                 <small class="text-primary">49 Courses</small>
                             </div>
                         </a>
-                    </div>
-                    <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
+                    </div> --}}
+
+                    {{-- <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
                         <a class="position-relative d-block overflow-hidden" href="">
                             <img class="img-fluid" src="{{asset('assets/home/img/cat-2.jpg')}}" alt="">
                             <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
@@ -201,8 +206,10 @@
                                 <small class="text-primary">49 Courses</small>
                             </div>
                         </a>
-                    </div>
-                    <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
+                    </div> --}}
+
+
+                    {{-- <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
                         <a class="position-relative d-block overflow-hidden" href="">
                             <img class="img-fluid" src="{{asset('assets/home/img/cat-3.jpg')}}" alt="">
                             <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
@@ -211,10 +218,12 @@
                                 <small class="text-primary">49 Courses</small>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
-            <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
+
+            {{-- <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
                 <a class="position-relative d-block h-100 overflow-hidden" href="">
                     <img class="img-fluid position-absolute w-100 h-100" src="{{asset('assets/home/img/cat-4.jpg')}}"
                         alt="" style="object-fit: cover;">
@@ -223,8 +232,10 @@
                         <small class="text-primary">49 Courses</small>
                     </div>
                 </a>
-            </div>
+            </div> --}}
+
         </div>
+
     </div>
 </div>
 
@@ -235,7 +246,7 @@
 
 
 <!-- Team Start -->
-<div class="container-xxl py-5">
+{{-- <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
             <h6 class="section-title bg-white text-center text-primary px-3">Instructores</h6>
@@ -243,116 +254,54 @@
         </div>
         <div class="row g-4">
 
-            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="team-item bg-light">
-                    <div class="overflow-hidden">
-                        <img class="img-fluid" src="{{asset('assets/home/img/team-1.jpg')}}" alt="">
-                    </div>
 
-                    <div class="text-center p-4">
-                        <h5 class="mb-0">Instructor Name</h5>
-                        <small>Designation</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="team-item bg-light">
-                    <div class="overflow-hidden">
-                        <img class="img-fluid" src="{{asset('assets/home/img/team-2.jpg')}}" alt="">
-                    </div>
-
-                    <div class="text-center p-4">
-                        <h5 class="mb-0">Instructor Name</h5>
-                        <small>Designation</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="team-item bg-light">
-                    <div class="overflow-hidden">
-                        <img class="img-fluid" src="{{asset('assets/home/img/team-3.jpg')}}" alt="">
-                    </div>
-
-                    <div class="text-center p-4">
-                        <h5 class="mb-0">Instructor Name</h5>
-                        <small>Designation</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                <div class="team-item bg-light">
-                    <div class="overflow-hidden">
-                        <img class="img-fluid" src="{{asset('assets/home/img/team-4.jpg')}}" alt="">
-                    </div>
-
-                    <div class="text-center p-4">
-                        <h5 class="mb-0">Instructor Name</h5>
-                        <small>Designation</small>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Team End -->
 
 
 <!-- Testimonial Start -->
 
-{{-- <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container">
         <div class="text-center">
-            <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
-            <h1 class="mb-5">Our Students Say!</h1>
+            <h6 class="section-title bg-white text-center text-primary px-3">Instructores</h6>
+            <h1 class="mb-5">Instructores expertos</h1>
         </div>
+
         <div class="owl-carousel testimonial-carousel position-relative">
-            <div class="testimonial-item text-center">
-                <img class="border rounded-circle p-2 mx-auto mb-3" src="{{asset('assets/home/img/testimonial-1.jpg')}}"
-                    style="width: 80px; height: 80px;">
-                <h5 class="mb-0">Client Name</h5>
-                <p>Profession</p>
-                <div class="testimonial-text bg-light text-center p-4">
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
+
+            @forelse ($instructors as $instructor)
+
+            <div class="wow fadeInUp" data-wow-delay="0.1s">
+                <div class="team-item bg-light">
+                    <div class="overflow-hidden image-user-container">
+                        <img class="img-fluid img-cover" src="{{ verifyUserAvatar($instructor->file) }}" alt="">
+                    </div>
+
+                    <div class="text-center p-4">
+                        <h5 class="mb-0">
+                            {{ ucwords(mb_strtolower($instructor->full_name, 'UTF-8')) }}
+                        </h5>
+                        <small>
+                            {{ $instructor->email ?? '-' }}
+                        </small>
+                    </div>
                 </div>
             </div>
-            <div class="testimonial-item text-center">
-                <img class="border rounded-circle p-2 mx-auto mb-3" src="{{asset('assets/home/img/testimonial-2.jpg')}}"
-                    style="width: 80px; height: 80px;">
-                <h5 class="mb-0">Client Name</h5>
-                <p>Profession</p>
-                <div class="testimonial-text bg-light text-center p-4">
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
-                </div>
-            </div>
-            <div class="testimonial-item text-center">
-                <img class="border rounded-circle p-2 mx-auto mb-3" src="{{asset('assets/home/img/testimonial-3.jpg')}}"
-                    style="width: 80px; height: 80px;">
-                <h5 class="mb-0">Client Name</h5>
-                <p>Profession</p>
-                <div class="testimonial-text bg-light text-center p-4">
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
-                </div>
-            </div>
-            <div class="testimonial-item text-center">
-                <img class="border rounded-circle p-2 mx-auto mb-3" src="{{asset('assets/home/img/testimonial-4.jpg')}}"
-                    style="width: 80px; height: 80px;">
-                <h5 class="mb-0">Client Name</h5>
-                <p>Profession</p>
-                <div class="testimonial-text bg-light text-center p-4">
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
-                </div>
-            </div>
+
+            @empty
+
+            <h4 class="text-center empty-records-message"> No hay Instructores que mostrar </h4>
+
+            @endforelse
+
         </div>
+
     </div>
-</div> --}}
+</div>
 
 <!-- Testimonial End -->
 
