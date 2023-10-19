@@ -7,11 +7,11 @@
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Cursos</h1>
+                    <h1 class="display-3 text-white animated slideInDown">Cursos libres</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a class="text-white" href="{{ route('home.index') }}">Inicio</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Cursos</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Cursos libres</li>
                         </ol>
                     </nav>
                 </div>
@@ -23,7 +23,7 @@
 
     <!-- Courses Start -->
 
-    @include('home.courses.partials._courses_list')
+    @include('home.freecourses.partials.boxes._categories_list')
 
     <!-- Courses End -->
 

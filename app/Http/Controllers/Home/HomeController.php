@@ -5,33 +5,29 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use App\Models\{Company, MiningUnit, User};
 use App\Services\Home\{HomeCourseService};
-use App\Services\UserService;
+use App\Services\{CourseCategoryService};
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    private $courseService;
-    private $userService;
-
-    public function __construct(HomeCourseService $courseService, UserService $userService)
-    {
-        $this->courseService = $courseService;
-        $this->userService = $userService;
-    }
-
 
     public function index(Request $request)
     {
-        $courses = $this->courseService->getAvailableCourses();
+        $courses = app(HomeCourseService::class)->getAvailableCourses();
         $instructors = User::where('role', 'instructor')
                             ->where('active', 'S')
                             ->with(['file' => fn($q) => 
                                     $q->where('category', 'avatars')
                             ])->get();
 
+        $categories = app(CourseCategoryService::class)->withCategoryRelationshipsQuery()
+                                                        ->where('status', 'S')
+                                                        ->get();
+
         return view('home.home', compact(
             'courses',
             'instructors',
+            'categories',
         ));
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use App\Providers\RouteServiceProvider;
 use App\Services\Auth\{AuthService};
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -55,6 +56,40 @@ class LoginController extends Controller
                 $this->redirectTo = '/login';
                 return $this->redirectTo;
         }
+    }
+        /**
+     * Get the post register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectPath(Request $request)
+    {
+        if (method_exists($this, 'redirectTo')) {
+            return $this->redirectTo($request);
+        }
+
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
+    }
+
+        /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect()->intended($this->redirectPath($request));
     }
 
     public function validateAttempt(AuthService $authService, Request $request)

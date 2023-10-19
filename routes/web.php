@@ -39,7 +39,7 @@ use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
 };
 
-use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController};
+use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
 use App\Http\Controllers\Auth\{LoginController, RegisterController};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +70,12 @@ Route::controller(HomeCourseController::class)->group(function () {
 
     Route::get('/cursos', 'index')->name('home.courses.index');
     Route::get('/cursos/{course}', 'show')->name('home.courses.show');
+});
+
+Route::controller(HomeFreeCourseController::class)->group(function () {
+
+    Route::get('/cursos-libres/categorías', 'index')->name('home.freecourses.categories.index');
+    Route::get('/cursos-libres/categoría/{category}', 'show')->name('home.freecourses.show');
 });
 
 

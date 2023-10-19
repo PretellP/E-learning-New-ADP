@@ -3,8 +3,6 @@
 
 @include('home.partials.head')
 
-<body>
-
     <!-- Spinner Start -->
 
     <div id="spinner"

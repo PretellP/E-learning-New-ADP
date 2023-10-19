@@ -19,7 +19,7 @@
                     <img src="{{ verifyUserAvatar(Auth::user()->avatar()) }}" alt="">
                 </span>
 
-                <b>¡Hola, {{ Auth::user()->full_name }}!</b>
+                <b>¡Hola, {{ ucwords(mb_strtolower(Auth::user()->full_name, 'UTF-8')) }}!</b>
             </span>
     
             @endauth
@@ -27,6 +27,7 @@
             <a href="{{ route('home.index') }}" class="nav-item nav-link {{ setActive('home.index') }}">Inicio</a>
             <a href="#" class="nav-item nav-link">Nosotros</a>
             <a href="{{ route('home.courses.index') }}" class="nav-item nav-link  {{ setActive('home.courses.*') }}">Cursos</a>
+            <a href="{{ route('home.freecourses.categories.index') }}" class="nav-item nav-link  {{ setActive('home.freecourses.*') }}">Cursos libres</a>
 
             @guest
 
@@ -51,13 +52,11 @@
 
         @auth
 
-       
         <a href=" {{ route('login') }} " class="btn btn-primary py-4 px-lg-5 d-block">
             Ingresar al E-Learning
             <i class="fa-solid fa-chalkboard-user ms-3"></i>
             {{-- <i class="fa fa-arrow-right ms-3"></i> --}}
         </a>
-
 
         <a href="#" class="nav-link" onclick="event.preventDefault(); 
         document.getElementById('logout-form').submit();">

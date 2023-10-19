@@ -9,18 +9,18 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
                     <h3 class="display-4 text-white animated slideInDown"> 
-                        {{ ucfirst(mb_strtolower($course->description, 'UTF-8')) }} 
+                        {{ ucfirst(mb_strtolower($category->description, 'UTF-8')) }} 
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a class="text-white" href="{{ route('home.index') }}">Inicio</a></li>
                             <li class="breadcrumb-item active">
-                                <a href="{{ route('home.courses.index') }}" class="text-white">
-                                    Cursos
+                                <a href="{{ route('home.freecourses.categories.index') }}" class="text-white">
+                                    Cursos libres
                                 </a>
                             </li>
                             <li class="breadcrumb-item text-white active" aria-current="page">
-                                {{ $course->description }}
+                                {{ $category->description }}
                             </li>
                         </ol>
                     </nav>
@@ -34,21 +34,12 @@
 
     <!-- Courses Start -->
 
-    <div class="container-xxl py-5 courses-container" id="events-list-container">
+    <div class="container-xxl py-5 courses-container" id="freecourses-list-container">
 
-    @include('home.courses.partials._events_list')
+    @include('home.freecourses.partials.boxes._freecourses_list')
 
     </div>
 
     <!-- Courses End -->
-
-@endsection
-
-
-@section('modals')
-
-<div id="login_register_modal">
-
-</div>
 
 @endsection

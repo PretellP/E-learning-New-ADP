@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Course, CourseCategory, SectionChapter};
+use App\Models\{Course, SectionChapter};
 use Exception;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -20,7 +20,9 @@ class FreeCourseService
                 $query2->where('file_type', 'imagenes')
                     ->where('category', 'cursoslibres')
             ]
-        )->withCount(['courseSections', 'courseChapters'])
+        )
+        ->where('course_type', 'FREE')
+        ->withCount(['courseSections', 'courseChapters'])
             ->withSum('courseChapters', 'duration');
     }
 
@@ -36,7 +38,9 @@ class FreeCourseService
                 $query2->where('file_type', 'imagenes')
                     ->where('category', 'cursoslibres')
             ]
-        )->withCount(['courseSections', 'courseChapters'])
+        )
+        ->where('course_type', 'FREE')
+        ->withCount(['courseSections', 'courseChapters'])
             ->withSum('courseChapters', 'duration');
     }
 
