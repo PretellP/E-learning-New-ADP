@@ -92,6 +92,15 @@
                 </a>
             </li>
 
+            <li class="{{setActive('admin.surveys.*')}}">
+                <a href="{{ route('admin.surveys.index') }}" class="nav-link">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                    <span>Encuestas</span>
+                </a>
+            </li>
+
+            
+
 
             
 

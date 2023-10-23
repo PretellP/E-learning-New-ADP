@@ -19,6 +19,17 @@ return [
         'technical_support' => 'Soporte Tecnico',
     ],
 
+    'survey_destined_to' => [
+        'course_live' => 'Ficha sintomatológica',
+        'evaluation' => 'Satisfacción',
+        'user_profile' => 'Perfil de usuario',
+    ],  
+
+    'statement_type' => [
+        'select_multi' => 'Selección múltiple',
+        'commentary' => 'Comentario'
+    ],
+
     'certification_status' =>[
         'pending' => 'Pendiente',
         'in_progress' => 'En curso',

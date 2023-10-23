@@ -517,8 +517,14 @@ $(function() {
             var name = $(this).attr('name');
             if(!$("input[name='"+name+"']").is(':checked'))
             {
-                flginputSelect = false;
-                return false;
+                flginputSelect = false
+                return false
+            }
+        })
+        $('.input-commentary-survey').each(function(){
+            if (!$(this).val()) {
+                flginputSelect = false
+                return false
             }
         })
 

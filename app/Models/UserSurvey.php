@@ -33,4 +33,21 @@ class UserSurvey extends Model
                                 ->withPivot(['id', 'answer', 'statement'])->withTimestamps();
     }
     
+    public function loadRelationships()
+    {
+        return $this->load(
+            [
+                'survey' => fn($q) => $q->select('id', 'name', 'destined_to'),
+                'surveyAnswers' => fn($q2) => $q2->with([
+                        'group:id,name,description,survey_id',
+                        'options:id,description,statement_id',   
+                        ])
+                        ->select('statements.id',
+                                'statements.description',
+                                'statements.group_id',
+                                'statements.desc',
+                                'statements.type')
+            ]
+        );
+    }
 }

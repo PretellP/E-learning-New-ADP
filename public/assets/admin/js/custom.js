@@ -977,12 +977,12 @@ $(function () {
             if ($(this).val()) {
                 // $('#registerUserForm').validate()
                 // $('#image-upload-category-edit').rules('add', { required: true })
-    
+
                 var img_path = $(this)[0].value;
                 var img_holder = $(this).closest('#registerUserForm').find('.img-holder');
                 var currentImagePath = $(this).data('value');
                 var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
-    
+
                 if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
                     if (typeof (FileReader) != 'undefined') {
                         img_holder.empty()
@@ -1087,7 +1087,7 @@ $(function () {
                     dataType: 'JSON',
                     success: function (data) {
 
-                        if (data.success){
+                        if (data.success) {
 
                             registerUserForm.resetForm()
                             usersTable.draw()
@@ -1106,7 +1106,7 @@ $(function () {
                                 text: data.message
                             })
                         }
-                       
+
                     },
                     complete: function (data) {
                         form.find('.btn-save').removeAttr('disabled')
@@ -1278,12 +1278,12 @@ $(function () {
         inputUserImageEdit.on("change", function () {
 
             if ($(this).val()) {
-    
+
                 var img_path = $(this)[0].value;
                 var img_holder = $(this).closest('#editUserForm').find('.img-holder');
                 var currentImagePath = $(this).data('value');
                 var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
-    
+
                 if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
                     if (typeof (FileReader) != 'undefined') {
                         img_holder.empty()
@@ -4775,6 +4775,145 @@ $(function () {
         })
 
 
+        /* -------------- EDIT -----------------*/
+
+
+        $('#edit-category-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-description-category');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editCategoryForm = $('#editCategoryForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editCategoryModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        var listContainer = $('#categories-list-container')
+                        listContainer.html(data.html)
+                        freeCoursesTable.draw()
+                        editCategoryForm.resetForm()
+
+                        loadSpinner.toggleClass('active')
+                        modal.modal('toggle')
+
+                        $(img_holder).empty()
+
+                        Toast.fire({
+                            icon: 'success',
+                            text: '¡Registro actualizado!'
+                        })
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                })
+            }
+        })
+
+        var inputCategoryEdit = $('#image-upload-category-edit');
+        inputCategoryEdit.on("change", function () {
+            $('#editCategoryForm').validate()
+            $('#image-upload-category-edit').rules('add', { required: true })
+
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#editCategoryForm').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).html(currentImagePath);
+                inputCategoryEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+
+        })
+
+
+        $('.main-content').on('click', '.editCategory-btn', function () {
+            var modal = $('#editCategoryModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editCategoryForm')
+
+            $('#editCategoryForm').validate()
+            $('#image-upload-category-edit').rules('remove', 'required')
+
+            editCategoryForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    modal.find('input[name=description]').val(data.description);
+                    modal.find('.img-holder').html('<img class="img-fluid course_img" id="image-category-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#image-upload-category-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid category_img"');
+                    modal.find('#image-upload-category-edit').val('');
+
+                    if (data.status == 'S') {
+                        modal.find('#edit-category-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-category').html('Activo');
+                    } else {
+                        modal.find('#edit-category-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-category').html('Inactivo');
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('toggle')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+
+
         // ------------------- ELIMINAR -------------------
 
         $('.main-content').on('click', '.deleteQuestion-btn', function () {
@@ -5026,8 +5165,6 @@ $(function () {
                     let match_start = match.index
                     let match_end = match_start + match[0].length
 
-                    console.log(match_start, match_end)
-
                     $('#statement-fill-blank').
                         val(currentVal.substring(0, match_start) + "" + currentVal.substring(match_end + 1))
                 }
@@ -5137,10 +5274,7 @@ $(function () {
                                 }
                             },
                             error: function (result) {
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: '¡Ocurrió un error inesperado!',
-                                });
+                                ToastError.fire()
                             }
                         });
                     } else {
@@ -5320,7 +5454,6 @@ $(function () {
             }
 
         })
-
 
 
 
@@ -7998,7 +8131,7 @@ $(function () {
                 complete: function (data) {
                     modal.modal('show')
                     let dataCard = data.responseJSON
-                    
+
                     modal.find('.note-editable').html(dataCard['card'].content)
                 },
                 error: function (data) {
@@ -8060,6 +8193,993 @@ $(function () {
         })
 
     }
+
+
+
+
+
+
+    // ------------ SURVEYS ---------------
+
+    var surveyTable
+
+    if ($('#surveys-table').length) {
+
+        var surveyTableEle = $('#surveys-table');
+        var getDataUrl = surveyTableEle.data('url');
+        surveyTable = surveyTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'destined_to', name: 'destined_to' },
+                { data: 'active', name: 'active' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+        });
+
+        // ---------------- REGISTER ----------------
+
+        $('#registerSurveyForm button[type=submit]').click(function () {
+            $('button[type=submit]', $(this).parents('form')).removeAttr('clicked').removeAttr('name')
+            $(this).attr('clicked', 'true').attr('name', 'verifybtn')
+        })
+
+        $('#register-survey-status-checkbox').change(function () {
+            var txtDesc = $('#txt-register-description-survey');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        $('#registerSurveySelect').select2({
+            dropdownParent: $("#RegisterSurveyModal"),
+            placeholder: 'Selecciona una categoría'
+        })
+
+        var surveyImageRegister = $('#input-image-survey-register');
+        surveyImageRegister.val('');
+        surveyImageRegister.on("change", function () {
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#registerSurveyForm').find('.img-holder');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid survey_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).empty();
+                surveyImageRegister.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!'
+                });
+            }
+        })
+
+        var registerSurveyForm = $('#registerSurveyForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                destined_to: {
+                    required: true
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var button = form.find('button[type=submit][clicked=true]')
+                var loadSpinner = button.find('.loadSpinner')
+                var modal = $('#RegisterSurveyModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: new FormData(form[0]),
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.show == true) {
+                                window.location.href = data.route
+                            }
+
+                            $(img_holder).empty()
+                            surveyTable.draw()
+                            surveyImageRegister.val('')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        registerSurveyForm.resetForm()
+                        $('#registerSurveySelect').val('').change()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+    }
+
+    /* -------------- EDIT -----------------*/
+
+    if ($('#editSurveyForm').length) {
+
+        $('#edit-survey-status-checkbox').change(function () {
+            var txtDesc = $('#txt-edit-description-survey');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+        var editSurveyForm = $('#editSurveyForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                destined_to: {
+                    required: true,
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editSurveyModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.location == 'show') {
+                                $('#survey-name-text-principal').html(data.title)
+                                $('#survey-box-container').html(data.html)
+                            }
+                            else {
+                                surveyTable.draw()
+                                editSurveyForm.resetForm()
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        $(img_holder).empty()
+                        modal.modal('hide')
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        var inputImageSurveyEdit = $('#input-image-survey-edit');
+        inputImageSurveyEdit.on("change", function () {
+
+            var img_path = $(this)[0].value;
+            var img_holder = $(this).closest('#editSurveyForm').find('.img-holder');
+            var currentImagePath = $(this).data('value');
+            var img_extension = img_path.substring(img_path.lastIndexOf('.') + 1).toLowerCase();
+
+            if (img_extension == 'jpeg' || img_extension == 'jpg' || img_extension == 'png') {
+                if (typeof (FileReader) != 'undefined') {
+                    img_holder.empty()
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('<img/>', { 'src': e.target.result, 'class': 'img-fluid category_img' }).
+                            appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    $(img_holder).html('Este navegador no soporta Lector de Archivos');
+                }
+            } else {
+                $(img_holder).html(currentImagePath);
+                inputImageSurveyEdit.val('')
+                Toast.fire({
+                    icon: 'warning',
+                    title: '¡Selecciona una imagen!',
+                });
+            }
+        })
+
+        $('.main-content').on('click', '.editSurvey', function () {
+            var modal = $('#editSurveyModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editSurveyForm')
+
+            editSurveyForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let survey = data.survey
+
+                    modal.find('input[name=name]').val(survey.name)
+                    modal.find('input[name=destined_to]').val(survey.destined_to)
+                    modal.find($('#input_destined_type')).html(data.destined_to)
+                    modal.find('.img-holder').html('<img class="img-fluid survey_img" id="image-survey-edit" src="' + data.url_img + '"></img>');
+                    modal.find('#input-image-survey-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid survey_img"');
+                    modal.find('#input-image-survey-edit').val('');
+
+                    if (survey.active == 'S') {
+                        modal.find('#edit-survey-status-checkbox').prop('checked', true);
+                        $('#txt-edit-description-survey').html('Activo');
+                    } else {
+                        modal.find('#edit-survey-status-checkbox').prop('checked', false);
+                        $('#txt-edit-description-survey').html('Inactivo');
+                    }
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+    }
+
+    //  ---------- DELETE SURVEY ----------------
+
+    $('html').on('click', '.deleteSurvey', function () {
+        var button = $(this)
+        var url = button.data('url')
+        var type = button.data('type')
+
+        SwalDelete.fire().then(function (e) {
+            if (e.value === true) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    data: {
+                        type: type
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+
+                        if (result.success) {
+
+                            if (result.location == 'index') {
+                                surveyTable.draw()
+                            }
+                            else {
+                                window.location.href = result.route
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: result.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: result.message
+                            })
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result)
+                        ToastError.fire()
+                    }
+                });
+            } else {
+                e.dismiss;
+            }
+        }, function (dismiss) {
+            return false;
+        });
+    })
+
+
+
+    // ------- SURVEY SHOW ------------
+
+    // -------- GROUPS TABLE ---------
+
+    var surveyGroupsTable
+
+    if ($('#groups-statements-table').length) {
+
+        var surveyGroupsTableEle = $('#groups-statements-table');
+        var getDataUrl = surveyGroupsTableEle.data('url');
+        surveyGroupsTable = surveyGroupsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+        });
+
+
+        // ----------- REGISTER GROUPS -------------
+
+        $('#registerSurveyGroupsForm button[type=submit]').click(function () {
+            $('button[type=submit]', $(this).parents('form')).removeAttr('clicked').removeAttr('name')
+            $(this).attr('clicked', 'true').attr('name', 'verifybtn')
+        })
+
+        var registerSurveyGroupForm = $('#registerSurveyGroupsForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                description: {
+                    required: true,
+                    maxlength: 255
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var button = form.find('button[type=submit][clicked=true]')
+                var loadSpinner = button.find('.loadSpinner')
+                var modal = $('#RegisterSurveyGroupModal')
+                var img_holder = form.find('.img-holder')
+
+                loadSpinner.toggleClass('active')
+
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: new FormData(form[0]),
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.show == true) {
+                                window.location.href = data.route
+                            }
+
+                            $(img_holder).empty()
+                            surveyGroupsTable.draw()
+                            $('#survey-box-container').html(data.html)
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        registerSurveyGroupForm.resetForm()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                        modal.modal('hide')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+    }
+
+    /* -------------- GROUP EDIT -----------------*/
+
+    if ($('#editSurveyGroupForm').length) {
+
+        var editSurveyGroupForm = $('#editSurveyGroupForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 255
+                },
+                description: {
+                    required: true,
+                    maxlength: 255
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#editSurveyGroupModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.location == 'show') {
+                                $('#group-name-text-principal').html(data.title)
+                                $('#group-box-container').html(data.html)
+                            }
+                            else {
+                                surveyGroupsTable.draw()
+                                editSurveyGroupForm.resetForm()
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        modal.modal('hide')
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('html').on('click', '.editGroup', function () {
+            var modal = $('#editSurveyGroupModal')
+            var getDataUrl = $(this).data('send')
+            var url = $(this).data('url')
+            var form = modal.find('#editSurveyGroupForm')
+
+            editSurveyGroupForm.resetForm()
+            form.trigger('reset')
+
+            form.attr('action', url)
+
+            $.ajax({
+                type: 'GET',
+                url: getDataUrl,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    let group = data.group
+
+                    modal.find('input[name=name]').val(group.name)
+                    modal.find('input[name=description]').val(group.description)
+                },
+                complete: function (data) {
+                    modal.modal('show')
+                },
+                error: function (data) {
+                    console.log(data)
+                }
+            })
+        })
+    }
+
+    // ------------ DELETE -------------
+
+    $('html').on('click', '.deleteGroup', function () {
+        var button = $(this)
+        var url = button.data('url')
+        var type = button.data('type')
+
+        SwalDelete.fire().then(function (e) {
+            if (e.value === true) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    data: {
+                        type: type
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+
+                        if (result.success) {
+
+                            if (result.location == 'index') {
+                                surveyGroupsTable.draw()
+                                $('#survey-box-container').html(result.html)
+                            }
+                            else {
+                                window.location.href = result.route
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: result.message
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: result.message
+                            })
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result)
+                        ToastError.fire()
+                    }
+                });
+            } else {
+                e.dismiss;
+            }
+        }, function (dismiss) {
+            return false;
+        });
+    })
+
+
+
+
+    // ---------- GROUP SHOW -------------
+
+    // -------- STATEMENTS TABLE ----------
+
+    var surveyStatementsTable
+
+    if ($('#statements-table').length) {
+
+        var surveyStatementsTableEle = $('#statements-table');
+        var getDataUrl = surveyStatementsTableEle.data('url');
+        surveyStatementsTable = surveyStatementsTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: getDataUrl,
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'description', name: 'description' },
+                { data: 'type', name: 'type' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+        });
+
+        // ----------- CREATE STATEMENTS ------------
+
+        $('#registerStatementTypeSelect').select2({
+            placeholder: 'Selecciona un tipo de pregunta',
+            minimumResultsForSearch: -1,
+        })
+
+        var registerStatementForm = $('#registerStatementForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                    maxlength: 255
+                },
+                desc: {
+                    maxlength: 255
+                },
+                type: {
+                    required: true,
+                },
+                'option[]': {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+
+                loadSpinner.toggleClass('active')
+
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            $('#options-type-container').html(data.html)
+                            surveyStatementsTable.draw()
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        registerStatementForm.resetForm()
+                        form.trigger('reset')
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        $('html').on('change', '#registerStatementTypeSelect', function () {
+            var select = $(this)
+            var value = select.val()
+            select.attr('disabled', 'disabled')
+
+            $.ajax({
+                type: 'GET',
+                url: $(this).data('url'),
+                data: {
+                    value: value
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#options-type-container').html(data.html)
+                },
+                complete: function (data) {
+                    select.removeAttr('disabled')
+                },
+                error: function (data) {
+                    console.log(data)
+                    ToastError.fire()
+                }
+            })
+        })
+
+
+        // ------------ DELETE STATEMENT -------------
+
+        $('html').on('click', '.deleteStatement', function () {
+            var button = $(this)
+            var url = button.data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+
+                            if (result.success) {
+
+                                surveyStatementsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            console.log(result)
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+
+    }
+
+    // --------- OPTION GENERAL -----------
+
+    if ($('#options-type-container').length) {
+
+        function addOptionHtml(type, count) {
+            if (type == 'select_multi') {
+                return '<tr class="alternative-row" data-index="' + count + '"> \
+                            <td> \
+                                <div class="input-group"> \
+                                    <div class="input-group-prepend"> \
+                                        <div class="input-group-text text-bold alternative-number"> \
+                                            '+ (parseInt(count) + 1) + ' \
+                                        </div> \
+                                    </div> \
+                                    <input type="text" name="option[]" class="form-control alternative no-label-error" \
+                                        placeholder="Ingresa la opción"> \
+                                </div> \
+                            </td> \
+                            <td class="text-center btn-action-container"> \
+                                <span class="delete-btn delete-option-btn"> \
+                                    <i class="fa-solid fa-trash-can"></i> \
+                                </span> \
+                            </td> \
+                        </tr>'
+            }
+            else {
+                return '';
+            }
+        }
+
+        function deleteOption(row, questionType) {
+
+            row.remove()
+
+            $('tr.alternative-row').each(function (index) {
+
+                $(this).attr('data-index', index)
+                $(this).find('.alternative-number').html(index + 1) 
+            })
+        }
+
+        // --------- ADD OPTIONS ------------
+
+        $('html').on('click', '.add_option_button', function () {
+
+            var type = $('#registerStatementTypeSelect').val()
+            var alternativesTable = $('#options-table')
+
+            let count = alternativesTable.find('.alternative-row').length
+            alternativesTable.append(addOptionHtml(type, count))
+
+        })
+
+        // ---------- DELETE OPTION -------------
+
+        $('html').on('click', '.delete-option-btn', function () {
+
+            var optionType = $('#registerStatementTypeSelect').val()
+            var row = $(this).closest('tr.alternative-row')
+            var dataStored = $(this).data('stored')
+
+            if (dataStored == true) {
+
+                var url = $(this).data('url')
+
+                SwalDelete.fire().then(function (e) {
+                    if (e.value === true) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: url,
+                            dataType: 'JSON',
+                            success: function (result) {
+
+                                if (result.success === true) {
+
+                                    deleteOption(row, optionType)
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        text: result.message,
+                                    })
+                                }
+                                else {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        text: result.message,
+                                    })
+                                }
+                            },
+                            error: function (result) {
+                                ToastError.fire()
+                            }
+                        });
+                    } else {
+                        e.dismiss;
+                    }
+                }, function (dismiss) {
+                    return false;
+                });
+
+            }
+            else {
+                deleteOption(row, optionType)
+            }
+        })
+
+
+    }
+
+
+
+    // -------- STATEMENT SHOW -----------
+
+    if ($('#updateStatementForm').length) {
+
+        // ----------- UPDATE ---------------
+
+        var updateStatementForm = $('#updateStatementForm').validate({
+            rules: {
+                description: {
+                    required: true,
+                    maxlength: 255
+                },
+                desc: {
+                    maxlength: 255
+                },
+                type: {
+                    required: true,
+                },
+                'option[]': {
+                    required: true
+                }
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+
+                loadSpinner.toggleClass('active')
+
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            let statement = data.statement
+
+                            $('#title-statement-container').html(statement.description)
+                            form.find('input[name=description]').val(statement.description)
+                            form.find('input[name=desc]').val(statement.desc)
+
+                            $('#options-type-container').html(data.html)
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            })
+
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+                    },
+                    complete: function (data) {
+                        updateStatementForm.resetForm()
+                        loadSpinner.toggleClass('active')
+                        form.find('.btn-save').removeAttr('disabled')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+    }
+
 
 
 

@@ -10,7 +10,12 @@ class SurveyStatement extends Model
 {
     use HasFactory;
     protected $table = 'statements';
-    protected $guarded = [];
+    protected $fillable = [
+        'description',
+        'desc',
+        'type',
+        'group_id'
+    ];
 
     public function group()
     {
@@ -26,5 +31,10 @@ class SurveyStatement extends Model
     {
         return $this->belongsToMany(UserSurvey::class, 'survey_answers', 'statement_id', 'user_survey_id')
                                 ->withPivot(['id', 'answer', 'statement', 'question_order'])->withTimestamps();
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load(['group.survey', 'options']);
     }
 }

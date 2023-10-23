@@ -1699,6 +1699,25 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 
 
 
+
+/* ------------- SURVEY --------------*/
+
+
+.info-element-box.survey
+{
+    height: 150px;
+}
+
+.info-element-box.survey
+.img-element-container
+{
+    width: auto !important;
+    height: 100% !important;
+}
+
+
+
+
 @media (min-width: 992px) {
 
     /* -------------  FREE COURSES ----------------*/

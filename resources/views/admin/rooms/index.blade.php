@@ -122,7 +122,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="EditRoomModalLabel">
                     <div class="section-title mt-0">
-                        <i class="fa-solid fa-square-plus"></i> &nbsp;
+                        <i class="fa-solid fa-pen-to-square"></i> &nbsp;
                         Editar Sala
                     </div>
                 </h5>

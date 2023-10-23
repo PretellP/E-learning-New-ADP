@@ -10,7 +10,10 @@ class SurveyOption extends Model
 {
     use HasFactory;
     protected $table = 'options';
-    protected $guarded = [];
+    protected $fillable = [
+        'description',
+        'statement_id'
+    ];
 
     public function statement()
     {

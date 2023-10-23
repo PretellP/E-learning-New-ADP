@@ -18,9 +18,9 @@
         <div class="step-survey-container">
 
             @if ($survey->destined_to == 'course_live')
-                @include('aula.viewParticipant.surveys.types.groupable')
+                @include('aula.viewParticipant.surveys.types._course_live')
             @else
-                @include('aula.viewParticipant.surveys.types.ungrouped')
+                @include('aula.viewParticipant.surveys.types._select_multiple')
             @endif
 
         </div>

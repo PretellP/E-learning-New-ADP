@@ -3197,7 +3197,6 @@ div.course-progress-innerbox {
     background-color: var(--second-color);
 }
 
-
 .step-survey-container {
     background-color: var(--light-gray);
     max-width: 1000px;
@@ -3274,7 +3273,7 @@ div.course-progress-innerbox {
     cursor: pointer;
 }
 
-.question-option input {
+.question-option:not(.commentary) input {
     display: none;
 }
 
@@ -3332,16 +3331,45 @@ button.btn-survey-submit:hover,
     font-weight: 700;
 }
 
+/* .input-commentary-survey
+{
+    padding: 0.5em;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: none;
+    border-color: var(--light-gray);
+} */
 
+/* ----------- SELECT MULTIPLE ----------- */
 
+.question-box.select-multiple
+{
+    flex-direction: column;
+    gap: 1.2em;
+}
 
+.question-box.select-multiple
+.question-options-group
+{
+    max-width: 100% !important;
+    gap: 1em;
+    flex-direction: column;
+    width: 100%;
+}
 
-
+.question-box.select-multiple
+.question-options-group
+.question-option
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    text-align: left;
+    height: auto;
+}
 
 /*----- MODAL STYLES --------*/
-
-
-
 
 
 .modal button.close:focus {

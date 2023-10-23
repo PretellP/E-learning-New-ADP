@@ -19,6 +19,10 @@ use App\Http\Controllers\Admin\{
     AdminOwnerCompaniesController,
     AdminMiningUnitsController,
     AdminSectionChaptersController,
+    AdminSurveyController,
+    AdminSurveyGroupController,
+    AdminSurveyOptionController,
+    AdminSurveyStatementController,
 };
 use App\Http\Controllers\Aula\Common\{
     AulaHomeController,
@@ -339,6 +343,57 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar-publicación', 'storeCard')->name('admin.announcements.card.store');
                 Route::post('/actualizar-publicación/{card}', 'updateCard')->name('admin.announcements.card.update');
                 Route::delete('/publicación/eliminar/{card}', 'destroyCard')->name('admin.announcements.card.delete');
+            });
+        });
+
+        // --------------- SURVEYS ----------------
+
+        Route::group(['prefix' => 'encuestas'], function () {
+
+            Route::controller(AdminSurveyController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.surveys.index');
+                Route::get('/editar/{survey}', 'edit')->name('admin.surveys.edit');
+                Route::get('/ver/{survey}', 'show')->name('admin.surveys.show');
+                Route::post('/registrar', 'store')->name('admin.surveys.store');
+                Route::post('/actualizar/{survey}', 'update')->name('admin.surveys.update');
+                Route::delete('/eliminar/{survey}', 'destroy')->name('admin.surveys.destroy');
+              
+            });
+
+            Route::group(['prefix' => 'grupos'], function () {
+
+                Route::controller(AdminSurveyGroupController::class)->group(function () {
+
+                    Route::get('/{survey}', 'index')->name('admin.surveys.groups.index');
+                    Route::get('/ver/{group}', 'show')->name('admin.surveys.groups.show');
+                    Route::get('/editar/{group}', 'edit')->name('admin.surveys.groups.edit');
+                    Route::post('/{survey}/registrar', 'store')->name('admin.surveys.groups.store');
+                    Route::post('/actualizar/{group}', 'update')->name('admin.surveys.groups.update');
+                    Route::delete('/eliminar/{group}', 'destroy')->name('admin.surveys.groups.destroy');
+
+                });
+
+                Route::group(['prefix' => 'preguntas'], function () {
+
+                    Route::controller(AdminSurveyStatementController::class)->group(function () {
+
+                        Route::get('/{group}', 'index')->name('admin.surveys.groups.statements.index');
+                        Route::get('/obtener-tipo-de-pregunta/{group}', 'getStatementType')->name('admin.surveys.groups.statements.getType');
+                        Route::get('/ver-pregunta/{statement}', 'show')->name('admin.surveys.groups.statements.show');
+                        Route::post('/{group}/registrar', 'store')->name('admin.surveys.groups.statement.store');
+                        Route::post('/actualizar/{statement}', 'update')->name('admin.surveys.groups.statements.update');
+                        Route::delete('/eliminar/{statement}', 'destroy')->name('admin.surveys.groups.statement.destroy');
+                    });
+
+                    Route::group(['prefix' => 'opciones'], function () {
+
+                        Route::controller(AdminSurveyOptionController::class)->group(function () {
+
+                            Route::delete('/eliminar/{option}', 'destroy')->name('admin.surveys.groups.statement.options.destroy');
+                        });
+                    });
+                });
             });
         });
     });

@@ -14,7 +14,8 @@ use App\Models\{
     Survey,
     UserSurvey,
     SurveyStatement,
-    SurveyOption
+    SurveyOption,
+    User
 };
 
 date_default_timezone_set("America/Lima");
@@ -199,7 +200,7 @@ function updateIfNotFinished($certification): void
 }
 
 
-/*------------ E LEARNING ------------*/
+/*-------------- E LEARNING ----------------*/
 
 function getInstructorsBasedOnUserAndCourse($course)
 {
@@ -220,7 +221,6 @@ function getInstructorsBasedOnUserAndCourse($course)
     return $instructors;
 }
 
-
 function getNStudentsFromCourse($course)
 {
     $role = Auth::user()->role;
@@ -237,14 +237,6 @@ function getNStudentsFromCourse($course)
 
     return $nstudents;
 }
-
-
-function getDiffForHumansFromTimestamp($timestamp)
-{
-    return Carbon::parse($timestamp)->diffForHumans();
-}
-
-
 
 function getProgressCertificationsFromCourse($course)
 {
@@ -273,10 +265,13 @@ function getOwnerCompanyFromCertification(Certification $certification)
     return $certification->event->exam->ownerCompany;
 }
 
-function getCurrentDate()
-{
-    return Carbon::now('America/Lima')->format('Y-m-d');
-}
+// ------------------------------------------------
+
+
+
+
+// ---------------- FREE COURSES ------------------
+
 
 function getFreeCourseTime($duration)
 {
@@ -297,12 +292,10 @@ function getCompletedChapters($chapters)
     return $completedChapters;
 }
 
-
 function getShowSection(CourseSection $current_section, CourseSection $section)
 {
     return $current_section->id == $section->id ? 'show' : '';
 }
-
 
 function getItsChapterFinished(SectionChapter $chapter, $allProgress)
 {
@@ -323,6 +316,9 @@ function getNFinishedChapters($section, $allProgress)
 }
 
 
+
+// --------------- SURVEYS ------------------
+
 function validateSurveys()
 {
     $user = Auth::user();
@@ -338,40 +334,18 @@ function validateSurveys()
     $checkEmptyUserProfile = $surveys->filter(function ($survey) {
         return $survey->survey->destined_to == 'user_profile';
     })->isEmpty();
+    $checkEmptyEvaluation = $surveys->filter(function ($survey) {
+        return $survey->survey->destined_to == 'evaluation';
+    })->isEmpty();
 
     if ($checkEmptyCourseLive) {
-        $survey_cl = Survey::where('destined_to', 'course_live')->first();
-
-        if ($survey_cl != null) {
-            UserSurvey::create([
-                'user_id' => $user->id,
-                'survey_id' => $survey_cl->id,
-                "company_id" => $user->company_id,
-                'date' => getCurrentDate(),
-                'status' => 'pending',
-                'start_time' => null,
-                'end_time' => null,
-                'total_time' => null,
-                'event_id' => null
-            ]);
-        }
+        storeUserSurvey('course_live', $user, NULL);
     }
     if ($checkEmptyUserProfile) {
-        $survey_up = Survey::where('destined_to', 'user_profile')->first();
-
-        if ($survey_up != null) {
-            UserSurvey::create([
-                'user_id' => $user->id,
-                'survey_id' => $survey_up->id,
-                "company_id" => $user->company_id,
-                'date' => getCurrentDate(),
-                'status' => 'pending',
-                'start_time' => null,
-                'end_time' => null,
-                'total_time' => null,
-                'event_id' => null
-            ]);
-        }
+        storeUserSurvey('user_profile', $user, NULL);
+    }
+    if ($checkEmptyEvaluation) {
+        storeUserSurvey('evaluation', $user, NULL);
     }
 
     $checkPendingSurveys = $surveys->filter(function ($survey) {
@@ -381,27 +355,39 @@ function validateSurveys()
     return $checkPendingSurveys;
 }
 
-
-function getStatementsFromUserSurvey(UserSurvey $userSurvey)
+function storeUserSurvey($destined_to, User $user, $event_id)
 {
-    $userSurvey->survey->load('surveyGroups');
+    $survey = Survey::where('destined_to', $destined_to)
+                    ->where('active', 'S')
+                    ->first();
 
-    $statements = $userSurvey->survey->with([
-        'surveyGroups' => fn ($query) => $query
-            ->select('id', 'survey_id')
-            ->with('statements:id,description,group_id')
-    ])
-        ->first()
-        ->surveyGroups->map(function ($group) {
-            return $group->statements;
-        })->flatten();
+    if ($survey != null) {
+        return UserSurvey::create([
+            'user_id' => $user->id,
+            'survey_id' => $survey->id,
+            "company_id" => $user->company_id,
+            'date' => getCurrentDate(),
+            'status' => 'pending',
+            'start_time' => null,
+            'end_time' => null,
+            'total_time' => null,
+            'event_id' => $event_id
+            ]);
+        }
 
-    return $statements;
+    return false;
 }
 
 function getOptionsFromStatement(SurveyStatement $statement)
 {
     $options = $statement->options->sortByDesc('description');
+
+    return $options;
+}
+
+function getOptionsFromStatementAsc(SurveyStatement $statement)
+{
+    $options = $statement->options->sortBy('description');
 
     return $options;
 }
@@ -416,10 +402,10 @@ function verifyLastSurveyGroup($answersByGroup, $group_position)
     return $answersByGroup->count() == $group_position ? true : false;
 }
 
-function getTimeforHummans($time)
-{
-    return Carbon::parse($time)->format('g:i A');
-}
+// ---------------------------------------------
+
+
+
 
 function getStatusClass($status)
 {
@@ -454,6 +440,11 @@ function getActiveSection($active)
 {
     return $active != null ? $active : '';
 }
+
+
+
+
+// ---------- FILE -------------
 
 function verifyUserAvatar($file)
 {
@@ -500,12 +491,35 @@ function verifyImage($file)
     return $url;
 }
 
-
-
 function verifyFile($file)
 {
     return $file != null ? $file->file_url : null; 
 }
+
+//--------------------------------
+
+
+
+
+
+// ----------- DATE TIME ------------
+
+function getCurrentDate()
+{
+    return Carbon::now('America/Lima')->format('Y-m-d');
+}
+
+function getDiffForHumansFromTimestamp($timestamp)
+{
+    return Carbon::parse($timestamp)->diffForHumans();
+}
+
+function getTimeforHummans($time)
+{
+    return Carbon::parse($time)->format('g:i A');
+}
+
+// ----------------------------------
 
 
 
@@ -532,7 +546,6 @@ function normalizeInputStatus($data)
     return $data;
 }
 
-
 function verifyEventType($type)
 {
     switch ($type) {
@@ -554,6 +567,9 @@ function verifyEventType($type)
 
     return $type;
 }
+
+
+
 
 
 /* ----------- HOME PAGE ------------*/
@@ -587,10 +603,7 @@ function getCountAllParticipants($course)
     return $participant;
 }
 
-
-
-
-
+// ------------------------------------
 
 
 

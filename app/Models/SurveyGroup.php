@@ -10,7 +10,11 @@ class SurveyGroup extends Model
 {
     use HasFactory;
     protected $table = 'groups';
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'description',
+        'survey_id'
+    ];
 
     public function survey()
     {
@@ -20,5 +24,13 @@ class SurveyGroup extends Model
     public function statements()
     {
         return $this->hasMany(SurveyStatement::class, 'group_id', 'id');
+    }
+
+    public function loadRelationships()
+    {
+        return $this->load([
+            'survey',
+        ])
+        ->loadCount('statements');
     }
 }
