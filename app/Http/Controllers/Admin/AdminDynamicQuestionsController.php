@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\{DynamicQuestion, Exam, QuestionType};
-use App\Services\dynamicQuestionService;
+use App\Services\DynamicQuestionService;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class AdminDynamicQuestionsController extends Controller
 {
     private $dynamicQuestionService;
 
-    public function __construct(dynamicQuestionService $service)
+    public function __construct(DynamicQuestionService $service)
     {
         $this->dynamicQuestionService = $service;
     }

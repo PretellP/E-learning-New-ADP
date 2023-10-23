@@ -6,7 +6,7 @@ use App\Models\{DynamicQuestion, Exam};
 use Exception;
 use Yajra\DataTables\Facades\DataTables;
 
-class dynamicQuestionService
+class DynamicQuestionService
 {
     public function getDataTable(int $exam_id = null)
     {
