@@ -9,6 +9,10 @@
 
 @section('content')
 
+@php
+$maxPage = $cardPublishings->lastPage();
+@endphp
+
 
 <div class="row content">
 
@@ -27,10 +31,10 @@
             <div class="carousel-container">
                 <div id="publishings-owlcarousel" class="publishings-owlcarousel owl-carousel owl-theme slider">
                     @forelse ($bannerPublishings as $banner)
-                        <div>
-                            {!! $banner->content !!}
-                            <img class='banner-img' src="{{verifyImage($banner->file)}}" alt="">
-                        </div>
+                    <div>
+                        {!! $banner->content !!}
+                        <img class='banner-img' src="{{verifyImage($banner->file)}}" alt="">
+                    </div>
                     @empty
                     <h4 class="text-center empty-records-message">
                         Aún no hay publicaciones
@@ -47,51 +51,34 @@
                 </div>
             </div>
 
-            <div class="tight-publishing-container">
-                @forelse ($cardPublishings as $card)
+            <div class="tight-publishing-container" id="card-publishing-container">
 
-                <div class="publishing-box card">
-                    <div class="card-body">
-                        <div class="box-content-info-user">
-                            <hr>
-                            <div class="box-flex-align-info">
-                                <div class="avatar-img">
-                                    <i class="fa-solid fa-circle-user"></i>
-                                </div>
-                                <div class="box-publication-info">
-                                    <div class="publishing-title">
-                                        {{$card->title}}
-                                    </div>
-                                    <div class="publishing-name-time">
-                                        <span class="publishing-username">
-                                            {{strtolower(($card->user->name))}}
-                                        </span>
-                                        <i class="fa-solid fa-circle fa-2xs"></i>
-                                        <span class="publishing-difftime">
-                                            {{getDiffForHumansFromTimestamp($card->publication_time)}}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="publishing-text-content">
-                                {!! $card->content !!}
-                            </div>
-                        </div>
-
-                        <div class="box-publishing-img">
-                            <img src="{{verifyImage($card->file)}}" alt="">
-                        </div>
-                    </div>
-                </div>
-
-                @empty
-
+                @if ($cardPublishings->isEmpty())
                 <h4 class="text-center empty-records-message">
                     Aún no hay publicaciones
                 </h4>
+                @else
+                @include('aula.common.home.partials.boxes.publishings')
+                @endif
 
-                @endforelse
             </div>
+
+            <div class="text-center" id="loader-container" style="display: none">
+                <span>
+                    <img src="{{ asset('assets/common/images/loader.gif') }}" alt="loader" style="max-width: 160px;">
+                </span>
+                <div>
+                    <i>
+                        <b>
+                            Cargando más publicaciones...
+                        </b>
+                    </i>
+                </div>
+            </div>
+
+            <h4 class="text-center empty-records-message" id="end-data-records" style="display: none">
+                No hay más publicaciones
+            </h4>
 
         </div>
     </div>
@@ -104,5 +91,54 @@
 @section('extra-script')
 
 <script src="{{asset('assets/common/modules/owlcarousel2/dist/owl.carousel.min.js')}}"></script>
+
+<script>
+    $(function() {
+
+        function loadPublishings(page, limitReached)
+        {
+            if (!limitReached) {
+                $.ajax({
+                url: '?page=' + page,
+                type: 'GET',
+                beforeSend: function()
+                {
+                    $("#loader-container").show()
+                }
+                })
+                .done(function(data){
+                    $("#loader-container").hide()
+                    $('#card-publishing-container').append(data.html)
+                })
+            }
+            else {
+                $('#end-data-records').show()
+            }
+        }
+
+        var page = 1;
+        var maxPage = @json($maxPage);
+        var limitReached = false
+
+        $(window).scroll(function(){
+            if (!limitReached) {
+                if ($(window).scrollTop() + $(window).height() + 100 >= $(document).height()) {
+                    if (page < maxPage) {
+                        page++
+                    }
+                    if (page == 1) {
+                        limitReached = true;
+                    }
+                    loadPublishings(page, limitReached)
+                    limitReached = (page == maxPage) ? true : false;
+                }
+            } else {
+                $('#end-data-records').show()
+            }
+        })
+    })
+
+
+</script>
 
 @endsection
