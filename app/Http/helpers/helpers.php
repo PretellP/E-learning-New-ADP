@@ -338,7 +338,7 @@ function validateSurveys()
         return $survey->survey->destined_to == 'evaluation';
     })->isEmpty();
 
-    if ($checkEmptyCourseLive) {
+    if ($checkEmptyCourseLive && $user->profile_survey == 'N') {
         storeUserSurvey('course_live', $user, NULL);
     }
     if ($checkEmptyUserProfile) {
@@ -401,6 +401,34 @@ function verifyLastSurveyGroup($answersByGroup, $group_position)
 {
     return $answersByGroup->count() == $group_position ? true : false;
 }
+
+function getProfileTypes(UserSurvey $userSurvey)
+{
+    $EC = 0;
+    $OR = 0;
+    $CA = 0;
+    $EA = 0;
+
+    foreach ($userSurvey->surveyAnswers as $surveyAnswer) {
+        if(Str::contains( $surveyAnswer->pivot->answer,'(EC)') == '(EC)')
+            $EC++;
+        if(Str::contains( $surveyAnswer->pivot->answer,'(OR)') == '(OR)')
+            $OR++;
+        if(Str::contains( $surveyAnswer->pivot->answer,'(CA)') == '(CA)')
+            $CA++;  
+        if(Str::contains( $surveyAnswer->pivot->answer,'(EA)') == '(EA)') 
+            $EA++;
+    }
+
+    return array(
+        "EC" => $EC,
+        "OR" => $OR,
+        "CA" => $CA,
+        "EA" => $EA
+    );
+}
+
+
 
 // ---------------------------------------------
 

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Survey};
+use App\Models\{Survey, UserSurvey};
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -125,5 +125,32 @@ class SurveyService
         }
 
         return $survey->delete();
+    }
+
+    public function getByFilters(Request $request, $destined_to = NULL)
+    {
+        $surveysQuery = UserSurvey::with([
+                                        'user', 
+                                        'survey', 
+                                        'surveyAnswers', 
+                                        'company',
+                                        'event.user',
+                                        'event.course',
+                                    ])
+                                    ->withCount('surveyAnswers')
+                                    ->where('status', 'finished')
+                                    ->orderBy('id', 'desc');
+
+        if ($destined_to) {
+            $surveysQuery->whereHas('survey', function ($q) use ($destined_to){
+                $q->where('destined_to', $destined_to);
+            });
+        }
+
+        if ($request->filled('from_date') && $request->filled('end_date')) {
+            $surveysQuery->whereBetween('end_time', [$request->from_date, $request->end_date]);
+        }
+
+        return $surveysQuery->limit(500)->get();
     }
 }

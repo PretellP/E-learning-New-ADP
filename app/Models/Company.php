@@ -22,4 +22,9 @@ class Company extends Model
     {
         return $this->hasMany(Certification::class, 'company_id', 'id');
     }
+
+    public function userSurveys()
+    {
+        return $this->hasMany(UserSurvey::class, 'company_id', 'id');
+    }
 }

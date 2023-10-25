@@ -20,6 +20,11 @@ button:focus {
     outline: none !important;
 }
 
+.btn-success, .btn-success.disabled
+{
+    background-color: rgb(7, 216, 0);
+}
+
 .modal-xl {
     max-width: 1140px;
 }
@@ -148,6 +153,36 @@ input.no-label-error~label.error {
 
 .modal-multiple-columns > div:last-child {
     padding-right: 0;
+}
+
+/* --------- SIDEAR ------------*/
+
+.main-sidebar .sidebar-menu li ul.dropdown-menu li a
+{
+    height: auto;
+}
+
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li a
+{
+    padding: 1em 0 1em 3em !important;
+    line-height: 1.3em;
+    color: rgba(255, 255, 255, 0.801);
+    background-color: var(--first-color);
+}
+
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li a:hover
+{
+    filter: brightness(1.1);
+}
+
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-menu li a
+{
+    background-color: var(--first-color);
+}
+
+.main-sidebar .sidebar-menu li ul.dropdown-menu li a i
+{
+    width: auto !important;
 }
 
 /* --------- DATE RANGE STYLES -------*/

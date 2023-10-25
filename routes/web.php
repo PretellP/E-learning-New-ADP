@@ -45,6 +45,8 @@ use App\Http\Controllers\Aula\Instructor\{
 
 use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
 use App\Http\Controllers\Auth\{LoginController, RegisterController};
+use App\Http\Controllers\Reports\ProfileSurveyReportController;
+use App\Http\Controllers\Reports\SurveysReportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -358,7 +360,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.surveys.store');
                 Route::post('/actualizar/{survey}', 'update')->name('admin.surveys.update');
                 Route::delete('/eliminar/{survey}', 'destroy')->name('admin.surveys.destroy');
-              
             });
 
             Route::group(['prefix' => 'grupos'], function () {
@@ -389,10 +390,26 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                     Route::group(['prefix' => 'opciones'], function () {
 
                         Route::controller(AdminSurveyOptionController::class)->group(function () {
-
                             Route::delete('/eliminar/{option}', 'destroy')->name('admin.surveys.groups.statement.options.destroy');
                         });
                     });
+                });
+            });
+
+            Route::group(['prefix' => 'reporte-perfil-de-usuario'], function () {
+
+                Route::controller(ProfileSurveyReportController::class)->group(function () {
+
+                    Route::get('/', 'index')->name('admin.surveys.reports.profile.index');
+                    Route::get('/descargar-excel-perfil-de-usuario', 'downloadExcelProfile')->name('admin.download.excel.profile');
+                });
+            });
+
+            Route::group(['prefix' => 'reporte-encuestados'], function () {
+
+                Route::controller(SurveysReportController::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.surveys.reports.index');
+                    Route::get('/descargar-excel-encuestas-usuario', 'downloadExcelUserSurveys')->name('admin.download.excel.user.surveys');
                 });
             });
         });
@@ -438,10 +455,17 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
             Route::get('/mi-progreso', [AulaMyProgressController::class, 'index'])->name('aula.myprogress.index');
 
-            Route::get('/encuestas', [AulaSurveysController::class, 'index'])->name('aula.surveys.index');
-            Route::get('/encuesta/{user_survey}/{num_question}', [AulaSurveysController::class, 'show'])->name('aula.surveys.show');
-            Route::post('/encuestas/iniciar/{userSurvey}', [AulaSurveysController::class, 'start'])->name('aula.surveys.start');
-            Route::patch('/encuestas/actualizar/{user_survey}/{group_id}', [AulaSurveysController::class, 'update'])->name('aula.surveys.update');
+            Route::group(['prefix' => 'encuestas'], function () {
+
+                Route::controller(AulaSurveysController::class)->group(function () {
+
+                    Route::get('/', 'index')->name('aula.surveys.index');
+                    Route::get('/{user_survey}/{num_question}', 'show')->name('aula.surveys.show');
+                    Route::post('/iniciar/{userSurvey}', 'start')->name('aula.surveys.start');
+                    Route::patch('/actualizar/{user_survey}/{group_id}', 'update')->name('aula.surveys.update');
+                });
+            });
+
         });
 
         Route::group(['middleware' => 'check.role:instructor'], function () {

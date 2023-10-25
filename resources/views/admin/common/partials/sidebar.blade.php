@@ -92,17 +92,38 @@
                 </a>
             </li>
 
-            <li class="{{setActive('admin.surveys.*')}}">
-                <a href="{{ route('admin.surveys.index') }}" class="nav-link">
+
+            <li class="dropdown {{setActive('admin.surveys.*')}}" >
+                <a href="javascript:void(0);" class="nav-link has-dropdown">
                     <i class="fa-solid fa-square-poll-vertical"></i>
                     <span>Encuestas</span>
                 </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('admin.surveys.index') }}" class="nav-link">
+                            <i class="fa-solid fa-circle fa-2xs"></i>
+                            Todos
+                        </a>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('admin.surveys.reports.index') }}" class="nav-link">
+                            <i class="fa-solid fa-circle fa-2xs"></i>
+                            Reporte de encuestados
+                        </a>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('admin.surveys.reports.profile.index') }}" class="nav-link">
+                            <i class="fa-solid fa-circle fa-2xs"></i>
+                            Reporte de perfil de usuario
+                        </a>
+                    </li>
+                </ul>
             </li>
 
-            
-
-
-            
 
             <li class="logout">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); 

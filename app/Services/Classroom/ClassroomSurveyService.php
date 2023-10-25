@@ -3,6 +3,7 @@
 namespace App\Services\Classroom;
 
 use App\Models\{Survey, User, UserSurvey};
+use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -144,8 +145,6 @@ class ClassroomSurveyService
 
     private function getPreviousNumQuestion($previous_group, $answers)
     {
-        // $previous_num_question = NULL;
-
         if($previous_group != null)
         {   
             $last_statement_id = $previous_group->first()->id;
@@ -185,15 +184,95 @@ class ClassroomSurveyService
 
     public function endSurvey(UserSurvey $userSurvey)
     {
+        $userSurvey->loadRelationships();
+
         $end_time = Carbon::now('America/Lima');
         $start_time = Carbon::parse($userSurvey->start_time);
         $total_time = intdiv($start_time->diffInSeconds($end_time), 60);
+        $isValid = true;
 
-        return $userSurvey->update([
-            'status' => 'finished',
-            'end_time' => $end_time,
-            'total_time' => $total_time
-        ]);
+        if ($userSurvey->survey->destined_to == 'user_profile') {
+            $profileTypesArray = $this->getProfileTypes($userSurvey);
+
+            if ($this->isValidProfile($profileTypesArray)) {
+                $this->udpateUserProfile($this->getUserProfle($profileTypesArray));
+            }
+            else {
+                $userSurvey->surveyAnswers()->detach();
+                $isValid = false;
+            } 
+        }
+
+        if ($isValid) {
+            return $userSurvey->update([
+                'status' => 'finished',
+                'end_time' => $end_time,
+                'total_time' => $total_time
+            ]);
+        }
+
+        return false;
+    }
+
+    private function isValidProfile(array $types)
+    {
+        return $types['EC'] != $types['CA'] && $types['OR'] != $types['EA'];
+    }
+
+    public function getProfileTypes(UserSurvey $userSurvey)
+    {
+        $EC = 0;
+        $OR = 0;
+        $CA = 0;
+        $EA = 0;
+
+        foreach ($userSurvey->surveyAnswers as $surveyAnswer) {
+            if(Str::contains( $surveyAnswer->pivot->answer,'(EC)') == '(EC)')
+                $EC++;
+            if(Str::contains( $surveyAnswer->pivot->answer,'(OR)') == '(OR)')
+                $OR++;
+            if(Str::contains( $surveyAnswer->pivot->answer,'(CA)') == '(CA)')
+                $CA++;  
+            if(Str::contains( $surveyAnswer->pivot->answer,'(EA)') == '(EA)') 
+                $EA++;
+        }
+
+        return array(
+            "EC" => $EC,
+            "OR" => $OR,
+            "CA" => $CA,
+            "EA" => $EA
+        );
+    }
+
+    public function getUserProfle(array $types)
+    {
+        $OR = $types['OR'];
+        $EC = $types['EC'];
+        $CA = $types['CA'];
+        $EA = $types['EA'];
+
+        $div = (($OR * $EC * 4)/2);
+        $aco = (($EA * $EC * 4)/2);
+        $asi = (($OR * $CA * 4)/2);
+        $con = (($EA * $CA * 4)/2);
+
+        if ($div>$aco && $div>$asi && $div>$con) $profile = 'DIVERGENTE';
+        if ($aco>$div && $aco>$asi && $aco>$con) $profile = 'ACOMODADOR';
+        if ($asi>$div && $asi>$aco && $asi>$con) $profile = 'ASIMILADOR';
+        if ($con>$div && $con>$aco && $con>$asi) $profile = 'CONVERGENTE';
+
+        return $profile ?? '-';
+    }
+
+    private function udpateUserProfile($profile)
+    {
+        $user = Auth::user();
+
+        return $user->update([
+                    "profile_user" => $profile,
+                    "profile_survey" => 'S',
+                ]);
     }
 
 }

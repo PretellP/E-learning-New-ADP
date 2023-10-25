@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Aula\Participant;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{UserSurvey, Survey, SurveyStatement};
-use App\Services\Classroom\ClassroomSurveyService;
+use App\Models\{UserSurvey};
+use App\Services\Classroom\{ClassroomSurveyService};
 use Auth;
-use Carbon\Carbon;
 
 class AulaSurveysController extends Controller
 {
@@ -90,4 +89,5 @@ class AulaSurveysController extends Controller
 
         return redirect()->route('aula.surveys.index');
     }
+
 }

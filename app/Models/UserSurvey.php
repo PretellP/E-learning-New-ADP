@@ -22,6 +22,11 @@ class UserSurvey extends Model
         return $this->belongsTo(Survey::class, 'survey_id', 'id');
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id', 'id');

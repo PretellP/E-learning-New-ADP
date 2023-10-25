@@ -8821,7 +8821,6 @@ $(function () {
 
 
 
-
     // ---------- GROUP SHOW -------------
 
     // -------- STATEMENTS TABLE ----------
@@ -9102,8 +9101,6 @@ $(function () {
 
     }
 
-
-
     // -------- STATEMENT SHOW -----------
 
     if ($('#updateStatementForm').length) {
@@ -9180,6 +9177,179 @@ $(function () {
 
     }
 
+
+
+
+    // ---------- PROFILE USER SURVEY REPORT -------------
+
+    if ($('#profile-surveys-table').length) {
+
+        var profileSurveysTable;
+
+        var formSurveyReport = $('#form-survey-report-export')
+        var inputFromDate = formSurveyReport.find('input[name=from_date]')
+        var inputEndDate = formSurveyReport.find('input[name=end_date]')
+
+        if ($('#date-range-input-surveys').length) {
+
+            $('#date-range-input-surveys').val('Todos los registros');
+
+            $('.daterange-cus').daterangepicker({
+                locale: { format: 'YYYY-MM-DD' },
+                drops: 'down',
+                opens: 'right'
+            });
+
+            $('#daterange-btn-surveys').daterangepicker({
+                ranges: {
+                    'Todo': [moment('1970-01-01'), moment('3000-01-01')],
+                    'Hoy': [moment(), moment().add(1, 'days')],
+                    'Ayer': [moment().subtract(1, 'days'), moment()],
+                    'Últimos 7 días': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+                    'Últimos 30 días': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+                    'Este mes': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+                    'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+                },
+                startDate: moment('1970-01-01'),
+                endDate: moment('3000-01-01'),
+            }, function (start, end) {
+
+                if (start.format('YYYY-MM-DD') == '1970-01-01') {
+                    inputFromDate.val('')
+                    inputEndDate.val('')
+                    $('#date-range-input-surveys').val('Todos los registros');
+                } else {
+                    inputFromDate.val(start.format('YYYY-MM-DD'))
+                    inputEndDate.val(end.format('YYYY-MM-DD'))
+                    $('#date-range-input-surveys').val('Del: ' + start.format('YYYY-MM-DD') + ' hasta el: ' + end.format('YYYY-MM-DD'))
+                }
+
+                profileSurveysTable.draw()
+            });
+        }
+
+
+         /* ----- PROFILE SURVEYS TABLE ------*/
+
+        var profileSurveysTableEle = $('#profile-surveys-table')
+        var getDataUrl = profileSurveysTableEle.data('url')
+        profileSurveysTable = profileSurveysTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                'url': getDataUrl,
+                "data": function (data) {
+                    data.from_date = $('#daterange-btn-surveys').data('daterangepicker').startDate.format('YYYY-MM-DD')
+                    data.end_date = $('#daterange-btn-surveys').data('daterangepicker').endDate.format('YYYY-MM-DD')
+                }
+            },
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'user.dni', name: 'user.dni' },
+                { data: 'user.paternal', name: 'user.paternal' },
+                { data: 'user.maternal', name: 'user.maternal' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'company.description', name: 'company.description', orderable: false},
+                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'end_time', name: 'end_time' },
+                { data: 'ec', name: 'ec', orderable: false },
+                { data: 'or', name: 'or', orderable: false },
+                { data: 'ca', name: 'ca', orderable: false },
+                { data: 'ea', name: 'ea', orderable: false },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+            // dom: 'rtip'
+        });
+
+
+
+    }
+
+
+    // ----------- GENERAL SURVEYS REPORT -------------
+
+    if ($('#general-user-surveys-table').length) {
+
+        var userSurveysTable;
+
+        var formSurveyReport = $('#form-survey-report-export')
+        var inputFromDate = formSurveyReport.find('input[name=from_date]')
+        var inputEndDate = formSurveyReport.find('input[name=end_date]')
+
+        if ($('#date-range-input-surveys').length) {
+
+            $('#date-range-input-surveys').val('Todos los registros');
+
+            $('.daterange-cus').daterangepicker({
+                locale: { format: 'YYYY-MM-DD' },
+                drops: 'down',
+                opens: 'right'
+            });
+
+            $('#daterange-btn-surveys').daterangepicker({
+                ranges: {
+                    'Todo': [moment('1970-01-01'), moment('3000-01-01')],
+                    'Hoy': [moment(), moment().add(1, 'days')],
+                    'Ayer': [moment().subtract(1, 'days'), moment()],
+                    'Últimos 7 días': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+                    'Últimos 30 días': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+                    'Este mes': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+                    'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+                },
+                startDate: moment('1970-01-01'),
+                endDate: moment('3000-01-01'),
+            }, function (start, end) {
+
+                if (start.format('YYYY-MM-DD') == '1970-01-01') {
+                    inputFromDate.val('')
+                    inputEndDate.val('')
+                    $('#date-range-input-surveys').val('Todos los registros');
+                } else {
+                    inputFromDate.val(start.format('YYYY-MM-DD'))
+                    inputEndDate.val(end.format('YYYY-MM-DD'))
+                    $('#date-range-input-surveys').val('Del: ' + start.format('YYYY-MM-DD') + ' hasta el: ' + end.format('YYYY-MM-DD'))
+                }
+
+                userSurveysTable.draw()
+            });
+        }
+
+        /* ----- USER SURVEYS TABLE ------*/
+
+        var userSurveysTableEle = $('#general-user-surveys-table')
+        var getDataUrl = userSurveysTableEle.data('url')
+        userSurveysTable = userSurveysTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                'url': getDataUrl,
+                "data": function (data) {
+                    data.from_date = $('#daterange-btn-surveys').data('daterangepicker').startDate.format('YYYY-MM-DD')
+                    data.end_date = $('#daterange-btn-surveys').data('daterangepicker').endDate.format('YYYY-MM-DD')
+                }
+            },
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'user.dni', name: 'user.dni' },
+                { data: 'user.paternal', name: 'user.paternal' },
+                { data: 'user.maternal', name: 'user.maternal' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'company.description', name: 'company.description', orderable: false},
+                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'end_time', name: 'end_time' },
+                { data: 'event.user.name', name: 'event.user.name' , orderable: false},
+                { data: 'event.course.description', name: 'event.course.description' , orderable: false},
+            ],
+            order: [
+                [0, 'desc']
+            ]
+            // dom: 'rtip'
+        });
+    }
 
 
 

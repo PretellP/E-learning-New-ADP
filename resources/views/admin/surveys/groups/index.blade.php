@@ -76,7 +76,7 @@
 
                             <div class="form-row questionTypeSelect">
                                 <div class="form-group col-12">
-                                    <label>Tipo de pregunta *</label>
+                                    <label>Tipo de respuesta *</label>
                                     <div class="input-group">
                                         <select name="type" class="form-control select2"
                                             id="registerStatementTypeSelect"
