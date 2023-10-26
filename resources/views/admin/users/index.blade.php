@@ -54,9 +54,7 @@
 @section('modals')
 
 @include('admin.users.partials.modals._register_user')
-
 @include('admin.users.partials.modals._edit_user')
-
 @include('admin.users.partials.modals._register_massive')
 
 @endsection

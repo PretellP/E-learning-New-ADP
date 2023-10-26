@@ -319,6 +319,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.events.store');
                 Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
                 Route::delete('/eliminar/{event}', 'destroy')->name('admin.events.destroy');
+
             });
 
             Route::controller(AdminCertificationsController::class)->group(function () {
@@ -329,6 +330,9 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
                 Route::post('/actualizar-certificado/{certification}', 'update')->name('admin.events.certifications.update');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
+
+                Route::get('/descargar-plantilla-registro-masivo-participantes', 'downloadImportTemplate')->name('admin.events.certifications.download.participants.template');
+                Route::post('/registro-masivo-de-participantes/{event}', 'storeMassive')->name('admin.events.certifications.store.massive');
             });
         });
 

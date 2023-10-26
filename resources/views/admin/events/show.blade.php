@@ -39,6 +39,11 @@
                     <i class="fa-solid fa-square-plus"></i> &nbsp; Registrar participantes
                     <i class="fa-solid fa-spinner fa-spin loadSpinner ms-1"></i>
                 </button>
+
+                <button class="btn btn-primary ms-3" id="btn-register-massive-participant-modal"
+                    data-toggle="modal" data-target="#RegisterParticipantsMassiveModal">
+                    <i class="fa-solid fa-file-import"></i> &nbsp; Registro masivo
+                </button>
             </div>
 
             <table id="certifications-table" class="table table-hover"
@@ -69,11 +74,10 @@
 @section('modals')
 
 @include('admin.events.partials._modal_edit_event', ["show" => 'show'])
-
 @include('admin.events.partials._modal_store_participant')
-
 @include('admin.events.partials._modal_show_certification')
-
 @include('admin.events.partials._modal_edit_certification')
+
+@include('admin.events.partials.modals._register_participants_massive')
 
 @endsection

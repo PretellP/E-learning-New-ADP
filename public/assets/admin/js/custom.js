@@ -6591,6 +6591,9 @@ $(function () {
                 { data: 'assit', name: 'assit', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
             ],
+            order: [
+                [0, 'desc']
+            ]
             // dom: 'rtip'
         });
 
@@ -7517,6 +7520,97 @@ $(function () {
             })
 
         })
+
+
+
+        // ----------- REGISTRO MASIVO -----------
+
+
+         var registerParticipantsMassiveForm = $('#registerParticipantsMassiveForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterParticipantsMassiveModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.status == 'exceeded') {
+                                Toast.fire({
+                                    icon: 'warning',
+                                    text: data.note
+                                })
+                            }
+                            else {
+                                var dataStatus = data.status
+
+                                certificationsTable.draw()
+                                registerParticipantsMassiveForm.resetForm()
+                                form.trigger('reset')
+                                modal.modal('hide')
+
+                                $('#event-box-container').html(data.html)
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        if (dataStatus == 'limitreached') {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.note
+                                            })
+                                        }
+                                        if (data.validationFailure) {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.failureMessage
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
 
     }
 

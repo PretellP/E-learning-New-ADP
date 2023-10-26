@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\UserImportTemplate;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileImportRequest;
 use App\Http\Requests\UserRequest;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
@@ -132,10 +133,10 @@ class AdminUsersController extends Controller
         return $usersImportTemplate->download('usuarios_plantilla_registro_masivo.xlsx');
     }
 
-    public function massiveStore(Request $request)
+    public function massiveStore(FileImportRequest $request)
     {
         $note = NULL;
-        $notebody = NULL;
+        
         $foundDuplicates = false;
 
         try {

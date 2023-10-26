@@ -93,7 +93,7 @@ class CertificationService
         return false;
     }
 
-    public function store($request, Event $event)
+    public function store($dnis, Event $event)
     {
         /** @var self $status */
         /** @var self $note */
@@ -102,7 +102,7 @@ class CertificationService
 
         $event->loadParticipantsRelationships();
 
-        $users = $this->getFilteredUsers($request['users-selected'], $event);
+        $users = $this->getFilteredUsers($dnis, $event);
 
         foreach ($users as $i => $user) {
 
