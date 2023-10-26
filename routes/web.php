@@ -43,7 +43,7 @@ use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
 };
 
-use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
+use App\Http\Controllers\Home\{HomeAboutController, HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
 use App\Http\Controllers\Auth\{LoginController, RegisterController};
 use App\Http\Controllers\Reports\ProfileSurveyReportController;
 use App\Http\Controllers\Reports\SurveysReportController;
@@ -84,6 +84,17 @@ Route::controller(HomeFreeCourseController::class)->group(function () {
     Route::get('/cursos-libres/categoría/{category}', 'show')->name('home.freecourses.show');
 });
 
+// * Wallace add...
+
+Route::controller(HomeAboutController::class)->group(function () {
+
+    Route::get('/nosotros', 'index')->name('home.about.index');
+
+});
+
+
+// * End wallace add...
+
 
 Route::controller(HomeCertificationController::class)->group(function () {
 
@@ -95,7 +106,7 @@ Auth::routes(['register' => false, 'login' => false]);
 
 Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
-    // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------ 
+    // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------
 
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin'], function () {
 
@@ -433,7 +444,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
             });
         });
 
-       
+
         Route::get('/e-learning', [AulaCourseController::class, 'index'])->name('aula.course.index');
 
         Route::group(['middleware' => 'check.role:participants'], function () {

@@ -21,11 +21,17 @@
 
                 <b>¡Hola, {{ ucwords(mb_strtolower(Auth::user()->full_name, 'UTF-8')) }}!</b>
             </span>
-    
+
             @endauth
 
             <a href="{{ route('home.index') }}" class="nav-item nav-link {{ setActive('home.index') }}">Inicio</a>
-            <a href="#" class="nav-item nav-link">Nosotros</a>
+
+            {{-- * Wallace add... --}}
+
+            <a href="{{ route('home.about.index') }}" class="nav-item nav-link" {{ setActive('home.about.*') }}>Nosotros</a>
+
+            {{-- * End wallace add... --}}
+
             <a href="{{ route('home.courses.index') }}" class="nav-item nav-link  {{ setActive('home.courses.*') }}">Cursos</a>
             <a href="{{ route('home.freecourses.categories.index') }}" class="nav-item nav-link  {{ setActive('home.freecourses.*') }}">Cursos libres</a>
 
@@ -58,7 +64,7 @@
             {{-- <i class="fa fa-arrow-right ms-3"></i> --}}
         </a>
 
-        <a href="#" class="nav-link" onclick="event.preventDefault(); 
+        <a href="#" class="nav-link" onclick="event.preventDefault();
         document.getElementById('logout-form').submit();">
             <i class="fa-solid fa-power-off"></i> &nbsp;
             <span>Cerrar sesión</span>
