@@ -159,12 +159,12 @@ class CertificationService
         throw new Exception(config('parameters.exception_message'));
     }
 
-    private function getFilteredUsers($ids, Event $event)
+    private function getFilteredUsers($dnis, Event $event)
     {
-        $filteredIds = array_diff($ids, $event->participants->pluck('id')->toArray());
+        $filteredDnis = array_diff($dnis, $event->participants->pluck('dni')->toArray());
 
-        return User::whereIn('id', $filteredIds)->with(['company:id', 'miningUnits:id'])
-            ->has('company')->get();
+        return User::whereIn('dni', $filteredDnis)->with(['company:id', 'miningUnits:id'])
+                ->has('company')->get();
     }
 
     private function getCertificationArrayData(User $user, string $assist, string $type)

@@ -20,6 +20,10 @@
                 <button class="btn btn-primary" id="btn-register-user-modal" data-url='{{route('admin.users.registerGetCompanies')}}'>
                     <i class="fa-solid fa-user-plus"></i> &nbsp; Registrar
                 </button>
+
+                <button class="btn btn-primary ms-4" id="btn-register-user-modal" data-toggle='modal' data-target="#RegisterUserMassiveModal">
+                    <i class="fa-solid fa-file-import"></i> &nbsp; Registro masivo
+                </button>
             </div>
 
             <table id="users-table" class="table table-hover" data-url="{{route('admin.users.index')}}">
@@ -52,5 +56,7 @@
 @include('admin.users.partials.modals._register_user')
 
 @include('admin.users.partials.modals._edit_user')
+
+@include('admin.users.partials.modals._register_massive')
 
 @endsection

@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin'], function () {
 
         // ---- ADMIN DASHBOARD PRINCIPAL VIEW --------
+        
         Route::get('/inicio', [AdminController::class, 'index'])->name('admin.home.index');
 
         // --------------- USERS -------------------------
@@ -116,6 +117,9 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.user.store');
                 Route::post('/actualizar/{user}', 'update')->name('admin.user.update');
                 Route::delete('/eliminar/{user}', 'destroy')->name('admin.user.delete');
+
+                Route::get('/descargar-plantilla-registro-masivo', 'downloadImportTemplate')->name('admin.user.download.register.template');
+                Route::post('/registro-masivo', 'massiveStore')->name('admin.users.massive.store');
             });
         });
 

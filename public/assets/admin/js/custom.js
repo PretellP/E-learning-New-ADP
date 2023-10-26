@@ -1415,6 +1415,90 @@ $(function () {
         })
 
 
+
+        // ----------- REGISTRO MASIVO -----------
+
+
+        var registerUserMassiveForm = $('#registerUserMassiveForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterUserMassiveModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            usersTable.draw()
+                                    
+                            registerUserMassiveForm.resetForm()
+                            form.trigger('reset')
+                            modal.modal('hide')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    if (data.foundDuplicates) {
+                                        var notebody = $('<ul/>')
+                                        $.each(data.notebody, function (key, values) {
+                                            var sub_li = $('<li/>').html(values)
+                                            notebody.append(sub_li)
+                                        })
+
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            showConfirmButton: true,
+                                            timerProgressBar: false,
+                                            icon: 'warning',
+                                            title: data.note,
+                                            html: notebody[0].outerHTML
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+
     }
 
     if ($('#ownerCompanies-table').length) {
@@ -9029,7 +9113,7 @@ $(function () {
             $('tr.alternative-row').each(function (index) {
 
                 $(this).attr('data-index', index)
-                $(this).find('.alternative-number').html(index + 1) 
+                $(this).find('.alternative-number').html(index + 1)
             })
         }
 
@@ -9229,7 +9313,7 @@ $(function () {
         }
 
 
-         /* ----- PROFILE SURVEYS TABLE ------*/
+        /* ----- PROFILE SURVEYS TABLE ------*/
 
         var profileSurveysTableEle = $('#profile-surveys-table')
         var getDataUrl = profileSurveysTableEle.data('url')
@@ -9250,8 +9334,8 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false},
-                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'company.description', name: 'company.description', orderable: false },
+                { data: 'survey.name', name: 'survey.name', orderable: false },
                 { data: 'end_time', name: 'end_time' },
                 { data: 'ec', name: 'ec', orderable: false },
                 { data: 'or', name: 'or', orderable: false },
@@ -9338,11 +9422,11 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false},
-                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'company.description', name: 'company.description', orderable: false },
+                { data: 'survey.name', name: 'survey.name', orderable: false },
                 { data: 'end_time', name: 'end_time' },
-                { data: 'event.user.name', name: 'event.user.name' , orderable: false},
-                { data: 'event.course.description', name: 'event.course.description' , orderable: false},
+                { data: 'event.user.name', name: 'event.user.name', orderable: false },
+                { data: 'event.course.description', name: 'event.course.description', orderable: false },
             ],
             order: [
                 [0, 'desc']

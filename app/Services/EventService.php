@@ -142,7 +142,7 @@ class EventService
             ->addColumn('choose', function ($user) {
                 $checkbox = '<div class="custom-checkbox custom-control">
                     <input type="checkbox" name="users-selected[]" 
-                     class="custom-control-input checkbox-user-input" id="checkbox-' . $user->id . '" value="' . $user->id . '">
+                     class="custom-control-input checkbox-user-input" id="checkbox-' . $user->id . '" value="' . $user->dni . '">
                     <label for="checkbox-' . $user->id . '" class="custom-control-label checkbox-user-label">&nbsp;</label>
                 </div>';
                 return $checkbox;
