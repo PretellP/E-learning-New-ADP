@@ -92,7 +92,6 @@
                 </a>
             </li>
 
-
             <li class="dropdown {{setActive('admin.surveys.*')}}" >
                 <a href="javascript:void(0);" class="nav-link has-dropdown">
                     <i class="fa-solid fa-square-poll-vertical"></i>
@@ -124,6 +123,12 @@
                 </ul>
             </li>
 
+            <li class="{{setActive('admin.certifications.*')}}">
+                <a href="{{ route('admin.certifications.index') }}" class="nav-link">
+                    <i class="fa-solid fa-file-contract"></i>
+                    <span>Certificados</span>
+                </a>
+            </li>
 
             <li class="logout">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); 

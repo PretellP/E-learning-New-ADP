@@ -42,9 +42,16 @@ use App\Http\Controllers\Aula\Participant\{
 use App\Http\Controllers\Aula\Instructor\{
     AulaCourseInstController,
 };
-
-use App\Http\Controllers\Home\{HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
+use App\Http\Controllers\Home\{
+    HomeController, 
+    HomeCourseController, 
+    HomeCertificationController, 
+    HomeFreeCourseController
+};
 use App\Http\Controllers\Auth\{LoginController, RegisterController};
+use App\Http\Controllers\Pdf\{
+    PdfCertificationController
+};
 use App\Http\Controllers\Reports\ProfileSurveyReportController;
 use App\Http\Controllers\Reports\SurveysReportController;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +100,9 @@ Route::controller(HomeCertificationController::class)->group(function () {
 Auth::routes(['register' => false, 'login' => false]);
 
 
+
 Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
+
 
     // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------ 
 
@@ -337,6 +346,18 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         });
 
 
+        // ----------- CERTIFICATIONS MODULE ------------
+
+        Route::group(['prefix' => 'certificados'], function () {
+
+            Route::controller(AdminCertificationsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.certifications.index');
+
+            });
+        });
+
+
         // --------------- ANNOUNCEMENTS ----------------
 
         Route::group(['prefix' => 'anuncios'], function () {
@@ -421,8 +442,17 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 });
             });
         });
+
+
+        // ----------------- PDFS ------------------
+
+        // ------ certifications ------------
+
+        Route::get('/generar-pdf-evaluación-de-participante/{certification}', [PdfCertificationController::class, 'examPdf'])->name('pdf.certification.exam');
     });
 
+
+    
 
     // -------  RUTAS DE LA INTERFAZ AULA ---------------
 
@@ -491,4 +521,5 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         Route::post('/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
         Route::patch('/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
     });
+
 });

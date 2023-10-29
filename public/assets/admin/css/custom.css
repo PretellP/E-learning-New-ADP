@@ -1704,7 +1704,6 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 
 
 
-
 /* ------------- SURVEY --------------*/
 
 
@@ -1754,3 +1753,7 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
         padding-right: 5px !important;
     }
 }
+
+
+
+

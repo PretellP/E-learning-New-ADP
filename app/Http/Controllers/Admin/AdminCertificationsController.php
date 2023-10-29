@@ -6,7 +6,7 @@ use App\Exports\ParticipantsImportTemplate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileImportRequest;
 use App\Imports\ParticipantsImport;
-use App\Models\{Certification, Company, Event, MiningUnit};
+use App\Models\{Certification, Company, Course, Event, MiningUnit};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
@@ -187,5 +187,23 @@ class AdminCertificationsController extends Controller
             "message" => $message,
             "html" => $html
         ]);
+    }
+
+
+    // ------------------- CERTIFICATION MODULE ------------------------
+
+    public function index(Request $request) 
+    {
+        if ($request->ajax()) {
+            return $this->certificationService->getApprovedCertificationDataTable($request);
+        }
+
+        $companies = Company::get(['id', 'description']);
+        $courses = Course::where('course_type', 'REGULAR')->get(['id', 'description']);
+
+        return view('admin.certifications.index', compact(
+            'companies',
+            'courses'
+        ));
     }
 }

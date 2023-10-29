@@ -84,6 +84,7 @@
                         @endforeach
                     </div>
                 </div>
+
                 <div id='chart-{{$course->id}}' class="course-progress-results"
                     data-approved='{{ $certifications->where('status', 'finished' )->filter( function ($certification, $key) use ($course) {
                         $event = getEventFromCourseAndCertification($course, $certification);
@@ -106,6 +107,7 @@
                         </span>
                         <canvas class="canva-progress" id="progress-chart-{{$course->id}}"></canvas>
                 </div>
+                
             </div>
 
             <hr>
