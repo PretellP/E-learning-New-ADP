@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\{
     DynamicAlternative,
+    DynamicQuestion,
     Evaluation,
     QuestionType
 };
@@ -59,34 +60,49 @@ class DatabaseSeeder extends Seeder
         //     "min_score" => 14
         // ]);
 
-        $evaluations = Evaluation::whereHas('question', function ($q){
-            $q->where('question_type_id', 1);
-        })
-        ->with(['question' => fn($q) =>
-            $q->select('id','question_type_id')
-                ->with('alternatives:id,dynamic_question_id,description,is_correct')
-        ])->get();
+        // $evaluations = Evaluation::whereHas('question', function ($q){
+        //     $q->where('question_type_id', 1);
+        // })
+        // ->with(['question' => fn($q) =>
+        //     $q->select('id','question_type_id')
+        //         ->with('alternatives:id,dynamic_question_id,description,is_correct')
+        // ])->get();
 
-        foreach ($evaluations as $evaluation) {
+        // foreach ($evaluations as $evaluation) {
 
-            $correct_alt_id = $evaluation->question->alternatives->where('is_correct', 1)->first()->id;
-            $selected_alt = $evaluation->selected_alternatives;
-            $selected_alt_related = $evaluation->question->alternatives->where('description', $selected_alt)->first();
+        //     $correct_alt_id = $evaluation->question->alternatives->where('is_correct', 1)->first()->id;
+        //     $selected_alt = $evaluation->selected_alternatives;
+        //     $selected_alt_related = $evaluation->question->alternatives->where('description', $selected_alt)->first();
 
-            if ($selected_alt_related) {
+        //     if ($selected_alt_related) {
 
-                $selected_alt_id = $selected_alt_related->id;
+        //         $selected_alt_id = $selected_alt_related->id;
 
-                $evaluation->update([
-                    "correct_alternatives" => $correct_alt_id,
-                    "selected_alternatives" => $selected_alt_id
-                ]);
-            }
-            else {
-                $evaluation->update([
-                    "correct_alternatives" => $correct_alt_id,
-                ]);
-            }
-        }
+        //         $evaluation->update([
+        //             "correct_alternatives" => $correct_alt_id,
+        //             "selected_alternatives" => $selected_alt_id
+        //         ]);
+        //     }
+        //     else {
+        //         $evaluation->update([
+        //             "correct_alternatives" => $correct_alt_id,
+        //         ]);
+        //     }
+        // }
+
+        // DB::table('dynamic_questions')->update([
+        //     "active" => 'S',
+        // ]);
+
+        // $evaluations = Evaluation::with('question:id')->get(['id', 'question_id']);
+
+        // foreach ($evaluations as $evaluation) {
+        //     if (!$evaluation->question) {
+        //         $evaluation->update([
+        //             "question_id" => NULL
+        //         ]);
+        //     }
+        // }
+
     }
 }

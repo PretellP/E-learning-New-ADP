@@ -7,13 +7,20 @@ use App\Models\Certification;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
-
 class PdfCertificationController extends Controller
 {
     public function examPdf(Certification $certification)
     {
-        // $certification->load('
-        // ');
+        $certification->load(
+            [
+                'event.exam.course', 
+                'company', 
+                'user', 
+                'evaluations.question.alternatives.droppableOption',
+                'evaluations.question.alternatives.file',
+                'evaluations.question.droppableOptions'
+            ]
+        );
 
         $pdf = Pdf::loadView('admin.common.pdf.certification_exam', compact(
             'certification'

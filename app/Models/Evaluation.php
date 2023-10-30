@@ -11,7 +11,17 @@ class Evaluation extends Model
     use HasFactory;
 
     protected $table = 'evaluations';
-    protected $guarded = [];
+    protected $fillable = [
+        'evaluation_time',
+        'statement',
+        'correct_alternatives',
+        'selected_alternatives',
+        'points',
+        'is_correct',
+        'question_order',
+        'question_id',
+        'certification_id'
+    ];
 
 
     public function certification()

@@ -166,6 +166,23 @@ input.no-label-error~label.error {
     padding-right: 0;
 }
 
+
+select[readonly].select2-hidden-accessible + .select2-container {
+    pointer-events: none;
+    touch-action: none;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection {
+    background: #eee;
+    box-shadow: none;
+}
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection__arrow,
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection__clear {
+    display: none;
+}
+
+
 /* --------- SIDEAR ------------*/
 
 .main-sidebar .sidebar-menu li ul.dropdown-menu li a {
@@ -796,7 +813,7 @@ textarea.form-control {
 }
 
 .little-text-width {
-    width: 130px;
+    width: 150px;
     display: inline-block;
 }
 
@@ -1586,6 +1603,14 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     border-radius: 10px 0 0 0;
 }
 
+
+.is_correct_button.not-user-allowed,
+.add_custom_button.not-user-allowed,
+.custom-checkbox-question.not-user-allowed,
+.delete-image-alternative.not-user-allowed
+{
+    filter: saturate(0);
+}
 
 
 

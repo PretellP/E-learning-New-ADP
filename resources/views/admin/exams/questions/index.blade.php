@@ -103,6 +103,7 @@
                         <th>Puntos</th>
                         <th>Fecha de creación</th>
                         <th>Fecha de actualización</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

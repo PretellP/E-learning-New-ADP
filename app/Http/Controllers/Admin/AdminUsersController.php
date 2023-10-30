@@ -119,6 +119,7 @@ class AdminUsersController extends Controller
     public function destroy(User $user)
     {
         $user->miningUnits()->detach();
+        $user->progressChapters()->detach();
         $user->delete();
 
         return response()->json([

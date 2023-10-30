@@ -4530,7 +4530,6 @@ $(function () {
 
     if ($('#questions-table').length) {
 
-
         /* ----- QUESTIONs TABLE ------*/
 
         var questionsTableEle = $('#questions-table');
@@ -4547,6 +4546,7 @@ $(function () {
                 { data: 'points', name: 'points' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'updated_at', name: 'updated_at' },
+                { data: 'active', name: 'active' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
         });
@@ -5296,6 +5296,16 @@ $(function () {
             img_holder.removeClass('show').empty()
             img_input.val('')
         }
+
+
+        $('html').on('change', '#question-status-checkbox', function () {
+            var txtDesc = $('#txt-status-question');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
 
 
         // ---------------- AÑADIR ALTERNATIVA --------------
@@ -6386,6 +6396,17 @@ $(function () {
                         inputQuestionQty.rules('add', { max: questQty })
                         inputMinScore.rules('add', { max: maxScore })
 
+                        if (event.finished_certifications_count != 0) {
+                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
+                            examSelect.attr('readonly', 'true')
+                            inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
+                            inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
+                        } else {
+                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
+                            examSelect.removeAttr('readonly')
+                            inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
+                            inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
+                        }
                     },
                     complete: function (data) {
                         modal.modal('show')
@@ -6919,6 +6940,17 @@ $(function () {
                         inputQuestionQty.rules('add', { max: questQty })
                         inputMinScore.rules('add', { max: maxScore })
 
+                        if (event.finished_certifications_count != 0) {
+                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
+                            examSelect.attr('readonly', 'true')
+                            inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
+                            inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
+                        } else {
+                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
+                            examSelect.removeAttr('readonly')
+                            inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
+                            inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
+                        }
                     },
                     complete: function (data) {
                         modal.modal('show')

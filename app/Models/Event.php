@@ -114,9 +114,17 @@ class Event extends Model
 
     public function loadParticipantsCount()
     {
-        return $this->loadCount(['participants' => function ($query) {
-            $query->where('certifications.evaluation_type', 'certification');
-        }]);
+        return $this->loadCount(
+            [
+                'participants' => function ($query) {
+                    $query->where('certifications.evaluation_type', 'certification');
+                }, 
+                'certifications as finished_certifications_count' => function ($query2) {
+                    $query2->where('status', 'finished')
+                            ->where('evaluation_type', 'certification');
+                }
+            ]
+        );
     }
 
     public function loadCounts()
@@ -129,8 +137,8 @@ class Event extends Model
         return $this->load([
             'user',
             'responsable',
-            'exam'=> fn($q) => $q->withCount('questions')
-                                ->withAvg('questions', 'points'),
+            'exam'=> fn($q) => $q->withCount(['questions' => fn($q) => $q->where('active', 'S')])
+                                ->withAvg(['questions' => fn($q) => $q->where('active', 'S')], 'points'),
             'course',
             'testExam',
             'ownerCompany',

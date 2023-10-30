@@ -105,7 +105,7 @@ class QuizController extends Controller
                 $certification->assist_user == 'S'
             ) {
 
-                $questions = $exam->questions()->inRandomOrder()->take($event->questions_qty)->get();
+                $questions = $exam->questions()->where('active', 'S')->inRandomOrder()->take($event->questions_qty)->get();
 
                 $time = time();
 

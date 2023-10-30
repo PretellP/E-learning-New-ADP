@@ -20,7 +20,8 @@ class DynamicQuestion extends Model
         'statement',
         'points',
         'exam_id',
-        'question_type_id'
+        'question_type_id',
+        'active'
     ];
 
 
@@ -63,7 +64,8 @@ class DynamicQuestion extends Model
                 'questionType', 
                 'alternatives' => fn ($query) => 
                     $query->with(['file', 'droppableOption'])
-            ]);
+            ])
+            ->loadCount('evaluations');
     }
     
 

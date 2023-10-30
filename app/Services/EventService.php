@@ -105,6 +105,13 @@ class EventService
     {
         $data = normalizeInputStatus($request->validated());
 
+        if ($event->finished_certifications_count != 0) {
+            $data['date'] = $event->date;
+            $data['exam_id'] = $event->exam_id;
+            $data['min_score'] = $event->min_score;
+            $data['questions_qty'] = $event->questions_qty;
+        }
+
         $isUpdated = $event->update($data);
 
         if ($isUpdated) {

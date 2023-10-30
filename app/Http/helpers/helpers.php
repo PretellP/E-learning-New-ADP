@@ -634,6 +634,13 @@ function getCountAllParticipants($course)
 // ------------------------------------
 
 
+function getCleanArrayAnswers($string)
+{
+    return array_map(function ($x) {
+        return trim(strtoupper($x));
+    }, explode(',', $string));
+}
+
 
 
 
