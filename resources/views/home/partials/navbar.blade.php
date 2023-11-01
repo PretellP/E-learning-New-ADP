@@ -28,11 +28,12 @@
 
             {{-- * Wallace add... --}}
 
-            <a href="{{ route('home.about.index') }}" class="nav-item nav-link" {{ setActive('home.about.*') }}>Nosotros</a>
+            <a href="{{ route('home.about.index') }}" class="nav-item nav-link {{ setActive('home.about.index') }}">Nosotros</a>
 
             {{-- * End wallace add... --}}
 
             <a href="{{ route('home.courses.index') }}" class="nav-item nav-link  {{ setActive('home.courses.*') }}">Cursos</a>
+
             <a href="{{ route('home.freecourses.categories.index') }}" class="nav-item nav-link  {{ setActive('home.freecourses.*') }}">Cursos libres</a>
 
             @guest

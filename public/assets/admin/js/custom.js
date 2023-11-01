@@ -9029,7 +9029,7 @@ $(function () {
             $('tr.alternative-row').each(function (index) {
 
                 $(this).attr('data-index', index)
-                $(this).find('.alternative-number').html(index + 1) 
+                $(this).find('.alternative-number').html(index + 1)
             })
         }
 

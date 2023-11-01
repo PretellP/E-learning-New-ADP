@@ -55,9 +55,17 @@
     opacity: 1;
 }
 
-.gap-1{gap: 1em;}
-.gap-2{gap: 3em;}
-.gap-3{gap: 3em;}
+.gap-1 {
+    gap: 1em;
+}
+
+.gap-2 {
+    gap: 3em;
+}
+
+.gap-3 {
+    gap: 3em;
+}
 
 
 /*** Button ***/
@@ -123,8 +131,7 @@
     color: var(--second-color);
 }
 
-.navbar-nav .user-avatar-container
-{
+.navbar-nav .user-avatar-container {
     display: inline-block;
     height: 50px;
     width: 50px;
@@ -132,8 +139,7 @@
     overflow: hidden;
 }
 
-.navbar-nav .user-avatar-container img
-{
+.navbar-nav .user-avatar-container img {
     height: 100%;
     width: 100%;
     object-fit: cover;
@@ -447,28 +453,22 @@
 }
 
 
-.testimonial-carousel .owl-item
-{
+.testimonial-carousel .owl-item {
     width: 300px !important;
 }
 
-.testimonial-carousel
-.img-carousel-container
-{
+.testimonial-carousel .img-carousel-container {
     height: 300px !important;
 }
 
-img.img-cover
-{
+img.img-cover {
     height: 100% !important;
     width: 100% !important;
     object-fit: cover;
 }
 
 
-.testimonial-carousel 
-.image-user-container
-{
+.testimonial-carousel .image-user-container {
     height: 300px;
 }
 
@@ -798,12 +798,69 @@ input.no-label-error~label.error {
 }
 
 
-.text-primary
-{
+.text-primary {
     color: var(--first-color) !important;
 }
 
-.text-secondary
-{
+.text-secondary {
     color: var(--second-color) !important;
 }
+
+.description-c-o {
+    width: 70%;
+    /* height: 90px; */
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-size: 17px;
+    align-items: center;
+    font-style: oblique;
+}
+
+.logo-adp-white img {
+    width: 190px;
+    margin-bottom: 1rem;
+}
+
+.card-img {
+    height: 160px;
+    margin-top: -70px;
+}
+
+.card-img img {
+    width: auto;
+    height: 100%;
+}
+
+
+.div-effect {
+    margin-top: 70px;
+    height: calc(100% - 70px);
+    border: 1px solid transparent;
+    transition: all.4s ease;
+    border-radius: 15px;
+    bottom: 90px;
+}
+
+
+.div-effect:hover {
+    border: 1px solid var(--first-color);
+    transform: scale(1.04);
+    box-shadow: 1px 1px 25px 1px rgba(119, 189, 198, 0.75);
+    -webkit-box-shadow: 1px 1px 25px 1px rgba(119, 189, 198, 0.75);
+    -moz-box-shadow: 1px 1px 25px 1px rgba(119, 189, 198, 0.75);
+}
+.accordion-item{
+    border: none;
+}
+
+.accordion-button{
+    border-radius: 35px !important;
+}
+
+.making-numbers{
+    font-size: 2.7em;
+    font-weight: bold;
+    color: #06BBCC;
+}
+

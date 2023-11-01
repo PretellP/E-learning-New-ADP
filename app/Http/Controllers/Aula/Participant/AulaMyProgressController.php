@@ -21,7 +21,7 @@ class AulaMyProgressController extends Controller
                                             $query->where('user_id', $user->id);
                                         })
                                         ->get();
-                
+                            
         return view('aula.viewParticipant.myprogress.index', [
             'courses' => $courses,
             'freeCourses' => $freeCourses,

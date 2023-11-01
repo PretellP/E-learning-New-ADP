@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Company, MiningUnit, User};
+use App\Models\{Company, Course, MiningUnit, User};
 use App\Services\Home\{HomeCourseService};
 use App\Services\{CourseCategoryService};
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class HomeController extends Controller
         $courses = app(HomeCourseService::class)->getAvailableCourses();
         $instructors = User::where('role', 'instructor')
                             ->where('active', 'S')
-                            ->with(['file' => fn($q) => 
+                            ->with(['file' => fn($q) =>
                                     $q->where('category', 'avatars')
                             ])->get();
 
@@ -24,10 +24,19 @@ class HomeController extends Controller
                                                         ->where('status', 'S')
                                                         ->get();
 
+
+        $numberUsers = User::where('role', 'participants')->count();
+        $numberCourses = Course::count();
+        $numberCompanys = Company::count();
+
+
         return view('home.home', compact(
             'courses',
             'instructors',
             'categories',
+            'numberUsers',
+            'numberCourses',
+            'numberCompanys'
         ));
     }
 
