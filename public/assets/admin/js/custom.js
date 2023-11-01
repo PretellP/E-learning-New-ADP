@@ -1445,7 +1445,7 @@ $(function () {
                         if (data.success) {
 
                             usersTable.draw()
-                                    
+
                             registerUserMassiveForm.resetForm()
                             form.trigger('reset')
                             modal.modal('hide')
@@ -6606,6 +6606,10 @@ $(function () {
 
     if ($('#certifications-table').length) {
 
+        $('#search_from_status_select').select2({
+            minimumResultsForSearch: -1
+        })
+
         /* ----- CERTIFICATIONS TABLE ------*/
 
         var certificationsTableEle = $('#certifications-table');
@@ -6614,7 +6618,12 @@ $(function () {
             language: DataTableEs,
             serverSide: true,
             processing: true,
-            ajax: getDataUrl,
+            ajax: {
+                "url": getDataUrl,
+                "data": function (data) {
+                    data.from_status = $('#search_from_status_select').val()
+                }
+            },
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'user.dni', name: 'user.dni' },
@@ -6631,6 +6640,10 @@ $(function () {
             ]
             // dom: 'rtip'
         });
+
+        $('html').on('change', '#search_from_status_select', function () {
+            certificationsTable.draw()
+        })
 
 
         // ------------ UPDATE ASSIST -------------
@@ -7173,6 +7186,7 @@ $(function () {
         })
 
         $('.main-content').on('click', '#btn-register-participant-modal', function () {
+
             var modal = $('#registerParticipantsModal')
 
             if (!$('#users-participants-table_wrapper').length) {
@@ -7665,6 +7679,57 @@ $(function () {
                     }
                 })
             }
+        })
+
+
+        // ---------------- RESETEAR CERTIFICADO ------------
+
+        $('html').on('click', '.resetCertification-btn', function () {
+            let url = $(this).data('url')
+
+            Swal.fire({
+                title: 'Reiniciar evaluación',
+                text: "Confirme antes de continuar",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+                        
+                                certificationsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                })
+                                
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        error: function (data) {
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
         })
 
 
@@ -9572,12 +9637,53 @@ $(function () {
                 { data: 'end_time', name: 'end_time' },
                 { data: 'event.user.name', name: 'event.user.name', orderable: false },
                 { data: 'event.course.description', name: 'event.course.description', orderable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order: [
                 [0, 'desc']
             ]
             // dom: 'rtip'
         });
+
+        // ---------- ELIMINAR ENCUESTA DE USUARIO ----------
+
+        $('html').on('click', '.deleteUserSurvey', function () {
+            let url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                userSurveysTable.draw();
+                                
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message,
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
     }
 
 
@@ -9586,7 +9692,7 @@ $(function () {
     if ($('#certifications-index-table').length) {
 
         var certifcationIndexTable;
-    
+
         if ($('#date-range-input-certifications').length) {
 
             $('#date-range-input-certifications').val('Todos los registros');
@@ -9627,7 +9733,7 @@ $(function () {
             certifcationIndexTable.draw()
         })
 
-    
+
         var certificationIndexTableEle = $('#certifications-index-table');
         var getDataUrl = certificationIndexTableEle.data('url');
         certifcationIndexTable = certificationIndexTableEle.DataTable({
@@ -9645,13 +9751,13 @@ $(function () {
             },
             columns: [
                 { data: 'certifications.id', name: 'certifications.id' },
-                { data: 'user.dni', name: 'user.dni'},
+                { data: 'user.dni', name: 'user.dni' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description'},
+                { data: 'company.description', name: 'company.description' },
                 { data: 'event.exam.course.description', name: 'event.exam.course.description' },
                 { data: 'event.date', name: 'event.date' },
                 { data: 'score', name: 'score' },
-                { data: 'exam', name: 'exam', orderable: false, searchable: false, className: 'text-center'},
+                { data: 'exam', name: 'exam', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'certification', name: 'certification', orderable: false, searchable: false, className: 'text-center' },
             ],
             order: [

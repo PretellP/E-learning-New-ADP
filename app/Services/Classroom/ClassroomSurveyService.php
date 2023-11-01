@@ -31,7 +31,7 @@ class ClassroomSurveyService
 
     public function getFirstUserSurvey(Event $event) 
     {
-        $filteredSurveys = $this->getFilteredSurveys($this->getEventSurveysCollection($event));
+        $filteredSurveys = $this->getFilteredSurveys($this->getEventSurveysCollection($event), $event);
 
         if ($filteredSurveys->isNotEmpty()) {
 
@@ -57,20 +57,21 @@ class ClassroomSurveyService
         return collect($surveysArray);
     }
 
-    private function getFilteredSurveys($allSurveys)
+    private function getFilteredSurveys($allSurveys, $event)
     {
-        $finishedUserSurveys = $this->getFinishedUserSurveys();
+        $finishedUserSurveys = $this->getFinishedUserSurveys($event);
 
         return $allSurveys->whereNotIn('id', $finishedUserSurveys->pluck('survey_id'));
     }
 
-    private function getFinishedUserSurveys()
+    private function getFinishedUserSurveys($event)
     {
         $user = Auth::user();
 
         return $user->userSurveys()
                     ->where('status', 'finished')
                     ->where('date', getCurrentDate())
+                    ->where('event_id', $event->id)
                     ->get();
     }
 

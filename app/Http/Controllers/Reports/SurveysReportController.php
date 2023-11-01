@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Reports;
 
 use App\Exports\UserSurveyExport;
 use App\Http\Controllers\Controller;
+use App\Models\UserSurvey;
 use App\Services\Reports\UserSurveyService;
 use App\Services\SurveyService;
+use Exception;
 use Illuminate\Http\Request;
 
 class SurveysReportController extends Controller
@@ -40,5 +42,21 @@ class SurveysReportController extends Controller
         return $surveyProfileExport->download(
             'reporte-encuestas-usuarios_'. $date_info .'.xlsx'
         );
+    }
+
+    public function destroy(UserSurvey $userSurvey)
+    {
+        try {
+            $success = $this->userSurveyService->destroy($userSurvey);
+            $message = config('parameters.deleted_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = config('parameters.exception_message');
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message
+        ]);
     }
 }

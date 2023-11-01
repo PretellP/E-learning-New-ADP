@@ -342,6 +342,8 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
                 Route::get('/descargar-plantilla-registro-masivo-participantes', 'downloadImportTemplate')->name('admin.events.certifications.download.participants.template');
                 Route::post('/registro-masivo-de-participantes/{event}', 'storeMassive')->name('admin.events.certifications.store.massive');
+
+                Route::post('/reiniciar-certificado/{certification}', 'reset')->name('admin.events.certifications.reset');
             });
         });
 
@@ -439,6 +441,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::controller(SurveysReportController::class)->group(function () {
                     Route::get('/', 'index')->name('admin.surveys.reports.index');
                     Route::get('/descargar-excel-encuestas-usuario', 'downloadExcelUserSurveys')->name('admin.download.excel.user.surveys');
+                    Route::delete('/eliminar-encuesta-de-usuario/{userSurvey}', 'destroy')->name('admin.surveys.reports.delete');
                 });
             });
         });

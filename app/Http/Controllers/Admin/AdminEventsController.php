@@ -174,7 +174,7 @@ class AdminEventsController extends Controller
     public function show(Request $request, Event $event)
     {
         if ($request->ajax()) {
-            return app(CertificationService::class)->getParticipantsTable($event);
+            return app(CertificationService::class)->getParticipantsTable($request, $event);
         }
 
         $event->loadRelationships();

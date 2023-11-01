@@ -10,7 +10,7 @@ use App\Models\{Certification, Company, Course, Event, MiningUnit};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminCertificationsController extends Controller
 {
@@ -186,6 +186,24 @@ class AdminCertificationsController extends Controller
             "failureMessage" => $failureMessage,
             "message" => $message,
             "html" => $html
+        ]);
+    }
+
+
+    public function reset(Certification $certification)
+    {
+        try {
+            $this->certificationService->reset($certification);
+            $success = true;
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = config('parameters.exception_message');
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message
         ]);
     }
 

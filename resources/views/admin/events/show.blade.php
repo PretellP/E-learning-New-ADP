@@ -46,6 +46,20 @@
                 </button>
             </div>
 
+            <div class="group-filter-buttons-section flex-wrap">
+                <div class="form-group col-2 p-0 select-group">
+                    <label class="form-label">Filtrar por estado: &nbsp;</label>
+                    <div>
+                        <select name="status" class="form-control select2 select-filter-certifications" id="search_from_status_select">
+                            <option value="">Todos</option>
+                            <option value="approved">Aprobados</option>
+                            <option value="suspended">Desaprobados</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
             <table id="certifications-table" class="table table-hover"
                 data-url="{{ route('admin.events.show', $event) }}">
                 <thead>

@@ -3,18 +3,28 @@
 namespace App\Services;
 
 use App\Models\{Certification, Event, User};
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class CertificationService
 {
-    public function getParticipantsTable(Event $event)
+    public function getParticipantsTable(Request $request, Event $event)
     {
         $query = $event->certifications()
             ->where('evaluation_type', 'certification')
             ->with(['user.company', 'event'])
             ->withCount('evaluations');
+
+        if ($request->filled('from_status')) {
+            if ($request['from_status'] == 'approved') {
+                $query->where('score', '>=', $event->min_score);
+            } 
+            elseif ($request['from_status'] == 'suspended') {
+                $query->where('score', '<', $event->min_score);
+            }
+        }
 
         $allCertifications = DataTables::of($query)
             ->editColumn('user.name', function ($certification) {
@@ -61,6 +71,14 @@ class CertificationService
                         data-send="' . route('admin.events.certifications.edit', $certification) . '"
                         data-original-title="edit" class="edit btn btn-warning btn-sm
                         editCertification-btn"><i class="fa-solid fa-pen-to-square"></i></button>';
+
+                if ($certification->evaluations_count > 0) {
+                    $btn .= '<button data-toggle="modal" data-id="' .
+                    $certification->id . '" data-url="'. route('admin.events.certifications.reset', $certification) .'" 
+                        data-original-title="edit" class="reset ms-3 btn btn-primary btn-sm
+                        resetCertification-btn"><i class="fa-solid fa-rotate-right"></i></button>';
+                }
+                
                 if (
                     $certification->evaluations_count == 0
                 ) {
@@ -190,6 +208,22 @@ class CertificationService
 
         $certification->testCertification()->associate($testCertification);
         $certification->save();
+    }
+
+    public function reset(Certification $certification)
+    {
+        if ($certification->evaluations()->delete()) {
+
+            return $certification->update([
+                "recovered_at" => Carbon::now('America/Lima'),
+                "status" => 'pending',
+                "evaluation_time" => null,
+                "start_time" => null,
+                "end_time" => null,
+                "total_time" => null,
+                "score" => null
+            ]);
+        }
     }
 
 
