@@ -45,9 +45,9 @@ class AdminDynamicQuestionsController extends Controller
 
     public function getQuestionType(Request $request)
     {
-        $html = '';
+        $html = NULL;
         $success = true;
-        $message = '';
+        $message = NULL;
 
         try {
             $html = $this->dynamicQuestionService->getQuestionTypeView(null, $request['value']);
@@ -133,16 +133,23 @@ class AdminDynamicQuestionsController extends Controller
 
         $storage = env('FILESYSTEM_DRIVER');
 
-        try{
-            $this->dynamicQuestionService->destroy($question, $storage);
+        if ($question->evaluations_count == 0) {
 
-            $exam->loadRelationships();
-            $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
-            $message = config('parameters.deleted_message');
-        }
-        catch (Exception $e) {
+            try{
+                $this->dynamicQuestionService->destroy($question, $storage);
+    
+                $exam->loadRelationships();
+                $html = view('admin.exams.partials.exam-box', compact('exam'))->render();
+                $message = config('parameters.deleted_message');
+            }
+            catch (Exception $e) {
+                $success = false;
+                $message = $e->getMessage();
+            }
+
+        } else {
             $success = false;
-            $message = $e->getMessage();
+            $message = config('parameters.exception_message');
         }
 
         if($request->has('place')){

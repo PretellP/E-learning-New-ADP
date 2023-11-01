@@ -47,8 +47,15 @@ class Exam extends Model
     public function loadRelationships()
     {
         return $this->load(['ownerCompany:id,name', 'course:id,description'])
-                    ->loadCount(['questions', 'events'])
-                    ->loadSum('questions', 'points');
+                    ->loadCount([
+                        'questions' => function ($q) {
+                            $q->where('active', 'S');
+                        }, 
+                        'events'
+                    ])
+                    ->loadSum(['questions' => function ($q2) {
+                        $q2->where('active', 'S');
+                    }], 'points');
     }
 
 }

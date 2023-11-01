@@ -35,8 +35,7 @@ class AdminEventsController extends Controller
     public function create()
     {
         $allExams = Exam::withCount('questions')->having('questions_count', '>=', 2)
-                        ->get(['id', 'title', 'exam_type'])
-                    ;
+            ->get(['id', 'title', 'exam_type']);
 
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
@@ -58,12 +57,12 @@ class AdminEventsController extends Controller
         $maxScore = null;
 
         $exam = Exam::where('id', $request['value'])
-                ->withCount('questions')
-                ->withAvg('questions', 'points')->first(); 
+            ->withCount(['questions' => fn ($q) => $q->where('active', 'S')])
+            ->withAvg(['questions' => fn ($q2) => $q2->where('active', 'S')], 'points')->first();
 
         $avg = $exam != null ? $exam->questions_avg_points : 0;
 
-        if($request->has('qty') && $request['qty'] != '') {
+        if ($request->has('qty') && $request['qty'] != '') {
             $maxScore = round($avg * $request['qty']);
         }
 
@@ -96,8 +95,8 @@ class AdminEventsController extends Controller
     {
         $event->loadRelationships()->loadParticipantsCount();
 
-        $allExams = Exam::withCount('questions')->having('questions_count', '>=', 2)
-                        ->get(['id', 'title', 'exam_type']);
+        $allExams = Exam::withCount(['questions' => fn ($q) => $q->where('active', 'S')])->having('questions_count', '>=', 2)
+            ->get(['id', 'title', 'exam_type']);
 
         $exams = $allExams->where('exam_type', 'dynamic');
         $examsTest = $allExams->where('exam_type', 'test');
@@ -121,6 +120,7 @@ class AdminEventsController extends Controller
 
     public function update(EventRequest $request, Event $event)
     {
+        $event->loadParticipantsCount();
         $success = true;
         $html = null;
 
@@ -174,7 +174,7 @@ class AdminEventsController extends Controller
     public function show(Request $request, Event $event)
     {
         if ($request->ajax()) {
-            return app(CertificationService::class)->getParticipantsTable($event);
+            return app(CertificationService::class)->getParticipantsTable($request, $event);
         }
 
         $event->loadRelationships();

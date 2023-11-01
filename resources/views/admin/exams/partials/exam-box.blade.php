@@ -29,7 +29,7 @@
         </div>
         <div class="counts-cont text-no-wrap">
             <div class="sections-cont">
-                <span class="little-text little-text-width">N° de enunciados: </span>
+                <span class="little-text little-text-width">N° de enunciados activos: </span>
                 <span class="text-bold">
                    {{ $exam->questions_count }}
                 </span>

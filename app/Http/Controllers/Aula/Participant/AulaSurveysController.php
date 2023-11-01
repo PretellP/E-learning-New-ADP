@@ -87,6 +87,10 @@ class AulaSurveysController extends Controller
 
         $this->surveyService->endSurvey($user_survey);
 
+        if ($user_survey->event != null) {
+            return redirect()->route('aula.course.evaluation.index', ["course" => $user_survey->event->course]);
+        }
+
         return redirect()->route('aula.surveys.index');
     }
 

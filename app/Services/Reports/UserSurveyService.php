@@ -37,8 +37,25 @@ class UserSurveyService
                 return $userSurvey->event != null ? $userSurvey->event->course->description :
                                                     'No hay registros';
             })
+            ->addColumn('action', function ($userSurvey) {
+                $btn = '<a href="javascript:void(0)" data-id="'.
+                                            $userSurvey->id.'" data-original-title="delete"
+                                            data-url="'.route('admin.surveys.reports.delete', $userSurvey).'" class="ms-3 edit btn btn-danger btn-sm
+                                            deleteUserSurvey"><i class="fa-solid fa-trash-can"></i></a>';
+
+                return $btn;
+            })
             ->make(true);
 
         return $allUserSurveys;
+    }
+
+    public function destroy(UserSurvey $userSurvey) 
+    {
+        if ($userSurvey->surveyAnswers()->detach()) {
+            return $userSurvey->delete();
+        }
+
+        throw new Exception(config('parameters.exception_message'));
     }
 }

@@ -13,18 +13,17 @@ use App\Models\{
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Services\Classroom\ClassroomQuizService;
 
 date_default_timezone_set("America/Lima");
 
 class QuizController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $quizService;
+
+    public function __construct(ClassroomQuizService $service)
     {
+        $this->quizService = $service;
     }
 
     public function show(Certification $certification, $num_question)
@@ -105,7 +104,13 @@ class QuizController extends Controller
                 $certification->assist_user == 'S'
             ) {
 
-                $questions = $exam->questions()->inRandomOrder()->take($event->questions_qty)->get();
+                $userSurvey = $this->quizService->getEnabledUserSurvey($certification);
+
+                if ($userSurvey) {
+                    return redirect()->route('aula.surveys.start', $userSurvey);
+                }
+
+                $questions = $exam->questions()->where('active', 'S')->inRandomOrder()->take($event->questions_qty)->get();
 
                 $time = time();
 

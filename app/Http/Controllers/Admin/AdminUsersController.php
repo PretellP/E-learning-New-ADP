@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UserImportTemplate;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileImportRequest;
 use App\Http\Requests\UserRequest;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\{User, Company, MiningUnit};
 use App\Services\UserService;
 use Exception;
@@ -117,10 +119,56 @@ class AdminUsersController extends Controller
     public function destroy(User $user)
     {
         $user->miningUnits()->detach();
+        $user->progressChapters()->detach();
         $user->delete();
 
         return response()->json([
             "success" => true
+        ]);
+    }
+
+    public function downloadImportTemplate()
+    {
+        $usersImportTemplate = new UserImportTemplate();
+
+        return $usersImportTemplate->download('usuarios_plantilla_registro_masivo.xlsx');
+    }
+
+    public function massiveStore(FileImportRequest $request)
+    {
+        $note = NULL;
+        
+        $foundDuplicates = false;
+
+        try {
+            $usersImport = new UsersImport;
+            $usersImport->import($request->file('file'));
+
+            $success = true;
+            $message = config('parameters.stored_message');
+
+            if ($usersImport->failures()->isNotEmpty()) {
+                $success = false;
+                $message = 'Se encontró errores de validación';
+            }
+    
+            if ($usersImport->getDuplicatedDnis()->isNotEmpty()) {
+                $foundDuplicates = true;
+                $note = 'Se encontraron DNIs duplicados';
+                $notebody = $usersImport->getDuplicatedDnis();
+            }
+
+        } catch (Exception $e) {
+            $success = false;
+            $message = config('parameters.exception_message');
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message,
+            'foundDuplicates' => $foundDuplicates,
+            'note' => $note,
+            'notebody' => $notebody
         ]);
     }
 }

@@ -328,24 +328,12 @@ function validateSurveys()
         ->with('survey:id,destined_to')
         ->get();
 
-    $checkEmptyCourseLive = $surveys->filter(function ($survey) {
-        return $survey->survey->destined_to == 'course_live';
-    })->isEmpty();
     $checkEmptyUserProfile = $surveys->filter(function ($survey) {
         return $survey->survey->destined_to == 'user_profile';
     })->isEmpty();
-    $checkEmptyEvaluation = $surveys->filter(function ($survey) {
-        return $survey->survey->destined_to == 'evaluation';
-    })->isEmpty();
 
-    if ($checkEmptyCourseLive && $user->profile_survey == 'N') {
-        storeUserSurvey('course_live', $user, NULL);
-    }
-    if ($checkEmptyUserProfile) {
+    if ($checkEmptyUserProfile && $user->profile_survey == 'N') {
         storeUserSurvey('user_profile', $user, NULL);
-    }
-    if ($checkEmptyEvaluation) {
-        storeUserSurvey('evaluation', $user, NULL);
     }
 
     $checkPendingSurveys = $surveys->filter(function ($survey) {
@@ -633,6 +621,13 @@ function getCountAllParticipants($course)
 
 // ------------------------------------
 
+
+function getCleanArrayAnswers($string)
+{
+    return array_map(function ($x) {
+        return trim(strtoupper($x));
+    }, explode(',', $string));
+}
 
 
 

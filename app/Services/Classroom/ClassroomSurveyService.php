@@ -2,12 +2,10 @@
 
 namespace App\Services\Classroom;
 
-use App\Models\{Survey, User, UserSurvey};
+use App\Models\{Event, Survey, User, UserSurvey};
 use Auth;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 
 class ClassroomSurveyService 
@@ -18,13 +16,97 @@ class ClassroomSurveyService
                                 ->whereHas('survey', function($query){
                                     $query->where('active', 'S');
                                 })
-                                ->with(['survey' => fn ($query) => 
-                                    $query->with('file')
-                                        ->select('id', 'name', 'destined_to', 'active')
-                                ])
+                                ->with(
+                                    [
+                                    'survey' => fn ($query) => 
+                                        $query->with('file')
+                                            ->select('id', 'name', 'destined_to', 'active'),
+                                    'event.course'
+                                    ]
+                                )
                                 ->get();
 
         return $pendingSurveys;
+    }
+
+    public function getFirstUserSurvey(Event $event) 
+    {
+        $filteredSurveys = $this->getFilteredSurveys($this->getEventSurveysCollection($event), $event);
+
+        if ($filteredSurveys->isNotEmpty()) {
+
+            $userSurvey = $this->getUserSurveyExists($filteredSurveys->first(), $event);
+
+            if ($userSurvey) {
+                return $userSurvey;
+            } else {
+                return $this->generateUserSurvey($filteredSurveys->first(), $event->id);
+            }
+        }
+
+        return null;
+    }
+
+    private function getEventSurveysCollection($event)
+    {
+        $surveysArray = array();
+
+        if ($event->flg_survey_course == 'S') array_push($surveysArray, $this->getSurveyFromContext('course_live'));
+        if ($event->flg_survey_evaluation == 'S') array_push($surveysArray, $this->getSurveyFromContext('evaluation'));
+
+        return collect($surveysArray);
+    }
+
+    private function getFilteredSurveys($allSurveys, $event)
+    {
+        $finishedUserSurveys = $this->getFinishedUserSurveys($event);
+
+        return $allSurveys->whereNotIn('id', $finishedUserSurveys->pluck('survey_id'));
+    }
+
+    private function getFinishedUserSurveys($event)
+    {
+        $user = Auth::user();
+
+        return $user->userSurveys()
+                    ->where('status', 'finished')
+                    ->where('date', getCurrentDate())
+                    ->where('event_id', $event->id)
+                    ->get();
+    }
+
+    public function getSurveyFromContext($destined_to)
+    {
+        return Survey::where('active', 'S')
+                    ->where('destined_to', $destined_to)
+                    ->first();
+    }
+
+    private function getUserSurveyExists($survey, $event)
+    {
+        $user = Auth::user();
+
+        return $user->userSurveys()->whereHas('survey', function($q) use ($survey) {
+                                        $q->where('destined_to', $survey->destined_to);
+                                    })
+                                    ->where('event_id', $event->id)
+                                    ->first();
+    }
+
+    private function generateUserSurvey($survey, $event_id = null)
+    {
+        $user = Auth::user();
+
+        return $user->userSurveys()->create([
+            'survey_id' => $survey->id,
+            'company_id' => $user->company_id,
+            'date' => getCurrentDate(),
+            'status' => 'pending',
+            'start_time' => null,
+            'end_time' => null,
+            'total_time' => null,
+            'event_id' => $event_id
+        ]);
     }
 
     // ------------- START EVALUATION ---------------
@@ -195,7 +277,7 @@ class ClassroomSurveyService
             $profileTypesArray = $this->getProfileTypes($userSurvey);
 
             if ($this->isValidProfile($profileTypesArray)) {
-                $this->udpateUserProfile($this->getUserProfle($profileTypesArray));
+                $this->udpateUserProfile($this->getUserProfile($profileTypesArray));
             }
             else {
                 $userSurvey->surveyAnswers()->detach();
@@ -245,7 +327,7 @@ class ClassroomSurveyService
         );
     }
 
-    public function getUserProfle(array $types)
+    public function getUserProfile(array $types)
     {
         $OR = $types['OR'];
         $EC = $types['EC'];

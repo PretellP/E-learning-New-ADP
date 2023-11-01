@@ -44,7 +44,11 @@ use App\Http\Controllers\Aula\Instructor\{
 };
 
 use App\Http\Controllers\Home\{HomeAboutController, HomeController, HomeCourseController, HomeCertificationController, HomeFreeCourseController};
+
 use App\Http\Controllers\Auth\{LoginController, RegisterController};
+use App\Http\Controllers\Pdf\{
+    PdfCertificationController
+};
 use App\Http\Controllers\Reports\ProfileSurveyReportController;
 use App\Http\Controllers\Reports\SurveysReportController;
 use Illuminate\Support\Facades\Auth;
@@ -104,13 +108,17 @@ Route::controller(HomeCertificationController::class)->group(function () {
 Auth::routes(['register' => false, 'login' => false]);
 
 
+
 Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
+
+    // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------
 
     // RUTAS DE LA INTERFAZ ADMINISTRADOR ------------------
 
     Route::group(['middleware' => 'check.role:admin', 'prefix' => 'admin'], function () {
 
         // ---- ADMIN DASHBOARD PRINCIPAL VIEW --------
+
         Route::get('/inicio', [AdminController::class, 'index'])->name('admin.home.index');
 
         // --------------- USERS -------------------------
@@ -127,6 +135,9 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.user.store');
                 Route::post('/actualizar/{user}', 'update')->name('admin.user.update');
                 Route::delete('/eliminar/{user}', 'destroy')->name('admin.user.delete');
+
+                Route::get('/descargar-plantilla-registro-masivo', 'downloadImportTemplate')->name('admin.user.download.register.template');
+                Route::post('/registro-masivo', 'massiveStore')->name('admin.users.massive.store');
             });
         });
 
@@ -326,6 +337,7 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.events.store');
                 Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
                 Route::delete('/eliminar/{event}', 'destroy')->name('admin.events.destroy');
+
             });
 
             Route::controller(AdminCertificationsController::class)->group(function () {
@@ -336,6 +348,23 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/actualizar-asistencia/{certification}', 'updateAssist')->name('admin.events.certification.updateAssist');
                 Route::post('/actualizar-certificado/{certification}', 'update')->name('admin.events.certifications.update');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
+
+                Route::get('/descargar-plantilla-registro-masivo-participantes', 'downloadImportTemplate')->name('admin.events.certifications.download.participants.template');
+                Route::post('/registro-masivo-de-participantes/{event}', 'storeMassive')->name('admin.events.certifications.store.massive');
+
+                Route::post('/reiniciar-certificado/{certification}', 'reset')->name('admin.events.certifications.reset');
+            });
+        });
+
+
+        // ----------- CERTIFICATIONS MODULE ------------
+
+        Route::group(['prefix' => 'certificados'], function () {
+
+            Route::controller(AdminCertificationsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.certifications.index');
+
             });
         });
 
@@ -421,10 +450,20 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::controller(SurveysReportController::class)->group(function () {
                     Route::get('/', 'index')->name('admin.surveys.reports.index');
                     Route::get('/descargar-excel-encuestas-usuario', 'downloadExcelUserSurveys')->name('admin.download.excel.user.surveys');
+                    Route::delete('/eliminar-encuesta-de-usuario/{userSurvey}', 'destroy')->name('admin.surveys.reports.delete');
                 });
             });
         });
+
+
+        // ----------------- PDFS ------------------
+
+        // ------ certifications ------------
+
+        Route::get('/generar-pdf-evaluación-de-participante/{certification}', [PdfCertificationController::class, 'examPdf'])->name('pdf.certification.exam');
     });
+
+
 
 
     // -------  RUTAS DE LA INTERFAZ AULA ---------------
@@ -471,8 +510,8 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::controller(AulaSurveysController::class)->group(function () {
 
                     Route::get('/', 'index')->name('aula.surveys.index');
+                    Route::get('/iniciar/{userSurvey}', 'start')->name('aula.surveys.start');
                     Route::get('/{user_survey}/{num_question}', 'show')->name('aula.surveys.show');
-                    Route::post('/iniciar/{userSurvey}', 'start')->name('aula.surveys.start');
                     Route::patch('/actualizar/{user_survey}/{group_id}', 'update')->name('aula.surveys.update');
                 });
             });
@@ -494,4 +533,5 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         Route::post('/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
         Route::patch('/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
     });
+
 });

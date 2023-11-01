@@ -59,6 +59,7 @@
                         <th>Fecha de finalización</th>
                         <th>Instructor</th>
                         <th>Curso</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
             </table>

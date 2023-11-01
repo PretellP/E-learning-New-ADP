@@ -2,19 +2,29 @@
 
 namespace App\Services;
 
-use App\Models\{Certification, Event, Exam, User};
+use App\Models\{Certification, Event, User};
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class CertificationService
 {
-    public function getParticipantsTable(Event $event)
+    public function getParticipantsTable(Request $request, Event $event)
     {
         $query = $event->certifications()
             ->where('evaluation_type', 'certification')
             ->with(['user.company', 'event'])
             ->withCount('evaluations');
+
+        if ($request->filled('from_status')) {
+            if ($request['from_status'] == 'approved') {
+                $query->where('score', '>=', $event->min_score);
+            } 
+            elseif ($request['from_status'] == 'suspended') {
+                $query->where('score', '<', $event->min_score);
+            }
+        }
 
         $allCertifications = DataTables::of($query)
             ->editColumn('user.name', function ($certification) {
@@ -61,6 +71,14 @@ class CertificationService
                         data-send="' . route('admin.events.certifications.edit', $certification) . '"
                         data-original-title="edit" class="edit btn btn-warning btn-sm
                         editCertification-btn"><i class="fa-solid fa-pen-to-square"></i></button>';
+
+                if ($certification->evaluations_count > 0) {
+                    $btn .= '<button data-toggle="modal" data-id="' .
+                    $certification->id . '" data-url="'. route('admin.events.certifications.reset', $certification) .'" 
+                        data-original-title="edit" class="reset ms-3 btn btn-primary btn-sm
+                        resetCertification-btn"><i class="fa-solid fa-rotate-right"></i></button>';
+                }
+                
                 if (
                     $certification->evaluations_count == 0
                 ) {
@@ -93,7 +111,7 @@ class CertificationService
         return false;
     }
 
-    public function store($request, Event $event)
+    public function store($dnis, Event $event)
     {
         /** @var self $status */
         /** @var self $note */
@@ -102,7 +120,7 @@ class CertificationService
 
         $event->loadParticipantsRelationships();
 
-        $users = $this->getFilteredUsers($request['users-selected'], $event);
+        $users = $this->getFilteredUsers($dnis, $event);
 
         foreach ($users as $i => $user) {
 
@@ -123,8 +141,6 @@ class CertificationService
 
         return array("success" => true, "status" => $status, "note" => $note);
     }
-
-
 
     public function updateAssist($request, Certification $certification)
     {
@@ -159,12 +175,12 @@ class CertificationService
         throw new Exception(config('parameters.exception_message'));
     }
 
-    private function getFilteredUsers($ids, Event $event)
+    private function getFilteredUsers($dnis, Event $event)
     {
-        $filteredIds = array_diff($ids, $event->participants->pluck('id')->toArray());
+        $filteredDnis = array_diff($dnis, $event->participants->pluck('dni')->toArray());
 
-        return User::whereIn('id', $filteredIds)->with(['company:id', 'miningUnits:id'])
-            ->has('company')->get();
+        return User::whereIn('dni', $filteredDnis)->with(['company:id', 'miningUnits:id'])
+                ->has('company')->get();
     }
 
     private function getCertificationArrayData(User $user, string $assist, string $type)
@@ -193,4 +209,89 @@ class CertificationService
         $certification->testCertification()->associate($testCertification);
         $certification->save();
     }
+
+    public function reset(Certification $certification)
+    {
+        if ($certification->evaluations()->delete()) {
+
+            return $certification->update([
+                "recovered_at" => Carbon::now('America/Lima'),
+                "status" => 'pending',
+                "evaluation_time" => null,
+                "start_time" => null,
+                "end_time" => null,
+                "total_time" => null,
+                "score" => null
+            ]);
+        }
+    }
+
+
+
+
+
+
+    // ----------------- CERTIFICATION MODULE ------------------------
+
+
+    public function getApprovedCertificationDataTable(Request $request)
+    {
+        $query = Certification::with(['user', 'company', 'event.exam.course'])
+                                ->where('status', 'finished')
+                                ->where('evaluation_type', 'certification')
+                                ->whereHas('event', function ($q) {
+                                    $q->whereRaw('certifications.score >= events.min_score');
+                                })
+                                ->select('certifications.*');
+
+        if ($request->filled('from_date') && $request->filled('end_date')) {
+            $query->whereHas('event', function ($q2) use ($request) {
+                $q2->whereBetween('date', [$request->from_date, $request->end_date]);
+            });
+        }
+
+        if ($request->filled('company')) {
+            $query->where('company_id', $request['company']);
+        }
+
+        if ($request->filled('course')) {
+            $query->whereHas('event.exam', function ($q3) use ($request) {
+                $q3->where('course_id', $request['course']);
+            });
+        }
+
+        $allCertifications = DataTables::of($query)
+            ->editColumn('certifications.id', function ($certification) {
+                return $certification->id;
+            })
+            ->editColumn('user.name', function ($certification) {
+                return $certification->user->full_name_complete;
+            })
+            ->editColumn('score', function ($certification) {
+                return $certification->score ?? '-';
+            })
+            ->addColumn('exam', function ($certification) {
+                $exam_icon = '<a href="'. route('pdf.certification.exam', $certification) .'" target="_BLANK">
+                                    <img src="'. asset('assets/common/img/exam-icon.svg') .'" 
+                                    alt="examen-'. $certification->id .'"
+                                    style="width:30px;">
+                                </a>';
+
+                return $exam_icon;
+            })
+            ->addColumn('certification', function ($certification) {
+                $exam_icon = '<a href="">
+                                    <img src="'. asset('assets/common/img/certification-icon.svg') .'"
+                                     alt="certificado-'. $certification->id .'" 
+                                     style="width:30px;">
+                                </a>';
+
+                return $exam_icon;
+            })
+            ->rawColumns(['exam', 'certification'])
+            ->make(true);
+
+        return $allCertifications;
+    }
+
 }

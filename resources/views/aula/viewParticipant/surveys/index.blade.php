@@ -34,14 +34,26 @@
                         {{$userSurvey->survey->name}}
                     </div>
 
+                    @if ($userSurvey->event)
+                    <div class="text-center">
+                        <div>
+                            <span class="font-weight-bold">Curso: </span>
+                            <span> {{ $userSurvey->event->course->description }} </span>
+                        </div>
+                        <div>
+                            <span class="font-weight-bold">Evento: </span>
+                            <span> {{ $userSurvey->event->description }} </span>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="survey-btn-start">
                         <a href="" onclick="event.preventDefault();
                             document.getElementById('survey-start-form-{{$userSurvey->id}}').submit();">
                             Responder &nbsp;
                             <i class="fa-solid fa-chevron-right"></i>
                         </a>
-                        <form id="survey-start-form-{{$userSurvey->id}}" action="{{route('aula.surveys.start', $userSurvey)}}" method="POST">
-                            @csrf
+                        <form id="survey-start-form-{{$userSurvey->id}}" action="{{route('aula.surveys.start', $userSurvey)}}" method="GET">
                         </form>
                     </div>
 

@@ -22,7 +22,8 @@ class AuthService
         return $request->validate([
                 $this->username() => ['required','string',  
                                 Rule::exists('users')->where(function ($q) {
-                                    $q->where('dni', Auth::user()->dni);
+                                    $q->where('dni', Auth::user()->dni)
+                                        ->where('role', 'participants');
                                 }),],
                 'password' => 'required|string|current_password',
             ]);
@@ -56,7 +57,10 @@ class AuthService
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            $this->username() => 'required|string',
+            $this->username() => ['required','string',
+                                Rule::exists('users')->where(function($q){
+                                    $q->where('role', 'participants');
+                                })],
             'password' => 'required|string',
         ]);
     }

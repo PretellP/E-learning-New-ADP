@@ -13,7 +13,23 @@
         </div>
     </div>
 
+   
     <div class="card-body body-global-container surveys card z-index-2 principal-container">
+
+        @if ($user_survey->event)
+
+        <div class="mb-4">
+            <div>
+                <span class="h5">Curso:</span>
+                 {{ $user_survey->event->course->description }}
+            </div>
+            <div>
+                <span class="h5">Evento:</span>
+                 {{ $user_survey->event->description }}
+            </div>
+        </div>
+            
+        @endif
 
         <div class="step-survey-container">
 

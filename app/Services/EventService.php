@@ -105,6 +105,13 @@ class EventService
     {
         $data = normalizeInputStatus($request->validated());
 
+        if ($event->finished_certifications_count != 0) {
+            $data['date'] = $event->date;
+            $data['exam_id'] = $event->exam_id;
+            $data['min_score'] = $event->min_score;
+            $data['questions_qty'] = $event->questions_qty;
+        }
+
         $isUpdated = $event->update($data);
 
         if ($isUpdated) {
@@ -142,7 +149,7 @@ class EventService
             ->addColumn('choose', function ($user) {
                 $checkbox = '<div class="custom-checkbox custom-control">
                     <input type="checkbox" name="users-selected[]" 
-                     class="custom-control-input checkbox-user-input" id="checkbox-' . $user->id . '" value="' . $user->id . '">
+                     class="custom-control-input checkbox-user-input" id="checkbox-' . $user->id . '" value="' . $user->dni . '">
                     <label for="checkbox-' . $user->id . '" class="custom-control-label checkbox-user-label">&nbsp;</label>
                 </div>';
                 return $checkbox;

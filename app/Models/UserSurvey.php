@@ -51,7 +51,8 @@ class UserSurvey extends Model
                                 'statements.description',
                                 'statements.group_id',
                                 'statements.desc',
-                                'statements.type')
+                                'statements.type'),
+                'event.course'
             ]
         );
     }

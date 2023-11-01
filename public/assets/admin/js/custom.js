@@ -290,7 +290,6 @@ $(function () {
 
     /* ---- DROPDOWN BUTTON -------*/
 
-
     $('.main-content').on('click', '.btn-dropdown-container', function () {
 
         if (window.matchMedia('(min-width: 992px)').matches) {
@@ -325,8 +324,6 @@ $(function () {
 
         button.toggleClass('show')
     })
-
-
 
 
     $.caretTo = function (el, index) {
@@ -1412,6 +1409,90 @@ $(function () {
             }, function (dismiss) {
                 return false;
             });
+        })
+
+
+
+        // ----------- REGISTRO MASIVO -----------
+
+
+        var registerUserMassiveForm = $('#registerUserMassiveForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterUserMassiveModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            usersTable.draw()
+
+                            registerUserMassiveForm.resetForm()
+                            form.trigger('reset')
+                            modal.modal('hide')
+
+                            Toast.fire({
+                                icon: 'success',
+                                text: data.message
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    if (data.foundDuplicates) {
+                                        var notebody = $('<ul/>')
+                                        $.each(data.notebody, function (key, values) {
+                                            var sub_li = $('<li/>').html(values)
+                                            notebody.append(sub_li)
+                                        })
+
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            showConfirmButton: true,
+                                            timerProgressBar: false,
+                                            icon: 'warning',
+                                            title: data.note,
+                                            html: notebody[0].outerHTML
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
         })
 
 
@@ -4449,7 +4530,6 @@ $(function () {
 
     if ($('#questions-table').length) {
 
-
         /* ----- QUESTIONs TABLE ------*/
 
         var questionsTableEle = $('#questions-table');
@@ -4466,6 +4546,7 @@ $(function () {
                 { data: 'points', name: 'points' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'updated_at', name: 'updated_at' },
+                { data: 'active', name: 'active' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
         });
@@ -5217,6 +5298,16 @@ $(function () {
         }
 
 
+        $('html').on('change', '#question-status-checkbox', function () {
+            var txtDesc = $('#txt-status-question');
+            if (this.checked) {
+                txtDesc.html('Activo');
+            } else {
+                txtDesc.html('Inactivo')
+            }
+        });
+
+
         // ---------------- AÑADIR ALTERNATIVA --------------
 
         $('.main-content').on('click', '.add_alternative_button', function () {
@@ -5570,9 +5661,6 @@ $(function () {
 
 
 
-
-
-
     // ------------- EVENTS  INDEX------------------
 
     function infoQtyText(qty) {
@@ -5688,7 +5776,8 @@ $(function () {
 
             $('#registerOwnerCompanySelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#registerExamSelect').select2({
@@ -5698,12 +5787,14 @@ $(function () {
 
             $('#registerTestExamSelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true
             })
 
             $('#registerElearningSelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true
             })
 
 
@@ -6049,7 +6140,8 @@ $(function () {
 
             $('#editOwnerCompanySelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#editExamSelect').select2({
@@ -6059,12 +6151,14 @@ $(function () {
 
             $('#editTestExamSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true
             })
 
             $('#editElearningSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true
             })
 
 
@@ -6178,6 +6272,8 @@ $(function () {
                 var activeChk = form.find('#edit-status-checkbox')
                 var flgTestChk = form.find('#edit-flg-test-checkbox')
                 var flgAssist = form.find('#edit-flg-assist-checkbox')
+                var flgSurveyCourse = form.find('#edit-flg-survey-course')
+                var flgSurveyEvaluation = form.find('#edit-flg-survey-evaluation')
 
                 editEventForm.resetForm()
                 form.trigger('reset')
@@ -6287,6 +6383,18 @@ $(function () {
                             flgAssist.prop('checked', false);
                         }
 
+                        if (event.flg_survey_course == 'S') {
+                            flgSurveyCourse.prop('checked', true);
+                        } else {
+                            flgSurveyCourse.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_evaluation == 'S') {
+                            flgSurveyEvaluation.prop('checked', true);
+                        } else {
+                            flgSurveyEvaluation.prop('checked', false);
+                        }
+
                         form.find('input[name=description]').val(event.description)
 
                         $('#dateinputEdit').data('daterangepicker').setStartDate(event.date);
@@ -6308,6 +6416,17 @@ $(function () {
                         inputQuestionQty.rules('add', { max: questQty })
                         inputMinScore.rules('add', { max: maxScore })
 
+                        if (event.finished_certifications_count != 0) {
+                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
+                            examSelect.attr('readonly', 'true')
+                            inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
+                            inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
+                        } else {
+                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
+                            examSelect.removeAttr('readonly')
+                            inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
+                            inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
+                        }
                     },
                     complete: function (data) {
                         modal.modal('show')
@@ -6487,6 +6606,10 @@ $(function () {
 
     if ($('#certifications-table').length) {
 
+        $('#search_from_status_select').select2({
+            minimumResultsForSearch: -1
+        })
+
         /* ----- CERTIFICATIONS TABLE ------*/
 
         var certificationsTableEle = $('#certifications-table');
@@ -6495,7 +6618,12 @@ $(function () {
             language: DataTableEs,
             serverSide: true,
             processing: true,
-            ajax: getDataUrl,
+            ajax: {
+                "url": getDataUrl,
+                "data": function (data) {
+                    data.from_status = $('#search_from_status_select').val()
+                }
+            },
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'user.dni', name: 'user.dni' },
@@ -6507,8 +6635,15 @@ $(function () {
                 { data: 'assit', name: 'assit', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
             ],
+            order: [
+                [0, 'desc']
+            ]
             // dom: 'rtip'
         });
+
+        $('html').on('change', '#search_from_status_select', function () {
+            certificationsTable.draw()
+        })
 
 
         // ------------ UPDATE ASSIST -------------
@@ -6578,7 +6713,8 @@ $(function () {
 
             $('#editOwnerCompanySelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#editExamSelect').select2({
@@ -6588,12 +6724,14 @@ $(function () {
 
             $('#editTestExamSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true,
             })
 
             $('#editElearningSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true,
             })
 
 
@@ -6709,8 +6847,9 @@ $(function () {
                 var elearningSelect = form.find('#editElearningSelect')
 
                 var activeChk = form.find('#edit-status-checkbox')
-                var flgTestChk = form.find('#edit-flg-test-checkbox')
                 var flgAssist = form.find('#edit-flg-assist-checkbox')
+                var flgSurveyCourse = form.find('#edit-flg-survey-course')
+                var flgSurveyEvaluation = form.find('#edit-flg-survey-evaluation')
 
                 typeSelect.empty()
                 instructorSelect.empty()
@@ -6805,16 +6944,22 @@ $(function () {
                             $('#txt-edit-status').html('Inactivo');
                         }
 
-                        if (event.flg_test_exam == 'S') {
-                            flgTestChk.prop('checked', true);
-                        } else {
-                            flgTestChk.prop('checked', false);
-                        }
-
                         if (event.flg_asist == 'S') {
                             flgAssist.prop('checked', true);
                         } else {
                             flgAssist.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_course == 'S') {
+                            flgSurveyCourse.prop('checked', true);
+                        } else {
+                            flgSurveyCourse.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_evaluation == 'S') {
+                            flgSurveyEvaluation.prop('checked', true);
+                        } else {
+                            flgSurveyEvaluation.prop('checked', false);
                         }
 
                         form.find('input[name=description]').val(event.description)
@@ -6838,6 +6983,17 @@ $(function () {
                         inputQuestionQty.rules('add', { max: questQty })
                         inputMinScore.rules('add', { max: maxScore })
 
+                        if (event.finished_certifications_count != 0) {
+                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
+                            examSelect.attr('readonly', 'true')
+                            inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
+                            inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
+                        } else {
+                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
+                            examSelect.removeAttr('readonly')
+                            inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
+                            inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
+                        }
                     },
                     complete: function (data) {
                         modal.modal('show')
@@ -7030,6 +7186,7 @@ $(function () {
         })
 
         $('.main-content').on('click', '#btn-register-participant-modal', function () {
+
             var modal = $('#registerParticipantsModal')
 
             if (!$('#users-participants-table_wrapper').length) {
@@ -7434,12 +7591,149 @@ $(function () {
 
         })
 
+
+
+        // ----------- REGISTRO MASIVO -----------
+
+
+        var registerParticipantsMassiveForm = $('#registerParticipantsMassiveForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterParticipantsMassiveModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (data.status == 'exceeded') {
+                                Toast.fire({
+                                    icon: 'warning',
+                                    text: data.note
+                                })
+                            }
+                            else {
+                                var dataStatus = data.status
+
+                                certificationsTable.draw()
+                                registerParticipantsMassiveForm.resetForm()
+                                form.trigger('reset')
+                                modal.modal('hide')
+
+                                $('#event-box-container').html(data.html)
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        if (dataStatus == 'limitreached') {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.note
+                                            })
+                                        }
+                                        if (data.validationFailure) {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.failureMessage
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+
+        // ---------------- RESETEAR CERTIFICADO ------------
+
+        $('html').on('click', '.resetCertification-btn', function () {
+            let url = $(this).data('url')
+
+            Swal.fire({
+                title: 'Reiniciar evaluación',
+                text: "Confirme antes de continuar",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+            }).then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (data) {
+
+                            if (data.success) {
+                        
+                                certificationsTable.draw()
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                })
+                                
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: data.message
+                                })
+                            }
+                        },
+                        error: function (data) {
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+
+
     }
-
-
-
-
-
 
 
     // --------------- ANNOUNCEMENTS ----------------
@@ -9229,7 +9523,7 @@ $(function () {
         }
 
 
-         /* ----- PROFILE SURVEYS TABLE ------*/
+        /* ----- PROFILE SURVEYS TABLE ------*/
 
         var profileSurveysTableEle = $('#profile-surveys-table')
         var getDataUrl = profileSurveysTableEle.data('url')
@@ -9250,8 +9544,8 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false},
-                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'company.description', name: 'company.description', orderable: false },
+                { data: 'survey.name', name: 'survey.name', orderable: false },
                 { data: 'end_time', name: 'end_time' },
                 { data: 'ec', name: 'ec', orderable: false },
                 { data: 'or', name: 'or', orderable: false },
@@ -9338,17 +9632,140 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false},
-                { data: 'survey.name', name: 'survey.name', orderable: false},
+                { data: 'company.description', name: 'company.description', orderable: false },
+                { data: 'survey.name', name: 'survey.name', orderable: false },
                 { data: 'end_time', name: 'end_time' },
-                { data: 'event.user.name', name: 'event.user.name' , orderable: false},
-                { data: 'event.course.description', name: 'event.course.description' , orderable: false},
+                { data: 'event.user.name', name: 'event.user.name', orderable: false },
+                { data: 'event.course.description', name: 'event.course.description', orderable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order: [
                 [0, 'desc']
             ]
             // dom: 'rtip'
         });
+
+        // ---------- ELIMINAR ENCUESTA DE USUARIO ----------
+
+        $('html').on('click', '.deleteUserSurvey', function () {
+            let url = $(this).data('url')
+
+            SwalDelete.fire().then(function (e) {
+                if (e.value === true) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.success === true) {
+
+                                userSurveysTable.draw();
+                                
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: result.message,
+                                })
+                            }
+                            else {
+                                Toast.fire({
+                                    icon: 'error',
+                                    text: result.message
+                                })
+                            }
+                        },
+                        error: function (result) {
+                            ToastError.fire()
+                        }
+                    });
+                } else {
+                    e.dismiss;
+                }
+            }, function (dismiss) {
+                return false;
+            });
+        })
+    }
+
+
+    // ------------- CERTIFICATIONS INDEX ------------------
+
+    if ($('#certifications-index-table').length) {
+
+        var certifcationIndexTable;
+
+        if ($('#date-range-input-certifications').length) {
+
+            $('#date-range-input-certifications').val('Todos los registros');
+
+            $('.daterange-cus').daterangepicker({
+                locale: { format: 'YYYY-MM-DD' },
+                drops: 'down',
+                opens: 'right'
+            });
+
+            $('#daterange-btn-certifications').daterangepicker({
+                ranges: {
+                    'Todo': [moment('1970-01-01'), moment('3000-01-01')],
+                    'Hoy': [moment(), moment().add(1, 'days')],
+                    'Ayer': [moment().subtract(1, 'days'), moment()],
+                    'Últimos 7 días': [moment().subtract(6, 'days'), moment().add(1, 'days')],
+                    'Últimos 30 días': [moment().subtract(29, 'days'), moment().add(1, 'days')],
+                    'Este mes': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+                    'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')]
+                },
+                startDate: moment('1970-01-01'),
+                endDate: moment('3000-01-01'),
+            }, function (start, end) {
+
+                if (start.format('YYYY-MM-DD') == '1970-01-01') {
+                    $('#date-range-input-certifications').val('Todos los registros');
+                } else {
+                    $('#date-range-input-certifications').val('Del: ' + start.format('YYYY-MM-DD') + ' hasta el: ' + end.format('YYYY-MM-DD'))
+                }
+
+                certifcationIndexTable.draw()
+            });
+        }
+
+        /* ---------- FILTER SELECT ----------*/
+
+        $('html').on('change', '.select-filter-certification', function () {
+            certifcationIndexTable.draw()
+        })
+
+
+        var certificationIndexTableEle = $('#certifications-index-table');
+        var getDataUrl = certificationIndexTableEle.data('url');
+        certifcationIndexTable = certificationIndexTableEle.DataTable({
+            language: DataTableEs,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                'url': getDataTable,
+                'data': function (data) {
+                    data.from_date = $('#daterange-btn-certifications').data('daterangepicker').startDate.format('YYYY-MM-DD')
+                    data.end_date = $('#daterange-btn-certifications').data('daterangepicker').endDate.format('YYYY-MM-DD')
+                    data.company = $('#search_from_company_select').val()
+                    data.course = $('#search_from_course_select').val()
+                }
+            },
+            columns: [
+                { data: 'certifications.id', name: 'certifications.id' },
+                { data: 'user.dni', name: 'user.dni' },
+                { data: 'user.name', name: 'user.name' },
+                { data: 'company.description', name: 'company.description' },
+                { data: 'event.exam.course.description', name: 'event.exam.course.description' },
+                { data: 'event.date', name: 'event.date' },
+                { data: 'score', name: 'score' },
+                { data: 'exam', name: 'exam', orderable: false, searchable: false, className: 'text-center' },
+                { data: 'certification', name: 'certification', orderable: false, searchable: false, className: 'text-center' },
+            ],
+            order: [
+                [0, 'desc']
+            ]
+        });
+
+
     }
 
 

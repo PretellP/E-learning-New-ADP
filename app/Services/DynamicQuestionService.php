@@ -10,7 +10,8 @@ class DynamicQuestionService
 {
     public function getDataTable(int $exam_id = null)
     {
-        $query = DynamicQuestion::with(['questionType:id,description']);
+        $query = DynamicQuestion::with(['questionType:id,description'])
+            ->withCount(['evaluations']);
 
         if ($exam_id) {
             $query->where('exam_id', $exam_id);
@@ -26,16 +27,26 @@ class DynamicQuestionService
             ->editColumn('updated_at', function ($question) {
                 return $question->updated_at;
             })
+            ->editColumn('active', function ($question) {
+                $status = $question->active;
+                $statusBtn = '<span class="status ' . getStatusClass($status) . '">' . getStatusText($status) . '</span>';
+
+                return $statusBtn;
+            })
             ->addColumn('action', function ($question) {
-                $btn = '<a href="javascript:void(0)" data-id="' .
-                    $question->id . '" data-original-title="delete"
+                if ($question->evaluations_count == 0) {
+                    $btn = '<a href="javascript:void(0)" data-id="' .
+                        $question->id . '" data-original-title="delete"
                                         data-url="' . route('admin.exams.questions.destroy', $question) . '" class="ms-3 edit btn btn-danger btn-sm
                                         deleteQuestion-btn"><i class="fa-solid fa-trash-can"></i></a>';
-
+                } else {
+                    $btn = '<a href="javascript:void(0)" data-id="' .
+                        $question->id . '" data-original-title="delete" class="ms-3 btn btn-danger disabled btn-sm"><i class="fa-solid fa-trash-can"></i></a>';
+                }
 
                 return $btn;
             })
-            ->rawColumns(['statement', 'action'])
+            ->rawColumns(['statement', 'action', 'active'])
             ->make(true);
 
         return $allQuestions;
@@ -63,9 +74,9 @@ class DynamicQuestionService
 
     public function store($request, Exam $exam, $storage)
     {
-        $question = DynamicQuestion::create($request->all() + [
-            "exam_id" => $exam->id
-        ]);
+        $data = normalizeInputStatus($request->all());
+
+        $question = $exam->questions()->create($data);
 
         if ($question) {
             $isStored = app(dynamicAlternativeService::class)->storeAll($request, $question, $storage);
@@ -80,40 +91,49 @@ class DynamicQuestionService
 
     public function update($request, DynamicQuestion $question, $storage)
     {
-        $isUpdated = $question->update($request->all());
+        $data = normalizeInputStatus($request->all());
+
+        if ($question->evaluations_count == 0) {
+            $isUpdated = $question->update($data);
+        } else {
+            $isUpdated = $question->update(["active" => $data['active']]);
+        }
 
         if ($isUpdated) {
 
-            foreach ($request['alternative'] as $i => $alternative) {
+            if ($question->evaluations_count == 0) {
 
-                if (
-                    isset($request['stored-alternatives']) &&
-                    array_key_exists($i, $request['stored-alternatives'])
-                ) {
+                foreach ($request['alternative'] as $i => $alternative) {
 
-                    $alternativeModel = $question->alternatives->where('id', $request['stored-alternatives'][$i])->first();
+                    if (
+                        isset($request['stored-alternatives']) &&
+                        array_key_exists($i, $request['stored-alternatives'])
+                    ) {
 
-                    app(dynamicAlternativeService::class)->update(
-                        $alternativeModel,
-                        $question->question_type_id,
-                        $request,
-                        $i,
-                        $storage
-                    );
-                } else {
-                    app(dynamicAlternativeService::class)->store(
-                        $request,
-                        $question,
-                        $i,
-                        $storage
-                    );
+                        $alternativeModel = $question->alternatives->where('id', $request['stored-alternatives'][$i])->first();
+
+                        app(dynamicAlternativeService::class)->update(
+                            $alternativeModel,
+                            $question->question_type_id,
+                            $request,
+                            $i,
+                            $storage
+                        );
+                    } else {
+                        app(dynamicAlternativeService::class)->store(
+                            $request,
+                            $question,
+                            $i,
+                            $storage
+                        );
+                    }
                 }
             }
-
+            
             return $question;
         }
 
-        throw new Exception('No es posible completar la solicitud');
+        throw new Exception(config('parameters.exception_message'));
     }
 
     public function destroy(DynamicQuestion $question, $storage)

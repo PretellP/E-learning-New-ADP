@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ParticipantsImportTemplate;
 use App\Http\Controllers\Controller;
-use App\Models\{Certification, Company, Event, MiningUnit};
+use App\Http\Requests\FileImportRequest;
+use App\Imports\ParticipantsImport;
+use App\Models\{Certification, Company, Course, Event, MiningUnit};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminCertificationsController extends Controller
 {
@@ -20,9 +24,10 @@ class AdminCertificationsController extends Controller
     public function store(Request $request, Event $event)
     {
         $event->loadRelationships();
+        $dnis = $request['users-selected'];
 
         try{
-            $info = $this->certificationService->store($request, $event);
+            $info = $this->certificationService->store($dnis, $event);
             $message = config('parameters.stored_message');
         } catch (Exception $e) {
             $info = array("success" => false, "status" => "error", "note" => config('parameters.exception_message'));
@@ -137,5 +142,86 @@ class AdminCertificationsController extends Controller
             "event" => $event,
             "certification" => $certification,
         ]);
+    }
+
+    public function downloadImportTemplate()
+    {
+        $participantsImportTemplate = new ParticipantsImportTemplate();
+
+        return $participantsImportTemplate->download('participantes_plantilla_registro_masivo.xlsx');
+    }
+
+    public function storeMassive(FileImportRequest $request, Event $event)
+    {
+        $event->loadRelationships();
+
+        $validationFailure = false;
+
+        try {
+            $participantsImport = new ParticipantsImport;
+            $participantsImport->import($request->file('file'));
+            $dnis = $participantsImport->getDnis();
+
+            $info = $this->certificationService->store($dnis, $event);
+            $message = config('parameters.stored_message');
+
+            if ($participantsImport->failures()->isNotEmpty()) {
+                $validationFailure = true;
+                $failureMessage= 'Se encontró errores de validación';
+            }
+
+        } catch (Exception $e) {
+            $info = array("success" => false, "status" => "error", "note" => config('parameters.exception_message'));
+            $message = $e->getMessage();  
+        }
+        
+        $event->loadCounts();
+        $html = view('admin.events.partials._box_event', compact('event'))->render();
+
+        return response()->json([
+            "success" => $info['success'],
+            "status" => $info['status'],
+            "note" => $info['note'],
+            "validationFailure" => $validationFailure,
+            "failureMessage" => $failureMessage,
+            "message" => $message,
+            "html" => $html
+        ]);
+    }
+
+
+    public function reset(Certification $certification)
+    {
+        try {
+            $this->certificationService->reset($certification);
+            $success = true;
+            $message = config('parameters.updated_message');
+        } catch (Exception $e) {
+            $success = false;
+            $message = config('parameters.exception_message');
+        }
+
+        return response()->json([
+            "success" => $success,
+            "message" => $message
+        ]);
+    }
+
+
+    // ------------------- CERTIFICATION MODULE ------------------------
+
+    public function index(Request $request) 
+    {
+        if ($request->ajax()) {
+            return $this->certificationService->getApprovedCertificationDataTable($request);
+        }
+
+        $companies = Company::get(['id', 'description']);
+        $courses = Course::where('course_type', 'REGULAR')->get(['id', 'description']);
+
+        return view('admin.certifications.index', compact(
+            'companies',
+            'courses'
+        ));
     }
 }
