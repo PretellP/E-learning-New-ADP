@@ -38,7 +38,7 @@ class CourseService
             })
             ->addColumn('action', function ($course) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $course->id . '" data-url="' . route('admin.courses.update', $course) . '" 
+                    $course->id . '" data-url="' . route('admin.courses.update', $course) . '"
                                         data-send="' . route('admin.courses.edit', $course) . '"
                                         data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                         editCourse"><i class="fa-solid fa-pen-to-square"></i></button>';

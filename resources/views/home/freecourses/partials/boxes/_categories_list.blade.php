@@ -11,25 +11,24 @@
             @endphp
 
             @forelse ($categories as $category)
+                @php
+                    $openRow = ($loop->iteration - 1) % 2 == 0 || $loop->first;
+                    $closeRow = $loop->iteration % 2 == 0 || $loop->last;
+                @endphp
 
-            @php
-                $openRow = ($loop->iteration - 1) % 2 == 0 ||
-                            $loop->first;
-                $closeRow = $loop->iteration % 2 == 0 ||
-                            $loop->last;
-            @endphp
-
-            @if ($openRow)
-            <div class="row g-3 justify-content-center">
-            @endif
+                @if ($openRow)
+                    <div class="row g-3 justify-content-center">
+                @endif
 
                 <div class="col-lg-6 col-md-12">
 
                     <div class="row g-3">
 
                         <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="{{ $delay }}s">
-                            <a class="position-relative d-block overflow-hidden" href="{{ route('home.freecourses.show', $category) }}" style="height: 240px;">
-                                <img class="img-fluid img-cover" src="{{ verifyImage($category->file) }}" alt="">
+                            <a class="position-relative d-block overflow-hidden"
+                                href="{{ route('home.freecourses.show', $category) }}" style="height: 240px;">
+                                <img class="img-fluid img-cover" src="{{ verifyImage($category->file) }}"
+                                    alt="">
                                 <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
                                     style="margin: 1px;">
                                     <h5 class="m-0">
@@ -46,21 +45,20 @@
 
                 </div>
 
-            @if ($closeRow)
-            </div>   
-            @endif
-            @php
-                $delay += 0.2;
-            @endphp
-            @empty
-
-            <h4 class="text-center empty-records-message"> No hay categorías que mostrar </h4>
-
-            @endforelse
-
+                @if ($closeRow)
         </div>
+        @endif
+        @php
+            $delay += 0.2;
+        @endphp
+    @empty
 
-       
+        <h4 class="text-center empty-records-message"> No hay categorías que mostrar </h4>
+        @endforelse
 
     </div>
+
+
+
+</div>
 </div>

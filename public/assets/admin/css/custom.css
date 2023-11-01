@@ -1653,7 +1653,8 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
 
 /* ------------- ANNOUNCEMENTS -------------*/
 
-.image-preview.banner-container-image {
+.image-preview.banner-container-image
+{
     height: 320px !important;
 }
 
@@ -1670,7 +1671,9 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     padding: 20px 20px;
 }
 
-.banner-container .order-indicator-container {
+.banner-container
+.order-indicator-container
+{
     min-width: 50px;
     height: 50px;
     background-color: rgb(255, 255, 255);
@@ -1785,6 +1788,145 @@ input[type=checkbox]:checked~label.custom-checkbox-question {
     }
 }
 
+/* * Wallace add... */
+
+.card-back {
+    background: #ffffff3c !important;
+    box-shadow: 2px 2px 15px 5px #f5f5f5;
+}
+
+.card-header-w {
+    min-height: 35px !important;
+}
+
+.card-body-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+}
 
 
 
+/* * Icons dashnoard personalizados por wallace*/
+
+.icon-info-d {
+    color: #dcffff;
+    font-size: 28px;
+}
+
+.icon-users-blue {
+    color: rgb(56, 156, 227);
+}
+
+.icon-users-blue::before {
+    background-color: rgba(220, 237, 255, 0.702);
+}
+
+.icon-building-red {
+    color: rgb(255, 70, 70);
+}
+
+.icon-building-red::before {
+    background-color: rgba(255, 221, 221, 0.638);
+}
+
+.icon-book-green {
+    color: rgb(117, 229, 117);
+}
+
+.icon-book-green::before {
+    background-color: rgba(220, 255, 220, 0.739);
+}
+
+.icon-events-yellow {
+    color: rgb(240, 229, 32);
+}
+
+.icon-events-yellow::before {
+    background-color: rgba(255, 254, 206, 0.71);
+}
+
+.icon-book-purple {
+    color: rgb(209, 43, 209);
+}
+
+.icon-book-purple::before {
+    background-color: rgba(255, 219, 255, 0.666);
+}
+
+
+.icon-info-d::before {
+    padding: 25px;
+    border-radius: 100%;
+    margin: 10px;
+}
+
+.card.card-primary {
+    border-top: 2px solid var(--first-color);
+}
+
+.icon-href {
+    color: var(--first-color);
+}
+
+/* * wallade end...  */
+
+.container-icon-d {
+    /* height: 50px; */
+    padding: 20px;
+}
+
+.count-numbers {
+    color: #242424;
+}
+
+.reference-count {
+    color: #757575d2;
+}
+
+.container-dashboard {
+    background-color: transparent;
+    box-shadow: none !important;
+}
+
+#chart-student-status,
+#chart-types-of-users {
+    height: 270px;
+}
+
+.title-chart {
+    text-align: center;
+    color: #242424;
+}
+
+.card-header-chart {
+    justify-content: center;
+}
+
+/* .card-chart-d{
+    height: 300px;
+}
+canvas{
+    height: 100%;
+} */
+
+/* .description-c-o{
+    width: 60%;
+    display: block;
+    background-color: red !important;
+} */
+
+
+#student-status {
+    color: rgb(42, 173, 162);
+    font-weight: bold;
+}
+
+.student-status {
+    display: none;
+}
+
+.student-status-active {
+    display: block;
+}

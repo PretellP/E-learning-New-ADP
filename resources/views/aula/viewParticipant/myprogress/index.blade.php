@@ -144,7 +144,7 @@
                         document.getElementById('freecourse-start-form').submit();" class="btn-start">
                             Ingresar
                         </a>
-                        <form id='freecourse-start-form' method="POST" action="{{route('aula.freecourse.start', ["course" => $freeCourse])}}"> 
+                        <form id='freecourse-start-form' method="POST" action="{{route('aula.freecourse.start', ["course" => $freeCourse])}}">
                             @csrf
                         </form>
                         <div class="extra-info">
@@ -155,7 +155,7 @@
                 </div>
 
                 <div class="freecourse-progress-results" >
-                    <div id='chart-{{$freeCourse->id}}' class="freecourse-progress-chart-box" 
+                    <div id='chart-{{$freeCourse->id}}' class="freecourse-progress-chart-box"
                         data-total='{{$totalChapters - $completedChapters}}' data-completed='{{$completedChapters}}'>
                         <canvas class="freecourse-chart" id="freecourse-chart-{{$freeCourse->id}}"></canvas>
                     </div>
@@ -169,7 +169,7 @@
                     </div>
                 </div>
 
-                
+
 
                 <div class="progress-bar-line-box course-progress-assist">
                     <div class="info-progress-txt info-assist">
@@ -188,7 +188,7 @@
                     </div>
 
                 </div>
-                
+
             </div>
 
             @empty

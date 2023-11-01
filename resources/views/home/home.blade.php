@@ -1,244 +1,242 @@
 @extends('home.layout.masterpage')
 
 @section('content')
+    <!-- Carousel Start -->
 
-<!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-5 principal-carrousel-container">
 
-<div class="container-fluid p-0 mb-5 principal-carrousel-container">
+        <div class="owl-carousel header-carousel position-relative">
 
-    <div class="owl-carousel header-carousel position-relative">
+            <div class="owl-carousel-item position-relative">
 
-        <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src="{{ asset('assets/home/img/carousel-1.jpeg') }}" alt="">
 
-            <img class="img-fluid" src="{{asset('assets/home/img/carousel-1.jpeg')}}" alt="">
-
-            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
-                style="background: rgba(24, 29, 56, .7);">
-                <div class="container">
-                    <div class="row justify-content-start">
-                        <div class="col-sm-10 col-lg-8">
-                            <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">Best Online Courses
-                            </h5>
-                            <h1 class="display-3 text-white animated slideInDown">The Best Online Learning Platform
-                            </h1>
-                            <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed
-                                stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus
-                                eirmod elitr.</p>
-                            {{-- <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+                    style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-9">
+                                <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">El Futuro del
+                                    Aprendizaje
+                                </h5>
+                                <h2 class="display-3 text-white animated slideInDown">Bienvenido a ADP E-Learning.</h2>
+                                <h2 class="display-3 text-white animated slideInDown">Tu destino para el aprendizaje en
+                                    línea.</h2>
+                                <p class="fs-5 text-white mb-4 pb-2">Aquí, el conocimiento es poder y está al alcance de tus
+                                    manos. Nuestra plataforma te ofrece una experiencia educativa única, donde la
+                                    flexibilidad se combina con la calidad.</p>
+                                {{-- <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
                                 More</a>
                             <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="owl-carousel-item position-relative">
+
+                <img class="img-fluid" src="{{ asset('assets/home/img/carousel-2.jpg') }}" alt="">
+
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+                    style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-8">
+                                <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">Best Online Courses
+                                </h5>
+                                <h1 class="display-3 text-white animated slideInDown">Get Educated Online From Your Home
+                                </h1>
+                                <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed
+                                    stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus
+                                    eirmod elitr.</p>
+                                {{-- <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
+                                More</a>
+                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Carousel End -->
+
+{{--
+    <div class="count-up-wrapper top">
+        <span id="count-up-container-top">0</span>
+        <span class="additional-info">Stars in Github:</span>
+    </div>
+    <div class="count-up-wrapper bottom">
+        <span class="additional-info">Used by:</span>
+        <span id="count-up-container-bottom">0</span>
+    </div> --}}
+
+
+    {{-- <div class="end-container">Thanks for watching</div> --}}
+
+    {{-- * walllace add --}}
+
+    <div class="container-xxl py-5 courses-container">
+        <div class="container wow fadeInUp" data-wow-delay="0.1s">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Construyendo</h6>
+                <h1 class="mb-5">Construyendo equipos listos para el futuro</h1>
+            </div>
+            <div class="row justify-content-center">
+                {{-- <h3 class="col-12 text-center p-4">Construyendo equipos listos para el futuro</h3> --}}
+                <div class="col-sm-12 col-lg-3 text-center">
+                    <span id="count-up-students" class="making-numbers" data-number="{{ $numberUsers }}">0</span>
+                    <p>de estudiantes registrados en nuestra plataforma.</p>
+                </div>
+                <div class="col-sm-12 col-lg-3 text-center">
+                    <span id="count-up-courses" class="making-numbers" data-number="{{ $numberCourses }}">0</span>
+                    <p>cursos publicados.</p>
+                </div>
+                <div class="col-sm-12 col-lg-3 text-center">
+                    <span id="count-up-companys" class="making-numbers" data-number="{{ $numberCompanys }}">0</span>
+                    <p>empresa desarrollando a sus equipos con nosotros.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container-xxl py-5 courses-container">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Caracteristicas</h6>
+                <h1>Caracteristicas que nos hacen únicos</h1>
+                <p class="mb-5 col-12 text-center p-4">El único sistema para capacitar a tu personal de campo y atención al
+                    cliente y validar su aprendizaje</p>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-4 wow fadeInUp" data-wow-delay="0.1s"">
+                    <div class="div-effect d-flex flex-column">
+                        <div class="card-img">
+                            <img class="w-100" src="{{ asset('assets/home/img/content-one.svg') }}" alt="">
+                        </div>
+                        <div class="container-description p-5">
+                            <h4 class="title-description">Interacción directa con <br> los contenidos</h4>
+                            <p>Los estudiantes pueden interactuar con los materiales del curso de manera activa, lo que puede mejorar la comprensión y el aprendizaje.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4 wow fadeInUp" data-wow-delay="0.3s"">
+                    <div class="div-effect d-flex flex-column">
+                        <div class="card-img">
+                            <img class="w-100" src="{{ asset('assets/home/img/phone-one.svg') }}" alt="">
+                        </div>
+                        <div class="container-description p-5">
+                            <h4 class="title-description">Flexiba, untuitiva y <br> autogestionable</h4>
+                            <p>Personaliza y centraliza tu plan de entrenamiento segmentando el contenido en función a la estructura de tu equipo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4 wow fadeInUp" data-wow-delay="0.5s"">
+                    <div class="div-effect d-flex flex-column">
+                        <div class="card-img">
+                            <img class="w-100" src="{{ asset('assets/home/img/laptop-one.svg') }}" alt="">
+                        </div>
+                        <div class="container-description p-5">
+                            <h4 class="title-description">Nos actualizamos <br> contigo</h4>
+                            <p>Actualizamos constantemente nuestro E-Learning System, tomando en cuenta tu feedback y el de tus colaboradores.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+    </div>
 
-        <div class="owl-carousel-item position-relative">
 
-            <img class="img-fluid" src="{{asset('assets/home/img/carousel-2.jpg')}}" alt="">
 
-            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
-                style="background: rgba(24, 29, 56, .7);">
-                <div class="container">
-                    <div class="row justify-content-start">
-                        <div class="col-sm-10 col-lg-8">
-                            <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">Best Online Courses
-                            </h5>
-                            <h1 class="display-3 text-white animated slideInDown">Get Educated Online From Your Home
-                            </h1>
-                            <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed
-                                stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus
-                                eirmod elitr.</p>
-                            {{-- <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
-                                More</a>
-                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a> --}}
+    {{-- * walllace end --}}
+
+
+    <!-- Courses Start -->
+
+    @include('home.courses.partials._courses_list')
+
+    <!-- Courses End -->
+
+
+    <!-- Categories Start -->
+
+    @include('home.freecourses.partials.boxes._categories_list')
+
+    <!-- Categories Start -->
+
+
+    {{-- faq start --}}
+
+    <div class="container-xxl py-5 courses-container">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Preguntas</h6>
+                <h1 class="mb-5">Preguntas frecuentes</h1>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6 text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <img class="w-75" src="{{ asset('assets/home/img/image-FaQ.jpg') }}" alt="">
+                </div>
+                <div class="col-sm-12 col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    ¿Cómo puedo acceder a los materiales del curso?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Los materiales del curso suelen estar disponibles en la plataforma de e-learning. Puedes encontrarlos en la sección de recursos del curso o en el aula virtual, dependiendo de la plataforma que estés utilizando.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    ¿Qué hago si tengo problemas técnicos?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Si tienes problemas técnicos, lo mejor es ponerse en contacto con el soporte técnico de la plataforma. También puedes consultar la sección de preguntas frecuentes o el manual del usuario para obtener ayuda.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    ¿Cómo puedo interactuar con otros estudiantes y con el profesor?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    La mayoría de las plataformas de e-learning ofrecen foros de discusión donde puedes interactuar con otros estudiantes y con el profesor. También puedes utilizar el correo electrónico o la mensajería instantánea para comunicarte directamente con ellos.
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-        </div>
-
-    </div>
-
-</div>
-
-<!-- Carousel End -->
-
-
-<!-- Service Start -->
-
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="service-item text-center pt-3">
-                    <div class="p-4">
-                        <i class="fa fa-3x fa-graduation-cap text-secondary mb-4"></i>
-                        <h5 class="mb-3">Instructores calificados</h5>
-                        <p>Nuestros instructores han sido cuidadosamente
-                            seleccionados por su conocimiento profundo, habilidades de enseñanza excelentes y
-                            experiencia en el mundo real.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="service-item text-center pt-3">
-                    <div class="p-4">
-                        <i class="fa fa-3x fa-globe text-secondary mb-4"></i>
-                        <h5 class="mb-3">Clases online</h5>
-                        <p>Nuestras clases en línea te brindan la ventaja de mantener tus habilidades y conocimientos
-                            actualizados. Estarás preparado para los desafíos que el futuro te presente.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="service-item text-center pt-3">
-                    <div class="p-4">
-                        <i class="fa-solid fa-file-lines text-secondary mb-4 fa-3x"></i>
-                        <h5 class="mb-3">Certificados</h5>
-                        <p>Celebramos tus logros y te brindamos el reconocimiento oficial que mereces por tu arduo
-                            trabajo y dedicación en el proceso de aprendizaje. Son la prueba de tu compromiso con la
-                            excelencia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                <div class="service-item text-center pt-3">
-                    <div class="p-4">
-                        <i class="fa-solid fa-person-chalkboard text-secondary mb-4 fa-3x"></i>
-                        <h5 class="mb-3">Eventos en vivo</h5>
-                        <p>Te brindamos una oportunidad única para conectarte con instructores y expertos en tiempo
-                            real, lo que agrega una dimensión interactiva excepcional a tu educación.</p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Service End -->
+    {{-- faq end --}}
 
-
-<!-- About Start -->
-
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
-                <div class="position-relative h-100">
-                    <img class="img-fluid position-absolute w-100 h-100" src="{{asset('assets/home/img/about.jpg')}}"
-                        alt="" style="object-fit: cover;">
-                </div>
-            </div>
-            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                <h6 class="section-title bg-white text-start text-primary pe-3">Acerca de nosotros</h6>
-                <h1 class="mb-4">Bienvenido a ADP eLearning</h1>
-                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                    eos. Clita erat ipsum et lorem et sit.</p>
-                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                    eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
-                </p>
-                <div class="row gy-2 gx-4 mb-4">
-                    <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Instructores calificados</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Clases online</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Certificados
-                        </p>
-                    </div>
-                    <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Eventos de vivo</p>
-                    </div>
-                </div>
-                {{-- <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a> --}}
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- About End -->
-
-
-<!-- Courses Start -->
-
-@include('home.courses.partials._courses_list')
-
-<!-- Courses End -->
-
-
-<!-- Categories Start -->
-
-@include('home.freecourses.partials.boxes._categories_list')
-
-<!-- Categories Start -->
-
-
-
-
-
-<!-- Team Start -->
-{{-- <div class="container-xxl py-5">
-    <div class="container">
-        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 class="section-title bg-white text-center text-primary px-3">Instructores</h6>
-            <h1 class="mb-5">Instructores expertos</h1>
-        </div>
-        <div class="row g-4">
-
-
-
-        </div>
-    </div>
-</div> --}}
-<!-- Team End -->
-
-
-<!-- Testimonial Start -->
-
-<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container">
-        <div class="text-center">
-            <h6 class="section-title bg-white text-center text-primary px-3">Instructores</h6>
-            <h1 class="mb-5">Instructores expertos</h1>
-        </div>
-
-        <div class="owl-carousel testimonial-carousel position-relative">
-
-            @forelse ($instructors as $instructor)
-
-            <div class="wow fadeInUp" data-wow-delay="0.1s">
-                <div class="team-item bg-light">
-                    <div class="overflow-hidden image-user-container">
-                        <img class="img-fluid img-cover" src="{{ verifyUserAvatar($instructor->file) }}" alt="">
-                    </div>
-
-                    <div class="text-center p-4">
-                        <h5 class="mb-0">
-                            {{ ucwords(mb_strtolower($instructor->full_name, 'UTF-8')) }}
-                        </h5>
-                        <small>
-                            {{ $instructor->email ?? '-' }}
-                        </small>
-                    </div>
-                </div>
-            </div>
-
-            @empty
-
-            <h4 class="text-center empty-records-message"> No hay Instructores que mostrar </h4>
-
-            @endforelse
-
-        </div>
-
-    </div>
-</div>
-
-<!-- Testimonial End -->
-
+    {{-- <script src="{{asset('assets/home/js/countUp.js')}}"></script> --}}
+    <script src="{{ asset('assets/home/js/contador.js') }}" type="module"></script>
 @endsection
