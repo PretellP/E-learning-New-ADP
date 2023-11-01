@@ -133,16 +133,25 @@
             </div>
 
             <div class="status-cont text-no-wrap d-flex justify-content-between gap-1 mb-2">
-                <span class="text-info-stat little-text"> Examen de prueba: &nbsp;</span>
-                <span class="status {{ getStatusClass($event->flg_test_exam) }}">
-                    {{ getStatusText($event->flg_test_exam) }}
-                </span>
-            </div>
-
-            <div class="status-cont text-no-wrap d-flex justify-content-between gap-1">
                 <span class="text-info-stat little-text"> Asistencias: &nbsp;</span>
                 <span class="status {{ getStatusClass($event->flg_asist) }}">
                     {{ getStatusText($event->flg_asist) }}
+                </span>
+            </div>
+
+            
+            <div class="status-cont text-no-wrap d-flex justify-content-between gap-1 mb-2">
+                <span class="text-info-stat little-text"> Encuesta ficha sintomatológica: &nbsp;</span>
+                <span class="status {{ getStatusClass($event->flg_survey_course) }}">
+                    {{ getStatusText($event->flg_survey_evaluation) }}
+                </span>
+            </div>
+
+            
+            <div class="status-cont text-no-wrap d-flex justify-content-between gap-1 mb-2">
+                <span class="text-info-stat little-text"> Encuesta de satisfacción: &nbsp;</span>
+                <span class="status {{ getStatusClass($event->flg_survey_evaluation) }}">
+                    {{ getStatusText($event->flg_survey_evaluation) }}
                 </span>
             </div>
         </div>

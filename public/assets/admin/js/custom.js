@@ -5776,7 +5776,8 @@ $(function () {
 
             $('#registerOwnerCompanySelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#registerExamSelect').select2({
@@ -5786,12 +5787,14 @@ $(function () {
 
             $('#registerTestExamSelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true
             })
 
             $('#registerElearningSelect').select2({
                 dropdownParent: $("#registerEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true
             })
 
 
@@ -6137,7 +6140,8 @@ $(function () {
 
             $('#editOwnerCompanySelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#editExamSelect').select2({
@@ -6147,12 +6151,14 @@ $(function () {
 
             $('#editTestExamSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true
             })
 
             $('#editElearningSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true
             })
 
 
@@ -6266,6 +6272,8 @@ $(function () {
                 var activeChk = form.find('#edit-status-checkbox')
                 var flgTestChk = form.find('#edit-flg-test-checkbox')
                 var flgAssist = form.find('#edit-flg-assist-checkbox')
+                var flgSurveyCourse = form.find('#edit-flg-survey-course')
+                var flgSurveyEvaluation = form.find('#edit-flg-survey-evaluation')
 
                 editEventForm.resetForm()
                 form.trigger('reset')
@@ -6373,6 +6381,18 @@ $(function () {
                             flgAssist.prop('checked', true);
                         } else {
                             flgAssist.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_course == 'S') {
+                            flgSurveyCourse.prop('checked', true);
+                        } else {
+                            flgSurveyCourse.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_evaluation == 'S') {
+                            flgSurveyEvaluation.prop('checked', true);
+                        } else {
+                            flgSurveyEvaluation.prop('checked', false);
                         }
 
                         form.find('input[name=description]').val(event.description)
@@ -6680,7 +6700,8 @@ $(function () {
 
             $('#editOwnerCompanySelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona una empresa titular'
+                placeholder: 'Selecciona una empresa titular',
+                allowClear: true
             })
 
             $('#editExamSelect').select2({
@@ -6690,12 +6711,14 @@ $(function () {
 
             $('#editTestExamSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un examen de prueba'
+                placeholder: 'Selecciona un examen de prueba',
+                allowClear: true,
             })
 
             $('#editElearningSelect').select2({
                 dropdownParent: $("#editEventModal"),
-                placeholder: 'Selecciona un e-learning'
+                placeholder: 'Selecciona un e-learning',
+                allowClear: true,
             })
 
 
@@ -6811,8 +6834,9 @@ $(function () {
                 var elearningSelect = form.find('#editElearningSelect')
 
                 var activeChk = form.find('#edit-status-checkbox')
-                var flgTestChk = form.find('#edit-flg-test-checkbox')
                 var flgAssist = form.find('#edit-flg-assist-checkbox')
+                var flgSurveyCourse = form.find('#edit-flg-survey-course')
+                var flgSurveyEvaluation = form.find('#edit-flg-survey-evaluation')
 
                 typeSelect.empty()
                 instructorSelect.empty()
@@ -6907,16 +6931,22 @@ $(function () {
                             $('#txt-edit-status').html('Inactivo');
                         }
 
-                        if (event.flg_test_exam == 'S') {
-                            flgTestChk.prop('checked', true);
-                        } else {
-                            flgTestChk.prop('checked', false);
-                        }
-
                         if (event.flg_asist == 'S') {
                             flgAssist.prop('checked', true);
                         } else {
                             flgAssist.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_course == 'S') {
+                            flgSurveyCourse.prop('checked', true);
+                        } else {
+                            flgSurveyCourse.prop('checked', false);
+                        }
+
+                        if (event.flg_survey_evaluation == 'S') {
+                            flgSurveyEvaluation.prop('checked', true);
+                        } else {
+                            flgSurveyEvaluation.prop('checked', false);
                         }
 
                         form.find('input[name=description]').val(event.description)

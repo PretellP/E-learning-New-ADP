@@ -498,8 +498,8 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::controller(AulaSurveysController::class)->group(function () {
 
                     Route::get('/', 'index')->name('aula.surveys.index');
+                    Route::get('/iniciar/{userSurvey}', 'start')->name('aula.surveys.start');
                     Route::get('/{user_survey}/{num_question}', 'show')->name('aula.surveys.show');
-                    Route::post('/iniciar/{userSurvey}', 'start')->name('aula.surveys.start');
                     Route::patch('/actualizar/{user_survey}/{group_id}', 'update')->name('aula.surveys.update');
                 });
             });
