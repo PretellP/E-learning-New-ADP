@@ -71,13 +71,13 @@
     <div class="action-box info-element-box">
         <div class="btn-action-container">
             <span id="survey-edit-btn" class="editSurvey edit-btn"
-                data-url="{{ route('admin.surveys.update', $survey) }}"
-                data-send="{{ route('admin.surveys.edit', $survey) }}">
+                data-url="{{ route('admin.surveys.all.update', $survey) }}"
+                data-send="{{ route('admin.surveys.all.edit', $survey) }}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
             @if($survey->survey_groups_count == 0)
                 <span class="delete-btn deleteSurvey" data-type="show"
-                        data-url="{{ route('admin.surveys.destroy', $survey) }}" data-type="soft">
+                        data-url="{{ route('admin.surveys.all.destroy', $survey) }}" data-type="soft">
                     <i class="fa-solid fa-trash-can"></i> 
                 </span>
             @else

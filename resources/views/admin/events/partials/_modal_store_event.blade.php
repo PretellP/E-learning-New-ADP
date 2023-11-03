@@ -137,76 +137,54 @@
                             </div>
     
                             <div class="form-row">
-                                <div class="form-group col-12">
-                                    <label>Examen de prueba (opcional)</label>
-                                    <div class="input-group">
-                                        <select name="test_exam_id" class="form-control select2"
-                                            id="registerTestExamSelect">
-                                            <option></option>
-                                        </select>
-                                    </div>
+
+                                <div class="form-group col-6">
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="active" id="register-status-checkbox" checked
+                                            class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        <span id="txt-register-status" class="custom-switch-description">Activo</span>
+                                    </label>
                                 </div>
+        
+                                <div class="form-group col-6">
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="flg_asist" id="register-flg-assist-checkbox" checked
+                                            class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        <span id="txt-register-flg-assist" class="custom-switch-description">Asistencias</span>
+                                    </label>
+                                </div>
+        
                             </div>
-    
+        
                             <div class="form-row">
-                                <div class="form-group col-12">
-                                    <label>E-Learning (opcional)</label>
-                                    <div class="input-group">
-                                        <select name="elearning_id" class="form-control select2"
-                                            id="registerElearningSelect">
-                                            <option></option>
-                                        </select>
-                                    </div>
+        
+                                <div class="form-group col-6">
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="flg_survey_course" id="register-flg-survey-course"
+                                            class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        <span id="txt-register-flg-survey-course" class="custom-switch-description">Encuesta ficha sintomatológica</span>
+                                    </label>
                                 </div>
+        
+                                <div class="form-group col-6">
+                                    <label class="custom-switch mt-2">
+                                        <input type="checkbox" name="flg_survey_evaluation" id="register-flg-survey-evaluation"
+                                            class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        <span id="txt-register-flg-survey-evaluation" class="custom-switch-description">Encuesta de satisfacción</span>
+                                    </label>
+                                </div>
+        
                             </div>
-    
+
                         </div>
 
                     </div>
 
-                    <div class="form-row">
-
-                        <div class="form-group col-3">
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="active" id="register-status-checkbox" checked
-                                    class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-register-status" class="custom-switch-description">Activo</span>
-                            </label>
-                        </div>
-
-                        <div class="form-group col-3">
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="flg_asist" id="register-flg-assist-checkbox" checked
-                                    class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-register-flg-assist" class="custom-switch-description">Asistencias</span>
-                            </label>
-                        </div>
-
-                    </div>
-
-                    <div class="form-row">
-
-                        <div class="form-group col-3">
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="flg_survey_course" id="register-flg-survey-course"
-                                    class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-register-flg-survey-course" class="custom-switch-description">Encuesta ficha sintomatológica</span>
-                            </label>
-                        </div>
-
-                        <div class="form-group col-3">
-                            <label class="custom-switch mt-2">
-                                <input type="checkbox" name="flg_survey_evaluation" id="register-flg-survey-evaluation"
-                                    class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span id="txt-register-flg-survey-evaluation" class="custom-switch-description">Encuesta de satisfacción</span>
-                            </label>
-                        </div>
-
-                    </div>
+                    
 
                 </div>
 

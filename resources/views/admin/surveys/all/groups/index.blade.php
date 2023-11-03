@@ -17,9 +17,9 @@
 
             <h5 class="title-header-show">
                 <i class="fa-solid fa-chevron-left fa-xs"></i>
-                <a href="{{route('admin.surveys.index')}}">Inicio</a>
+                <a href="{{route('admin.surveys.all.index')}}">Inicio</a>
                 / Encuesta:
-                <a href="{{ route('admin.surveys.show', ["survey" => $group->survey]) }}">
+                <a href="{{ route('admin.surveys.all.show', ["survey" => $group->survey]) }}">
                     {{ $group->survey->name }}
                 </a>
                 / Grupo:
@@ -57,7 +57,7 @@
 
                     <div id="dropdown-statement-create" class="related-dropdown-container">
 
-                        <form id="registerStatementForm" action="{{ route('admin.surveys.groups.statement.store', $group) }}" method="POST" enctype="multipart/form-data">
+                        <form id="registerStatementForm" action="{{ route('admin.surveys.all.groups.statement.store', $group) }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-row">
@@ -80,7 +80,7 @@
                                     <div class="input-group">
                                         <select name="type" class="form-control select2"
                                             id="registerStatementTypeSelect"
-                                            data-url="{{ route('admin.surveys.groups.statements.getType', $group) }}">
+                                            data-url="{{ route('admin.surveys.all.groups.statements.getType', $group) }}">
                                             <option></option>
                                             @foreach (config('parameters.statement_type') as $key => $type)
                                             <option value="{{ $key}}"> {{ $type }}
@@ -118,7 +118,7 @@
             </h5>
 
             <table id="statements-table" class="table table-hover"
-                data-url="{{ route('admin.surveys.groups.statements.index', $group) }}">
+                data-url="{{ route('admin.surveys.all.groups.statements.index', $group) }}">
                 <thead>
                     <tr>
                         <th>N°</th>

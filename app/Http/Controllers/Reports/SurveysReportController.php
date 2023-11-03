@@ -25,7 +25,7 @@ class SurveysReportController extends Controller
             return $this->userSurveyService->getDataTable($request);
         }
 
-        return view('admin.surveys.userSurveys.index');
+        return view('admin.surveys.reports.index');
     }
 
     public function downloadExcelUserSurveys(Request $request, SurveyService $surveyService)

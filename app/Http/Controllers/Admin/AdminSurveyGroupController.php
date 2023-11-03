@@ -28,7 +28,7 @@ class AdminSurveyGroupController extends Controller
     {
         $group->loadRelationships();
 
-        return view('admin.surveys.groups.index', compact(
+        return view('admin.surveys.all.groups.index', compact(
             'group'
         ));
     }
@@ -49,7 +49,7 @@ class AdminSurveyGroupController extends Controller
         }
 
         if ($request['verifybtn'] == 'show') {
-            $route = route('admin.surveys.groups.show', $group);
+            $route = route('admin.surveys.all.groups.show', $group);
             $show = true;
         }
 
@@ -116,7 +116,7 @@ class AdminSurveyGroupController extends Controller
             $message = $e->getMessage();
         }
 
-        $route = $location == 'show' ? route('admin.surveys.show', $survey) : NULL;  
+        $route = $location == 'show' ? route('admin.surveys.all.show', $survey) : NULL;  
 
         if ($success && $location == 'index') {
             $survey->loadRelationships();

@@ -52,15 +52,15 @@
 
         <div class="btn-action-container">
             <span id="group-edit-btn" class="edit-btn editGroup" 
-                data-url="{{ route('admin.surveys.groups.update', $group) }}"
-                data-send="{{ route('admin.surveys.groups.edit', $group) }}">
+                data-url="{{ route('admin.surveys.all.groups.update', $group) }}"
+                data-send="{{ route('admin.surveys.all.groups.edit', $group) }}">
                 <i class="fa-solid fa-pen-to-square"></i>
             </span>
             @if(
                 $group->statements_count == 0
             )
                 <span class="delete-btn deleteGroup" data-type="show"
-                        data-url="{{ route('admin.surveys.groups.destroy', $group) }}"> 
+                        data-url="{{ route('admin.surveys.all.groups.desrtoy', $group) }}"> 
                     <i class="fa-solid fa-trash-can"></i> 
                 </span>
             @else

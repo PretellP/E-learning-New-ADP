@@ -14,7 +14,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('admin.surveys.store') }}" id="registerSurveyForm" method="POST"'>
+            <form action="{{ route('admin.surveys.all.store') }}" id="registerSurveyForm" method="POST"'>
                 @csrf
 
                 <div class="modal-body">

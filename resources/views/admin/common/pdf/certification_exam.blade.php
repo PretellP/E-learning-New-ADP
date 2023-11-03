@@ -175,6 +175,16 @@ $evaluations = $certification->evaluations;
             </div>
         </div>
 
+        @if ($certification->recovered_at != '')
+
+        <div class="f-clear">
+            <div class="w-half f-left">
+                <b>Fecha de recuperación: </b>
+                {{$certification->recovered_at}}
+            </div>
+        </div> 
+
+        @endif
     </div>
 
     {{-- PARTICIPANT DETAILS --}}

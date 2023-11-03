@@ -18,7 +18,7 @@
 
             <h5 class="title-header-show">
                 <i class="fa-solid fa-chevron-left fa-xs"></i>
-                <a href="{{route('admin.surveys.index')}}">Inicio</a>
+                <a href="{{route('admin.surveys.all.index')}}">Inicio</a>
                 / Encuesta:
                 <span id="survey-name-text-principal">
                     {{ $survey->name }}
@@ -42,7 +42,7 @@
             </div>
 
             <table id="groups-statements-table" class="table table-hover"
-                data-url="{{ route('admin.surveys.groups.index', $survey) }}">
+                data-url="{{ route('admin.surveys.all.groups.index', $survey) }}">
                 <thead>
                     <tr>
                         <th>N°</th>

@@ -40,7 +40,7 @@
             </td>
             <td class="text-center btn-action-container">
                 <span data-stored="true"
-                    data-url="{{ route('admin.surveys.groups.statement.options.destroy', $option) }}"
+                    data-url="{{ route('admin.surveys.all.groups.statement.options.destroy', $option) }}"
                     class="delete-btn @if($i==0) disabled @else delete-option-btn @endif">
                     <i class="fa-solid fa-trash-can"></i>
                 </span>

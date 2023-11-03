@@ -14,12 +14,12 @@ class SurveyGroupService
     {
         $allGroups = DataTables::of($survey->surveyGroups()->withCount('statements'))
             ->editColumn('name', function ($group) {
-                return '<a href="'. route('admin.surveys.groups.show', $group) .'">'. $group->name .'</a>';
+                return '<a href="'. route('admin.surveys.all.groups.show', $group) .'">'. $group->name .'</a>';
             })
             ->addColumn('action', function ($group) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $group->id . '" data-url="'. route('admin.surveys.groups.update', $group) .'"
-                                data-send="'. route('admin.surveys.groups.edit', $group) .'"
+                    $group->id . '" data-url="'. route('admin.surveys.all.groups.update', $group) .'"
+                                data-send="'. route('admin.surveys.all.groups.edit', $group) .'"
                                 data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                 editGroup"><i class="fa-solid fa-pen-to-square"></i></button>';
                 if (
@@ -27,7 +27,7 @@ class SurveyGroupService
                 ) {
                     $btn .= '<a href="javascript:void(0)" data-id="' .
                         $group->id . '" data-original-title="delete" data-type="index"
-                                    data-url="'. route('admin.surveys.groups.destroy', $group) .'" class="ms-3 edit btn btn-danger btn-sm
+                                    data-url="'. route('admin.surveys.all.groups.desrtoy', $group) .'" class="ms-3 edit btn btn-danger btn-sm
                                     deleteGroup"><i class="fa-solid fa-trash-can"></i></a>';
                 }
 

@@ -22,7 +22,7 @@ class ProfileSurveyReportController extends Controller
             return $this->profileSurveyService->getDataTable($request);
         }
 
-        return view('admin.surveys.profileSurveys.index');
+        return view('admin.surveys.reports.profile.index');
     }
 
     public function downloadExcelProfile(Request $request, SurveyService $surveyService)

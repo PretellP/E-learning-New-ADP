@@ -1,15 +1,15 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
 
-        <div class="sidebar-brand">
-            <a href="">
-                <img src="" alt="">
+        <div class="sidebar-brand p-2">
+            <a href="{{ route('admin.home.index') }}">
+                <img src="{{ asset('assets/common/img/adp-logo-white.svg') }}" class="h-100" alt="">
             </a>
         </div>
         
-        <div class="sidebar-brand hidden sidebar-brand-sm">
-            <a href="">
-                <img src="" alt="">
+        <div class="sidebar-brand hidden sidebar-brand-sm p-1 align-items-center">
+            <a href="{{ route('admin.home.index') }}">
+                <img src="{{ asset('assets/common/img/adp-logo-white.svg') }}" class="w-100" alt="">
             </a>
         </div>
 
@@ -98,15 +98,15 @@
                     <span>Encuestas</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>
-                        <a href="{{ route('admin.surveys.index') }}" class="nav-link">
+                    <li class="{{ setActive('admin.surveys.all.*') }}">
+                        <a href="{{ route('admin.surveys.all.index') }}" class="nav-link">
                             <i class="fa-solid fa-circle fa-2xs"></i>
                             Todos
                         </a>
                     </li>
                 </ul>
                 <ul class="dropdown-menu">
-                    <li>
+                    <li class="{{ setActive('admin.surveys.reports.index') }}">
                         <a href="{{ route('admin.surveys.reports.index') }}" class="nav-link">
                             <i class="fa-solid fa-circle fa-2xs"></i>
                             Reporte de encuestados
@@ -114,7 +114,7 @@
                     </li>
                 </ul>
                 <ul class="dropdown-menu">
-                    <li>
+                    <li class="{{ setActive('admin.surveys.reports.profile.index') }}">
                         <a href="{{ route('admin.surveys.reports.profile.index') }}" class="nav-link">
                             <i class="fa-solid fa-circle fa-2xs"></i>
                             Reporte de perfil de usuario
@@ -123,12 +123,13 @@
                 </ul>
             </li>
 
-            <li class="{{setActive('admin.certifications.*')}}">
+            <li class="{{setActive('admin.certifications.*')}}" >
                 <a href="{{ route('admin.certifications.index') }}" class="nav-link">
                     <i class="fa-solid fa-file-contract"></i>
-                    <span>Certificados</span>
+                    <span>Evaluaciones</span>
                 </a>
             </li>
+
 
             <li class="logout">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); 

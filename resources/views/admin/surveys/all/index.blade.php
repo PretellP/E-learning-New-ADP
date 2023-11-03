@@ -22,7 +22,7 @@
                 </button>
             </div>
 
-            <table id="surveys-table" class="table table-hover" data-url="{{route('admin.surveys.index')}}">
+            <table id="surveys-table" class="table table-hover" data-url="{{route('admin.surveys.all.index')}}">
                 <thead>
                     <tr>
                         <th>N°</th>

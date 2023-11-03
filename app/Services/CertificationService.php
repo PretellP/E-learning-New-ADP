@@ -73,7 +73,7 @@ class CertificationService
                         editCertification-btn"><i class="fa-solid fa-pen-to-square"></i></button>';
 
                 if ($certification->evaluations_count > 0) {
-                    $btn .= '<button data-toggle="modal" data-id="' .
+                    $btn .= '<button data-toggle="modal" title="reiniciar" data-id="' .
                     $certification->id . '" data-url="'. route('admin.events.certifications.reset', $certification) .'" 
                         data-original-title="edit" class="reset ms-3 btn btn-primary btn-sm
                         resetCertification-btn"><i class="fa-solid fa-rotate-right"></i></button>';
@@ -234,15 +234,24 @@ class CertificationService
     // ----------------- CERTIFICATION MODULE ------------------------
 
 
-    public function getApprovedCertificationDataTable(Request $request)
+    public function getCertificationDataTable(Request $request)
     {
         $query = Certification::with(['user', 'company', 'event.exam.course'])
                                 ->where('status', 'finished')
                                 ->where('evaluation_type', 'certification')
-                                ->whereHas('event', function ($q) {
-                                    $q->whereRaw('certifications.score >= events.min_score');
-                                })
                                 ->select('certifications.*');
+
+        if ($request->filled('status')) {
+            if ($request['status'] == 'approved') {
+                $query->whereHas('event', function ($q) {
+                    $q->whereRaw('certifications.score >= events.min_score');
+                });
+            } else if ($request['status'] == 'suspended') {
+                $query->whereHas('event', function ($q) {
+                    $q->whereRaw('certifications.score < events.min_score');
+                });
+            }
+        }
 
         if ($request->filled('from_date') && $request->filled('end_date')) {
             $query->whereHas('event', function ($q2) use ($request) {
@@ -267,6 +276,11 @@ class CertificationService
             ->editColumn('user.name', function ($certification) {
                 return $certification->user->full_name_complete;
             })
+            ->editColumn('event.description', function ($certification) {
+                return '<a href="'. route('admin.events.show', ['event' => $certification->event]) .'">'. 
+                            $certification->event->description 
+                        .'</a>';
+            })
             ->editColumn('score', function ($certification) {
                 return $certification->score ?? '-';
             })
@@ -280,15 +294,21 @@ class CertificationService
                 return $exam_icon;
             })
             ->addColumn('certification', function ($certification) {
-                $exam_icon = '<a href="">
-                                    <img src="'. asset('assets/common/img/certification-icon.svg') .'"
-                                     alt="certificado-'. $certification->id .'" 
-                                     style="width:30px;">
-                                </a>';
 
-                return $exam_icon;
+                if ($certification->score >= $certification->event->min_score ) {
+
+                    $certification_icon = '<a href="">
+                                                <img src="'. asset('assets/common/img/certification-icon.svg') .'"
+                                                alt="certificado-'. $certification->id .'" 
+                                                style="width:30px;">
+                                          </a>';
+                } else {
+                   $certification_icon = '-';
+                }
+
+                return $certification_icon;
             })
-            ->rawColumns(['exam', 'certification'])
+            ->rawColumns(['exam', 'event.description','certification'])
             ->make(true);
 
         return $allCertifications;

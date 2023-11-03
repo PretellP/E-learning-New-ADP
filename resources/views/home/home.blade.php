@@ -111,8 +111,8 @@
     <div class="container-xxl py-5 courses-container">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Caracteristicas</h6>
-                <h1>Caracteristicas que nos hacen únicos</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">Características</h6>
+                <h1>Características que nos hacen únicos</h1>
                 <p class="mb-5 col-12 text-center p-4">El único sistema para capacitar a tu personal de campo y atención al
                     cliente y validar su aprendizaje</p>
             </div>
@@ -134,7 +134,7 @@
                             <img class="w-100" src="{{ asset('assets/home/img/phone-one.svg') }}" alt="">
                         </div>
                         <div class="container-description p-5">
-                            <h4 class="title-description">Flexiba, untuitiva y <br> autogestionable</h4>
+                            <h4 class="title-description">Flexible, intuitiva y <br> autogestionable</h4>
                             <p>Personaliza y centraliza tu plan de entrenamiento segmentando el contenido en función a la estructura de tu equipo.</p>
                         </div>
                     </div>
