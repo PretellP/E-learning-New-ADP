@@ -137,7 +137,7 @@
                                 <h4 class="title-chart">Estado de los alumnos de {{ getCurrentMonth() }}</h4>
                             </div>
                             <div class="card-body" id="card-body-first-chart">
-                                <h6 id="student-status" class="student-status">Oops... Los alumnos aún no han dado alguna evalución este mes.</h6>
+                                <h6 id="student-status" class="student-status">Oops... Los alumnos aún no han dado alguna evaluación este mes.</h6>
                                 <canvas data-approved="{{ $approved }}" data-suspended="{{ $suspended }}"
                                     id="chart-student-status">
                                 </canvas>

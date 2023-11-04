@@ -6417,12 +6417,10 @@ $(function () {
                         inputMinScore.rules('add', { max: maxScore })
 
                         if (event.finished_certifications_count != 0) {
-                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
                             examSelect.attr('readonly', 'true')
                             inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
                             inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
                         } else {
-                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
                             examSelect.removeAttr('readonly')
                             inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
                             inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
@@ -6984,12 +6982,10 @@ $(function () {
                         inputMinScore.rules('add', { max: maxScore })
 
                         if (event.finished_certifications_count != 0) {
-                            $('#dateinputEdit').attr('readonly', 'true').addClass('not-user-allowed')
                             examSelect.attr('readonly', 'true')
                             inputQuestionQty.attr('readonly', 'true').addClass('not-user-allowed')
                             inputMinScore.attr('readonly', 'true').addClass('not-user-allowed')
                         } else {
-                            $('#dateinputEdit').removeAttr('readonly').removeClass('not-user-allowed')
                             examSelect.removeAttr('readonly')
                             inputQuestionQty.removeAttr('readonly').removeClass('not-user-allowed')
                             inputMinScore.removeAttr('readonly').removeClass('not-user-allowed')
@@ -9729,10 +9725,13 @@ $(function () {
 
         /* ---------- FILTER SELECT ----------*/
 
+        $('#search_from_status_select').select2({
+            minimumResultsForSearch: -1
+        })
+
         $('html').on('change', '.select-filter-certification', function () {
             certifcationIndexTable.draw()
         })
-
 
         var certificationIndexTableEle = $('#certifications-index-table');
         var getDataUrl = certificationIndexTableEle.data('url');
@@ -9747,6 +9746,7 @@ $(function () {
                     data.end_date = $('#daterange-btn-certifications').data('daterangepicker').endDate.format('YYYY-MM-DD')
                     data.company = $('#search_from_company_select').val()
                     data.course = $('#search_from_course_select').val()
+                    data.status = $('#search_from_status_select').val()
                 }
             },
             columns: [
@@ -9755,6 +9755,7 @@ $(function () {
                 { data: 'user.name', name: 'user.name' },
                 { data: 'company.description', name: 'company.description' },
                 { data: 'event.exam.course.description', name: 'event.exam.course.description' },
+                { data: 'event.description', name: 'event.description' },
                 { data: 'event.date', name: 'event.date' },
                 { data: 'score', name: 'score' },
                 { data: 'exam', name: 'exam', orderable: false, searchable: false, className: 'text-center' },

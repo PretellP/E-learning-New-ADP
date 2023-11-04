@@ -17,13 +17,13 @@
 
             <h5 class="title-header-show">
                 <i class="fa-solid fa-chevron-left fa-xs"></i>
-                <a href="{{route('admin.surveys.index')}}">Inicio</a>
+                <a href="{{route('admin.surveys.all.index')}}">Inicio</a>
                 / Encuesta:
-                <a href="{{ route('admin.surveys.show', ["survey" => $statement->group->survey]) }}">
+                <a href="{{ route('admin.surveys.all.show', ["survey" => $statement->group->survey]) }}">
                     {{ $statement->group->survey->name }}
                 </a>
                 / Grupo:
-                <a href="{{ route('admin.surveys.groups.show', ["group" => $statement->group]) }}">
+                <a href="{{ route('admin.surveys.all.groups.show', ["group" => $statement->group]) }}">
                     {{ $statement->group->name }}
                 </a>
                 / Pregunta:
@@ -34,7 +34,7 @@
 
             <hr>
 
-            <form id="updateStatementForm" action="{{ route('admin.surveys.groups.statements.update', $statement) }}" method="POST">
+            <form id="updateStatementForm" action="{{ route('admin.surveys.all.groups.statements.update', $statement) }}" method="POST">
                 @csrf
 
                 <input type="hidden" id="registerStatementTypeSelect" name="type" value="{{ $statement->type }}">

@@ -15,7 +15,7 @@ class SurveyStatementService
     {
         $allStatements = DataTables::of($group->statements()->withCount('options'))
         ->editColumn('description', function ($statement) {
-            return '<a href="'. route('admin.surveys.groups.statements.show', $statement) .'">'. $statement->description .'</a>';
+            return '<a href="'. route('admin.surveys.all.groups.statements.show', $statement) .'">'. $statement->description .'</a>';
         })
         ->editColumn('type', function ($statement) {
             return config('parameters.statement_type')[$statement->type] ?? '-';
@@ -30,7 +30,7 @@ class SurveyStatementService
             
             $btn = '<a href="javascript:void(0)" data-id="' .
                 $statement->id . '" data-original-title="delete" data-type="index"
-                            data-url="'. route('admin.surveys.groups.statement.destroy', $statement) .'" class="ms-3 edit btn btn-danger btn-sm
+                            data-url="'. route('admin.surveys.all.groups.statement.destroy', $statement) .'" class="ms-3 edit btn btn-danger btn-sm
                             deleteStatement"><i class="fa-solid fa-trash-can"></i></a>';
 
             return $btn;

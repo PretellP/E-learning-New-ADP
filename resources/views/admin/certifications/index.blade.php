@@ -8,7 +8,7 @@
         <div class="card page-title-container">
             <div class="card-header">
                 <div class="total-width-container">
-                    <h4>Certificados</h4>
+                    <h4>Evaluaciones</h4>
                 </div>
             </div>
         </div>
@@ -32,6 +32,17 @@
             </div>
 
             <div class="group-filter-buttons-section flex-wrap">
+
+                <div class="form-group col-2 p-0 select-group">
+                    <label class="form-label">Filtrar por estado: &nbsp;</label>
+                    <div>
+                        <select name="status" class="form-control select2 select-filter-certification" id="search_from_status_select">
+                            <option value=""> Todos </option>
+                            <option value="approved"> Aprobados </option>
+                            <option value="suspended"> Desaprobados </option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-group col-2 p-0 select-group">
                     <label class="form-label">Filtrar por empresa: &nbsp;</label>
@@ -69,6 +80,7 @@
                         <th>Apellidos y nombres</th>
                         <th>Empresa</th>
                         <th>Curso</th>
+                        <th>Evento</th>
                         <th>Fecha</th>
                         <th>Nota</th>
                         <th>Examen</th>
@@ -76,11 +88,6 @@
                     </tr>
                 </thead>
             </table>
-
-
-            <a href="">
-                
-            </a>
 
         </div>
 

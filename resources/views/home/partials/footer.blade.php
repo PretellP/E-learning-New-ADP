@@ -30,33 +30,10 @@
 
             <div class="col-lg-4 col-md-12">
                 <h4 class="text-white mb-3">Visita nuestras otras páginas</h4>
-                <a class="btn btn-link" href="#">Nosotros</a>
+                <a class="btn btn-link" href="{{ route('home.about.index') }}">Nosotros</a>
                 <a class="btn btn-link" href="{{ route('home.courses.index') }}">Cursos</a>
-                <a class="btn btn-link" href="">Cursos libres</a>
-                <a class="btn btn-link" href="">Registrate!</a>
-
-
-                {{-- <h4 class="text-white mb-3">Galeria</h4>
-                <div class="row g-2 pt-2">
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-1.jpg')}}" alt="">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-2.jpg')}}" alt="">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-3.jpg')}}" alt="">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-2.jpg')}}" alt="">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-3.jpg')}}" alt="">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid bg-light p-1" src="{{asset('assets/home/img/course-1.jpg')}}" alt="">
-                    </div>
-                </div> --}}
+                <a class="btn btn-link" href="{{ route('home.freecourses.categories.index') }}">Cursos libres</a>
+                <a class="btn btn-link" href="{{ route('register.show') }}">Regístrate!</a>
 
 
 

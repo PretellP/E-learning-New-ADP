@@ -26,7 +26,7 @@ class AdminSurveyStatementController extends Controller
     {
         $statement->loadRelationships();
 
-        return view('admin.surveys.statements.show', compact(
+        return view('admin.surveys.all.groups.statements.show', compact(
             'statement'
         ));
     }

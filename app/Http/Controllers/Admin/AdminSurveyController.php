@@ -24,14 +24,14 @@ class AdminSurveyController extends Controller
             return $this->surveyService->getDataTable();
         }
 
-        return view('admin.surveys.index');
+        return view('admin.surveys.all.index');
     }
 
     public function show(Survey $survey)
     {
         $survey->loadRelationships();
 
-        return view('admin.surveys.show', compact(
+        return view('admin.surveys.all.show', compact(
             'survey'
         ));
     }
@@ -52,7 +52,7 @@ class AdminSurveyController extends Controller
         }
 
         if ($request['verifybtn'] == 'show') {
-            $route = route('admin.surveys.show', $survey);
+            $route = route('admin.surveys.all.show', $survey);
             $show = true;
         }
 
@@ -124,7 +124,7 @@ class AdminSurveyController extends Controller
             $message = $e->getMessage();
         }
 
-        $route = $location == 'show' ? route('admin.surveys.index') : NULL ;  
+        $route = $location == 'show' ? route('admin.surveys.all.index') : NULL ;  
 
         return response()->json([
             "success" => $success,

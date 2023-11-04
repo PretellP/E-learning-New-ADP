@@ -18,7 +18,7 @@ class SurveyService
                 ]
             ))
             ->editColumn('name', function ($survey) {
-                return '<a href="'. route('admin.surveys.show', $survey) .'">'. $survey->name .'</a>';
+                return '<a href="'. route('admin.surveys.all.show', $survey) .'">'. $survey->name .'</a>';
             })
             ->editColumn('destined_to', function ($survey) {
                 return config('parameters.survey_destined_to')[$survey->destined_to] ?? '-';
@@ -32,8 +32,8 @@ class SurveyService
             })
             ->addColumn('action', function ($survey) {
                 $btn = '<button data-toggle="modal" data-id="' .
-                    $survey->id . '" data-url="'. route('admin.surveys.update', $survey) .'"
-                                data-send="'. route('admin.surveys.edit', $survey) .'"
+                    $survey->id . '" data-url="'. route('admin.surveys.all.update', $survey) .'"
+                                data-send="'. route('admin.surveys.all.edit', $survey) .'"
                                 data-original-title="edit" class="me-3 edit btn btn-warning btn-sm
                                 editSurvey"><i class="fa-solid fa-pen-to-square"></i></button>';
                 if (
@@ -41,7 +41,7 @@ class SurveyService
                 ) {
                     $btn .= '<a href="javascript:void(0)" data-id="' .
                         $survey->id . '" data-original-title="delete" data-type="index"
-                                    data-url="'. route('admin.surveys.destroy', $survey) .'" class="ms-3 edit btn btn-danger btn-sm
+                                    data-url="'. route('admin.surveys.all.destroy', $survey) .'" class="ms-3 edit btn btn-danger btn-sm
                                     deleteSurvey"><i class="fa-solid fa-trash-can"></i></a>';
                 }
 

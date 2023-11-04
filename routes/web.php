@@ -93,7 +93,6 @@ Route::controller(HomeFreeCourseController::class)->group(function () {
 Route::controller(HomeAboutController::class)->group(function () {
 
     Route::get('/nosotros', 'index')->name('home.about.index');
-
 });
 
 
@@ -337,7 +336,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registrar', 'store')->name('admin.events.store');
                 Route::post('/actualizar/{event}', 'update')->name('admin.events.update');
                 Route::delete('/eliminar/{event}', 'destroy')->name('admin.events.destroy');
-
             });
 
             Route::controller(AdminCertificationsController::class)->group(function () {
@@ -353,18 +351,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/registro-masivo-de-participantes/{event}', 'storeMassive')->name('admin.events.certifications.store.massive');
 
                 Route::post('/reiniciar-certificado/{certification}', 'reset')->name('admin.events.certifications.reset');
-            });
-        });
-
-
-        // ----------- CERTIFICATIONS MODULE ------------
-
-        Route::group(['prefix' => 'certificados'], function () {
-
-            Route::controller(AdminCertificationsController::class)->group(function () {
-
-                Route::get('/', 'index')->name('admin.certifications.index');
-
             });
         });
 
@@ -394,43 +380,42 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
             Route::controller(AdminSurveyController::class)->group(function () {
 
-                Route::get('/', 'index')->name('admin.surveys.index');
-                Route::get('/editar/{survey}', 'edit')->name('admin.surveys.edit');
-                Route::get('/ver/{survey}', 'show')->name('admin.surveys.show');
-                Route::post('/registrar', 'store')->name('admin.surveys.store');
-                Route::post('/actualizar/{survey}', 'update')->name('admin.surveys.update');
-                Route::delete('/eliminar/{survey}', 'destroy')->name('admin.surveys.destroy');
+                Route::get('/', 'index')->name('admin.surveys.all.index');
+                Route::get('/editar/{survey}', 'edit')->name('admin.surveys.all.edit');
+                Route::get('/ver/{survey}', 'show')->name('admin.surveys.all.show');
+                Route::post('/registrar', 'store')->name('admin.surveys.all.store');
+                Route::post('/actualizar/{survey}', 'update')->name('admin.surveys.all.update');
+                Route::delete('/eliminar/{survey}', 'destroy')->name('admin.surveys.all.destroy');
             });
 
             Route::group(['prefix' => 'grupos'], function () {
 
                 Route::controller(AdminSurveyGroupController::class)->group(function () {
 
-                    Route::get('/{survey}', 'index')->name('admin.surveys.groups.index');
-                    Route::get('/ver/{group}', 'show')->name('admin.surveys.groups.show');
-                    Route::get('/editar/{group}', 'edit')->name('admin.surveys.groups.edit');
-                    Route::post('/{survey}/registrar', 'store')->name('admin.surveys.groups.store');
-                    Route::post('/actualizar/{group}', 'update')->name('admin.surveys.groups.update');
-                    Route::delete('/eliminar/{group}', 'destroy')->name('admin.surveys.groups.destroy');
-
+                    Route::get('/{survey}', 'index')->name('admin.surveys.all.groups.index');
+                    Route::get('/ver/{group}', 'show')->name('admin.surveys.all.groups.show');
+                    Route::get('/editar/{group}', 'edit')->name('admin.surveys.all.groups.edit');
+                    Route::post('/{survey}/registrar', 'store')->name('admin.surveys.all.groups.store');
+                    Route::post('/actualizar/{group}', 'update')->name('admin.surveys.all.groups.update');
+                    Route::delete('/eliminar/{group}', 'destroy')->name('admin.surveys.all.groups.desrtoy');
                 });
 
                 Route::group(['prefix' => 'preguntas'], function () {
 
                     Route::controller(AdminSurveyStatementController::class)->group(function () {
 
-                        Route::get('/{group}', 'index')->name('admin.surveys.groups.statements.index');
-                        Route::get('/obtener-tipo-de-pregunta/{group}', 'getStatementType')->name('admin.surveys.groups.statements.getType');
-                        Route::get('/ver-pregunta/{statement}', 'show')->name('admin.surveys.groups.statements.show');
-                        Route::post('/{group}/registrar', 'store')->name('admin.surveys.groups.statement.store');
-                        Route::post('/actualizar/{statement}', 'update')->name('admin.surveys.groups.statements.update');
-                        Route::delete('/eliminar/{statement}', 'destroy')->name('admin.surveys.groups.statement.destroy');
+                        Route::get('/{group}', 'index')->name('admin.surveys.all.groups.statements.index');
+                        Route::get('/obtener-tipo-de-pregunta/{group}', 'getStatementType')->name('admin.surveys.all.groups.statements.getType');
+                        Route::get('/ver-pregunta/{statement}', 'show')->name('admin.surveys.all.groups.statements.show');
+                        Route::post('/{group}/registrar', 'store')->name('admin.surveys.all.groups.statement.store');
+                        Route::post('/actualizar/{statement}', 'update')->name('admin.surveys.all.groups.statements.update');
+                        Route::delete('/eliminar/{statement}', 'destroy')->name('admin.surveys.all.groups.statement.destroy');
                     });
 
                     Route::group(['prefix' => 'opciones'], function () {
 
                         Route::controller(AdminSurveyOptionController::class)->group(function () {
-                            Route::delete('/eliminar/{option}', 'destroy')->name('admin.surveys.groups.statement.options.destroy');
+                            Route::delete('/eliminar/{option}', 'destroy')->name('admin.surveys.all.groups.statement.options.destroy');
                         });
                     });
                 });
@@ -456,11 +441,22 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         });
 
 
-        // ----------------- PDFS ------------------
+        // ----------- CERTIFICATIONS MODULE ------------
 
-        // ------ certifications ------------
+        Route::group(['prefix' => 'certificados'], function () {
 
-        Route::get('/generar-pdf-evaluación-de-participante/{certification}', [PdfCertificationController::class, 'examPdf'])->name('pdf.certification.exam');
+            Route::controller(AdminCertificationsController::class)->group(function () {
+
+                Route::get('/', 'index')->name('admin.certifications.index');
+            });
+
+
+            // ----------------- PDFS ------------------
+
+            // ------ certifications ------------
+
+            Route::get('/generar-pdf-evaluación-de-participante/{certification}', [PdfCertificationController::class, 'examPdf'])->name('pdf.certification.exam');
+        });
     });
 
 
@@ -515,7 +511,6 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                     Route::patch('/actualizar/{user_survey}/{group_id}', 'update')->name('aula.surveys.update');
                 });
             });
-
         });
 
         Route::group(['middleware' => 'check.role:instructor'], function () {
@@ -533,5 +528,4 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
         Route::post('/e-learning/{certification}', [QuizController::class, 'start'])->name('aula.course.quiz.start');
         Route::patch('/e-learning/{certification}/{exam}/pregunta/{num_question}/{key}/{evaluation}', [QuizController::class, 'update'])->name('aula.course.quiz.update');
     });
-
 });

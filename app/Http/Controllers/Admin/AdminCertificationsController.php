@@ -213,7 +213,7 @@ class AdminCertificationsController extends Controller
     public function index(Request $request) 
     {
         if ($request->ajax()) {
-            return $this->certificationService->getApprovedCertificationDataTable($request);
+            return $this->certificationService->getCertificationDataTable($request);
         }
 
         $companies = Company::get(['id', 'description']);

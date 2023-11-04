@@ -191,6 +191,53 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 
 /* --------- SIDEAR ------------*/
 
+body.sidebar-mini .main-sidebar .sidebar-brand-sm
+{
+    display: flex !important;
+}
+
+.main-sidebar {
+    background-color: var(--first-color);
+}
+
+.main-sidebar .sidebar-menu li a {
+    color: white;
+    transition: all .2s !important;
+}
+
+.main-sidebar .sidebar-menu li.logout a {
+    background-color: rgb(170, 66, 66);
+}
+
+.main-sidebar .sidebar-menu li.active a {
+    color: var(--first-color);
+}
+
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu>li.active>a:before,
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu>li.active>a {
+    background-color: white;
+}
+
+.main-sidebar .sidebar-menu li a:hover {
+    filter: brightness(1.1);
+    background-color: var(--first-color);
+}
+
+.main-sidebar .sidebar-menu li.logout a:hover {
+    filter: brightness(1.1);
+    background-color: rgb(170, 66, 66);
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu>li.active>a {
+    background-color: var(--first-color);
+    box-shadow: 0 4px 8px #ace7f6
+}
+
+body.sidebar-mini .main-sidebar::after {
+    display: none !important;
+}
+
+
 .main-sidebar .sidebar-menu li ul.dropdown-menu li a {
     height: auto;
 }
@@ -202,7 +249,11 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li a 
     background-color: var(--first-color);
 }
 
-body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li a:hover {
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li.active a {
+    filter: brightness(1.1);
+}
+
+body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li ul.dropdown-menu li:not(.active) a:hover {
     filter: brightness(1.1);
 }
 
@@ -213,6 +264,9 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 .main-sidebar .sidebar-menu li ul.dropdown-menu li a i {
     width: auto !important;
 }
+
+
+
 
 /* --------- DATE RANGE STYLES -------*/
 
@@ -842,49 +896,6 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
 
 
 
-
-/* ---------   SIDEBAR   --------- -*/
-
-.main-sidebar {
-    background-color: var(--first-color);
-}
-
-.main-sidebar .sidebar-menu li a {
-    color: white;
-    transition: all .2s !important;
-}
-
-.main-sidebar .sidebar-menu li.logout a {
-    background-color: rgb(170, 66, 66);
-}
-
-.main-sidebar .sidebar-menu li.active a {
-    color: var(--first-color);
-}
-
-body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu>li.active>a:before,
-body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu>li.active>a {
-    background-color: white;
-}
-
-.main-sidebar .sidebar-menu li a:hover {
-    filter: brightness(1.1);
-    background-color: var(--first-color);
-}
-
-.main-sidebar .sidebar-menu li.logout a:hover {
-    filter: brightness(1.1);
-    background-color: rgb(170, 66, 66);
-}
-
-body.sidebar-mini .main-sidebar .sidebar-menu>li.active>a {
-    background-color: var(--first-color);
-    box-shadow: 0 4px 8px #ace7f6
-}
-
-body.sidebar-mini .main-sidebar::after {
-    display: none !important;
-}
 
 
 
