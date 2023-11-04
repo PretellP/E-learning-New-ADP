@@ -44,16 +44,9 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-sm-10 col-lg-8">
-                                <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">Best Online Courses
-                                </h5>
-                                <h1 class="display-3 text-white animated slideInDown">Get Educated Online From Your Home
-                                </h1>
-                                <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed
-                                    stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus
-                                    eirmod elitr.</p>
-                                {{-- <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
-                                More</a>
-                            <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a> --}}
+                                <h5 class="text-secondary text-uppercase mb-3 animated slideInDown">Transforma tu futuro hoy</h5>
+                                <h2 class="display-3 text-white animated slideInDown">¡Descubre el Poder del Aprendizaje en Línea con ADP Learning!</h2>
+                                <p class="fs-5 text-white mb-4 pb-2">Ofrecemos una variedad de cursos en línea diseñados para ayudarte a alcanzar tus metas profesionales y personales. Nuestros programas de estudio son flexibles, interactivos y están llenos de información relevante y actualizada.</p>
                             </div>
                         </div>
                     </div>
@@ -91,15 +84,15 @@
             <div class="row justify-content-center">
                 {{-- <h3 class="col-12 text-center p-4">Construyendo equipos listos para el futuro</h3> --}}
                 <div class="col-sm-12 col-lg-3 text-center">
-                    <span id="count-up-students" class="making-numbers" data-number="{{ $numberUsers }}">0</span>
+                    <span id="count-up-students" class="making-numbers" data-number="{{ $numberUsers }}"></span>
                     <p>de estudiantes registrados en nuestra plataforma.</p>
                 </div>
                 <div class="col-sm-12 col-lg-3 text-center">
-                    <span id="count-up-courses" class="making-numbers" data-number="{{ $numberCourses }}">0</span>
+                    <span id="count-up-courses" class="making-numbers" data-number="{{ $numberCourses }}"></span>
                     <p>cursos publicados.</p>
                 </div>
                 <div class="col-sm-12 col-lg-3 text-center">
-                    <span id="count-up-companys" class="making-numbers" data-number="{{ $numberCompanys }}">0</span>
+                    <span id="count-up-companys" class="making-numbers" data-number="{{ $numberCompanys }}"></span>
                     <p>empresa desarrollando a sus equipos con nosotros.</p>
                 </div>
             </div>

@@ -1,7 +1,5 @@
 @extends('admin.common.layouts.masterpage')
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 @section('content')
     <div class="row content">
 
@@ -56,8 +54,7 @@
                                     <i class="icon-info-d fa-solid fa-building icon-building-red"></i>
                                 </div>
                                 <div class="numbers">
-                                    <h2 id="count-up-companys" data-number="{{ $company }}" class="count-numbers">0
-                                    </h2>
+                                    <h2 id="count-up-companys" data-number="{{ $company }}" class="count-numbers">0</h2>
                                 </div>
                                 <p class="reference-count">Empresas</p>
                             </div>
@@ -79,8 +76,7 @@
                                     <i class="icon-info-d fa-solid fa-book icon-book-green"></i>
                                 </div>
                                 <div class="numbers">
-                                    <h2 id="count-up-course-regular" data-number="{{ $courseRegular }}"
-                                        class="count-numbers">0</h2>
+                                    <h2 id="count-up-course-regular" data-number="{{ $courseRegular }}" class="count-numbers">0</h2>
                                 </div>
                                 <p class="reference-count">Cursos</p>
                             </div>
@@ -102,8 +98,7 @@
                                     <i class="icon-info-d fa-solid fa-book icon-book-purple"></i>
                                 </div>
                                 <div class="numbers">
-                                    <h2 id="count-up-course-free" data-number="{{ $courseFree }}" class="count-numbers">0
-                                    </h2>
+                                    <h2 id="count-up-course-free" data-number="{{ $courseFree }}" class="count-numbers">0</h2>
                                 </div>
                                 <p class="reference-count">Cursos libres</p>
                             </div>
@@ -139,7 +134,7 @@
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card card-primary card-back">
                             <div class="card-header card-header-chart">
-                                <h4 class="title-chart">Estado de los alumnos de {{ $nameMonth }}</h4>
+                                <h4 class="title-chart">Estado de los alumnos de {{ getCurrentMonth() }}</h4>
                             </div>
                             <div class="card-body" id="card-body-first-chart">
                                 <h6 id="student-status" class="student-status">Oops... Los alumnos aún no han dado alguna evaluación este mes.</h6>

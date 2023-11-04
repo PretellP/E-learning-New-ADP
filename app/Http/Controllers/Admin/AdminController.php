@@ -40,10 +40,6 @@ class AdminController extends Controller
 
         $typesOfUsers = $this->dashboardService->getTypeRole();
 
-        $nameMonth = Carbon::now()->locale('es')->isoFormat('MMMM');
-
-        // dd($cantidad_usuarios);
-
 
         return view('admin.common.home.home',[
             'users' => $users,
@@ -54,7 +50,6 @@ class AdminController extends Controller
             'approved' => $approved,
             'suspended' => $suspended,
             'typesOfUsers' => $typesOfUsers,
-            'nameMonth' => $nameMonth
         ]);
 
 
