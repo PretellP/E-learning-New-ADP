@@ -48,7 +48,7 @@
                 <div class="col-md-12 text-center text-md-start mb-3 mb-md-0">
 
                     <p class="text-center">
-                        Copyright &copy; {{ date('Y') }} <a class="border-bottom" href="#">E-Learning ADP</a>.
+                        Copyright &copy; {{ getCurrentYear() }} <a class="border-bottom" href="#">E-Learning ADP</a>.
                         Reservados todos los derechos.
                     </p>
 

@@ -83,8 +83,8 @@ function getScoreFromCertification($certification)
         if($evaluation->points == $evaluation->question->points){
             $correct_answers++;
         }
-    } 
-    
+    }
+
     $score = ($points > $max_score ||
             $correct_answers == $certification->evaluations->count()) ?
             $max_score : $points;
@@ -403,8 +403,8 @@ function getProfileTypes(UserSurvey $userSurvey)
         if(Str::contains( $surveyAnswer->pivot->answer,'(OR)') == '(OR)')
             $OR++;
         if(Str::contains( $surveyAnswer->pivot->answer,'(CA)') == '(CA)')
-            $CA++;  
-        if(Str::contains( $surveyAnswer->pivot->answer,'(EA)') == '(EA)') 
+            $CA++;
+        if(Str::contains( $surveyAnswer->pivot->answer,'(EA)') == '(EA)')
             $EA++;
     }
 
@@ -465,7 +465,7 @@ function getActiveSection($active)
 function verifyUserAvatar($file)
 {
     $url = asset('storage/img/user_avatar/default.png');
-    
+
     if ($file) {
         $url = $file->file_url == null ? $url
         : $file->file_url;
@@ -509,7 +509,7 @@ function verifyImage($file)
 
 function verifyFile($file)
 {
-    return $file != null ? $file->file_url : null; 
+    return $file != null ? $file->file_url : null;
 }
 
 //--------------------------------
@@ -533,6 +533,16 @@ function getDiffForHumansFromTimestamp($timestamp)
 function getTimeforHummans($time)
 {
     return Carbon::parse($time)->format('g:i A');
+}
+
+function getCurrentYear()
+{
+    return Carbon::now('America/Lima')->format('Y');
+}
+
+function getCurrentMonth()
+{
+    return Carbon::now('America/Lima')->isoFormat('MMMM');
 }
 
 // ----------------------------------

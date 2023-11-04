@@ -124,7 +124,7 @@ Chart.defaults.global.defaultFontColor = "black";
         options: {
             maintainAspectRatio: false,
             legend: {
-                display: true,
+                display: false,
                 position: "top",
                 labels: {
                     padding: 5,
@@ -138,7 +138,7 @@ Chart.defaults.global.defaultFontColor = "black";
                     beginAtZero: true,
                 },
             },
+            indexAxis: "y",
         },
     });
 })(jQuery);
-
