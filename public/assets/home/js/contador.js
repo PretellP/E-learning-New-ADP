@@ -1,7 +1,7 @@
 import { CountUp } from "./countUp.js";
 import { Odometer } from "./odemeter.js";
 
-const duration = 6;
+const duration = 1.5;
 
 const n_students = document
     .getElementById("count-up-students")
@@ -18,9 +18,9 @@ const students = new CountUp("count-up-students", n_students, {
     // suffix: " 🧑‍💻",
     duration,
     separator: ",",
-    enableScrollSpy: true,
+    // enableScrollSpy: true,
     plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 2.0,
+    duration: 1.0,
 });
 
 const courses = new CountUp("count-up-courses", n_courses, {
@@ -28,9 +28,9 @@ const courses = new CountUp("count-up-courses", n_courses, {
     // suffix: " 📚",
     duration,
     separator: ",",
-    enableScrollSpy: true,
+    // enableScrollSpy: true,
     plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 2.0,
+    duration: 1.0,
 });
 
 const companys = new CountUp("count-up-companys", n_companys, {
@@ -38,9 +38,9 @@ const companys = new CountUp("count-up-companys", n_companys, {
     // suffix: " 🏢",
     duration,
     separator: ",",
-    enableScrollSpy: true,
+    // enableScrollSpy: true,
     plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 2.0,
+    duration: 1.0,
 });
 
 if (!students.error && !courses.error && !companys.error) {

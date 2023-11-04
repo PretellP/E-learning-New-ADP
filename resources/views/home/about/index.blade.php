@@ -89,11 +89,9 @@
                 </div>
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                     <h6 class="section-title bg-white text-start text-primary pe-3">Acerca de nosotros</h6>
-                    <h1 class="mb-4">Bienvenido a ADP eLearning</h1>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit.</p>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
-                        eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
+                    <h1 class="mb-4">¡Bienvenidos a ADP E-Learning!</h1>
+                    <p class="mb-4">Somos una plataforma dedicada a la educación en línea, comprometida con el crecimiento y desarrollo de nuestros estudiantes. Nuestro objetivo es proporcionar un aprendizaje accesible, asequible y de alta calidad para todos, independientemente de dónde se encuentren.</p>
+                    <p class="mb-4">En ADP E-Learning, creemos en el poder de la educación para transformar vidas. Nuestros cursos están diseñados para ser interactivos, atractivos y fáciles de entender, permitiendo a los estudiantes aprender a su propio ritmo.
                     </p>
                     <div class="row gy-2 gx-4 mb-4">
                         <div class="col-sm-6">

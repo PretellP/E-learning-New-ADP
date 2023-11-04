@@ -2,7 +2,7 @@
 
     <meta charset="UTF-8">
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-	
+
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'E-learning | Admin')</title>
@@ -36,7 +36,7 @@
 	<link rel="stylesheet" href="{{asset('assets/common/css/components.css')}}">
 
 	<link rel="stylesheet" href="{{asset('assets/common/css/style.css')}}">
-	
+
 	@yield('extra-head')
 
 
@@ -44,6 +44,5 @@
 	<link rel="stylesheet" href="{{asset('assets/common/css/fonts.css')}}">
 
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-	
 
 </head>
