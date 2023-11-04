@@ -1,10 +1,7 @@
 @extends('admin.common.layouts.masterpage')
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 @section('content')
     <div class="row content">
-
 
         <div class="main-container-page">
             <div class="card page-title-container">
