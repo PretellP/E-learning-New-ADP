@@ -137,7 +137,6 @@ class AdminUsersController extends Controller
     public function massiveStore(FileImportRequest $request)
     {
         $note = NULL;
-        
         $foundDuplicates = false;
 
         try {

@@ -20,8 +20,8 @@ Chart.defaults.global.defaultFontColor = "black";
             type: "doughnut",
             data: {
                 labels: [
-                    `Aprobado #${dataApproved}`,
-                    `Desaprobado #${dataSuspended}`,
+                    `Aprobados: ${dataApproved}`,
+                    `Desaprobados: ${dataSuspended}`,
                 ],
                 datasets: [
                     {
@@ -46,7 +46,7 @@ Chart.defaults.global.defaultFontColor = "black";
                     },
                 },
                 tooltips: {
-                    enabled: true,
+                    enabled: false,
                 },
             },
         });

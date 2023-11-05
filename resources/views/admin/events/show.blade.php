@@ -44,6 +44,16 @@
                     data-toggle="modal" data-target="#RegisterParticipantsMassiveModal">
                     <i class="fa-solid fa-file-import"></i> &nbsp; Registro masivo
                 </button>
+
+                <button class="btn btn-primary ms-3" id="btn-register-participants-score-modal"
+                    data-toggle="modal" data-target="#RegisterParticipantsScoreModal">
+                    <i class="fa-solid fa-file-import"></i> &nbsp; Subir notas
+                </button>
+
+                <button class="btn btn-primary ms-3" id="btn-register-area-observations"
+                    data-toggle="modal" data-target="#RegisterParticipantsAreaModal">
+                    <i class="fa-solid fa-file-import"></i> &nbsp; Área / Observaciones
+                </button>
             </div>
 
             <div class="group-filter-buttons-section flex-wrap">
@@ -93,5 +103,7 @@
 @include('admin.events.partials._modal_edit_certification')
 
 @include('admin.events.partials.modals._register_participants_massive')
+@include('admin.events.partials.modals._register_participants_score')
+@include('admin.events.partials.modals._register_participants_area')
 
 @endsection

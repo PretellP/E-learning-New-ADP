@@ -6,6 +6,7 @@ use App\Models\{Certification, Event, User};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Yajra\DataTables\Facades\DataTables;
 
 class CertificationService
@@ -209,7 +210,7 @@ class CertificationService
         $certification->testCertification()->associate($testCertification);
         $certification->save();
     }
-
+    
     public function reset(Certification $certification)
     {
         if ($certification->evaluations()->delete()) {
@@ -224,6 +225,55 @@ class CertificationService
                 "score" => null
             ]);
         }
+    }
+
+    public function storeMassiveFromContext($rows, Event $event, $context)
+    {
+        $users = $this->getUsersFromRows($rows);
+
+        $isStored = $this->updateCertificationMassive($event, $users, $rows, $context);
+
+        return array("success" => true, "isStored" => $isStored);
+    }
+
+    private function getUsersFromRows($rows)
+    {
+        $dnis_array = Arr::pluck($rows, 'dni');
+        return User::whereIn('dni', $dnis_array)->get(['id', 'dni']);
+    }
+
+    private function updateCertificationMassive(Event $event, $users, $rows, $context)
+    {
+        $isStored = false;
+
+        foreach ($users as $key => $user) {
+            $certification = $event->certifications->where('user_id', $user->id)->first();
+
+            if ($certification) {
+                if ($this->updateMassiveFromContext($certification, $rows, $key, $context)) {
+                    $isStored = true;
+                }
+            }
+        }
+
+        return $isStored;
+    }
+
+    private function updateMassiveFromContext(Certification $certification, $rows, $key, $context)
+    {
+        if ($context == 'score') {
+            return $certification->update([
+                'score' => $rows[$key]['nota']
+            ]);
+        }
+        else if ($context == 'area') {
+            return $certification->update([
+                'area' => $rows[$key]['area'],
+                'observation' => $rows[$key]['observacion']
+            ]);
+        }
+
+        return null;
     }
 
 

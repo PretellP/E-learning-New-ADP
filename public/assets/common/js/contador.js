@@ -1,7 +1,7 @@
 import { CountUp } from "./../../home/js/countUp.js";
 import { Odometer } from "./../../home/js/odemeter.js";
 
-const duration = 1.5;
+const duration = 0.6;
 
 const n_users = document
     .getElementById("count-up-users")
@@ -20,14 +20,15 @@ const n_events = document
     .getAttribute("data-number");
 
 
+
+
 const users = new CountUp("count-up-users", n_users, {
     // prefix: "+ ",
     // suffix: " 🧑‍💻",
     duration,
     separator: ",",
     // enableScrollSpy: true,
-    plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 1.0,
+    plugin: new Odometer({ duration: 0.6, lastDigitDelay: 0 }),
 });
 
 const companys = new CountUp("count-up-companys", n_companys, {
@@ -36,8 +37,7 @@ const companys = new CountUp("count-up-companys", n_companys, {
     duration,
     separator: ",",
     // enableScrollSpy: true,
-    plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 1.0,
+    plugin: new Odometer({ duration: 0.6, lastDigitDelay: 0 }),
 });
 
 const courses_regular = new CountUp("count-up-course-regular", n_courses_regular, {
@@ -46,8 +46,8 @@ const courses_regular = new CountUp("count-up-course-regular", n_courses_regular
     duration,
     separator: ",",
     // enableScrollSpy: true,
-    plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 1.0,
+    plugin: new Odometer({ duration: 0.6, lastDigitDelay: 0 }),
+
 });
 
 const courses_free = new CountUp("count-up-course-free", n_courses_free, {
@@ -56,8 +56,8 @@ const courses_free = new CountUp("count-up-course-free", n_courses_free, {
     duration,
     separator: ",",
     // enableScrollSpy: true,
-    plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 1.0,
+    plugin: new Odometer({ duration: 0.6, lastDigitDelay: 0 }),
+
 });
 
 
@@ -67,8 +67,8 @@ const events = new CountUp("count-up-events", n_events, {
     duration,
     separator: ",",
     // enableScrollSpy: true,
-    plugin: new Odometer({ duration: 2.3, lastDigitDelay: 0 }),
-    duration: 1.0,
+    plugin: new Odometer({ duration: 0.6, lastDigitDelay: 0 }),
+
 });
 
 

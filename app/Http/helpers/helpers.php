@@ -162,7 +162,6 @@ function getDroppableOptionFromId($id)
     return DroppableOption::findOrFail($id);
 }
 
-
 function updateIfNotFinished($certification): void
 {
     $current_date_string = Carbon::now('America/Lima')->format('Y-m-d');

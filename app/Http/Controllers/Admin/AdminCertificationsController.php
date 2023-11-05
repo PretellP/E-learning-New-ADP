@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\ParticipantsImportTemplate;
+use App\Exports\{ParticipantsAreaImportTemplate, ParticipantsImportTemplate, ParticipantsScoreImportTemplate};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileImportRequest;
+use App\Imports\ParticipantsAreaImport;
 use App\Imports\ParticipantsImport;
+use App\Imports\ParticipantsScoreImport;
 use App\Models\{Certification, Company, Course, Event, MiningUnit};
 use App\Services\{CertificationService};
 use Exception;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class AdminCertificationsController extends Controller
 {
@@ -151,11 +152,26 @@ class AdminCertificationsController extends Controller
         return $participantsImportTemplate->download('participantes_plantilla_registro_masivo.xlsx');
     }
 
+    public function downloadImportScoreTemplate()
+    {
+        $participantsScoreTemplate = new ParticipantsScoreImportTemplate();
+
+        return $participantsScoreTemplate->download('registro_de_notas_masivo_plantilla.xlsx');
+    }
+
+    public function downloadImportAreaTemplate()
+    {
+        $participantsAreaTemplate = new ParticipantsAreaImportTemplate();
+
+        return $participantsAreaTemplate->download('registro_de_area_observaciones_plantilla.xlsx');
+    }
+
     public function storeMassive(FileImportRequest $request, Event $event)
     {
         $event->loadRelationships();
 
         $validationFailure = false;
+        $failureMessage = null;
 
         try {
             $participantsImport = new ParticipantsImport;
@@ -189,6 +205,79 @@ class AdminCertificationsController extends Controller
         ]);
     }
 
+    public function storeScoresMasive(FileImportRequest $request, Event $event)
+    {
+        $event->load(['certifications' => fn ($q) =>
+                        $q->where('evaluation_type', 'certification')
+                            ->select('id','event_id','user_id','score','evaluation_type')
+                    ]);
+
+        $validationFailure = false;
+        $failureMessage = null;
+
+        try {
+            $participantsScoreImport = new ParticipantsScoreImport;
+            $participantsScoreImport->import($request->file('file'));
+            $rows = $participantsScoreImport->getDnis();
+
+            $info = $this->certificationService->storeMassiveFromContext($rows, $event, 'score');
+            $message = config('parameters.updated_message');
+
+            if ($participantsScoreImport->failures()->isNotEmpty()) {
+                $validationFailure = true;
+                $failureMessage= 'Se encontró errores de validación';
+            }
+
+        } catch (Exception $e) {
+            $info = array("success" => false, "isStored" => false);
+            $message = $e->getMessage();  
+        }
+
+        return response()->json([
+            "success" => $info['success'],
+            "isStored" => $info['isStored'],
+            "validationFailure" => $validationFailure,
+            "failureMessage" => $failureMessage,
+            "message" => $message,
+        ]);
+    }
+
+    public function updateAreaMassive(FileImportRequest $request, Event $event)
+    {
+        $event->load(['certifications' => fn ($q) =>
+                        $q->where('evaluation_type', 'certification')
+                            ->select('id','event_id','user_id','score','evaluation_type')
+                    ]);
+
+        $validationFailure = false;
+        $failureMessage = null;
+
+        try {
+            $participantsAreaImport = new ParticipantsAreaImport;
+            $participantsAreaImport->import($request->file('file'));
+            $rows = $participantsAreaImport->getDnis();
+
+            $info = $this->certificationService->storeMassiveFromContext($rows, $event, 'area');
+            $message = config('parameters.updated_message');
+
+            if ($participantsAreaImport->failures()->isNotEmpty()) {
+                $validationFailure = true;
+                $failureMessage= 'Se encontró errores de validación';
+            }
+
+        } catch (Exception $e) {
+            $info = array("success" => false, "isStored" => false);
+            $message = $e->getMessage();  
+        }
+
+        return response()->json([
+            "success" => $info['success'],
+            "isStored" => $info['isStored'],
+            "validationFailure" => $validationFailure,
+            "failureMessage" => $failureMessage,
+            "message" => $message,
+        ]);
+    }
 
     public function reset(Certification $certification)
     {
@@ -206,7 +295,6 @@ class AdminCertificationsController extends Controller
             "message" => $message
         ]);
     }
-
 
     // ------------------- CERTIFICATION MODULE ------------------------
 

@@ -85,7 +85,7 @@
                 {{-- <h3 class="col-12 text-center p-4">Construyendo equipos listos para el futuro</h3> --}}
                 <div class="col-sm-12 col-lg-3 text-center">
                     <span id="count-up-students" class="making-numbers" data-number="{{ $numberUsers }}"></span>
-                    <p>de estudiantes registrados en nuestra plataforma.</p>
+                    <p>estudiantes registrados en nuestra plataforma.</p>
                 </div>
                 <div class="col-sm-12 col-lg-3 text-center">
                     <span id="count-up-courses" class="making-numbers" data-number="{{ $numberCourses }}"></span>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="col-sm-12 col-lg-3 text-center">
                     <span id="count-up-companys" class="making-numbers" data-number="{{ $numberCompanys }}"></span>
-                    <p>empresa desarrollando a sus equipos con nosotros.</p>
+                    <p>empresas desarrollando a sus equipos con nosotros.</p>
                 </div>
             </div>
         </div>

@@ -347,9 +347,20 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
                 Route::post('/actualizar-certificado/{certification}', 'update')->name('admin.events.certifications.update');
                 Route::delete('/eliminar-certificado/{certification}', 'destroy')->name('admin.events.certifications.destroy');
 
+                // --------- IMPORT PARTICIPANTS -------------
                 Route::get('/descargar-plantilla-registro-masivo-participantes', 'downloadImportTemplate')->name('admin.events.certifications.download.participants.template');
                 Route::post('/registro-masivo-de-participantes/{event}', 'storeMassive')->name('admin.events.certifications.store.massive');
 
+                // ---------- IMPORT SCORES -------------
+                Route::get('/descargar-plantilla-registro-de-notas-masivo', 'downloadImportScoreTemplate')->name('admin.events.certifications.download.participants_score.template');
+                Route::post('/registro-masivo-de-notas/{event}', 'storeScoresMasive')->name('admin.events.certifications.store.score_massive');
+
+                // ---------- IMPORT AREA ---------------
+
+                Route::get('/descargar-plantilla-registro-de-area-obervacion', 'downloadImportAreaTemplate')->name('admin.events.certifications.download.participants_area.template');
+                Route::post('/registro-masivo-de-area-observacion/{event}', 'updateAreaMassive')->name('admin.events.certifications.store.area_massive');
+
+                // ----------- RESET -----------------
                 Route::post('/reiniciar-certificado/{certification}', 'reset')->name('admin.events.certifications.reset');
             });
         });

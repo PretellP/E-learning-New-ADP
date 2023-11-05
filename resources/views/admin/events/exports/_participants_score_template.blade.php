@@ -1,0 +1,19 @@
+<table>
+    <thead>
+        <tr>
+            <th>dni</th>
+            <th>nota</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>41018360</td>
+            <td>18</td>
+        </tr>
+        <tr>
+            <td>71258522</td>
+            <td>19</td>
+        </tr>
+    </tbody>
+</table>

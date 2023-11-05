@@ -1087,7 +1087,7 @@ $(function () {
                         if (data.success) {
 
                             registerUserForm.resetForm()
-                            usersTable.draw()
+                            usersTable.ajax.reload(null, false)
 
                             form.trigger('reset')
                             modal.modal('hide')
@@ -1244,7 +1244,7 @@ $(function () {
 
                         if (data.success) {
 
-                            usersTable.draw()
+                            usersTable.ajax.reload(null, false)
                             form.trigger('reset')
                             modal.modal('hide')
 
@@ -1389,7 +1389,7 @@ $(function () {
                         dataType: 'JSON',
                         success: function (result) {
                             if (result.success === true) {
-                                usersTable.draw();
+                                usersTable.ajax.reload(null, false)
                                 Toast.fire({
                                     icon: 'success',
                                     text: '¡Registro eliminado!',
@@ -1444,7 +1444,7 @@ $(function () {
 
                         if (data.success) {
 
-                            usersTable.draw()
+                            usersTable.ajax.reload(null, false)
 
                             registerUserMassiveForm.resetForm()
                             form.trigger('reset')
@@ -6640,7 +6640,7 @@ $(function () {
         });
 
         $('html').on('change', '#search_from_status_select', function () {
-            certificationsTable.draw()
+            certificationsTable.ajax.reload(null, false)
         })
 
 
@@ -6664,7 +6664,7 @@ $(function () {
                 success: function (data) {
 
                     if (data.success) {
-                        certificationsTable.draw()
+                        certificationsTable.ajax.reload(null, false)
                     }
                     else {
                         Toast.fire({
@@ -6798,7 +6798,7 @@ $(function () {
 
                                 eventBoxContainer.html(data.html)
                                 $('#event-description-text-principal').html(data.title)
-                                certificationsTable.draw()
+                                certificationsTable.ajax.reload(null, false)
                                 editEventForm.resetForm()
                                 form.trigger('reset');
 
@@ -7330,7 +7330,7 @@ $(function () {
                         success: function (result) {
                             if (result.success === true) {
 
-                                certificationsTable.draw()
+                                certificationsTable.ajax.reload(null, false)
                                 $('#event-box-container').html(result.html)
 
                                 Toast.fire({
@@ -7492,7 +7492,7 @@ $(function () {
 
                         if (data.success) {
 
-                            certificationsTable.draw()
+                            certificationsTable.ajax.reload(null, false)
                             editCertificationForm.resetForm()
                             form.trigger('reset');
 
@@ -7589,8 +7589,7 @@ $(function () {
 
 
 
-        // ----------- REGISTRO MASIVO -----------
-
+        // ----------- REGISTRO MASIVO PARTICIPANTES -----------
 
         var registerParticipantsMassiveForm = $('#registerParticipantsMassiveForm').validate({
             rules: {
@@ -7629,7 +7628,7 @@ $(function () {
                             else {
                                 var dataStatus = data.status
 
-                                certificationsTable.draw()
+                                certificationsTable.ajax.reload(null, false)
                                 registerParticipantsMassiveForm.resetForm()
                                 form.trigger('reset')
                                 modal.modal('hide')
@@ -7647,6 +7646,163 @@ $(function () {
                                                 text: data.note
                                             })
                                         }
+                                        if (data.validationFailure) {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.failureMessage
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        // ------------- REGISTRO MASIVO NOTAS -------------------
+
+        var registerParticipantsScoreForm = $('#registerParticipantsScoreForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterParticipantsScoreModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (!data.isStored) {
+                                Toast.fire({
+                                    icon: 'warning',
+                                    text: 'No se actualizaron notas, revise su archivo.'
+                                })
+                            }
+                            else {
+
+                                certificationsTable.ajax.reload(null, false)
+
+                                registerParticipantsScoreForm.resetForm()
+                                form.trigger('reset')
+                                modal.modal('hide')
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        if (data.validationFailure) {
+                                            Toast.fire({
+                                                icon: 'warning',
+                                                text: data.failureMessage
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                text: data.message
+                            })
+                        }
+
+                    },
+                    complete: function (data) {
+                        form.find('.btn-save').removeAttr('disabled')
+                        loadSpinner.toggleClass('active')
+                    },
+                    error: function (data) {
+                        console.log(data)
+                        ToastError.fire()
+                    }
+                })
+            }
+        })
+
+        // ------------- REGISTRO MASIVO AREA -------------------
+
+        var registerParticipantsAreaForm = $('#registerParticipantsAreaForm').validate({
+            rules: {
+                file: {
+                    required: true,
+                },
+            },
+            submitHandler: function (form, event) {
+                event.preventDefault()
+                var form = $(form)
+                var loadSpinner = form.find('.loadSpinner')
+                var modal = $('#RegisterParticipantsAreaModal')
+
+                loadSpinner.toggleClass('active')
+                form.find('.btn-save').attr('disabled', 'disabled')
+
+                var formData = new FormData(form[0])
+
+                $.ajax({
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+
+                        if (data.success) {
+
+                            if (!data.isStored) {
+                                Toast.fire({
+                                    icon: 'warning',
+                                    text: 'No se actualizaron datos, revise su archivo.'
+                                })
+                            }
+                            else {
+
+                                certificationsTable.ajax.reload(null, false)
+                                registerParticipantsAreaForm.resetForm()
+                                form.trigger('reset')
+                                modal.modal('hide')
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    text: data.message
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
                                         if (data.validationFailure) {
                                             Toast.fire({
                                                 icon: 'warning',
@@ -7700,14 +7856,14 @@ $(function () {
                         success: function (data) {
 
                             if (data.success) {
-                        
-                                certificationsTable.draw()
+
+                                certificationsTable.ajax.reload(null, false)
 
                                 Toast.fire({
                                     icon: 'success',
                                     text: data.message
                                 })
-                                
+
                             }
                             else {
                                 Toast.fire({
@@ -7727,7 +7883,6 @@ $(function () {
                 return false;
             });
         })
-
 
     }
 
@@ -9633,7 +9788,7 @@ $(function () {
                 { data: 'end_time', name: 'end_time' },
                 { data: 'event.user.name', name: 'event.user.name', orderable: false },
                 { data: 'event.course.description', name: 'event.course.description', orderable: false },
-                { data: 'action', name: 'action', orderable: false, searchable: false},
+                { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
             order: [
                 [0, 'desc']
@@ -9656,7 +9811,7 @@ $(function () {
                             if (result.success === true) {
 
                                 userSurveysTable.draw();
-                                
+
                                 Toast.fire({
                                     icon: 'success',
                                     text: result.message,
