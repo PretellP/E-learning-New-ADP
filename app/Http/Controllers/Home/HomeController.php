@@ -42,12 +42,12 @@ class HomeController extends Controller
 
     public function getRegisterModalContent()
     {
-        $miningUnits = MiningUnit::get(['id', 'description']);
+        // $miningUnits = MiningUnit::get(['id', 'description']);
         $companies = Company::where('active', 'S')->get(['id', 'description']);
 
         return response()->json([
             "html" => view('home.common.partials.boxes._login_register', compact(
-                'miningUnits',
+                // 'miningUnits',
                 'companies'
             ))->render()
         ]);

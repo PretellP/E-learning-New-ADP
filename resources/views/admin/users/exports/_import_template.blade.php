@@ -7,7 +7,7 @@
             <th>materno</th>
             <th>cod empresa</th>
             <th>cargo</th>
-            <th>unidad minera</th>
+            {{-- <th>unidad minera</th> --}}
             <th>email</th>
             <th>telefono</th>
 
@@ -22,7 +22,7 @@
             <td>CASAS</td>
             <td>1</td>
             <td>CONDUCTOR DE CAMIONETA</td>
-            <td>1,2</td>
+            {{-- <td>1,2</td> --}}
             <td>elmer.alcantara1@uguil.com</td>
             <td>920004879</td>
         </tr>

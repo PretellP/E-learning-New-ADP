@@ -75,10 +75,10 @@ class User extends Authenticatable
         return $this -> belongsTo(Company::class, 'company_id', 'id');
     }
 
-    public function miningUnits()
-    {
-        return $this -> belongsToMany(MiningUnit::class, 'mining_units_users', 'user_id', 'mining_unit_id');
-    }
+    // public function miningUnits()
+    // {
+    //     return $this -> belongsToMany(MiningUnit::class, 'mining_units_users', 'user_id', 'mining_unit_id');
+    // }
 
     public function publishings()
     {

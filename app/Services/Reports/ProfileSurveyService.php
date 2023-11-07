@@ -22,13 +22,17 @@ class ProfileSurveyService
         ->whereHas('survey', function ($q) {
             $q->where('destined_to', 'user_profile');
         })
-        ->where('status', 'finished');
+        ->where('status', 'finished')
+        ->select('users_surveys.*');
 
         if ($request->filled('from_date') && $request->filled('end_date')) {
             $query = $query->whereBetween('end_time', [$request->from_date, $request->end_date]);
         }
 
         $allProfileSurveys = DataTables::of($query)
+            ->editColumn('company.description', function ($userSurvey) {
+                return $userSurvey->company == null ? '-' : $userSurvey->company->description;
+            })
             ->editColumn('end_time', function ($userSurvey) {
                 return $userSurvey->end_time;
             })

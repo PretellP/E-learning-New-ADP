@@ -55,7 +55,7 @@ class UsersImport implements
                 $user = User::create($data->all());
             }
 
-            $user->miningUnits()->sync($row['unidad_minera']);
+            // $user->miningUnits()->sync($row['unidad_minera']);
 
             return $user;
 
@@ -75,10 +75,10 @@ class UsersImport implements
             '*.materno'         => ['required', 'max:255'],
             '*.email'           => ['required', 'email', 'max:255'],
             '*.telefono'        => ['nullable', 'max:20'],
-            '*.cod_empresa'     => ['required', 'exists:App\Models\Company,id'],
+            '*.cod_empresa'     => ['nullable', 'exists:App\Models\Company,id'],
             '*.cargo'           => ['nullable', 'max:255'],
-            '*.unidad_minera'   => ['filled', 'array'],
-            '*.unidad_minera.*' => ['exists:App\Models\MiningUnit,id'],
+            // '*.unidad_minera'   => ['filled', 'array'],
+            // '*.unidad_minera.*' => ['exists:App\Models\MiningUnit,id'],
         ];
     }
 
@@ -86,7 +86,7 @@ class UsersImport implements
     {
         return [
             'cod_empresa' => 'cod empresa',
-            'unidad_minera.*' => 'unidad minera',
+            // 'unidad_minera.*' => 'unidad minera',
         ];
     }
 
@@ -94,8 +94,8 @@ class UsersImport implements
     {
         $this->validateDuplicatedDnis($row['dni']);
 
-        $miningUnits = Str::of($row['unidad_minera'])->explode(',')->all();
-        $row['unidad_minera'] = $miningUnits ?? $row['unidad_minera'];
+        // $miningUnits = Str::of($row['unidad_minera'])->explode(',')->all();
+        // $row['unidad_minera'] = $miningUnits ?? $row['unidad_minera'];
 
         return $row;
     }

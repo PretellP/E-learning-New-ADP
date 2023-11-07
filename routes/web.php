@@ -173,17 +173,17 @@ Route::group(['middleware' => ['auth', 'check.valid.user']], function () {
 
         /* ---------------- MINING UNITS ----------------------*/
 
-        Route::group(['prefix' => 'unidades-mineras'], function () {
+        // Route::group(['prefix' => 'unidades-mineras'], function () {
 
-            Route::controller(AdminMiningUnitsController::class)->group(function () {
+        //     Route::controller(AdminMiningUnitsController::class)->group(function () {
 
-                Route::get('/', 'index')->name('admin.miningUnits.index');
-                Route::get('/editar/{miningUnit}', 'getDataEdit')->name('admin.miningUnits.getDataEdit');
-                Route::post('/registrar', 'store')->name('admin.miningUnits.store');
-                Route::post('/actualizar/{miningUnit}', 'update')->name('admin.mininUnits.update');
-                Route::delete('/eliminar/{miningUnit}', 'destroy')->name('admin.miningUnits.delete');
-            });
-        });
+        //         Route::get('/', 'index')->name('admin.miningUnits.index');
+        //         Route::get('/editar/{miningUnit}', 'getDataEdit')->name('admin.miningUnits.getDataEdit');
+        //         Route::post('/registrar', 'store')->name('admin.miningUnits.store');
+        //         Route::post('/actualizar/{miningUnit}', 'update')->name('admin.mininUnits.update');
+        //         Route::delete('/eliminar/{miningUnit}', 'destroy')->name('admin.miningUnits.delete');
+        //     });
+        // });
 
         // --------------- ROOMS -------------------------
 

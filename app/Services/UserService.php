@@ -29,7 +29,7 @@ class UserService
                 return config('parameters.roles')[$user->role] ?? '-';
             })
             ->editColumn('company.description', function ($user) {
-                $company = $user->company == null ? '' : $user->company->description;
+                $company = $user->company == null ? '-' : $user->company->description;
 
                 return $company;
             })
@@ -78,7 +78,8 @@ class UserService
         ]);
 
         if ($user) {
-            $user->miningUnits()->sync($request['id_mining_units']);
+
+            // $user->miningUnits()->sync($request['id_mining_units']);
 
             if ($request->hasFile('image')) {
 
@@ -114,7 +115,7 @@ class UserService
 
         if ($user->update($data)) {
             
-            $user->miningUnits()->sync($request['id_mining_units']);
+            // $user->miningUnits()->sync($request['id_mining_units']);
 
             return $this->updateUserAvatar($request, $user, $storage);
         }
@@ -137,12 +138,12 @@ class UserService
         ]);
 
         if ($user) {
-            if ($user->miningUnits()->sync($request['mining_units_ids'])) {
+            // if ($user->miningUnits()->sync($request['mining_units_ids'])) {
 
                 app(EmailService::class)->sendUserCredentialsMail($user, $password);
 
                 return $user;
-            };
+            // };
         }
 
         throw new Exception(config('parameters.exception_message'));

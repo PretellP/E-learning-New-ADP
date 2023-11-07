@@ -90,7 +90,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="d-flex flex-column">
                     <select id="registerMiningUnitsSelect" name="mining_units_ids[]" class="select2"
                         multiple="multiple">
@@ -100,7 +100,7 @@
                         @endforeach
                     </select>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="my-3 message-form d-flex align-items-center">
                 <span>

@@ -33,5 +33,4 @@ class Evaluation extends Model
     {
         return $this->belongsTo(DynamicQuestion::class, 'question_id', 'id');
     }
-
 }

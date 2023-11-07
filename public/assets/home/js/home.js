@@ -185,13 +185,14 @@ $(function () {
                     if (registerModalForm.length) {
 
                         $('#registerCompanySelect').select2({
-                            placeholder: 'Selecciona una empresa'
+                            placeholder: 'Selecciona una empresa',
+                            allowClear: true
                         })
 
-                        $('#registerMiningUnitsSelect').select2({
-                            placeholder: 'Selecciona una o más unidades mineras',
-                            closeOnSelect: false
-                        })
+                        // $('#registerMiningUnitsSelect').select2({
+                        //     placeholder: 'Selecciona una o más unidades mineras',
+                        //     closeOnSelect: false
+                        // })
 
                         var userRegisterModalForm = registerModalForm.validate({
                             rules: {
@@ -226,12 +227,12 @@ $(function () {
                                     maxlength: 255,
                                     email: true
                                 },
-                                company_id: {
-                                    required: true
-                                },
-                                "mining_units_ids[]": {
-                                    required: true
-                                }
+                                // company_id: {
+                                //     required: true
+                                // },
+                                // "mining_units_ids[]": {
+                                //     required: true
+                                // }
                             },
                             messages: {
                                 dni: {

@@ -32,6 +32,10 @@ class CertificationService
                 $user = $certification->user;
                 return $user->full_name_complete;
             })
+            ->editColumn('user.company.description', function ($certification) {
+                $user = $certification->user;
+                return $user->company == null ? '-' : $user->company->description;
+            })
             ->editColumn('score', function ($certification) {
                 return $certification->score ?? '-';
             })
@@ -99,13 +103,12 @@ class CertificationService
 
     public function selfStore($user, Event $event)
     {
-        $event->loadParticipantsRelationships();
+        $event->loadParticipantsRelationships()->loadParticipantsCount();
 
-        $event->loadParticipantsCount();
-        $miningUnitsIds = $user->miningUnits->pluck('id');
+        // $miningUnitsIds = $user->miningUnits->pluck('id');
 
         if ($event->room->capacity > $event->participants_count) {
-            $this->storeAll($event, $user, $miningUnitsIds);
+            $this->storeAll($event, $user);
             return true;
         }
 
@@ -126,11 +129,11 @@ class CertificationService
         foreach ($users as $i => $user) {
 
             $event->loadParticipantsCount();
-            $miningUnitsIds = $user->miningUnits->pluck('id');
+            // $miningUnitsIds = $user->miningUnits->pluck('id');
 
             if ($event->room->capacity > $event->participants_count) {
 
-                $this->storeAll($event, $user, $miningUnitsIds);
+                $this->storeAll($event, $user);
                 $status = 'finished';
                 
             } else {
@@ -156,16 +159,16 @@ class CertificationService
 
         $isUpdated = $certification->update($data->except('status'));
 
-        if ($isUpdated) {
-            $certification->miningUnits()->sync($request['mining_unit_id']);
-        }
+        // if ($isUpdated) {
+        //     $certification->miningUnits()->sync($request['mining_unit_id']);
+        // }
 
         return $isUpdated;
     }
 
     public function destroy(Certification $certification)
     {
-        $certification->miningUnits()->detach();
+        // $certification->miningUnits()->detach();
 
         if ($certification->testCertification != null) {
             $this->destroy($certification->testCertification);
@@ -180,8 +183,7 @@ class CertificationService
     {
         $filteredDnis = array_diff($dnis, $event->participants->pluck('dni')->toArray());
 
-        return User::whereIn('dni', $filteredDnis)->with(['company:id', 'miningUnits:id'])
-                ->has('company')->get();
+        return User::whereIn('dni', $filteredDnis)->with(['company:id'])->get();
     }
 
     private function getCertificationArrayData(User $user, string $assist, string $type)
@@ -193,19 +195,19 @@ class CertificationService
             "status" => 'pending',
             "position" => $user->position,
             "evaluation_type" => $type,
-            "company_id" => $user->company->id
+            "company_id" => $user->company == null ? null : $user->company->id,
         ];
     }
 
-    private function storeAll(Event $event, User $user, $miningUnitsIds)
+    private function storeAll(Event $event, User $user)
     {
         $certification = $event->certifications()
             ->create($this->getCertificationArrayData($user, 'N', 'certification'));
-        $certification->miningUnits()->sync($miningUnitsIds);
+        // $certification->miningUnits()->sync($miningUnitsIds);
 
         $testCertification = $event->certifications()
             ->create($this->getCertificationArrayData($user, 'S', 'test'));
-        $testCertification->miningUnits()->sync($miningUnitsIds);
+        // $testCertification->miningUnits()->sync($miningUnitsIds);
 
         $certification->testCertification()->associate($testCertification);
         $certification->save();
@@ -325,6 +327,9 @@ class CertificationService
             })
             ->editColumn('user.name', function ($certification) {
                 return $certification->user->full_name_complete;
+            })
+            ->editColumn('company.description', function ($certification) {
+                return $certification->company == null ? '-' : $certification->company->description;
             })
             ->editColumn('event.description', function ($certification) {
                 return '<a href="'. route('admin.events.show', ['event' => $certification->event]) .'">'. 

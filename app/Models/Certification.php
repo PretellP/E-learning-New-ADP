@@ -51,10 +51,10 @@ class Certification extends Model
         return $this->belongsTo(self::class, 'test_certification_id', 'id');
     }
 
-    public function miningUnits()
-    {
-        return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units', 'certification_id', 'mining_unit_id')->withTimestamps();
-    }
+    // public function miningUnits()
+    // {
+    //     return $this->belongsToMany(MiningUnit::class, 'certifications_mining_units', 'certification_id', 'mining_unit_id')->withTimestamps();
+    // }
 
     public function company()
     {
@@ -65,13 +65,12 @@ class Certification extends Model
     {
         return $this->load([
             'user' => fn ($query) =>
-                    $query->with(['miningUnits', 'company']),
+                    $query->with(['company']),
             'event' => fn ($q) =>
                 $q->with(['exam' => fn($q2) =>
                             $q2->withCount('questions')
                                 ->withAvg('questions', 'points')
                         , 'course']), 
-            'miningUnits',
             'company'
         ]);
     }

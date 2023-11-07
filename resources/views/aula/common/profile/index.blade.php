@@ -73,10 +73,10 @@
                 </div>
                 <div class="profile-row">
                     <div class="profile-label">ECM</div>
-                    <div class="profile-info"> {{$user->company()->select('id','description')->first()->description}}
+                    <div class="profile-info"> {{$user->company == null ? '-' : $user->company->description}}
                     </div>
                 </div>
-                <div class="profile-row">
+                {{-- <div class="profile-row">
                     <div class="profile-label">Unidad Minera</div>
                     <div class="profile-info">
                         @foreach ($user->miningUnits()->select('mining_units.id','mining_units.description')->get() as
@@ -86,7 +86,7 @@
                         </div>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
             </div>
 
         </div>

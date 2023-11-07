@@ -43,12 +43,12 @@
                 </a>
             </li>
 
-            <li class="{{setActive('admin.miningUnits.*')}}">
+            {{-- <li class="{{setActive('admin.miningUnits.*')}}">
                 <a href="{{route('admin.miningUnits.index')}}" class="nav-link">
                     <i class="fa-solid fa-mountain-city"></i>
                     <span>Unidades Mineras</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="{{setActive('admin.rooms.*')}}">
                 <a href="{{route('admin.rooms.index')}}" class="nav-link">

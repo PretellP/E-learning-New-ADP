@@ -30,8 +30,7 @@ class UserRequest extends FormRequest
             "maternal" => ['required'],
             "email" => ['required'],
             "password" => ['required'],
-            "company_id" => ['required'],
-            "id_mining_units" => ['required'],
+            "company_id" => ['nullable'],
             "role" => ['required'],
             "active" => ['nullable']
         ];

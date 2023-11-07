@@ -40,12 +40,12 @@ $(function () {
                 maxlength: 255,
                 email: true
             },
-            company_id: {
-                required: true
-            },
-            "mining_units_ids[]": {
-                required: true
-            }
+            // company_id: {
+            //     required: true
+            // },
+            // "mining_units_ids[]": {
+            //     required: true
+            // }
         }
 
         var registerUserForm = $('#register-form').validate({
@@ -101,13 +101,14 @@ $(function () {
 
 
     $('#registerCompanySelect').select2({
-        placeholder: 'Selecciona una empresa'
+        placeholder: 'Selecciona una empresa',
+        allowClear: true,
     })
 
-    $('#registerMiningUnitsSelect').select2({
-        placeholder: 'Selecciona una o más unidades mineras',
-        closeOnSelect: false
-    })
+    // $('#registerMiningUnitsSelect').select2({
+    //     placeholder: 'Selecciona una o más unidades mineras',
+    //     closeOnSelect: false
+    // })
 
     jQuery.extend(jQuery.validator.messages, {
         required: '<i class="fa-solid fa-circle-exclamation"></i> &nbsp; Este campo es obligatorio',

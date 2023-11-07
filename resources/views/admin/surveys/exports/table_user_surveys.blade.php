@@ -31,7 +31,7 @@
             <td> {{ $userSurvey->user->paternal }} </td>
             <td> {{ $userSurvey->user->maternal }} </td>
             <td> {{ $userSurvey->user->name }} </td>
-            <td> {{ $userSurvey->company->description }} </td>
+            <td> {{ $userSurvey->company == null ? '-' : $userSurvey->company->description }} </td>
             <td> {{ $userSurvey->survey->name }} </td>
             <td> {{ $userSurvey->end_time }} </td>
             <td> {{ $userSurvey->event != null ? $userSurvey->event->user->full_name : 'No hay registros' }} </td>

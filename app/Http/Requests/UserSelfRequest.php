@@ -29,8 +29,8 @@ class UserSelfRequest extends FormRequest
             "paternal" => ['required', 'max:255'],
             "maternal" => ['required', 'max:255'],
             "email" => ['required', 'max:255', 'email'],
-            "company_id" => ['required', 'integer'],
-            "mining_units_ids" => ['required']
+            "company_id" => ['nullable'],
+            // "mining_units_ids" => ['required']
         ];
     }
 }

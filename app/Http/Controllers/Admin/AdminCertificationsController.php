@@ -69,11 +69,11 @@ class AdminCertificationsController extends Controller
 
         return response()->json([
             "all" => [
-                "miningUnits" => MiningUnit::get(['id', 'description']),
+                // "miningUnits" => MiningUnit::get(['id', 'description']),
                 "companies" => Company::get(['id', 'description'])
             ],
             "selected" => [
-                "miningUnits" => $certification->miningUnits->pluck('id'),
+                // "miningUnits" => $certification->miningUnits->pluck('id'),
                 'company' => $certification->company,
                 'participant' => $certification->user->full_name_complete
             ],

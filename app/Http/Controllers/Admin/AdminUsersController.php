@@ -27,11 +27,11 @@ class AdminUsersController extends Controller
         {   
             return $this->userService->getDataTable();
         }else{
-            $miningUnits =  MiningUnit::get(['id','description']);
+            // $miningUnits =  MiningUnit::get(['id','description']);
             $roles = config('parameters')['roles'];
             
             return view('admin.users.index', compact(
-                'miningUnits',
+                // 'miningUnits',
                 'roles'
             ));
         } 
@@ -92,8 +92,8 @@ class AdminUsersController extends Controller
             "user" => $user,
             "role" => $role,
             "companies" => Company::get(['id','description']),
-            "miningUnits" => MiningUnit::get(['id', 'description']),
-            "miningUnitsSelect" => $user->miningUnits->pluck('id')->toArray(),
+            // "miningUnits" => MiningUnit::get(['id', 'description']),
+            // "miningUnitsSelect" => $user->miningUnits->pluck('id')->toArray(),
             "url_img" => verifyUserAvatar($user->file),
         ]);
     }
@@ -118,7 +118,7 @@ class AdminUsersController extends Controller
 
     public function destroy(User $user)
     {
-        $user->miningUnits()->detach();
+        // $user->miningUnits()->detach();
         $user->progressChapters()->detach();
         $user->delete();
 
@@ -136,9 +136,10 @@ class AdminUsersController extends Controller
 
     public function massiveStore(FileImportRequest $request)
     {
-        $note = NULL;
+        $note = null;
+        $notebody = null;
         $foundDuplicates = false;
-
+       
         try {
             $usersImport = new UsersImport;
             $usersImport->import($request->file('file'));

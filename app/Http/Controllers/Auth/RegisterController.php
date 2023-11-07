@@ -21,11 +21,11 @@ class RegisterController extends Controller
 
     public function showRegistrationForm(Request $request, $redirect = NULL)
     {
-        $miningUnits = MiningUnit::get(['id', 'description']);
+        // $miningUnits = MiningUnit::get(['id', 'description']);
         $companies = Company::where('active', 'S')->get(['id', 'description']);
 
         return view('auth.register', compact(
-            'miningUnits',
+            // 'miningUnits',
             'companies',
             'redirect'
         ));

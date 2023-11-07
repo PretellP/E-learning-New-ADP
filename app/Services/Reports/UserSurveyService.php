@@ -19,7 +19,8 @@ class UserSurveyService
             'surveyAnswers',
             'company'
         ])
-        ->where('status', 'finished');
+        ->where('status', 'finished')
+        ->select('users_surveys.*');
 
         if ($request->filled('from_date') && $request->filled('end_date')) {
             $query = $query->whereBetween('end_time', [$request->from_date, $request->end_date]);
@@ -28,6 +29,9 @@ class UserSurveyService
         $allUserSurveys = DataTables::of($query)
             ->editColumn('end_time', function ($userSurvey) {
                 return $userSurvey->end_time;
+            })
+            ->editColumn('company.description', function ($userSurvey) {
+                return $userSurvey->company == null ? '-' : $userSurvey->company->description;
             })
             ->editColumn('event.user.name', function ($userSurvey) {
                 return $userSurvey->event != null ? $userSurvey->event->user->full_name :

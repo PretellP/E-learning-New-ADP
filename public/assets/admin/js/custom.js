@@ -905,14 +905,15 @@ $(function () {
 
         $('#registerCompanySelect').select2({
             dropdownParent: $("#RegisterUserModal"),
-            placeholder: 'Selecciona una empresa'
+            placeholder: 'Selecciona una empresa',
+            allowClear: true,
         })
 
-        $('#registerMiningUnitsSelect').select2({
-            dropdownParent: $("#RegisterUserModal"),
-            placeholder: 'Selecciona una o más unidades mineras',
-            closeOnSelect: false
-        });
+        // $('#registerMiningUnitsSelect').select2({
+        //     dropdownParent: $("#RegisterUserModal"),
+        //     placeholder: 'Selecciona una o más unidades mineras',
+        //     closeOnSelect: false
+        // });
 
         $('#editRoleSelect').select2({
             dropdownParent: $("#EditUserModal"),
@@ -921,14 +922,15 @@ $(function () {
 
         $('#editCompanySelect').select2({
             dropdownParent: $("#EditUserModal"),
-            placeholder: 'Selecciona una empresa'
+            placeholder: 'Selecciona una empresa',
+            allowClear: true,
         })
 
-        $('#editMiningUnitsSelect').select2({
-            dropdownParent: $("#EditUserModal"),
-            placeholder: 'Selecciona una o más unidades mineras',
-            closeOnSelect: false
-        })
+        // $('#editMiningUnitsSelect').select2({
+        //     dropdownParent: $("#EditUserModal"),
+        //     placeholder: 'Selecciona una o más unidades mineras',
+        //     closeOnSelect: false
+        // })
 
 
         /* --------------------------------*/
@@ -1049,12 +1051,12 @@ $(function () {
                 cip: {
                     maxlength: 10
                 },
-                company_id: {
-                    required: true
-                },
-                "id_mining_units[]": {
-                    required: true
-                },
+                // company_id: {
+                //     required: true
+                // },
+                // "id_mining_units[]": {
+                //     required: true
+                // },
                 position: {
                     maxlength: 255
                 }
@@ -1206,12 +1208,12 @@ $(function () {
                 cip: {
                     maxlength: 10
                 },
-                company_id: {
-                    required: true
-                },
-                "id_mining_units[]": {
-                    required: true
-                },
+                // company_id: {
+                //     required: true
+                // },
+                // "id_mining_units[]": {
+                //     required: true
+                // },
                 position: {
                     maxlength: 255
                 }
@@ -1312,10 +1314,10 @@ $(function () {
             var form = modal.find('#editUserForm')
             var selectCompany = modal.find('#editCompanySelect')
             var selectRole = modal.find('#editRoleSelect')
-            var selectMiningUnits = modal.find('#editMiningUnitsSelect')
+            // var selectMiningUnits = modal.find('#editMiningUnitsSelect')
 
             selectCompany.html('')
-            selectMiningUnits.html('')
+            // selectMiningUnits.html('')
             editUserForm.resetForm()
             form.trigger('reset')
 
@@ -1347,12 +1349,12 @@ $(function () {
 
                     selectCompany.val(user.company_id).change()
 
-                    selectMiningUnits.append('<option></option>')
-                    $.each(data.miningUnits, function (key, values) {
-                        selectMiningUnits.append('<option value="' + values.id + '">' + values.description + '</option>')
-                    })
+                    // selectMiningUnits.append('<option></option>')
+                    // $.each(data.miningUnits, function (key, values) {
+                    //     selectMiningUnits.append('<option value="' + values.id + '">' + values.description + '</option>')
+                    // })
 
-                    selectMiningUnits.val(data.miningUnitsSelect).change()
+                    // selectMiningUnits.val(data.miningUnitsSelect).change()
 
                     modal.find('.img-holder').html('<img class="img-fluid avatar_img" id="image-avatar-edit" src="' + data.url_img + '"></img>');
                     modal.find('#input-user-image-edit').attr('data-value', '<img scr="' + data.url_img + '" class="img-fluid avatar_img"></img>');
@@ -1367,7 +1369,7 @@ $(function () {
                     }
                 },
                 complete: function (data) {
-                    modal.modal('toggle')
+                    modal.modal('show')
                 },
                 error: function (data) {
                     console.log(data)
@@ -1494,7 +1496,6 @@ $(function () {
                 })
             }
         })
-
 
     }
 
@@ -7386,19 +7387,18 @@ $(function () {
                     let participant = data.participant
                     let partStatus = (participant.active == 'S') ? statuslabelActive : statuslabelInactive
 
-                    let miningUnits = '<ul>'
-                    $.each(participant.mining_units, function (key, value) {
-                        miningUnits += '<li>' + value.description + '</li>'
-                    })
-                    miningUnits += '</ul>'
+                    // let miningUnits = '<ul>'
+                    // $.each(participant.mining_units, function (key, value) {
+                    //     miningUnits += '<li>' + value.description + '</li>'
+                    // })
+                    // miningUnits += '</ul>'
 
                     bodyParticipant.html('<tr> \
                                             <td>' + participant.id + '</td>\
                                             <td>' + participant.dni + '</td>\
                                             <td>' + participant.name + '</td>\
-                                            <td class="p-0">' + miningUnits + '</td>\
                                             <td>' + participant.email + '</td>\
-                                            <td>' + participant.company['description'] + '</td>\
+                                            <td>' + (participant.company == null ? '-' : participant.company.description) + '</td>\
                                             <td>' + (participant.position ?? '-') + '</td>\
                                             <td>' + partStatus + '</td>\
                                         </tr>')
@@ -7446,26 +7446,27 @@ $(function () {
 
         // ------------- EDITAR CERTIFICADO --------------------
 
-        $('#editCertMiningUnitSelect').select2({
-            dropdownParent: $("#editCertificationModal"),
-            placeholder: 'Selecciona una o más unidades mineras',
-            closeOnSelect: false
-        })
+        // $('#editCertMiningUnitSelect').select2({
+        //     dropdownParent: $("#editCertificationModal"),
+        //     placeholder: 'Selecciona una o más unidades mineras',
+        //     closeOnSelect: false
+        // })
 
         $('#editCertCompanySelect').select2({
             dropdownParent: $("#editCertificationModal"),
-            placeholder: 'Selecciona una empresa'
+            placeholder: 'Selecciona una empresa',
+            allowClear: true,
         })
 
 
         var editCertificationForm = $('#editCertificationForm').validate({
             rules: {
-                "mining_unit_id[]": {
-                    required: true,
-                },
-                company_id: {
-                    required: true,
-                },
+                // "mining_unit_id[]": {
+                //     required: true,
+                // },
+                // company_id: {
+                //     required: true,
+                // },
                 area: {
                     maxlength: 100,
                 },
@@ -7529,11 +7530,11 @@ $(function () {
             var url = $(this).data('url')
             var form = modal.find('#editCertificationForm')
 
-            let miningUnitsSelect = form.find('#editCertMiningUnitSelect')
+            // let miningUnitsSelect = form.find('#editCertMiningUnitSelect')
             let companySelect = form.find('#editCertCompanySelect')
             let checkbox = form.find('#edit-assist-checkbox')
 
-            miningUnitsSelect.empty()
+            // miningUnitsSelect.empty()
             companySelect.empty()
 
             form.attr('action', url)
@@ -7550,17 +7551,17 @@ $(function () {
 
                     form.find('#participant-name').html(selected.participant)
 
-                    miningUnitsSelect.append('<option></option>')
-                    $.each(all.miningUnits, function (key, value) {
-                        miningUnitsSelect.append('<option value="' + value.id + '">' + value.description + '</option>')
-                    })
-                    miningUnitsSelect.val(selected.miningUnits).change()
+                    // miningUnitsSelect.append('<option></option>')
+                    // $.each(all.miningUnits, function (key, value) {
+                    //     miningUnitsSelect.append('<option value="' + value.id + '">' + value.description + '</option>')
+                    // })
+                    // miningUnitsSelect.val(selected.miningUnits).change()
 
                     companySelect.append('<option></option>')
                     $.each(all.companies, function (key, value) {
                         companySelect.append('<option value="' + value.id + '">' + value.description + '</option>')
                     })
-                    companySelect.val(selected['company'].id).change()
+                    companySelect.val((selected['company'] == null ? '' : selected['company'].id)).change()
 
                     form.find('input[name=area]').val(certification.area)
                     form.find('input[name=observation]').val(certification.observation)
@@ -9695,8 +9696,8 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false },
-                { data: 'survey.name', name: 'survey.name', orderable: false },
+                { data: 'company.description', name: 'company.description' },
+                { data: 'survey.name', name: 'survey.name' },
                 { data: 'end_time', name: 'end_time' },
                 { data: 'ec', name: 'ec', orderable: false },
                 { data: 'or', name: 'or', orderable: false },
@@ -9783,10 +9784,10 @@ $(function () {
                 { data: 'user.paternal', name: 'user.paternal' },
                 { data: 'user.maternal', name: 'user.maternal' },
                 { data: 'user.name', name: 'user.name' },
-                { data: 'company.description', name: 'company.description', orderable: false },
-                { data: 'survey.name', name: 'survey.name', orderable: false },
+                { data: 'company.description', name: 'company.description' },
+                { data: 'survey.name', name: 'survey.name' },
                 { data: 'end_time', name: 'end_time' },
-                { data: 'event.user.name', name: 'event.user.name', orderable: false },
+                { data: 'event.user.name', name: 'event.user.name' },
                 { data: 'event.course.description', name: 'event.course.description', orderable: false },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ],
@@ -9920,8 +9921,6 @@ $(function () {
                 [0, 'desc']
             ]
         });
-
-
     }
 
 

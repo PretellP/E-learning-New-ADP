@@ -37,7 +37,7 @@
             <td> {{ $userSurvey->user->paternal }} </td>
             <td> {{ $userSurvey->user->maternal }} </td>
             <td> {{ $userSurvey->user->name }} </td>
-            <td> {{ $userSurvey->company->description }} </td>
+            <td> {{ $userSurvey->company == null ? '-' : $userSurvey->company->description }} </td>
             <td> {{ $userSurvey->survey->name }} </td>
             <td> {{ $userSurvey->end_time }} </td>
             <td> {{ $typesArray['EC'] }} </td>

@@ -31,7 +31,7 @@
                             <th>N°</th>
                             <th>DNI</th>
                             <th>Nombre</th>
-                            <th>Unidades mineras</th>
+                            {{-- <th>Unidades mineras</th> --}}
                             <th>Email</th>
                             <th>Empresa</th>
                             <th>Cargo</th>

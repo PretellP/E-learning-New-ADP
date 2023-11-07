@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    {{-- <div class="form-row">
                         <div class="form-group col-12">
                             <label>Unidades Mineras *</label>
                             <div class="input-group">
@@ -37,11 +37,11 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label>Empresa *</label>
+                            <label>Empresa (opcional) </label>
                             <div class="input-group">
                                 <select name="company_id" class="form-control select2" id="editCertCompanySelect">
                                   

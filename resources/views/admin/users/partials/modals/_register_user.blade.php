@@ -119,7 +119,7 @@
                                     <input type="text" name="cip" class="form-control" placeholder="Ingrese código CIP">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Empresa *</label>
+                                    <label>Empresa (opcional)</label>
                                     <div class="input-group">
                                         <select name="company_id" class="form-control select2" id="registerCompanySelect">
 
@@ -132,7 +132,7 @@
 
                         <div class="col-6">
 
-                            <div class="form-row">
+                            {{-- <div class="form-row">
                                 <div class="form-group col-12">
                                     <label> Unidades mineras *</label>
                                     <select id="registerMiningUnitsSelect" name="id_mining_units[]"
@@ -144,7 +144,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-row">
                                 <div class="form-group col-md-12">

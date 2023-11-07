@@ -53,7 +53,7 @@
                 </select>
             </div>
     
-            <div class="input-box my-2 d-flex flex-column">
+            {{-- <div class="input-box my-2 d-flex flex-column">
                 <select id="registerMiningUnitsSelect" name="mining_units_ids[]" class="form-control select2" 
                         multiple="multiple"> 
                         <option></option>
@@ -61,7 +61,7 @@
                         <option value="{{$miningUnit->id}}"> {{strtoupper($miningUnit->description)}} </option>
                         @endforeach
                 </select>
-            </div>
+            </div> --}}
         </div>
 
     </div>
